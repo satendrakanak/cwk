@@ -22,10 +22,10 @@ dev-logs:
 	docker compose --env-file .env.docker logs -f
 
 prod:
-	docker compose --env-file .env.production.local -f docker-compose.prod.yml up --build -d
+	docker compose --env-file .env.production -f docker-compose.prod.yml up --build -d
 
 prod-down:
-	docker compose --env-file .env.production.local -f docker-compose.prod.yml down
+	docker compose --env-file .env.production -f docker-compose.prod.yml down
 
 prod-logs:
-	docker compose --env-file .env.production.local -f docker-compose.prod.yml logs -f
+	docker compose --env-file .env.production -f docker-compose.prod.yml logs -f

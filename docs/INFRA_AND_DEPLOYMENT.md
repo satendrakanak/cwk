@@ -3,7 +3,7 @@
 CodeWithKasa has one clean Docker path with two modes:
 
 - Development: `docker-compose.yml`, hot reload, local-only env from `.env.docker`.
-- Production test / server runtime: `docker-compose.prod.yml`, production Docker targets, env from `.env.production.local` locally and `.env.production` on the server.
+- Production: `docker-compose.prod.yml`, production Docker targets, env from `.env.production`.
 
 No local machine should push directly to `master`. Work on a branch, open a PR, merge into `master`, and let GitHub Actions deploy.
 
@@ -46,29 +46,6 @@ Development URLs:
 - API: http://localhost:8000
 - Swagger: http://localhost:8000/api
 
-## Local Production Test
-
-Use this before pushing a deployment PR. It builds and runs the same production Docker targets that the server uses.
-
-```bash
-kasa stop
-kasa install prod
-```
-
-Daily start after the env already exists:
-
-```bash
-kasa start
-```
-
-Stop:
-
-```bash
-kasa stop
-```
-
-Production test uses `.env.production.local`, created from `.env.production.local.example`. It has its own Postgres and Redis Docker volumes so it does not depend on development data.
-
 ## Production Server
 
 Server files live at `DEPLOY_PATH`, for example:
@@ -94,7 +71,7 @@ cp .env.production.example .env.production
 Fill real secrets/domains in `.env.production`, then test once:
 
 ```bash
-docker compose --env-file .env.production -f docker-compose.prod.yml up -d
+kasa install prod
 ```
 
 ## GitHub Deploy Flow
@@ -118,10 +95,9 @@ Required GitHub secrets:
 ## Files Kept On Purpose
 
 - `.env.docker.example`: development template
-- `.env.production.local.example`: local production test template
 - `.env.production.example`: server production template
 - `docker-compose.yml`: development stack
-- `docker-compose.prod.yml`: production stack for both local production test and server
+- `docker-compose.prod.yml`: production stack
 - `client/Dockerfile`: development and production client targets
 - `server/Dockerfile`: development and production server targets
 - `.github/workflows/ci.yml`: PR checks

@@ -17,7 +17,6 @@ kasa install dev
 
 Then open:
 
-- Installer: http://localhost:3000/install
 - Client: http://localhost:3000
 - API: http://localhost:8000
 - Swagger: http://localhost:8000/api
@@ -47,36 +46,28 @@ kasa install dev -r
 kasa install prod
 kasa start dev
 kasa start
-kasa start prod
 kasa status
 kasa stop
 kasa restart dev
 
 make install-dev
-make install-prod
 make dev
 make dev-down
-
-make prod
-make prod-down
 ```
 
 What they do:
 
 - `kasa install dev`: creates `.env.docker` if needed, builds the development stack, and streams live logs in the terminal.
 - `kasa install dev -r`: stops the development stack, removes bundled Docker data, keeps `.env.docker` in place, and starts a fresh installer.
-- `kasa install prod`: creates `.env.production.local` if needed and starts the local production test stack.
+- `kasa install prod`: uses `.env.production` and starts the production stack.
 - `kasa start dev`: starts an already-installed development stack with live logs in the terminal.
-- `kasa start`: starts an already-installed local production test stack.
-- `kasa start prod`: starts an already-installed local production test stack without resetting setup.
-- `kasa status`: shows Docker state and installation state for development and local production test mode.
-- `kasa stop`: stops both development and local production test stacks so ports are free.
+- `kasa start`: starts the production stack.
+- `kasa status`: shows Docker state and installation state for development and production.
+- `kasa stop`: stops development and production stacks so ports are free.
 - `kasa restart dev`: stops and starts the development stack without reinstalling.
-- `kasa restart prod`: stops and starts the local production test stack without reinstalling.
+- `kasa restart prod`: stops and starts the production stack without reinstalling.
 - `make install-dev`: creates `.env.docker` if needed, builds the development stack, and streams live logs in the terminal.
-- `make install-prod`: creates `.env.production.local` if needed and starts the local production test stack.
 - `make dev`: starts the development Docker stack with hot reload.
-- `make prod`: builds and starts the local production Docker stack for final testing.
 
 Raw Docker command:
 
@@ -100,10 +91,10 @@ The selected external database is stored inside the Docker runtime volume at `/r
 Install vs start:
 
 - Use `kasa install dev` or `kasa install prod` only for first setup or when creating env files.
-- Use `kasa start dev`, `kasa start`, or `kasa start prod` after setup is already complete.
+- Use `kasa start dev` for development and `kasa start` for production after setup is already complete.
 - Use `kasa status` to check whether Docker is running and whether the app is installed.
 - Use `kasa restart dev` or `kasa restart prod` after changing database mode in the installer.
-- Use `kasa stop` before switching between dev and local production test stacks.
+- Use `kasa stop` before switching modes.
 
 ---
 

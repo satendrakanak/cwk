@@ -35,7 +35,7 @@ services:
       - app-network
 
   server:
-    image: ${SERVER_IMAGE:-codewithkasa-server:local-prod}
+    image: ${SERVER_IMAGE:-codewithkasa-server:latest}
     build:
       context: ./server
       target: production
@@ -79,7 +79,7 @@ services:
       - app-network
 
   client:
-    image: ${CLIENT_IMAGE:-codewithkasa-client:local-prod}
+    image: ${CLIENT_IMAGE:-codewithkasa-client:latest}
     build:
       context: ./client
       target: production

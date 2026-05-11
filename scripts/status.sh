@@ -36,14 +36,14 @@ print_dev_status() {
 }
 
 print_prod_status() {
-  echo "Production test"
-  if [ ! -f .env.production.local ]; then
-    echo "Environment: missing .env.production.local"
+  echo "Production"
+  if [ ! -f .env.production ]; then
+    echo "Environment: missing .env.production"
     echo "Next: kasa install prod"
     return
   fi
 
-  docker compose --env-file .env.production.local -f docker-compose.prod.yml ps
+  docker compose --env-file .env.production -f docker-compose.prod.yml ps
   print_installation_state prod
 }
 

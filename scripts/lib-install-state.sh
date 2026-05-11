@@ -5,7 +5,7 @@ dev_client_container() {
 }
 
 prod_client_container() {
-  docker compose --env-file .env.production.local -f docker-compose.prod.yml ps -q client 2>/dev/null || true
+  docker compose --env-file .env.production -f docker-compose.prod.yml ps -q client 2>/dev/null || true
 }
 
 installer_status_json() {
