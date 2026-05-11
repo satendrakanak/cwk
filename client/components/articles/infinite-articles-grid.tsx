@@ -11,11 +11,13 @@ import { Paginated } from "@/types/api";
 type InfiniteArticlesGridProps = {
   initialPage: Paginated<Article>;
   pageSize: number;
+  category?: string;
 };
 
 export function InfiniteArticlesGrid({
   initialPage,
   pageSize,
+  category,
 }: InfiniteArticlesGridProps) {
   const [articles, setArticles] = useState(initialPage.data);
   const [meta, setMeta] = useState(initialPage.meta);
@@ -32,6 +34,7 @@ export function InfiniteArticlesGrid({
       const response = await articleClientService.getPublicArticles({
         page: meta.currentPage + 1,
         limit: pageSize,
+        category,
       });
 
       setArticles((current) => [...current, ...response.data.data]);
@@ -39,7 +42,7 @@ export function InfiniteArticlesGrid({
     } finally {
       setIsLoading(false);
     }
-  }, [hasMore, isLoading, meta.currentPage, pageSize]);
+  }, [category, hasMore, isLoading, meta.currentPage, pageSize]);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -67,7 +70,7 @@ export function InfiniteArticlesGrid({
         </p>
 
         <p className="mt-1 text-sm text-muted-foreground">
-          Articles will appear here once they are published.
+          Try another topic or come back when more articles are published.
         </p>
       </div>
     );

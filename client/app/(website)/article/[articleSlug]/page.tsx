@@ -74,8 +74,11 @@ export default async function ArticleSlugPage({ params }: ArticlePageProps) {
   let allArticles: Article[] = [];
 
   try {
-    const response = await articleServerService.getAll();
-    allArticles = response.data;
+    const response = await articleServerService.getPublicArticles({
+      page: 1,
+      limit: 1000,
+    });
+    allArticles = response.data.data;
   } catch (error: unknown) {
     throw new Error(getErrorMessage(error));
   }

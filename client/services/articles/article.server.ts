@@ -9,11 +9,14 @@ export const articleServerService = {
     apiServer.get<ApiResponse<Article[]>>("/articles?isPublished=true", {
       next: { revalidate: PUBLIC_REVALIDATE_SECONDS },
     }),
-  getPublicArticles: (query: { page?: number; limit?: number } = {}) => {
+  getPublicArticles: (
+    query: { page?: number; limit?: number; category?: string } = {},
+  ) => {
     const params = new URLSearchParams();
 
     if (query.page) params.set("page", String(query.page));
     if (query.limit) params.set("limit", String(query.limit));
+    if (query.category) params.set("category", query.category);
 
     const search = params.toString();
 

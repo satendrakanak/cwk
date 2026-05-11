@@ -40,6 +40,33 @@ export class FindAllProvider {
      * smaller sections can still fetch the full published list.
      */
     if (getArticlesDto.isPublished) {
+      if (getArticlesDto.category) {
+        const articleQuery = this.articleRepository
+          .createQueryBuilder('article')
+          .leftJoinAndSelect('article.createdBy', 'createdBy')
+          .leftJoinAndSelect('article.updatedBy', 'updatedBy')
+          .leftJoinAndSelect('article.featuredImage', 'featuredImage')
+          .leftJoinAndSelect('article.categories', 'categories')
+          .leftJoinAndSelect('article.tags', 'tags')
+          .where('article.isPublished = :isPublished', { isPublished: true })
+          .andWhere('categories.slug = :category', {
+            category: getArticlesDto.category,
+          })
+          .orderBy('article.createdAt', 'DESC');
+
+        const result = await this.paginationProvider.paginateQueryBuilder(
+          {
+            limit: getArticlesDto.limit ?? 9,
+            page: getArticlesDto.page ?? 1,
+          },
+          articleQuery,
+        );
+
+        result.data = this.mediaFileMappingService.mapArticles(result.data);
+
+        return result;
+      }
+
       const findOptions = {
         where: {
           isPublished: true,
