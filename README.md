@@ -91,7 +91,7 @@ Database setup during installation:
 - For external databases, create the empty database first, then enter host, port, database name, username, password, and SSL preference in the installer.
 - After saving an external database, restart the stack with `kasa restart dev` or `kasa restart prod`, then reopen `/install` and continue.
 
-The selected external database is stored locally in `.kasa/database.json`. This file is ignored by Git and should not be committed.
+The selected external database is stored inside the Docker runtime volume at `/runtime/database.json`, so no local `.kasa` folder is created in the project.
 
 Install vs start:
 

@@ -12,7 +12,7 @@ fi
 echo "Stopping development stack and removing bundled Docker data..."
 docker compose --env-file .env.docker down -v
 
-rm -f .kasa/database.json
+docker volume rm "${RUNTIME_VOLUME_NAME:-codewithkasa-dev_runtime_data}" >/dev/null 2>&1 || true
 
 echo ""
 echo "Development data has been reset."

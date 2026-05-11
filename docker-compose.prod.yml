@@ -63,8 +63,9 @@ services:
       APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY}
       LICENSE_PORTAL_URL: ${LICENSE_PORTAL_URL:-http://localhost:5000}
       LICENSE_PRODUCT_SLUG: ${LICENSE_PRODUCT_SLUG:-codewithkasa}
+      KASA_RUNTIME_DATABASE_CONFIG: /runtime/database.json
     volumes:
-      - ./.kasa:/app/.kasa
+      - runtime_data:/runtime
     ports:
       - "${SERVER_PORT:-8000}:8000"
     extra_hosts:
@@ -105,6 +106,9 @@ volumes:
   redis_data:
     name: ${REDIS_VOLUME_NAME:-codewithkasa-prod_redis_data}
     external: ${REDIS_VOLUME_EXTERNAL:-false}
+  runtime_data:
+    name: ${RUNTIME_VOLUME_NAME:-codewithkasa-prod_runtime_data}
+    external: ${RUNTIME_VOLUME_EXTERNAL:-false}
 
 networks:
   app-network:
