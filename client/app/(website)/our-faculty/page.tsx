@@ -1,9 +1,11 @@
 import Container from "@/components/container";
-import { FacultyGrid } from "@/components/faculty/faculty-grid";
+import { InfiniteFacultyGrid } from "@/components/faculty/infinite-faculty-grid";
 import { PageHero } from "@/components/sliders/page-hero";
+import { getErrorMessage } from "@/lib/error-handler";
 import { buildMetadata } from "@/lib/seo";
 import { userServerService } from "@/services/users/user.server";
-import { User } from "@/types/user";
+
+const PAGE_SIZE = 8;
 
 export const metadata = buildMetadata({
   title: "Our Faculty",
@@ -13,14 +15,13 @@ export const metadata = buildMetadata({
 });
 
 export default async function FacultiesPage() {
-  let faculties: User[] = [];
+  const response = await userServerService
+    .getFacultyPage({ page: 1, limit: PAGE_SIZE })
+    .catch((error: unknown) => {
+      throw new Error(getErrorMessage(error));
+    });
 
-  try {
-    const response = await userServerService.getFaculties();
-    faculties = response.data;
-  } catch {
-    console.error("Failed to load faculties");
-  }
+  const facultiesPage = response.data;
 
   return (
     <div className="relative min-h-screen bg-background">
@@ -37,19 +38,10 @@ export default async function FacultiesPage() {
 
         <section className="py-12 pb-20">
           <Container>
-            {faculties.length ? (
-              <FacultyGrid faculties={faculties} />
-            ) : (
-              <div className="academy-card border-dashed p-10 text-center">
-                <p className="text-sm font-semibold text-card-foreground">
-                  No faculty profiles found
-                </p>
-
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Faculty profiles will appear here once they are added.
-                </p>
-              </div>
-            )}
+            <InfiniteFacultyGrid
+              initialPage={facultiesPage}
+              pageSize={PAGE_SIZE}
+            />
           </Container>
         </section>
       </div>

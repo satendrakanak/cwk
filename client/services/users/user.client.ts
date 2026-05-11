@@ -89,6 +89,11 @@ export const userClientService = {
   getAllFaculties: () =>
     apiClient.get<ApiResponse<User[]>>(`/api/users/all-faculty`),
 
+  getFacultyPage: (params?: Pick<UsersQueryParams, "page" | "limit">) =>
+    apiClient.get<ApiResponse<Paginated<User>>>(
+      `/api/users/faculty${buildUsersQuery(params)}`,
+    ),
+
   getFacultyProfile: (id: number) =>
     apiClient.get<ApiResponse<User>>(`/api/users/faculty-profile/${id}`),
 

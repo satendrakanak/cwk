@@ -9,7 +9,7 @@ import {
   Camera,
   CheckCircle2,
   Clock3,
-  Loader2,
+  Loader,
   Mic,
   RefreshCw,
   Video,
@@ -235,7 +235,7 @@ export function BbbClassroomClient() {
         <div className="relative min-h-[calc(100vh-96px)] flex-1 overflow-hidden rounded-2xl border bg-card shadow-sm">
           {loading ? (
             <ClassroomState
-              icon={<Loader2 className="size-7 animate-spin" />}
+              icon={<Loader className="size-7 animate-spin" />}
               title="Preparing your classroom"
               message="We are checking class timing and opening the live session."
             />
@@ -315,7 +315,7 @@ function DeviceSetupState({
       <div className="w-full max-w-2xl rounded-3xl border bg-background p-6 shadow-sm md:p-8">
         <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
           {isChecking ? (
-            <Loader2 className="size-7 animate-spin" />
+            <Loader className="size-7 animate-spin" />
           ) : (
             <Video className="size-7" />
           )}
@@ -372,7 +372,7 @@ function DeviceSetupState({
         <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
           <Button type="button" onClick={onStart} disabled={isChecking}>
             {isChecking ? (
-              <Loader2 className="mr-2 size-4 animate-spin" />
+              <Loader className="mr-2 size-4 animate-spin" />
             ) : (
               <CheckCircle2 className="mr-2 size-4" />
             )}
@@ -410,7 +410,7 @@ function EmbeddedClassroom({
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-background">
           <div className="max-w-md rounded-3xl border bg-card p-8 text-center shadow-sm">
             <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-              <Loader2 className="size-7 animate-spin" />
+              <Loader className="size-7 animate-spin" />
             </div>
             <h2 className="mt-5 text-2xl font-semibold">Opening classroom</h2>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">

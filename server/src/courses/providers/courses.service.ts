@@ -95,7 +95,8 @@ export class CoursesService {
     user?: ActiveUserData,
   ): Promise<Paginated<Course> | Course[]> {
     /**
-     * 🔥 NO PAGINATION (website case)
+     * Public website case: infinite-scroll pages request pagination, while
+     * small homepage sections can still fetch their scoped endpoints.
      */
     if (getCoursesDto.isPublished) {
       const courseQuery = this.courseRepository
@@ -127,35 +128,23 @@ export class CoursesService {
         });
       }
 
+      if (getCoursesDto.page || getCoursesDto.limit) {
+        const result = await this.paginationProvider.paginateQueryBuilder(
+          {
+            limit: getCoursesDto.limit ?? 9,
+            page: getCoursesDto.page ?? 1,
+          },
+          courseQuery,
+        );
+
+        result.data = await this.attachCourseState(result.data, user);
+
+        return result;
+      }
+
       const courses = await courseQuery.getMany();
 
-      const mapped = this.mediaFileMappingService.mapCourses(courses);
-      if (!user) {
-        return mapped.map((c) => ({
-          ...c,
-          isEnrolled: false,
-          progress: null,
-        }));
-      }
-      const courseIds = mapped.map((c) => c.id);
-
-      const [enrollmentMap, progressMap] = await Promise.all([
-        this.enrollmentsService.checkMultipleEnrollments(user.sub, courseIds),
-        this.userProgressService.getMultipleCourseProgressSummary(
-          user,
-          courseIds,
-        ),
-      ]);
-
-      return mapped.map((course) => ({
-        ...course,
-        isEnrolled: enrollmentMap[course.id] ?? false,
-        progress: progressMap[course.id] ?? {
-          isCompleted: false,
-          progress: 0,
-          lastTime: 0,
-        },
-      }));
+      return this.attachCourseState(courses, user);
     }
 
     /**
@@ -239,6 +228,36 @@ export class CoursesService {
 
   async findCourseForLearning(slug: string, user: ActiveUserData) {
     return await this.findOneBySlugProvider.getCourseForLearning(slug, user);
+  }
+
+  private async attachCourseState(courses: Course[], user?: ActiveUserData) {
+    const mapped = this.mediaFileMappingService.mapCourses(courses);
+    if (!user) {
+      return mapped.map((c) => ({
+        ...c,
+        isEnrolled: false,
+        progress: null,
+      }));
+    }
+    const courseIds = mapped.map((c) => c.id);
+
+    const [enrollmentMap, progressMap] = await Promise.all([
+      this.enrollmentsService.checkMultipleEnrollments(user.sub, courseIds),
+      this.userProgressService.getMultipleCourseProgressSummary(
+        user,
+        courseIds,
+      ),
+    ]);
+
+    return mapped.map((course) => ({
+      ...course,
+      isEnrolled: enrollmentMap[course.id] ?? false,
+      progress: progressMap[course.id] ?? {
+        isCompleted: false,
+        progress: 0,
+        lastTime: 0,
+      },
+    }));
   }
 
   async getFeaturedCourses(user?: ActiveUserData) {

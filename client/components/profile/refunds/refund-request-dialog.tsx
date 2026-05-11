@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Loader2, RotateCcw } from "lucide-react";
+import { Loader, RotateCcw } from "lucide-react";
 
 import {
   Dialog,
@@ -161,7 +161,7 @@ export function RefundRequestDialog({
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader className="h-4 w-4 animate-spin" />
                   Submitting
                 </>
               ) : (

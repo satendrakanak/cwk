@@ -52,6 +52,13 @@ export const userServerService = {
     apiServer.get<ApiResponse<User[]>>("/users/all-faculty", {
       next: { revalidate: PUBLIC_REVALIDATE_SECONDS },
     }),
+  getFacultyPage: (params?: Pick<UsersQueryParams, "page" | "limit">) =>
+    apiServer.get<ApiResponse<Paginated<User>>>(
+      `/users/faculty${buildUsersQuery(params)}`,
+      {
+        next: { revalidate: PUBLIC_REVALIDATE_SECONDS },
+      },
+    ),
   getFacultyProfile: (facultyId: number) =>
     apiServer.get<ApiResponse<User>>(`/users/faculty-profile/${facultyId}`, {
       next: { revalidate: PUBLIC_REVALIDATE_SECONDS },

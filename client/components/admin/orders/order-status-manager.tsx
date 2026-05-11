@@ -10,7 +10,7 @@ import {
 import { Order, OrderStatus } from "@/types/order";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { Loader } from "lucide-react";
 import { orderClientService } from "@/services/orders/order.client";
 import { Button } from "@/components/ui/button";
 
@@ -109,7 +109,7 @@ export const OrderStatusManager = ({ order }: Props) => {
       {/* HEADER */}
       <div className="px-4 py-3 border-b flex justify-between items-center">
         <h3 className="text-sm font-medium">Order Status</h3>
-        {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+        {loading && <Loader className="h-4 w-4 animate-spin" />}
       </div>
 
       <div className="p-4 space-y-4">

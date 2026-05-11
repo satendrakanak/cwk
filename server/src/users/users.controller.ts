@@ -45,6 +45,14 @@ export class UsersController {
   }
 
   @Auth(AuthType.None)
+  @Get('faculty')
+  public async getFacultyPage(
+    @Query() getUsersDto: GetUsersDto,
+  ): Promise<Paginated<User>> {
+    return await this.usersService.getFacultyPage(getUsersDto);
+  }
+
+  @Auth(AuthType.None)
   @Get('all-faculty')
   public async getAllFaculty() {
     return await this.usersService.getAllFaculty();

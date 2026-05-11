@@ -9,7 +9,7 @@ import { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
 
 @Injectable()
 export class GetFeaturedCoursesProvider {
-  private readonly heroCourseLimit = 5;
+  private readonly heroCourseLimit = 3;
   private readonly popularCourseLimit = 6;
 
   constructor(

@@ -11,7 +11,7 @@ import {
   FileArchive,
   Image as ImageIcon,
   Images,
-  Loader2,
+  Loader,
   Search,
   Trash2,
   UploadCloud,
@@ -361,7 +361,7 @@ export function AdminMediaLibraryPage() {
           <div className="min-h-[520px] rounded-[24px] border border-slate-100 bg-slate-50/70 p-4 dark:border-white/10 dark:bg-slate-950/30">
             {loading ? (
               <div className="flex min-h-[420px] items-center justify-center">
-                <Loader2 className="size-8 animate-spin text-muted-foreground" />
+                <Loader className="size-8 animate-spin text-muted-foreground" />
               </div>
             ) : filteredMedia.length ? (
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
@@ -512,7 +512,7 @@ function UploadPreviewCard({
             disabled={uploadingFile.uploading}
           >
             {uploadingFile.uploading ? (
-              <Loader2 className="size-4 animate-spin" />
+              <Loader className="size-4 animate-spin" />
             ) : (
               <UploadCloud className="size-4" />
             )}

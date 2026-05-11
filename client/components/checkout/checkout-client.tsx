@@ -4,7 +4,7 @@ import * as z from "zod";
 import { useEffect, useState } from "react";
 import { FormProvider } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ShoppingCart, ArrowRight, Loader2, ShieldCheck } from "lucide-react";
+import { ShoppingCart, ArrowRight, Loader, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
 import { useCartStore } from "@/store/cart-store";
@@ -198,7 +198,7 @@ const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
         <Container className="relative z-10">
           <div className="flex min-h-[60vh] items-center justify-center">
             <div className="academy-card p-8 text-center">
-              <Loader2 className="mx-auto mb-4 h-8 w-8 animate-spin text-primary" />
+              <Loader className="mx-auto mb-4 h-8 w-8 animate-spin text-primary" />
 
               <p className="text-sm font-semibold text-card-foreground">
                 Loading checkout...

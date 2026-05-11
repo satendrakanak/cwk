@@ -8,7 +8,7 @@ import {
   ArrowRight,
   BookOpenCheck,
   GraduationCap,
-  Loader2,
+  Loader,
   LockKeyhole,
   LogIn,
   RefreshCcw,
@@ -133,7 +133,7 @@ export default function GlobalError({
                 className="h-11 w-full gap-2 bg-emerald-400 font-semibold text-emerald-950 hover:bg-emerald-300"
               >
                 {isRecovering ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader className="h-4 w-4 animate-spin" />
                 ) : (
                   <RefreshCcw className="h-4 w-4" />
                 )}
@@ -181,7 +181,7 @@ export default function GlobalError({
             </div>
             <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl border border-emerald-300/20 bg-emerald-300/10 text-emerald-200 shadow-2xl shadow-emerald-950/40">
               {isRecovering ? (
-                <Loader2 className="h-10 w-10 animate-spin" />
+                <Loader className="h-10 w-10 animate-spin" />
               ) : (
                 <LockKeyhole className="h-10 w-10" />
               )}

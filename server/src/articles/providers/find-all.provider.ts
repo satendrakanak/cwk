@@ -36,10 +36,11 @@ export class FindAllProvider {
     user?: ActiveUserData,
   ): Promise<Paginated<Article> | Article[]> {
     /**
-     * 🔥 NO PAGINATION (website case)
+     * Public website case: infinite-scroll pages request pagination, while
+     * smaller sections can still fetch the full published list.
      */
     if (getArticlesDto.isPublished) {
-      const articles = await this.articleRepository.find({
+      const findOptions = {
         where: {
           isPublished: true,
         },
@@ -51,13 +52,28 @@ export class FindAllProvider {
           'tags',
         ],
         order: {
-          createdAt: 'DESC',
+          createdAt: 'DESC' as const,
         },
-      });
+      };
 
-      const mapped = this.mediaFileMappingService.mapArticles(articles);
+      if (getArticlesDto.page || getArticlesDto.limit) {
+        const result = await this.paginationProvider.paginateQuery(
+          {
+            limit: getArticlesDto.limit ?? 9,
+            page: getArticlesDto.page ?? 1,
+          },
+          this.articleRepository,
+          findOptions,
+        );
 
-      return mapped;
+        result.data = this.mediaFileMappingService.mapArticles(result.data);
+
+        return result;
+      }
+
+      const articles = await this.articleRepository.find(findOptions);
+
+      return this.mediaFileMappingService.mapArticles(articles);
     }
 
     /**

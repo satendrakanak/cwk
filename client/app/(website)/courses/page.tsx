@@ -1,10 +1,11 @@
 import Container from "@/components/container";
-import { CouponBulkClient } from "@/components/coupon/coupon-bulk-client";
+import { InfiniteCoursesGrid } from "@/components/courses/infinite-courses-grid";
 import { CoursesBanner } from "@/components/layout/courses-banner";
 import { getErrorMessage } from "@/lib/error-handler";
 import { buildMetadata } from "@/lib/seo";
 import { courseServerService } from "@/services/courses/course.server";
-import { Course } from "@/types/course";
+
+const PAGE_SIZE = 9;
 
 export const metadata = buildMetadata({
   title: "Courses",
@@ -14,18 +15,18 @@ export const metadata = buildMetadata({
 });
 
 export default async function CoursesPage() {
-  let courses: Course[] = [];
+  const response = await courseServerService
+    .getPublicCourses({ page: 1, limit: PAGE_SIZE })
+    .catch((error: unknown) => {
+      const message = getErrorMessage(error);
+      throw new Error(message);
+    });
 
-  try {
-    const response = await courseServerService.getPopularCourses();
-    courses = response.data;
-  } catch (error: unknown) {
-    const message = getErrorMessage(error);
-    throw new Error(message);
-  }
+  const coursesPage = response.data;
+
   return (
     <div>
-      <CoursesBanner totalCourses={courses.length} />
+      <CoursesBanner totalCourses={coursesPage.meta.totalItems} />
 
       <section className="academy-section relative bg-background">
         <div className="pointer-events-none absolute inset-0">
@@ -33,7 +34,7 @@ export default async function CoursesPage() {
         </div>
 
         <Container className="relative z-10">
-          <CouponBulkClient courses={courses} />
+          <InfiniteCoursesGrid initialPage={coursesPage} pageSize={PAGE_SIZE} />
         </Container>
       </section>
     </div>

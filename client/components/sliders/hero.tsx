@@ -16,7 +16,7 @@ interface HeroProps {
 }
 
 export default function Hero({ courses }: HeroProps) {
-  const visibleCourses = useMemo(() => courses.slice(0, 5), [courses]);
+  const visibleCourses = useMemo(() => courses.slice(0, 3), [courses]);
   const [couponMap, setCouponMap] = useState<CouponMap>({});
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Check, Loader2, Lock, Pencil, X } from "lucide-react";
+import { Check, Loader, Lock, Pencil, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -100,7 +100,7 @@ export function EditableField({
 
             {loading ? (
               <div className="absolute inset-0 flex items-center justify-center rounded-2xl bg-background/70 backdrop-blur-sm">
-                <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                <Loader className="h-4 w-4 animate-spin text-primary" />
               </div>
             ) : null}
           </div>

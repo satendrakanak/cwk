@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Bell, CheckCheck, Loader2 } from "lucide-react";
+import { Bell, CheckCheck, Loader } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -237,7 +237,7 @@ export function NotificationBell() {
             className="h-8 gap-1.5 rounded-full px-2.5 text-xs"
           >
             {markingAll ? (
-              <Loader2 className="size-3.5 animate-spin" />
+              <Loader className="size-3.5 animate-spin" />
             ) : (
               <CheckCheck className="size-3.5" />
             )}
@@ -248,7 +248,7 @@ export function NotificationBell() {
         <div className="max-h-105 overflow-y-auto p-2">
           {loading && !notifications.length ? (
             <div className="flex items-center justify-center p-8 text-sm text-muted-foreground">
-              <Loader2 className="mr-2 size-4 animate-spin" />
+              <Loader className="mr-2 size-4 animate-spin" />
               Loading notifications
             </div>
           ) : notifications.length ? (
@@ -480,7 +480,7 @@ export function NotificationNavIcon({
               className="h-8 shrink-0 gap-1.5 rounded-full px-3 text-xs"
             >
               {markingAll ? (
-                <Loader2 className="size-3.5 animate-spin" />
+                <Loader className="size-3.5 animate-spin" />
               ) : (
                 <CheckCheck className="size-3.5" />
               )}
@@ -492,7 +492,7 @@ export function NotificationNavIcon({
         <div className="max-h-[62vh] overflow-y-auto border-t border-border">
           {loading && !notifications.length ? (
             <div className="flex items-center justify-center px-5 py-10 text-sm text-muted-foreground">
-              <Loader2 className="mr-2 size-4 animate-spin" />
+              <Loader className="mr-2 size-4 animate-spin" />
               Loading updates
             </div>
           ) : notifications.length ? (

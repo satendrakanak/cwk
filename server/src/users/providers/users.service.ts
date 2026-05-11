@@ -520,6 +520,28 @@ export class UsersService {
 
     return mapped;
   }
+  async getFacultyPage(getUsersDto: GetUsersDto): Promise<Paginated<User>> {
+    const queryBuilder = this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.roles', 'role')
+      .leftJoinAndSelect('user.facultyProfile', 'facultyProfile')
+      .leftJoinAndSelect('user.profile', 'profile')
+      .leftJoinAndSelect('user.avatar', 'avatar')
+      .where('role.name = :roleName', { roleName: 'faculty' })
+      .orderBy('user.createdAt', 'DESC');
+
+    const result = await this.paginationProvider.paginateQueryBuilder(
+      {
+        limit: getUsersDto.limit ?? 8,
+        page: getUsersDto.page ?? 1,
+      },
+      queryBuilder,
+    );
+
+    result.data = this.mediaFileMappingService.mapUsers(result.data);
+
+    return result;
+  }
   async getFacultiesByIds(ids: number[]) {
     const users = await this.userRepository.find({
       where: { id: In(ids) },

@@ -1,5 +1,5 @@
 import { apiServer } from "@/lib/api/server";
-import { ApiResponse } from "@/types/api";
+import { ApiResponse, Paginated } from "@/types/api";
 import { Course } from "@/types/course";
 
 const PUBLIC_REVALIDATE_SECONDS = 60;
@@ -27,6 +27,11 @@ function withQuery(path: string, query?: DateRangeQuery) {
 export const courseServerService = {
   getAll: () =>
     apiServer.get<ApiResponse<Course[]>>("/courses?isPublished=true"),
+  getPublicCourses: (query?: DateRangeQuery) =>
+    apiServer.get<ApiResponse<Paginated<Course>>>(
+      withQuery("/courses?isPublished=true", query),
+      { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } },
+    ),
   getAllCourses: (query?: DateRangeQuery) =>
     apiServer.get<ApiResponse<{ data: Course[] }>>(
       withQuery("/courses", query),

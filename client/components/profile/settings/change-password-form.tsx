@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LockKeyhole, Loader2, Save } from "lucide-react";
+import { LockKeyhole, Loader, Save } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -154,7 +154,7 @@ export function ChangePasswordForm() {
           >
             {isSubmitting ? (
               <>
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader className="h-4 w-4 animate-spin" />
                 Updating...
               </>
             ) : (

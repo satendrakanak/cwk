@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Loader2, MailCheck } from "lucide-react";
+import { Loader, MailCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -105,7 +105,7 @@ export function SignupVerificationDialog({
             className="h-11 rounded-full border-border bg-background px-5 font-semibold text-foreground hover:bg-accent"
           >
             {isResending ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader className="mr-2 h-4 w-4 animate-spin" />
             ) : null}
             Resend code
           </Button>
@@ -117,7 +117,7 @@ export function SignupVerificationDialog({
             className="academy-btn-primary h-11 px-5 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSubmitting ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader className="mr-2 h-4 w-4 animate-spin" />
             ) : null}
             Verify account
           </Button>

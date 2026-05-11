@@ -319,8 +319,8 @@
       }
     ],
     "isFeatured": false,
-    "showInHero": true,
-    "showInPopular": false
+    "showInHero": false,
+    "showInPopular": true
   },
   {
     "title": "Next.js Production Apps Mentorship",
@@ -402,8 +402,8 @@
       }
     ],
     "isFeatured": false,
-    "showInHero": true,
-    "showInPopular": false
+    "showInHero": false,
+    "showInPopular": true
   },
   {
     "title": "Node.js API Development Live Cohort",
@@ -812,7 +812,7 @@
     ],
     "isFeatured": false,
     "showInHero": false,
-    "showInPopular": true
+    "showInPopular": false
   },
   {
     "title": "Data Analytics Career Track",
@@ -895,7 +895,7 @@
     ],
     "isFeatured": false,
     "showInHero": false,
-    "showInPopular": true
+    "showInPopular": false
   },
   {
     "title": "Excel SQL and Dashboard Reporting",
