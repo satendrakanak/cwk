@@ -43,7 +43,9 @@ Usage:
   kasa install dev [-r|--reset]
   kasa install prod
   kasa start dev
+  kasa start
   kasa start prod
+  kasa status [dev|prod]
   kasa reset dev
   kasa stop
   kasa restart dev
@@ -54,7 +56,9 @@ Examples:
   kasa install dev -r
   kasa install prod
   kasa start dev
+  kasa start
   kasa start prod
+  kasa status
   kasa stop
 USAGE
 }
@@ -76,8 +80,20 @@ case "$command:$target" in
   start:dev)
     ./scripts/start-dev.sh
     ;;
+  start:)
+    ./scripts/start-prod.sh
+    ;;
   start:prod)
     ./scripts/start-prod.sh
+    ;;
+  status:)
+    ./scripts/status.sh
+    ;;
+  status:dev)
+    ./scripts/status.sh dev
+    ;;
+  status:prod)
+    ./scripts/status.sh prod
     ;;
   reset:dev)
     ./scripts/reset-dev.sh

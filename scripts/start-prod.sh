@@ -16,5 +16,4 @@ docker compose --env-file .env.production.local -f docker-compose.prod.yml up -d
 echo ""
 echo "CodeWithKasa production test stack is running."
 echo "App:       http://localhost:3000"
-echo "Installer: http://localhost:3000/install"
 echo "API:       http://localhost:8000"

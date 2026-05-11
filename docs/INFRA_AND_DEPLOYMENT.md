@@ -34,10 +34,15 @@ Stop:
 kasa stop
 ```
 
+Status:
+
+```bash
+kasa status
+```
+
 Development URLs:
 
 - App: http://localhost:3000
-- Installer: http://localhost:3000/install
 - API: http://localhost:8000
 - Swagger: http://localhost:8000/api
 
@@ -53,7 +58,7 @@ kasa install prod
 Daily start after the env already exists:
 
 ```bash
-kasa start prod
+kasa start
 ```
 
 Stop:

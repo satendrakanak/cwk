@@ -46,7 +46,9 @@ kasa install dev
 kasa install dev -r
 kasa install prod
 kasa start dev
+kasa start
 kasa start prod
+kasa status
 kasa stop
 kasa restart dev
 
@@ -63,14 +65,16 @@ What they do:
 
 - `kasa install dev`: creates `.env.docker` if needed, builds the development stack, and streams live logs in the terminal.
 - `kasa install dev -r`: stops the development stack, removes bundled Docker data, keeps `.env.docker` in place, and starts a fresh installer.
-- `kasa install prod`: creates `.env.production.local` if needed, starts the local production test stack, and prints setup URLs.
+- `kasa install prod`: creates `.env.production.local` if needed and starts the local production test stack.
 - `kasa start dev`: starts an already-installed development stack with live logs in the terminal.
+- `kasa start`: starts an already-installed local production test stack.
 - `kasa start prod`: starts an already-installed local production test stack without resetting setup.
+- `kasa status`: shows Docker state and installation state for development and local production test mode.
 - `kasa stop`: stops both development and local production test stacks so ports are free.
 - `kasa restart dev`: stops and starts the development stack without reinstalling.
 - `kasa restart prod`: stops and starts the local production test stack without reinstalling.
 - `make install-dev`: creates `.env.docker` if needed, builds the development stack, and streams live logs in the terminal.
-- `make install-prod`: creates `.env.production.local` if needed, starts the local production test stack, and prints setup URLs.
+- `make install-prod`: creates `.env.production.local` if needed and starts the local production test stack.
 - `make dev`: starts the development Docker stack with hot reload.
 - `make prod`: builds and starts the local production Docker stack for final testing.
 
@@ -89,14 +93,15 @@ Database setup during installation:
 - Choose **bundled database** for the default Docker Postgres setup.
 - Choose **external PostgreSQL** for localhost Postgres, a private database server, or Amazon RDS.
 - For external databases, create the empty database first, then enter host, port, database name, username, password, and SSL preference in the installer.
-- After saving an external database, restart the stack with `kasa restart dev` or `kasa restart prod`, then reopen `/install` and continue.
+- After saving an external database, restart the stack with `kasa restart dev` or `kasa restart prod`, then continue from the app URL.
 
 The selected external database is stored inside the Docker runtime volume at `/runtime/database.json`, so no local `.kasa` folder is created in the project.
 
 Install vs start:
 
 - Use `kasa install dev` or `kasa install prod` only for first setup or when creating env files.
-- Use `kasa start dev` or `kasa start prod` after setup is already complete.
+- Use `kasa start dev`, `kasa start`, or `kasa start prod` after setup is already complete.
+- Use `kasa status` to check whether Docker is running and whether the app is installed.
 - Use `kasa restart dev` or `kasa restart prod` after changing database mode in the installer.
 - Use `kasa stop` before switching between dev and local production test stacks.
 
