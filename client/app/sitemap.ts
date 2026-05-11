@@ -23,13 +23,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   })) satisfies MetadataRoute.Sitemap;
 
   const [coursesResult, articlesResult] = await Promise.allSettled([
-    courseServerService.getAll(),
-    articleServerService.getAll(),
+    courseServerService.getPublicCourses({ page: 1, limit: 1000 }),
+    articleServerService.getPublicArticles({ page: 1, limit: 1000 }),
   ]);
 
   const courseEntries =
     coursesResult.status === "fulfilled"
-      ? coursesResult.value.data.map((course) => ({
+      ? coursesResult.value.data.data.map((course) => ({
           url: new URL(`/course/${course.slug}`, siteConfig.url).toString(),
           lastModified: course.updatedAt ? new Date(course.updatedAt) : now,
           changeFrequency: "weekly" as const,
@@ -39,7 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const articleEntries =
     articlesResult.status === "fulfilled"
-      ? articlesResult.value.data.map((article) => ({
+      ? articlesResult.value.data.data.map((article) => ({
           url: new URL(`/article/${article.slug}`, siteConfig.url).toString(),
           lastModified: article.updatedAt ? new Date(article.updatedAt) : now,
           changeFrequency: "weekly" as const,

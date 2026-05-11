@@ -21,8 +21,11 @@ export default async function CouponIdPage({
   let courses: Course[] = [];
 
   try {
-    const response = await courseServerService.getAll();
-    courses = response.data;
+    const response = await courseServerService.getPublicCourses({
+      page: 1,
+      limit: 100,
+    });
+    courses = response.data.data;
   } catch (error: unknown) {
     const message = getErrorMessage(error);
     throw new Error(message);
