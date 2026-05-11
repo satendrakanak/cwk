@@ -108,11 +108,6 @@ export class CoursesService {
         .leftJoinAndSelect('course.categories', 'categories')
         .leftJoinAndSelect('course.faculties', 'faculties')
         .leftJoinAndSelect('course.tags', 'tags')
-        .leftJoinAndSelect('course.chapters', 'chapters')
-        .leftJoinAndSelect('chapters.lectures', 'lectures')
-        .leftJoinAndSelect('lectures.video', 'lectureVideo')
-        .leftJoinAndSelect('lectures.attachments', 'attachments')
-        .leftJoinAndSelect('attachments.file', 'attachmentFile')
         .where('course.isPublished = :isPublished', { isPublished: true })
         .orderBy('course.createdAt', 'DESC');
 

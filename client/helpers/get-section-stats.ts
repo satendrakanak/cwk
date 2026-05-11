@@ -3,19 +3,34 @@ import { Lecture } from "@/types/lecture";
 /**
  * 🎥 get video duration
  */
+const durationCache = new Map<string, Promise<number>>();
+
 export const getVideoDuration = (url: string): Promise<number> => {
-  return new Promise((resolve) => {
+  const cached = durationCache.get(url);
+  if (cached) return cached;
+
+  const durationPromise = new Promise<number>((resolve) => {
     const video = document.createElement("video");
 
     video.src = url;
     video.preload = "metadata";
 
     video.onloadedmetadata = () => {
+      video.removeAttribute("src");
+      video.load();
       resolve(video.duration || 0);
     };
 
-    video.onerror = () => resolve(0);
+    video.onerror = () => {
+      video.removeAttribute("src");
+      video.load();
+      resolve(0);
+    };
   });
+
+  durationCache.set(url, durationPromise);
+
+  return durationPromise;
 };
 
 /**
@@ -54,7 +69,7 @@ export const getSectionStats = async (lectures: Lecture[]) => {
     };
   }
 
-  let total = lectures.length;
+  const total = lectures.length;
   let completed = 0;
 
   // 🔥 parallel duration calculation

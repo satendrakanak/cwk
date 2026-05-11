@@ -6,6 +6,7 @@ import {
 import { Course } from '../course.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Chapter } from 'src/chapters/chapter.entity';
 import { MediaFileMappingService } from 'src/common/media-file-mapping/providers/media-file-mapping.service';
 import { EnrollmentsService } from 'src/enrollments/providers/enrollments.service';
 import { UserProgressService } from 'src/user-progress/providers/user-progress.service';
@@ -24,6 +25,9 @@ export class FindOneBySlugProvider {
 
     @InjectRepository(Course)
     private readonly courseRepository: Repository<Course>,
+
+    @InjectRepository(Chapter)
+    private readonly chapterRepository: Repository<Chapter>,
 
     /**
      * Inject mediaFileMappingService
@@ -48,8 +52,6 @@ export class FindOneBySlugProvider {
   ): Promise<CourseWithAccess> {
     const course = await this.courseRepository
       .createQueryBuilder('course')
-
-      // 🔥 RELATIONS
       .leftJoinAndSelect('course.createdBy', 'createdBy')
       .leftJoinAndSelect('course.updatedBy', 'updatedBy')
       .leftJoinAndSelect('course.image', 'image')
@@ -60,43 +62,35 @@ export class FindOneBySlugProvider {
       .leftJoinAndSelect('faculties.avatar', 'facultyAvatar')
       .leftJoinAndSelect('faculties.facultyProfile', 'facultyProfile')
       .leftJoinAndSelect('faculties.profile', 'profile')
-
-      // 🔥 CHAPTERS (ONLY PUBLISHED)
-      .leftJoinAndSelect(
-        'course.chapters',
-        'chapters',
-        'chapters.isPublished = :chapterPublished',
-        { chapterPublished: true },
-      )
-
-      // 🔥 LECTURES (ONLY PUBLISHED)
-      .leftJoinAndSelect(
-        'chapters.lectures',
-        'lectures',
-        'lectures.isPublished = :lecturePublished',
-        { lecturePublished: true },
-      )
-
-      // 🔥 NESTED RELATIONS
-      .leftJoinAndSelect('lectures.video', 'lectureVideo')
-      .leftJoinAndSelect('lectures.attachments', 'attachments')
-      .leftJoinAndSelect('attachments.file', 'file')
-
-      // 🔥 COURSE FILTER
       .where('course.slug = :slug', { slug })
       .andWhere('course.isPublished = :coursePublished', {
         coursePublished: true,
       })
-
-      // 🔥 ORDERING
-      .orderBy('chapters.position', 'ASC')
-      .addOrderBy('lectures.position', 'ASC')
-
       .getOne();
 
     if (!course) {
       throw new NotFoundException('Course not found');
     }
+
+    course.chapters = await this.chapterRepository
+      .createQueryBuilder('chapter')
+      .leftJoinAndSelect(
+        'chapter.lectures',
+        'lectures',
+        'lectures.isPublished = :lecturePublished',
+        { lecturePublished: true },
+      )
+      .leftJoinAndSelect('lectures.video', 'lectureVideo')
+      .leftJoinAndSelect('lectures.attachments', 'attachments')
+      .leftJoinAndSelect('attachments.file', 'file')
+      .where('chapter.courseId = :courseId', { courseId: course.id })
+      .andWhere('chapter.isPublished = :chapterPublished', {
+        chapterPublished: true,
+      })
+      .orderBy('chapter.position', 'ASC')
+      .addOrderBy('lectures.position', 'ASC')
+      .getMany();
+
     const mappedCourse = this.mediaFileMappingService.mapCourse(course);
     let isEnrolled = false;
     let progress: CourseProgress = {

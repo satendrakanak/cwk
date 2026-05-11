@@ -40,20 +40,24 @@ export const CourseContent = ({ course }: CourseContentProps) => {
       const lectureDurations: Record<number, number> = {};
       const sectionDurations: Record<number, number> = {};
 
-      for (const chapter of course.chapters ?? []) {
-        let total = 0;
+      await Promise.all(
+        (course.chapters ?? []).map(async (chapter) => {
+          const durations = await Promise.all(
+            (chapter.lectures ?? []).map(async (lecture) => {
+              if (!lecture.video?.path) return 0;
 
-        for (const lecture of chapter.lectures ?? []) {
-          if (!lecture.video?.path) continue;
+              const duration = await getVideoDuration(lecture.video.path);
+              lectureDurations[lecture.id] = duration;
+              return duration;
+            }),
+          );
 
-          const duration = await getVideoDuration(lecture.video.path);
-
-          lectureDurations[lecture.id] = duration;
-          total += duration;
-        }
-
-        sectionDurations[chapter.id] = total;
-      }
+          sectionDurations[chapter.id] = durations.reduce(
+            (total, duration) => total + duration,
+            0,
+          );
+        }),
+      );
 
       if (!isMounted) return;
 

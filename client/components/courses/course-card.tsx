@@ -47,14 +47,21 @@ const getInstructorLabel = (course: Course) => {
 
 export function CourseCard({ course, coupon }: CourseCardProps) {
   const addToCart = useCartStore((s) => s.addToCart);
-  const [meta, setMeta] = useState({
+  const [meta, setMeta] = useState<{
+    totalLectures: number;
+    totalDuration: string;
+  } | null>({
     totalLectures: 0,
-    totalDuration: "0m",
+    totalDuration: course.duration || "0m",
   });
 
   const router = useRouter();
 
   useEffect(() => {
+    if (!course.chapters?.length) {
+      return;
+    }
+
     const loadMeta = async () => {
       const data = await getCourseMeta(course);
       setMeta(data);
@@ -72,6 +79,8 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
   const delivery = getCourseDeliveryLabel(course.mode);
   const recordedLearning = hasRecordedLearning(course);
   const liveClasses = hasLiveClasses(course);
+  const totalLectures = meta?.totalLectures ?? 0;
+  const totalDuration = meta?.totalDuration || course.duration || "Self-paced";
   const basePrice = Number(course.priceInr);
   const finalPrice = coupon?.finalAmount ?? basePrice;
   const discount = coupon?.discount ?? 0;
@@ -89,8 +98,8 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
       price: Number(course.priceInr),
       image: course.image?.path,
       instructor: getInstructorLabel(course),
-      totalDuration: meta.totalDuration,
-      totalLectures: meta.totalLectures,
+      totalDuration,
+      totalLectures,
       slug: course.slug,
     });
 
@@ -146,8 +155,10 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
         <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
           {recordedLearning ? (
             <>
-              <span>🎬 {meta.totalLectures} lectures</span>
-              <span>⏱ {meta.totalDuration}</span>
+              {totalLectures > 0 ? (
+                <span>🎬 {totalLectures} lectures</span>
+              ) : null}
+              <span>⏱ {totalDuration}</span>
             </>
           ) : null}
           {liveClasses ? <span>📅 Live batches</span> : null}

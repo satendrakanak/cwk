@@ -44,15 +44,11 @@ export class GetRelatedCoursesProvider {
         'video',
         'categories',
         'tags',
-        'chapters',
-        'chapters.lectures',
-        'chapters.lectures.video',
-        'chapters.lectures.attachments',
-        'chapters.lectures.attachments.file',
       ],
       order: {
         createdAt: 'DESC',
       },
+      take: 8,
     });
 
     const mapped = this.mediaFileMappingService.mapCourses(courses);

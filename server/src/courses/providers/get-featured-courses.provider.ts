@@ -72,11 +72,6 @@ export class GetFeaturedCoursesProvider {
         'video',
         'categories',
         'tags',
-        'chapters',
-        'chapters.lectures',
-        'chapters.lectures.video',
-        'chapters.lectures.attachments',
-        'chapters.lectures.attachments.file',
       ],
       order: {
         createdAt: 'DESC',

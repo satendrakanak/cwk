@@ -62,21 +62,19 @@ export default async function CourseSlugPage({ params }: CoursePageProps) {
   }
 
   let relatedCourses: Course[] = [];
-  try {
-    const response = await courseServerService.getRealtedCourses(course.id);
-    relatedCourses = response.data;
-  } catch (error: unknown) {
-    const message = getErrorMessage(error);
-    throw new Error(message);
-  }
-
   let testimonials: Testimonial[] = [];
+
   try {
-    const response = await testimonialServerService.getPublic({
-      courseId: course.id,
-      limit: 6,
-    });
-    testimonials = response.data.data;
+    const [relatedCoursesResponse, testimonialsResponse] = await Promise.all([
+      courseServerService.getRealtedCourses(course.id),
+      testimonialServerService.getPublic({
+        courseId: course.id,
+        limit: 6,
+      }),
+    ]);
+
+    relatedCourses = relatedCoursesResponse.data;
+    testimonials = testimonialsResponse.data.data;
   } catch (error: unknown) {
     const message = getErrorMessage(error);
     throw new Error(message);

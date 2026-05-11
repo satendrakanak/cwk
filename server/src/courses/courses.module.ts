@@ -20,10 +20,11 @@ import { GetEnrolledCoursesProvider } from './providers/get-enrolled-courses.pro
 import { UsersModule } from 'src/users/users.module';
 import { EngagementModule } from 'src/engagement/engagement.module';
 import { CourseDisplayFlagsSchemaProvider } from './providers/course-display-flags-schema.provider';
+import { Chapter } from 'src/chapters/chapter.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Course]),
+    TypeOrmModule.forFeature([Course, Chapter]),
     SlugModule,
     PaginationModule,
     UploadsModule,
