@@ -42,6 +42,7 @@ CodeWithKasa CLI
 Usage:
   kasa install dev [-r|--reset]
   kasa install prod
+  kasa build
   kasa start dev
   kasa start
   kasa status [dev|prod]
@@ -54,6 +55,7 @@ Examples:
   kasa install dev
   kasa install dev -r
   kasa install prod
+  kasa build
   kasa start dev
   kasa start
   kasa status
@@ -74,6 +76,12 @@ case "$command:$target" in
     ;;
   install:prod)
     ./scripts/install-prod.sh
+    ;;
+  build:)
+    ./scripts/build-prod.sh
+    ;;
+  build:prod)
+    ./scripts/build-prod.sh
     ;;
   start:dev)
     ./scripts/start-dev.sh

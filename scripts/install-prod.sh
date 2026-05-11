@@ -17,8 +17,7 @@ if [ ! -f .env ]; then
   exit 1
 fi
 
-echo "Starting CodeWithKasa production stack..."
-docker compose --env-file .env -f docker-compose.prod.yml up --build -d
+./scripts/build-prod.sh
 
 status_json="$(wait_for_installer_status prod 30 || true)"
 if [ -n "$status_json" ] && status_is_installed "$status_json"; then
