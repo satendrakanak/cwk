@@ -20,6 +20,7 @@ interface FacultyCardProps {
 export function FacultyCard({ faculty }: FacultyCardProps) {
   const name = `${faculty.firstName} ${faculty.lastName || ""}`.trim();
   const designation = faculty.facultyProfile?.designation || "Faculty Mentor";
+  const avatarSrc = faculty.avatar?.path || faculty.avatarUrl || "/assets/default.png";
 
   const socials = [
     {
@@ -60,7 +61,7 @@ export function FacultyCard({ faculty }: FacultyCardProps) {
 
       <div className="relative h-56 overflow-hidden rounded-[22px] border border-border bg-muted">
         <Image
-          src={faculty.avatar?.path || "/assets/default.png"}
+          src={avatarSrc}
           alt={name || "Faculty"}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

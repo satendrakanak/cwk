@@ -5,7 +5,7 @@
     "company": "Independent Learner",
     "message": "The recorded lessons in Frontend Developer Starter Kit helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 4,
-    "avatarPath": "/assets/testimonials/student-1.jpg",
+    "avatarPath": "/assets/users/user-girl-01.webp",
     "avatarAlt": "Nisha Mehta profile photo",
     "courseSlugs": [
       "frontend-developer-starter-kit"
@@ -18,7 +18,7 @@
     "company": "Junior Developer",
     "message": "The recorded lessons in JavaScript Mastery Self Learning Path helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-2.jpg",
+    "avatarPath": "/assets/users/user-boy-01.webp",
     "avatarAlt": "Rohit Bansal profile photo",
     "courseSlugs": [
       "javascript-mastery-self-learning-path"
@@ -31,7 +31,7 @@
     "company": "Student",
     "message": "The recorded lessons in TypeScript for Practical Developers helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-3.jpg",
+    "avatarPath": "/assets/users/user-girl-02.webp",
     "avatarAlt": "Ananya Rao profile photo",
     "courseSlugs": [
       "typescript-for-practical-developers"
@@ -44,7 +44,7 @@
     "company": "Working Professional",
     "message": "The live faculty sessions in React Project Builder Bootcamp helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-1.jpg",
+    "avatarPath": "/assets/users/user-boy-02.webp",
     "avatarAlt": "Sahil Jain profile photo",
     "courseSlugs": [
       "react-project-builder-bootcamp"
@@ -57,7 +57,7 @@
     "company": "Independent Learner",
     "message": "The hybrid learning flow in Next.js Production Apps Mentorship helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-2.jpg",
+    "avatarPath": "/assets/users/user-girl-03.webp",
     "avatarAlt": "Tanvi Shah profile photo",
     "courseSlugs": [
       "nextjs-production-apps-mentorship"
@@ -70,7 +70,7 @@
     "company": "Junior Developer",
     "message": "The live faculty sessions in Node.js API Development Live Cohort helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-3.jpg",
+    "avatarPath": "/assets/users/user-boy-03.webp",
     "avatarAlt": "Mohit Yadav profile photo",
     "courseSlugs": [
       "nodejs-api-development-live-cohort"
@@ -83,7 +83,7 @@
     "company": "Student",
     "message": "The live faculty sessions in NestJS Backend Architecture Program helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-1.jpg",
+    "avatarPath": "/assets/users/user-girl-04.webp",
     "avatarAlt": "Kriti Kapoor profile photo",
     "courseSlugs": [
       "nestjs-backend-architecture-program"
@@ -96,7 +96,7 @@
     "company": "Working Professional",
     "message": "The recorded lessons in PostgreSQL and Database Design helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-2.jpg",
+    "avatarPath": "/assets/users/user-boy-04.webp",
     "avatarAlt": "Aman Raj profile photo",
     "courseSlugs": [
       "postgresql-and-database-design"
@@ -109,7 +109,7 @@
     "company": "Independent Learner",
     "message": "The hybrid learning flow in Full Stack Web Development Mentorship helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-3.jpg",
+    "avatarPath": "/assets/users/user-girl-05.webp",
     "avatarAlt": "Sneha Pillai profile photo",
     "courseSlugs": [
       "full-stack-web-development-mentorship"
@@ -122,7 +122,7 @@
     "company": "Junior Developer",
     "message": "The recorded lessons in Python Programming Foundations helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 4,
-    "avatarPath": "/assets/testimonials/student-1.jpg",
+    "avatarPath": "/assets/users/user-boy-05.webp",
     "avatarAlt": "Laksh Malik profile photo",
     "courseSlugs": [
       "python-programming-foundations"
@@ -135,7 +135,7 @@
     "company": "Student",
     "message": "The hybrid learning flow in Data Analytics Career Track helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-2.jpg",
+    "avatarPath": "/assets/users/user-girl-06.webp",
     "avatarAlt": "Diya Suri profile photo",
     "courseSlugs": [
       "data-analytics-career-track"
@@ -148,7 +148,7 @@
     "company": "Working Professional",
     "message": "The live faculty sessions in Excel SQL and Dashboard Reporting helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-3.jpg",
+    "avatarPath": "/assets/users/user-boy-06.webp",
     "avatarAlt": "Varun Bhatt profile photo",
     "courseSlugs": [
       "excel-sql-dashboard-reporting"
@@ -161,7 +161,7 @@
     "company": "Independent Learner",
     "message": "The live faculty sessions in DSA Interview Practice Live helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-1.jpg",
+    "avatarPath": "/assets/users/user-girl-07.webp",
     "avatarAlt": "Isha Gupta profile photo",
     "courseSlugs": [
       "dsa-interview-practice-live"
@@ -174,7 +174,7 @@
     "company": "Junior Developer",
     "message": "The recorded lessons in Git and GitHub Team Workflow helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-2.jpg",
+    "avatarPath": "/assets/users/user-boy-07.webp",
     "avatarAlt": "Neil Dutta profile photo",
     "courseSlugs": [
       "git-and-github-team-workflow"
@@ -187,7 +187,7 @@
     "company": "Student",
     "message": "The recorded lessons in Docker DevOps Starter Course helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-3.jpg",
+    "avatarPath": "/assets/users/user-girl-08.webp",
     "avatarAlt": "Avni Kohli profile photo",
     "courseSlugs": [
       "docker-devops-starter-course"
@@ -200,7 +200,7 @@
     "company": "Working Professional",
     "message": "The live faculty sessions in AWS Cloud Deployment Essentials helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-1.jpg",
+    "avatarPath": "/assets/users/user-boy-08.webp",
     "avatarAlt": "Dhruv Sinha profile photo",
     "courseSlugs": [
       "aws-cloud-deployment-essentials"
@@ -213,7 +213,7 @@
     "company": "Independent Learner",
     "message": "The live faculty sessions in Web Performance Optimization Lab helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-2.jpg",
+    "avatarPath": "/assets/users/user-girl-09.webp",
     "avatarAlt": "Mitali Roy profile photo",
     "courseSlugs": [
       "web-performance-optimization-lab"
@@ -226,7 +226,7 @@
     "company": "Junior Developer",
     "message": "The recorded lessons in UI UX Design Essentials helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-3.jpg",
+    "avatarPath": "/assets/users/user-girl-10.webp",
     "avatarAlt": "Aarohi Jain profile photo",
     "courseSlugs": [
       "ui-ux-design-essentials"
@@ -239,7 +239,7 @@
     "company": "Student",
     "message": "The hybrid learning flow in Figma to Frontend Workflow helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 4,
-    "avatarPath": "/assets/testimonials/student-1.jpg",
+    "avatarPath": "/assets/users/user-boy-09.webp",
     "avatarAlt": "Karan Mehra profile photo",
     "courseSlugs": [
       "figma-to-frontend-workflow"
@@ -252,7 +252,7 @@
     "company": "Working Professional",
     "message": "The live faculty sessions in QA Automation with Playwright helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-2.jpg",
+    "avatarPath": "/assets/users/user-boy-10.webp",
     "avatarAlt": "Sanya Bedi profile photo",
     "courseSlugs": [
       "qa-automation-with-playwright"
@@ -265,7 +265,7 @@
     "company": "Independent Learner",
     "message": "The recorded lessons in Cybersecurity for Web Developers helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-3.jpg",
+    "avatarPath": "/assets/users/user-boy-11.webp",
     "avatarAlt": "Vivaan Shah profile photo",
     "courseSlugs": [
       "cybersecurity-for-web-developers"
@@ -278,7 +278,7 @@
     "company": "Junior Developer",
     "message": "The live faculty sessions in React Native App Launchpad helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-1.jpg",
+    "avatarPath": "/assets/users/user-boy-12.webp",
     "avatarAlt": "Mehul Nanda profile photo",
     "courseSlugs": [
       "react-native-app-launchpad"
@@ -291,7 +291,7 @@
     "company": "Student",
     "message": "The recorded lessons in AI Tools for Developer Productivity helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-2.jpg",
+    "avatarPath": "/assets/users/user-girl-11.webp",
     "avatarAlt": "Rhea Sood profile photo",
     "courseSlugs": [
       "ai-tools-for-developer-productivity"
@@ -304,7 +304,7 @@
     "company": "Working Professional",
     "message": "The recorded lessons in Technical Writing for Developers helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-3.jpg",
+    "avatarPath": "/assets/users/user-boy-01.webp",
     "avatarAlt": "Aditya Rao profile photo",
     "courseSlugs": [
       "technical-writing-for-developers"
@@ -317,7 +317,7 @@
     "company": "Independent Learner",
     "message": "The live faculty sessions in Spoken English Live Confidence Batch helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-1.jpg",
+    "avatarPath": "/assets/users/user-girl-12.webp",
     "avatarAlt": "Prachi Saini profile photo",
     "courseSlugs": [
       "spoken-english-live-confidence-batch"
@@ -330,7 +330,7 @@
     "company": "Junior Developer",
     "message": "The live faculty sessions in Career Prep Resume and Interview Lab helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-2.jpg",
+    "avatarPath": "/assets/users/user-boy-02.webp",
     "avatarAlt": "Gaurav Saxena profile photo",
     "courseSlugs": [
       "career-prep-resume-interview-lab"
@@ -343,7 +343,7 @@
     "company": "Student",
     "message": "The hybrid learning flow in System Design Foundation Hybrid helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-3.jpg",
+    "avatarPath": "/assets/users/user-girl-01.webp",
     "avatarAlt": "Naina Verma profile photo",
     "courseSlugs": [
       "system-design-foundation-hybrid"
@@ -356,7 +356,7 @@
     "company": "Working Professional",
     "message": "The live faculty sessions in Ecommerce Website Builder Program helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 4,
-    "avatarPath": "/assets/testimonials/student-1.jpg",
+    "avatarPath": "/assets/users/user-boy-03.webp",
     "avatarAlt": "Aryan Khanna profile photo",
     "courseSlugs": [
       "ecommerce-website-builder-program"
@@ -369,7 +369,7 @@
     "company": "Independent Learner",
     "message": "The recorded lessons in Freelance Developer Business Kit helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-2.jpg",
+    "avatarPath": "/assets/users/user-girl-02.webp",
     "avatarAlt": "Jiya Menon profile photo",
     "courseSlugs": [
       "freelance-developer-business-kit"
@@ -382,7 +382,7 @@
     "company": "Junior Developer",
     "message": "The hybrid learning flow in Product Analytics and Growth Metrics helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-3.jpg",
+    "avatarPath": "/assets/users/user-boy-04.webp",
     "avatarAlt": "Sameer Ali profile photo",
     "courseSlugs": [
       "product-analytics-growth-metrics"
@@ -395,7 +395,7 @@
     "company": "Student",
     "message": "The recorded lessons in Frontend Developer Starter Kit helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-1.jpg",
+    "avatarPath": "/assets/users/user-girl-03.webp",
     "avatarAlt": "Kiara Bose profile photo",
     "courseSlugs": [
       "frontend-developer-starter-kit"
@@ -408,7 +408,7 @@
     "company": "Working Professional",
     "message": "The recorded lessons in JavaScript Mastery Self Learning Path helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-2.jpg",
+    "avatarPath": "/assets/users/user-boy-05.webp",
     "avatarAlt": "Tarun Goyal profile photo",
     "courseSlugs": [
       "javascript-mastery-self-learning-path"
@@ -421,7 +421,7 @@
     "company": "Independent Learner",
     "message": "The recorded lessons in TypeScript for Practical Developers helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-3.jpg",
+    "avatarPath": "/assets/users/user-girl-04.webp",
     "avatarAlt": "Bhavna Puri profile photo",
     "courseSlugs": [
       "typescript-for-practical-developers"
@@ -434,7 +434,7 @@
     "company": "Junior Developer",
     "message": "The live faculty sessions in React Project Builder Bootcamp helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-1.jpg",
+    "avatarPath": "/assets/users/user-boy-06.webp",
     "avatarAlt": "Uday Chandra profile photo",
     "courseSlugs": [
       "react-project-builder-bootcamp"
@@ -447,7 +447,7 @@
     "company": "Student",
     "message": "The hybrid learning flow in Next.js Production Apps Mentorship helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-2.jpg",
+    "avatarPath": "/assets/users/user-girl-05.webp",
     "avatarAlt": "Rashi Kamat profile photo",
     "courseSlugs": [
       "nextjs-production-apps-mentorship"
@@ -460,7 +460,7 @@
     "company": "Working Professional",
     "message": "The live faculty sessions in Node.js API Development Live Cohort helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-3.jpg",
+    "avatarPath": "/assets/users/user-boy-07.webp",
     "avatarAlt": "Nikhil Bhatia profile photo",
     "courseSlugs": [
       "nodejs-api-development-live-cohort"
@@ -473,7 +473,7 @@
     "company": "Independent Learner",
     "message": "The live faculty sessions in NestJS Backend Architecture Program helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 4,
-    "avatarPath": "/assets/testimonials/student-1.jpg",
+    "avatarPath": "/assets/users/user-girl-06.webp",
     "avatarAlt": "Mira Dsouza profile photo",
     "courseSlugs": [
       "nestjs-backend-architecture-program"
@@ -486,7 +486,7 @@
     "company": "Junior Developer",
     "message": "The recorded lessons in PostgreSQL and Database Design helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-2.jpg",
+    "avatarPath": "/assets/users/user-boy-08.webp",
     "avatarAlt": "Jay Malhotra profile photo",
     "courseSlugs": [
       "postgresql-and-database-design"
@@ -499,7 +499,7 @@
     "company": "Student",
     "message": "The hybrid learning flow in Full Stack Web Development Mentorship helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-3.jpg",
+    "avatarPath": "/assets/users/user-girl-07.webp",
     "avatarAlt": "Tanya Arora profile photo",
     "courseSlugs": [
       "full-stack-web-development-mentorship"
@@ -512,7 +512,7 @@
     "company": "Working Professional",
     "message": "The recorded lessons in Python Programming Foundations helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-1.jpg",
+    "avatarPath": "/assets/users/user-boy-09.webp",
     "avatarAlt": "Abhay Kulkarni profile photo",
     "courseSlugs": [
       "python-programming-foundations"

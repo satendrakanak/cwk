@@ -33,7 +33,8 @@ export async function generateMetadata({ params }: PageProps) {
         faculty.facultyProfile?.expertise ||
         "Meet our faculty and explore learner feedback.",
       path: `/our-faculty/${faculty.id}`,
-      image: faculty.avatar?.path || faculty.coverImage?.path || null,
+      image:
+        faculty.avatar?.path || faculty.avatarUrl || faculty.coverImage?.path || null,
     });
   } catch {
     return buildMetadata({
@@ -57,6 +58,7 @@ export default async function FacultyDetailPage({ params }: PageProps) {
   const fullName = [faculty.firstName, faculty.lastName]
     .filter(Boolean)
     .join(" ");
+  const avatarSrc = faculty.avatar?.path || faculty.avatarUrl || "/assets/default.png";
 
   const enrolledCourses = session
     ? await userServerService
@@ -165,7 +167,7 @@ export default async function FacultyDetailPage({ params }: PageProps) {
                 <div className="overflow-hidden rounded-[30px] border border-white/15 bg-white/10 p-3 shadow-[0_32px_90px_rgba(2,6,23,0.35)] backdrop-blur-xl">
                   <div className="relative aspect-square overflow-hidden rounded-[24px] bg-white/10">
                     <Image
-                      src={faculty.avatar?.path || "/assets/default.png"}
+                      src={avatarSrc}
                       alt={fullName || "Faculty"}
                       fill
                       priority

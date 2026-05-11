@@ -66,7 +66,8 @@ export const CourseInstructor = ({ course }: CourseInstructorProps) => {
             instructor.lastName || ""
           }`.trim();
 
-          const avatar = instructor.avatar?.path || "/assets/default.png";
+          const avatar =
+            instructor.avatar?.path || instructor.avatarUrl || "/assets/default.png";
 
           const socials = [
             {

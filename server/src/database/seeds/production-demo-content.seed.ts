@@ -1108,14 +1108,26 @@ async function getUpload(dataSource: DataSource, path: string, name: string) {
   const uploadRepository = dataSource.getRepository(Upload);
   const existingUpload = await uploadRepository.findOne({ where: { path } });
 
-  if (existingUpload) return existingUpload;
+  const mime = path.endsWith('.webp')
+    ? 'image/webp'
+    : path.endsWith('.png')
+      ? 'image/png'
+      : 'image/jpeg';
+
+  if (existingUpload) {
+    existingUpload.name = name;
+    existingUpload.type = FileTypes.IMAGE;
+    existingUpload.mime = mime;
+    existingUpload.status = UploadStatus.COMPLETED;
+    return uploadRepository.save(existingUpload);
+  }
 
   return uploadRepository.save(
     uploadRepository.create({
       name,
       path,
       type: FileTypes.IMAGE,
-      mime: 'image/jpeg',
+      mime,
       size: 0,
       status: UploadStatus.COMPLETED,
     }),
