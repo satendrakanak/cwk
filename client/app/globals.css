@@ -610,8 +610,8 @@
 .related-courses-slider .swiper-button-next,
 .related-articles-slider .swiper-button-prev,
 .related-articles-slider .swiper-button-next {
-  width: 42px;
-  height: 42px;
+  width: 36px;
+  height: 36px;
   border-radius: 999px;
   background: var(--surface-panel-strong);
   border: 1px solid var(--border);
@@ -623,11 +623,20 @@
 .related-courses-slider .swiper-button-next::after,
 .related-articles-slider .swiper-button-prev::after,
 .related-articles-slider .swiper-button-next::after {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 800;
 }
 
 .related-courses-slider .swiper-button-disabled,
 .related-articles-slider .swiper-button-disabled {
   opacity: 0.35;
+}
+
+@media (max-width: 639px) {
+  .related-courses-slider .swiper-button-prev,
+  .related-courses-slider .swiper-button-next,
+  .related-articles-slider .swiper-button-prev,
+  .related-articles-slider .swiper-button-next {
+    display: none;
+  }
 }

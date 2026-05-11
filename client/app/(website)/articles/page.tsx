@@ -90,6 +90,7 @@ export default async function ArticlesPage({
               />
 
               <InfiniteArticlesGrid
+                key={selectedCategory || "all"}
                 initialPage={articlesPage}
                 pageSize={PAGE_SIZE}
                 category={selectedCategory}
