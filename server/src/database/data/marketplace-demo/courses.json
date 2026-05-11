@@ -74,7 +74,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": true,
+    "showInPopular": false
   },
   {
     "title": "JavaScript Mastery Self Learning Path",
@@ -151,7 +154,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": true,
+    "showInPopular": false
   },
   {
     "title": "TypeScript for Practical Developers",
@@ -228,7 +234,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": true,
+    "showInPopular": false
   },
   {
     "title": "React Project Builder Bootcamp",
@@ -308,7 +317,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": true,
+    "showInPopular": false
   },
   {
     "title": "Next.js Production Apps Mentorship",
@@ -388,7 +400,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": true,
+    "showInPopular": false
   },
   {
     "title": "Node.js API Development Live Cohort",
@@ -468,7 +483,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": true
   },
   {
     "title": "NestJS Backend Architecture Program",
@@ -548,7 +566,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": true
   },
   {
     "title": "PostgreSQL and Database Design",
@@ -625,7 +646,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": true
   },
   {
     "title": "Full Stack Web Development Mentorship",
@@ -705,7 +729,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": true
   },
   {
     "title": "Python Programming Foundations",
@@ -782,7 +809,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": true
   },
   {
     "title": "Data Analytics Career Track",
@@ -862,7 +892,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": true
   },
   {
     "title": "Excel SQL and Dashboard Reporting",
@@ -942,7 +975,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   },
   {
     "title": "DSA Interview Practice Live",
@@ -1022,7 +1058,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   },
   {
     "title": "Git and GitHub Team Workflow",
@@ -1099,7 +1138,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   },
   {
     "title": "Docker DevOps Starter Course",
@@ -1176,7 +1218,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   },
   {
     "title": "AWS Cloud Deployment Essentials",
@@ -1256,7 +1301,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   },
   {
     "title": "Web Performance Optimization Lab",
@@ -1336,7 +1384,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   },
   {
     "title": "UI UX Design Essentials",
@@ -1413,7 +1464,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   },
   {
     "title": "Figma to Frontend Workflow",
@@ -1493,7 +1547,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   },
   {
     "title": "QA Automation with Playwright",
@@ -1573,7 +1630,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   },
   {
     "title": "Cybersecurity for Web Developers",
@@ -1650,7 +1710,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   },
   {
     "title": "React Native App Launchpad",
@@ -1730,7 +1793,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   },
   {
     "title": "AI Tools for Developer Productivity",
@@ -1807,7 +1873,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   },
   {
     "title": "Technical Writing for Developers",
@@ -1884,7 +1953,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   },
   {
     "title": "Spoken English Live Confidence Batch",
@@ -1964,7 +2036,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   },
   {
     "title": "Career Prep Resume and Interview Lab",
@@ -2044,7 +2119,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   },
   {
     "title": "System Design Foundation Hybrid",
@@ -2124,7 +2202,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   },
   {
     "title": "Ecommerce Website Builder Program",
@@ -2204,7 +2285,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   },
   {
     "title": "Freelance Developer Business Kit",
@@ -2281,7 +2365,10 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   },
   {
     "title": "Product Analytics and Growth Metrics",
@@ -2361,6 +2448,9 @@
           }
         ]
       }
-    ]
+    ],
+    "isFeatured": false,
+    "showInHero": false,
+    "showInPopular": false
   }
 ]

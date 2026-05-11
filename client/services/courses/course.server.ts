@@ -33,7 +33,12 @@ export const courseServerService = {
     ),
 
   getPopularCourses: () =>
-    apiServer.get<ApiResponse<Course[]>>("/courses/featured", {
+    apiServer.get<ApiResponse<Course[]>>("/courses/popular", {
+      next: { revalidate: PUBLIC_REVALIDATE_SECONDS },
+    }),
+
+  getHeroCourses: () =>
+    apiServer.get<ApiResponse<Course[]>>("/courses/hero", {
       next: { revalidate: PUBLIC_REVALIDATE_SECONDS },
     }),
 

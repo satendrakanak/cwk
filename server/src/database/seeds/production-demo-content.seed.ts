@@ -91,6 +91,9 @@ type DemoCourse = {
   monthlyLiveClassLimit?: number | null;
   attendanceType?: string;
   attendanceValue?: number | null;
+  showInHero?: boolean;
+  showInPopular?: boolean;
+  isFeatured?: boolean;
   categories: string[];
   tags: string[];
   chapters: DemoChapter[];
@@ -1561,7 +1564,9 @@ export async function seedProductionDemoContent(dataSource: DataSource) {
     course.image = image;
     course.imageAlt = demoCourse.imageAlt;
     course.isFree = false;
-    course.isFeatured = true;
+    course.isFeatured = Boolean(demoCourse.isFeatured);
+    course.showInHero = Boolean(demoCourse.showInHero);
+    course.showInPopular = Boolean(demoCourse.showInPopular);
     course.isPublished = true;
     course.priceInr = demoCourse.priceInr;
     course.priceUsd = demoCourse.priceUsd;

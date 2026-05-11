@@ -6,6 +6,8 @@ interface PopularCoursesProps {
 }
 
 export default function PopularCourses({ courses }: PopularCoursesProps) {
+  const visibleCourses = courses.slice(0, 6);
+
   return (
     <section className="academy-section relative bg-background">
       <div className="pointer-events-none absolute inset-0">
@@ -34,7 +36,7 @@ export default function PopularCourses({ courses }: PopularCoursesProps) {
           </p>
         </div>
 
-        <CouponBulkClient courses={courses} />
+        <CouponBulkClient courses={visibleCourses} />
       </div>
     </section>
   );

@@ -19,6 +19,7 @@ import { GetRelatedCoursesProvider } from './providers/get-related-courses.provi
 import { GetEnrolledCoursesProvider } from './providers/get-enrolled-courses.provider';
 import { UsersModule } from 'src/users/users.module';
 import { EngagementModule } from 'src/engagement/engagement.module';
+import { CourseDisplayFlagsSchemaProvider } from './providers/course-display-flags-schema.provider';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { EngagementModule } from 'src/engagement/engagement.module';
     GetFeaturedCoursesProvider,
     GetRelatedCoursesProvider,
     GetEnrolledCoursesProvider,
+    CourseDisplayFlagsSchemaProvider,
   ],
   exports: [CoursesService],
 })

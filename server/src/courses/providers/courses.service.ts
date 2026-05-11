@@ -245,6 +245,14 @@ export class CoursesService {
     return await this.getFeaturedCoursesProvider.getFeaturedCourses(user);
   }
 
+  async getHeroCourses(user?: ActiveUserData) {
+    return await this.getFeaturedCoursesProvider.getHeroCourses(user);
+  }
+
+  async getPopularCourses(user?: ActiveUserData) {
+    return await this.getFeaturedCoursesProvider.getPopularCourses(user);
+  }
+
   async getRelatedCourses(courseId: number, user?: ActiveUserData) {
     return await this.getRelatedCoursesProvider.getRelatedCourses(
       courseId,
@@ -336,6 +344,8 @@ export class CoursesService {
           video: sourceCourse.video ?? null,
           isFree: sourceCourse.isFree,
           isFeatured: false,
+          showInHero: false,
+          showInPopular: false,
           isPublished: false,
           priceInr: sourceCourse.priceInr,
           priceUsd: sourceCourse.priceUsd,

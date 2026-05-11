@@ -259,6 +259,8 @@ export class UpdateCourseProvider {
       'facultyIds',
       'isPublished',
       'isFeatured',
+      'showInHero',
+      'showInPopular',
       'isFree',
       'priceInr',
       'priceUsd',

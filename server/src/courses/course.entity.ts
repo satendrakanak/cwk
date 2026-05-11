@@ -94,6 +94,12 @@ export class Course {
   isFeatured!: boolean;
 
   @Column({ type: 'boolean', default: false })
+  showInHero!: boolean;
+
+  @Column({ type: 'boolean', default: false })
+  showInPopular!: boolean;
+
+  @Column({ type: 'boolean', default: false })
   isPublished!: boolean;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })

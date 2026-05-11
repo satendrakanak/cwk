@@ -102,6 +102,8 @@ export type CreateCoursePayload = {
   isFree?: boolean;
   isPublished?: boolean;
   isFeatured?: boolean;
+  showInHero?: boolean;
+  showInPopular?: boolean;
   priceInr?: string;
   priceUsd?: string;
 
@@ -152,6 +154,8 @@ export type Course = {
   isFree: boolean;
   isPublished: boolean;
   isFeatured: boolean;
+  showInHero: boolean;
+  showInPopular: boolean;
   priceInr: string | null;
   priceUsd: string | null;
   duration: string | null;

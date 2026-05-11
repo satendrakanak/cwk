@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Autoplay, EffectCards, Pagination } from "swiper/modules";
@@ -16,15 +16,16 @@ interface HeroProps {
 }
 
 export default function Hero({ courses }: HeroProps) {
+  const visibleCourses = useMemo(() => courses.slice(0, 5), [courses]);
   const [couponMap, setCouponMap] = useState<CouponMap>({});
 
   useEffect(() => {
-    if (!courses?.length) return;
+    if (!visibleCourses?.length) return;
 
     const fetchCoupons = async () => {
       try {
         const res = await couponClientService.autoApplyBulk({
-          courses: courses.map((course) => ({
+          courses: visibleCourses.map((course) => ({
             id: course.id,
             price: Number(course.priceInr),
           })),
@@ -37,7 +38,7 @@ export default function Hero({ courses }: HeroProps) {
     };
 
     fetchCoupons();
-  }, [courses]);
+  }, [visibleCourses]);
 
   return (
     <section className="academy-hero relative overflow-hidden text-white">
@@ -100,11 +101,11 @@ export default function Hero({ courses }: HeroProps) {
           <Swiper
             modules={[Pagination, EffectCards, Autoplay]}
             effect="cards"
-            loop={courses.length > 1}
+            loop={visibleCourses.length > 1}
             autoplay={{ delay: 3000 }}
             pagination={{ clickable: true }}
           >
-            {courses.map((course) => {
+            {visibleCourses.map((course) => {
               const price = Number(course.priceInr);
               const coupon = couponMap[course.id];
               const discount = coupon?.discount ?? 0;
@@ -129,12 +130,12 @@ export default function Hero({ courses }: HeroProps) {
           <div className="relative z-40 w-full max-w-85">
             <Swiper
               modules={[Pagination, Autoplay]}
-              loop={courses.length > 1}
+              loop={visibleCourses.length > 1}
               autoplay={{ delay: 3000 }}
               pagination={{ clickable: true }}
               className="pb-8"
             >
-              {courses.map((course) => {
+              {visibleCourses.map((course) => {
                 const price = Number(course.priceInr);
                 const coupon = couponMap[course.id];
                 const discount = coupon?.discount ?? 0;

@@ -9,6 +9,9 @@ import { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
 
 @Injectable()
 export class GetFeaturedCoursesProvider {
+  private readonly heroCourseLimit = 5;
+  private readonly popularCourseLimit = 6;
+
   constructor(
     /**
      * Inject courseRepository
@@ -33,9 +36,33 @@ export class GetFeaturedCoursesProvider {
   ) {}
 
   async getFeaturedCourses(user?: ActiveUserData) {
+    return this.getCoursesByFlag('isFeatured', undefined, user);
+  }
+
+  async getHeroCourses(user?: ActiveUserData) {
+    return this.getCoursesByFlag(
+      'showInHero',
+      this.heroCourseLimit,
+      user,
+    );
+  }
+
+  async getPopularCourses(user?: ActiveUserData) {
+    return this.getCoursesByFlag(
+      'showInPopular',
+      this.popularCourseLimit,
+      user,
+    );
+  }
+
+  private async getCoursesByFlag(
+    flag: 'isFeatured' | 'showInHero' | 'showInPopular',
+    limit?: number,
+    user?: ActiveUserData,
+  ) {
     const courses = await this.courseRepository.find({
       where: {
-        isFeatured: true,
+        [flag]: true,
         isPublished: true,
       },
       relations: [
@@ -54,6 +81,7 @@ export class GetFeaturedCoursesProvider {
       order: {
         createdAt: 'DESC',
       },
+      take: limit,
     });
 
     const mapped = this.mediaFileMappingService.mapCourses(courses);

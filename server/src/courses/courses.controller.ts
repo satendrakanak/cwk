@@ -46,6 +46,18 @@ export class CoursesController {
   }
 
   @Auth(AuthType.Optional)
+  @Get('hero')
+  async getHeroCourses(@ActiveUser() user: ActiveUserData) {
+    return await this.coursesService.getHeroCourses(user);
+  }
+
+  @Auth(AuthType.Optional)
+  @Get('popular')
+  async getPopularCourses(@ActiveUser() user: ActiveUserData) {
+    return await this.coursesService.getPopularCourses(user);
+  }
+
+  @Auth(AuthType.Optional)
   @Get('related/:id')
   async getRelatedCourses(
     @Param('id', ParseIntPipe) id: number,
