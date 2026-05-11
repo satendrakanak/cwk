@@ -2,317 +2,783 @@
   {
     "title": "Frontend Developer Starter Kit",
     "slug": "frontend-developer-starter-kit",
-    "shortDescription": "A polished self-learning path for HTML, CSS, JavaScript, responsive UI, and portfolio-ready practice.",
-    "description": "<p>Start from the foundations and build real interface confidence. This self-paced course is structured for learners who want clean HTML, responsive CSS, JavaScript interaction, and practical portfolio exercises without needing a live classroom.</p>",
+    "shortDescription": "Frontend Developer Starter Kit gives learners a structured self-paced path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>Frontend Developer Starter Kit is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
     "imagePath": "/assets/courses/course-1.jpg",
-    "imageAlt": "Learner building a frontend project on a laptop",
+    "imageAlt": "Frontend Developer Starter Kit course cover",
     "priceInr": "1499.00",
     "priceUsd": "29.00",
     "duration": "6 weeks",
     "mode": "self_learning",
     "certificate": "Certificate after recorded progress and final assessment",
     "experienceLevel": "Beginner",
-    "studyMaterial": "Downloadable notes, code checklists, UI practice sheets, and final project prompts.",
-    "additionalBook": "Frontend Foundations Workbook",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "Frontend Developer Starter Practice Workbook",
     "language": "English",
-    "technologyRequirements": "Laptop or desktop, modern browser, VS Code, and stable internet connection.",
-    "eligibilityRequirements": "No prior programming experience required. Basic computer comfort is enough.",
-    "disclaimer": "Learner outcome depends on regular practice and completion of assigned projects.",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "Basic computer comfort required. Prior coding experience is helpful but not mandatory.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
     "exams": "Final assessment required for certification",
-    "categories": ["Web Development", "Self Learning"],
-    "tags": ["HTML", "CSS", "JavaScript", "Portfolio"],
+    "categories": [
+      "Web Development",
+      "Self Learning"
+    ],
+    "tags": [
+      "Web Development",
+      "Frontend",
+      "Recorded Lessons",
+      "Certificate"
+    ],
     "chapters": [
       {
-        "title": "Web Foundations",
-        "description": "Understand browser basics, page structure, assets, semantic HTML, and project setup.",
+        "title": "Frontend Developer Starter Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
         "isFree": true,
         "lectures": [
           {
-            "title": "How websites are built",
-            "description": "A practical introduction to pages, assets, links, developer tools, and deployment thinking.",
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
             "isFree": true
           },
           {
-            "title": "Semantic HTML starter project",
-            "description": "Create a clean page structure with headings, sections, forms, links, and media."
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
           }
         ]
       },
       {
-        "title": "Responsive Interface Design",
-        "description": "Build layouts that stay readable on mobile, tablet, and desktop screens.",
+        "title": "Core Frontend Developer Starter Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
         "lectures": [
           {
-            "title": "CSS layout essentials",
-            "description": "Use spacing, typography, flexbox, grid, and reusable layout patterns."
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
           },
           {
-            "title": "Mobile-first landing page",
-            "description": "Turn a simple design into a responsive landing page with polished buttons and cards."
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
           }
         ]
       },
       {
-        "title": "JavaScript for Real UI",
-        "description": "Add meaningful interaction using events, DOM updates, validation, and loading states.",
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
         "lectures": [
           {
-            "title": "DOM events and state",
-            "description": "Build interactive menus, tabs, counters, and small interface patterns."
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
           },
           {
-            "title": "Form validation mini project",
-            "description": "Create a practical form flow with validation messages and submit feedback."
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
           }
         ]
       }
     ]
   },
   {
-    "title": "UI UX Design Essentials",
-    "slug": "ui-ux-design-essentials",
-    "shortDescription": "A self-paced design course covering UX research, wireframes, design systems, and handoff basics.",
-    "description": "<p>Learn how to think like a product designer. This course covers user journeys, wireframes, visual hierarchy, accessible interface patterns, and developer handoff.</p>",
-    "imagePath": "/assets/courses/course-3.png",
-    "imageAlt": "Designer reviewing a digital interface prototype",
+    "title": "JavaScript Mastery Self Learning Path",
+    "slug": "javascript-mastery-self-learning-path",
+    "shortDescription": "JavaScript Mastery Self Learning Path gives learners a structured self-paced path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>JavaScript Mastery Self Learning Path is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/course-2.jpg",
+    "imageAlt": "JavaScript Mastery Self Learning Path course cover",
     "priceInr": "1999.00",
     "priceUsd": "39.00",
+    "duration": "8 weeks",
+    "mode": "self_learning",
+    "certificate": "Certificate after recorded progress and final assessment",
+    "experienceLevel": "Beginner to Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "JavaScript Mastery Self Learning Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "categories": [
+      "Web Development",
+      "Self Learning"
+    ],
+    "tags": [
+      "Web Development",
+      "JavaScript",
+      "Recorded Lessons",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "JavaScript Mastery Self Learning Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core JavaScript Mastery Self Learning Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "TypeScript for Practical Developers",
+    "slug": "typescript-for-practical-developers",
+    "shortDescription": "TypeScript for Practical Developers gives learners a structured self-paced path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>TypeScript for Practical Developers is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/course-3.png",
+    "imageAlt": "TypeScript for Practical Developers course cover",
+    "priceInr": "2499.00",
+    "priceUsd": "49.00",
     "duration": "5 weeks",
     "mode": "self_learning",
-    "certificate": "Certificate after design project submission and final quiz",
-    "experienceLevel": "Beginner to Intermediate",
-    "studyMaterial": "UX worksheets, design review checklist, wireframe templates, and handoff notes.",
-    "additionalBook": "Practical UI Review Checklist",
+    "certificate": "Certificate after recorded progress and final assessment",
+    "experienceLevel": "Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "TypeScript for Practical Developers Practice Workbook",
     "language": "English",
-    "technologyRequirements": "Laptop or desktop, Figma or browser-based design tool, and internet access.",
-    "eligibilityRequirements": "No design degree required. Suitable for students, founders, and junior designers.",
-    "disclaimer": "Design portfolio quality depends on project effort and feedback iteration.",
-    "exams": "Final design-readiness assessment required for certification",
-    "categories": ["Design", "Self Learning"],
-    "tags": ["UI UX", "Figma", "Design Systems", "Portfolio"],
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "categories": [
+      "Web Development",
+      "Self Learning"
+    ],
+    "tags": [
+      "Web Development",
+      "TypeScript",
+      "Recorded Lessons",
+      "Certificate"
+    ],
     "chapters": [
       {
-        "title": "UX Thinking",
-        "description": "Learn problem framing, user goals, customer journeys, and simple research notes.",
+        "title": "TypeScript for Practical Developers Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
         "isFree": true,
         "lectures": [
           {
-            "title": "Understanding users",
-            "description": "Map user goals, pain points, and decisions before designing screens.",
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
             "isFree": true
           },
           {
-            "title": "Journey map practice",
-            "description": "Create a simple journey map and identify moments where UI can reduce friction."
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
           }
         ]
       },
       {
-        "title": "Interface Craft",
-        "description": "Improve hierarchy, spacing, typography, colors, components, and responsive composition.",
+        "title": "Core TypeScript for Practical Developers Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
         "lectures": [
           {
-            "title": "Visual hierarchy basics",
-            "description": "Use size, contrast, grouping, and alignment to make screens easier to scan."
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
           },
           {
-            "title": "Component consistency",
-            "description": "Build repeatable buttons, cards, forms, and navigation patterns."
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
           }
         ]
       }
     ]
   },
   {
-    "title": "Digital Marketing Launchpad",
-    "slug": "digital-marketing-launchpad",
-    "shortDescription": "A self-learning course for content planning, SEO basics, campaign funnels, and analytics reports.",
-    "description": "<p>This practical marketing course helps learners understand content strategy, search visibility, paid campaign planning, email sequences, and analytics reporting.</p>",
+    "title": "React Project Builder Bootcamp",
+    "slug": "react-project-builder-bootcamp",
+    "shortDescription": "React Project Builder Bootcamp gives learners a structured live faculty-led path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>React Project Builder Bootcamp is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
     "imagePath": "/assets/courses/course-4.png",
-    "imageAlt": "Marketing dashboard with campaign planning notes",
-    "priceInr": "1799.00",
-    "priceUsd": "35.00",
-    "duration": "4 weeks",
-    "mode": "self_learning",
-    "certificate": "Certificate after campaign plan submission and assessment",
-    "experienceLevel": "Beginner",
-    "studyMaterial": "Campaign planner, SEO checklist, content calendar template, and analytics worksheet.",
-    "additionalBook": "30-Day Marketing Action Planner",
-    "language": "English",
-    "technologyRequirements": "Browser, spreadsheet tool, and access to basic social media or website examples.",
-    "eligibilityRequirements": "Suitable for students, small business owners, creators, and marketing beginners.",
-    "disclaimer": "Marketing results vary by niche, budget, offer, and execution quality.",
-    "exams": "Final marketing strategy assessment required for certification",
-    "categories": ["Marketing", "Self Learning"],
-    "tags": ["SEO", "Content", "Analytics", "Campaigns"],
-    "chapters": [
-      {
-        "title": "Marketing Foundations",
-        "description": "Understand audiences, positioning, offers, channels, and conversion goals.",
-        "isFree": true,
-        "lectures": [
-          {
-            "title": "Audience and offer clarity",
-            "description": "Define who the campaign is for, what problem it solves, and why it matters.",
-            "isFree": true
-          },
-          {
-            "title": "Channel selection",
-            "description": "Choose the right mix of search, social, email, and content channels."
-          }
-        ]
-      },
-      {
-        "title": "Campaign Execution",
-        "description": "Plan content, landing pages, lead magnets, paid promotion, and email follow-up.",
-        "lectures": [
-          {
-            "title": "Content calendar workflow",
-            "description": "Build a practical publishing calendar with topics, owners, and outcomes."
-          },
-          {
-            "title": "Funnel and email sequence",
-            "description": "Create a simple campaign funnel from awareness to lead capture and conversion."
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "title": "Ayurveda Nutrition Live Practitioner Program",
-    "slug": "ayurveda-nutrition-live-practitioner-program",
-    "shortDescription": "A faculty-led course with live classes, batch scheduling, attendance rules, and certificate readiness.",
-    "description": "<p>This faculty-led program demonstrates a coaching-style course where learners attend scheduled live sessions instead of recorded lectures.</p>",
-    "imagePath": "/assets/courses/vedic-nutrition-beginner.png",
-    "imageAlt": "Ayurveda nutrition live class with healthy food planning",
-    "priceInr": "6999.00",
-    "priceUsd": "129.00",
-    "duration": "12 weeks",
-    "mode": "faculty_led",
-    "certificate": "Certificate after live attendance requirement and final exam",
-    "experienceLevel": "Beginner to Professional",
-    "studyMaterial": "Live class notes, printable diet planning sheets, case discussion templates, and replay references.",
-    "additionalBook": "Ayurveda Nutrition Casebook",
-    "language": "English and Hindi",
-    "technologyRequirements": "Mobile or laptop, camera and microphone for live sessions, and stable internet.",
-    "eligibilityRequirements": "Open to wellness learners, yoga trainers, nutrition enthusiasts, and healthcare assistants.",
-    "disclaimer": "This course is educational and does not replace medical diagnosis or clinical treatment.",
-    "exams": "Final exam unlocks after attendance requirement is met",
-    "monthlyLiveClassLimit": 8,
-    "attendanceType": "percentage",
-    "attendanceValue": 80,
-    "categories": ["Health and Wellness", "Live Classes"],
-    "tags": ["Ayurveda", "Nutrition", "Faculty Led", "Attendance"],
-    "chapters": [
-      {
-        "title": "Foundations of Ayurvedic Nutrition",
-        "description": "Live sessions cover prakriti, digestion, meal timing, food qualities, and learner Q&A.",
-        "isFree": true
-      },
-      {
-        "title": "Diet Planning Workshops",
-        "description": "Faculty guides learners through practical meal plans, seasonal adjustments, and case examples."
-      },
-      {
-        "title": "Case Discussions and Exam Readiness",
-        "description": "Learners review common client scenarios, revise key concepts, and prepare for assessment."
-      }
-    ]
-  },
-  {
-    "title": "Spoken English Live Confidence Batch",
-    "slug": "spoken-english-live-confidence-batch",
-    "shortDescription": "A live batch program for spoken English fluency, interview practice, and confidence building.",
-    "description": "<p>This course demonstrates how language academies can run live cohorts with scheduled classes and attendance-based certification.</p>",
-    "imagePath": "/assets/courses/course-2.jpg",
-    "imageAlt": "Learners practicing spoken English in a live batch",
-    "priceInr": "3499.00",
-    "priceUsd": "69.00",
+    "imageAlt": "React Project Builder Bootcamp course cover",
+    "priceInr": "6499.00",
+    "priceUsd": "119.00",
     "duration": "8 weeks",
     "mode": "faculty_led",
-    "certificate": "Certificate after attendance and speaking assessment",
-    "experienceLevel": "Beginner to Intermediate",
-    "studyMaterial": "Speaking prompts, vocabulary sheets, interview scripts, and weekly practice tasks.",
-    "additionalBook": "Daily Speaking Practice Journal",
-    "language": "English and Hindi",
-    "technologyRequirements": "Mobile or laptop, microphone, camera for live practice, and stable internet.",
-    "eligibilityRequirements": "Learners should be comfortable reading basic English sentences.",
-    "disclaimer": "Fluency improves with regular practice, class participation, and speaking confidence.",
-    "exams": "Speaking assessment and final quiz required for certification",
-    "monthlyLiveClassLimit": 12,
+    "certificate": "Certificate after attendance, assignment review, and final assessment",
+    "experienceLevel": "Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "React Project Builder Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "monthlyLiveClassLimit": 8,
     "attendanceType": "percentage",
-    "attendanceValue": 70,
-    "categories": ["Language Learning", "Live Classes"],
-    "tags": ["English", "Interview", "Communication", "Faculty Led"],
+    "attendanceValue": 75,
+    "categories": [
+      "Web Development",
+      "Faculty Led"
+    ],
+    "tags": [
+      "Web Development",
+      "React",
+      "Live Classes",
+      "Certificate"
+    ],
     "chapters": [
       {
-        "title": "Confidence and Pronunciation",
-        "description": "Live speaking drills, pronunciation correction, and confidence-building exercises.",
-        "isFree": true
+        "title": "React Project Builder Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
       },
       {
-        "title": "Daily Conversation Practice",
-        "description": "Roleplays for introductions, workplace conversations, calls, and common situations."
+        "title": "Core React Project Builder Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
       },
       {
-        "title": "Interview and Presentation Practice",
-        "description": "Mock interviews, short presentations, feedback rounds, and final speaking assessment."
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Next.js Production Apps Mentorship",
+    "slug": "nextjs-production-apps-mentorship",
+    "shortDescription": "Next.js Production Apps Mentorship gives learners a structured hybrid path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>Next.js Production Apps Mentorship is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/banner-01.webp",
+    "imageAlt": "Next.js Production Apps Mentorship course cover",
+    "priceInr": "9999.00",
+    "priceUsd": "149.00",
+    "duration": "10 weeks",
+    "mode": "hybrid",
+    "certificate": "Certificate after attendance, assignment review, and final assessment",
+    "experienceLevel": "Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "Next.js Production Apps Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "Basic computer comfort required. Prior coding experience is helpful but not mandatory.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "monthlyLiveClassLimit": 6,
+    "attendanceType": "percentage",
+    "attendanceValue": 70,
+    "categories": [
+      "Web Development",
+      "Hybrid"
+    ],
+    "tags": [
+      "Web Development",
+      "Next.js",
+      "Live Classes",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "Next.js Production Apps Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core Next.js Production Apps Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Node.js API Development Live Cohort",
+    "slug": "nodejs-api-development-live-cohort",
+    "shortDescription": "Node.js API Development Live Cohort gives learners a structured live faculty-led path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>Node.js API Development Live Cohort is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/vedic-nutrition-beginner.png",
+    "imageAlt": "Node.js API Development Live Cohort course cover",
+    "priceInr": "4999.00",
+    "priceUsd": "99.00",
+    "duration": "8 weeks",
+    "mode": "faculty_led",
+    "certificate": "Certificate after attendance, assignment review, and final assessment",
+    "experienceLevel": "Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "Node.js API Development  Cohort Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "monthlyLiveClassLimit": 8,
+    "attendanceType": "percentage",
+    "attendanceValue": 75,
+    "categories": [
+      "Backend Development",
+      "Faculty Led"
+    ],
+    "tags": [
+      "Backend Development",
+      "Node.js",
+      "Live Classes",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "Node.js API Development  Cohort Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core Node.js API Development  Cohort Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "NestJS Backend Architecture Program",
+    "slug": "nestjs-backend-architecture-program",
+    "shortDescription": "NestJS Backend Architecture Program gives learners a structured live faculty-led path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>NestJS Backend Architecture Program is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/course-1.jpg",
+    "imageAlt": "NestJS Backend Architecture Program course cover",
+    "priceInr": "5499.00",
+    "priceUsd": "109.00",
+    "duration": "9 weeks",
+    "mode": "faculty_led",
+    "certificate": "Certificate after attendance, assignment review, and final assessment",
+    "experienceLevel": "Intermediate to Advanced",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "NestJS Backend Architecture Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "monthlyLiveClassLimit": 8,
+    "attendanceType": "percentage",
+    "attendanceValue": 75,
+    "categories": [
+      "Backend Development",
+      "Faculty Led"
+    ],
+    "tags": [
+      "Backend Development",
+      "NestJS",
+      "Live Classes",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "NestJS Backend Architecture Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core NestJS Backend Architecture Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "PostgreSQL and Database Design",
+    "slug": "postgresql-and-database-design",
+    "shortDescription": "PostgreSQL and Database Design gives learners a structured self-paced path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>PostgreSQL and Database Design is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/course-2.jpg",
+    "imageAlt": "PostgreSQL and Database Design course cover",
+    "priceInr": "2499.00",
+    "priceUsd": "59.00",
+    "duration": "6 weeks",
+    "mode": "self_learning",
+    "certificate": "Certificate after recorded progress and final assessment",
+    "experienceLevel": "Beginner to Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "PostgreSQL and Database Design Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "categories": [
+      "Database",
+      "Self Learning"
+    ],
+    "tags": [
+      "Database",
+      "PostgreSQL",
+      "Recorded Lessons",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "PostgreSQL and Database Design Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core PostgreSQL and Database Design Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
       }
     ]
   },
   {
     "title": "Full Stack Web Development Mentorship",
     "slug": "full-stack-web-development-mentorship",
-    "shortDescription": "A hybrid mentorship program with recorded modules, live project reviews, attendance, exams, and certificates.",
-    "description": "<p>This premium hybrid course combines recorded lessons with faculty-led live implementation sessions.</p>",
-    "imagePath": "/assets/courses/banner-01.webp",
-    "imageAlt": "Hybrid full stack development mentorship dashboard",
-    "priceInr": "8999.00",
-    "priceUsd": "179.00",
-    "duration": "16 weeks",
+    "shortDescription": "Full Stack Web Development Mentorship gives learners a structured hybrid path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>Full Stack Web Development Mentorship is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/course-3.png",
+    "imageAlt": "Full Stack Web Development Mentorship course cover",
+    "priceInr": "9499.00",
+    "priceUsd": "149.00",
+    "duration": "12 weeks",
     "mode": "hybrid",
-    "certificate": "Certificate after progress, attendance, project review, and final exam",
+    "certificate": "Certificate after attendance, assignment review, and final assessment",
     "experienceLevel": "Beginner to Intermediate",
-    "studyMaterial": "Recorded modules, live class notes, Git workflow guide, project briefs, and review checklists.",
-    "additionalBook": "Full Stack Project Workbook",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "Full Stack Web Development Practice Workbook",
     "language": "English",
-    "technologyRequirements": "Laptop or desktop, Node.js, VS Code, Git, modern browser, webcam, microphone, and internet.",
-    "eligibilityRequirements": "Basic computer skills required. Prior coding experience is helpful but not mandatory.",
-    "disclaimer": "Project readiness depends on completing both recorded and live learning requirements.",
-    "exams": "Final assessment unlocks after progress and attendance requirements are met",
-    "monthlyLiveClassLimit": 10,
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "Basic computer comfort required. Prior coding experience is helpful but not mandatory.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "monthlyLiveClassLimit": 6,
     "attendanceType": "percentage",
-    "attendanceValue": 75,
-    "categories": ["Web Development", "Hybrid Programs"],
-    "tags": ["Full Stack", "Mentorship", "Live Classes", "Projects"],
+    "attendanceValue": 70,
+    "categories": [
+      "Web Development",
+      "Hybrid"
+    ],
+    "tags": [
+      "Web Development",
+      "Full",
+      "Live Classes",
+      "Certificate"
+    ],
     "chapters": [
       {
-        "title": "Recorded Foundations",
-        "description": "Self-paced modules prepare learners for productive live project sessions.",
+        "title": "Full Stack Web Development Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
         "isFree": true,
         "lectures": [
           {
-            "title": "Development environment setup",
-            "description": "Install and configure Node.js, VS Code, Git, browser tools, and project folders.",
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
             "isFree": true
           },
           {
-            "title": "JavaScript and TypeScript essentials",
-            "description": "Revise variables, functions, async flows, types, and practical debugging habits."
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
           }
         ]
       },
       {
-        "title": "Frontend Application Build",
-        "description": "Build authenticated screens, dashboards, forms, tables, and reusable UI patterns.",
+        "title": "Core Full Stack Web Development Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
         "lectures": [
           {
-            "title": "Component planning",
-            "description": "Break screens into maintainable components, states, and data-fetching boundaries."
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
           },
           {
-            "title": "Forms and validation",
-            "description": "Create polished form flows with validation, loading states, and helpful errors."
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Python Programming Foundations",
+    "slug": "python-programming-foundations",
+    "shortDescription": "Python Programming Foundations gives learners a structured self-paced path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>Python Programming Foundations is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/course-4.png",
+    "imageAlt": "Python Programming Foundations course cover",
+    "priceInr": "3499.00",
+    "priceUsd": "39.00",
+    "duration": "7 weeks",
+    "mode": "self_learning",
+    "certificate": "Certificate after recorded progress and final assessment",
+    "experienceLevel": "Beginner",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "Python ming Foundations Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "categories": [
+      "Programming",
+      "Self Learning"
+    ],
+    "tags": [
+      "Programming",
+      "Python",
+      "Recorded Lessons",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "Python ming Foundations Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core Python ming Foundations Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
           }
         ]
       }
@@ -321,56 +787,1577 @@
   {
     "title": "Data Analytics Career Track",
     "slug": "data-analytics-career-track",
-    "shortDescription": "A hybrid analytics course with recorded Excel and SQL modules, live dashboard workshops, and portfolio review.",
-    "description": "<p>This hybrid analytics track is designed for learners who need structured practice and live review.</p>",
-    "imagePath": "/assets/courses/course-3.png",
-    "imageAlt": "Data analytics dashboard and learner notes",
-    "priceInr": "5999.00",
-    "priceUsd": "119.00",
+    "shortDescription": "Data Analytics Career Track gives learners a structured hybrid path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>Data Analytics Career Track is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/banner-01.webp",
+    "imageAlt": "Data Analytics Career Track course cover",
+    "priceInr": "7999.00",
+    "priceUsd": "169.00",
     "duration": "10 weeks",
     "mode": "hybrid",
-    "certificate": "Certificate after analytics portfolio, attendance, and final assessment",
+    "certificate": "Certificate after attendance, assignment review, and final assessment",
     "experienceLevel": "Beginner to Intermediate",
-    "studyMaterial": "Practice datasets, dashboard templates, SQL exercises, and case study briefs.",
-    "additionalBook": "Analytics Portfolio Playbook",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "Data Analytics Career Practice Workbook",
     "language": "English",
-    "technologyRequirements": "Laptop or desktop, spreadsheet software, browser, SQL practice tool, and stable internet.",
-    "eligibilityRequirements": "Suitable for students, analysts, operations teams, and career switchers.",
-    "disclaimer": "Portfolio quality depends on completed practice assignments and review participation.",
-    "exams": "Final analytics assessment and portfolio review required for certification",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
     "monthlyLiveClassLimit": 6,
     "attendanceType": "percentage",
-    "attendanceValue": 75,
-    "categories": ["Data Analytics", "Hybrid Programs"],
-    "tags": ["Excel", "SQL", "Dashboards", "Career Track"],
+    "attendanceValue": 70,
+    "categories": [
+      "Data Analytics",
+      "Hybrid"
+    ],
+    "tags": [
+      "Data Analytics",
+      "Data",
+      "Live Classes",
+      "Certificate"
+    ],
     "chapters": [
       {
-        "title": "Analytics Foundations",
-        "description": "Learn data cleaning, metrics, spreadsheet logic, and practical analysis habits.",
+        "title": "Data Analytics Career Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
         "isFree": true,
         "lectures": [
           {
-            "title": "Data thinking for beginners",
-            "description": "Understand rows, columns, metrics, dimensions, and business questions.",
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
             "isFree": true
           },
           {
-            "title": "Spreadsheet cleanup workflow",
-            "description": "Practice cleaning messy data and preparing it for charts and reports."
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
           }
         ]
       },
       {
-        "title": "SQL and Reporting",
-        "description": "Use SQL queries and reporting patterns to answer practical business questions.",
+        "title": "Core Data Analytics Career Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
         "lectures": [
           {
-            "title": "SQL select and filters",
-            "description": "Write simple queries, filter records, sort outputs, and avoid common mistakes."
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
           },
           {
-            "title": "Report storytelling",
-            "description": "Turn metrics into clear observations, risks, and recommendations."
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Excel SQL and Dashboard Reporting",
+    "slug": "excel-sql-dashboard-reporting",
+    "shortDescription": "Excel SQL and Dashboard Reporting gives learners a structured live faculty-led path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>Excel SQL and Dashboard Reporting is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/vedic-nutrition-beginner.png",
+    "imageAlt": "Excel SQL and Dashboard Reporting course cover",
+    "priceInr": "5499.00",
+    "priceUsd": "119.00",
+    "duration": "6 weeks",
+    "mode": "faculty_led",
+    "certificate": "Certificate after attendance, assignment review, and final assessment",
+    "experienceLevel": "Beginner",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "Excel SQL and Dashboard Reporting Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "monthlyLiveClassLimit": 8,
+    "attendanceType": "percentage",
+    "attendanceValue": 75,
+    "categories": [
+      "Data Analytics",
+      "Faculty Led"
+    ],
+    "tags": [
+      "Data Analytics",
+      "Excel",
+      "Live Classes",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "Excel SQL and Dashboard Reporting Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core Excel SQL and Dashboard Reporting Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "DSA Interview Practice Live",
+    "slug": "dsa-interview-practice-live",
+    "shortDescription": "DSA Interview Practice Live gives learners a structured live faculty-led path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>DSA Interview Practice Live is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/course-1.jpg",
+    "imageAlt": "DSA Interview Practice Live course cover",
+    "priceInr": "5999.00",
+    "priceUsd": "89.00",
+    "duration": "8 weeks",
+    "mode": "faculty_led",
+    "certificate": "Certificate after attendance, assignment review, and final assessment",
+    "experienceLevel": "Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "DSA Interview Practice Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "Basic computer comfort required. Prior coding experience is helpful but not mandatory.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "monthlyLiveClassLimit": 8,
+    "attendanceType": "percentage",
+    "attendanceValue": 75,
+    "categories": [
+      "Interview Preparation",
+      "Faculty Led"
+    ],
+    "tags": [
+      "Interview Preparation",
+      "DSA",
+      "Live Classes",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "DSA Interview Practice Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core DSA Interview Practice Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Git and GitHub Team Workflow",
+    "slug": "git-and-github-team-workflow",
+    "shortDescription": "Git and GitHub Team Workflow gives learners a structured self-paced path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>Git and GitHub Team Workflow is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/course-2.jpg",
+    "imageAlt": "Git and GitHub Team Workflow course cover",
+    "priceInr": "2999.00",
+    "priceUsd": "39.00",
+    "duration": "3 weeks",
+    "mode": "self_learning",
+    "certificate": "Certificate after recorded progress and final assessment",
+    "experienceLevel": "Beginner",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "Git and GitHub Team Workflow Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "categories": [
+      "Developer Tools",
+      "Self Learning"
+    ],
+    "tags": [
+      "Developer Tools",
+      "Git",
+      "Recorded Lessons",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "Git and GitHub Team Workflow Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core Git and GitHub Team Workflow Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Docker DevOps Starter Course",
+    "slug": "docker-devops-starter-course",
+    "shortDescription": "Docker DevOps Starter Course gives learners a structured self-paced path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>Docker DevOps Starter Course is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/course-3.png",
+    "imageAlt": "Docker DevOps Starter Course course cover",
+    "priceInr": "3499.00",
+    "priceUsd": "49.00",
+    "duration": "5 weeks",
+    "mode": "self_learning",
+    "certificate": "Certificate after recorded progress and final assessment",
+    "experienceLevel": "Beginner to Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "Docker DevOps Starter Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "categories": [
+      "DevOps",
+      "Self Learning"
+    ],
+    "tags": [
+      "DevOps",
+      "Docker",
+      "Recorded Lessons",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "Docker DevOps Starter Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core Docker DevOps Starter Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "AWS Cloud Deployment Essentials",
+    "slug": "aws-cloud-deployment-essentials",
+    "shortDescription": "AWS Cloud Deployment Essentials gives learners a structured live faculty-led path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>AWS Cloud Deployment Essentials is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/course-4.png",
+    "imageAlt": "AWS Cloud Deployment Essentials course cover",
+    "priceInr": "4999.00",
+    "priceUsd": "119.00",
+    "duration": "7 weeks",
+    "mode": "faculty_led",
+    "certificate": "Certificate after attendance, assignment review, and final assessment",
+    "experienceLevel": "Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "AWS Cloud Deployment Essentials Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "monthlyLiveClassLimit": 8,
+    "attendanceType": "percentage",
+    "attendanceValue": 75,
+    "categories": [
+      "Cloud",
+      "Faculty Led"
+    ],
+    "tags": [
+      "Cloud",
+      "AWS",
+      "Live Classes",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "AWS Cloud Deployment Essentials Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core AWS Cloud Deployment Essentials Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Web Performance Optimization Lab",
+    "slug": "web-performance-optimization-lab",
+    "shortDescription": "Web Performance Optimization Lab gives learners a structured live faculty-led path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>Web Performance Optimization Lab is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/banner-01.webp",
+    "imageAlt": "Web Performance Optimization Lab course cover",
+    "priceInr": "5499.00",
+    "priceUsd": "89.00",
+    "duration": "5 weeks",
+    "mode": "faculty_led",
+    "certificate": "Certificate after attendance, assignment review, and final assessment",
+    "experienceLevel": "Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "Web Performance Optimization Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "Basic computer comfort required. Prior coding experience is helpful but not mandatory.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "monthlyLiveClassLimit": 8,
+    "attendanceType": "percentage",
+    "attendanceValue": 75,
+    "categories": [
+      "Web Development",
+      "Faculty Led"
+    ],
+    "tags": [
+      "Web Development",
+      "Web",
+      "Live Classes",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "Web Performance Optimization Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core Web Performance Optimization Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "UI UX Design Essentials",
+    "slug": "ui-ux-design-essentials",
+    "shortDescription": "UI UX Design Essentials gives learners a structured self-paced path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>UI UX Design Essentials is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/vedic-nutrition-beginner.png",
+    "imageAlt": "UI UX Design Essentials course cover",
+    "priceInr": "2499.00",
+    "priceUsd": "39.00",
+    "duration": "5 weeks",
+    "mode": "self_learning",
+    "certificate": "Certificate after recorded progress and final assessment",
+    "experienceLevel": "Beginner to Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "UI UX Design Essentials Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "categories": [
+      "Design",
+      "Self Learning"
+    ],
+    "tags": [
+      "Design",
+      "UI",
+      "Recorded Lessons",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "UI UX Design Essentials Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core UI UX Design Essentials Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Figma to Frontend Workflow",
+    "slug": "figma-to-frontend-workflow",
+    "shortDescription": "Figma to Frontend Workflow gives learners a structured hybrid path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>Figma to Frontend Workflow is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/course-1.jpg",
+    "imageAlt": "Figma to Frontend Workflow course cover",
+    "priceInr": "9499.00",
+    "priceUsd": "169.00",
+    "duration": "7 weeks",
+    "mode": "hybrid",
+    "certificate": "Certificate after attendance, assignment review, and final assessment",
+    "experienceLevel": "Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "Figma to Frontend Workflow Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "monthlyLiveClassLimit": 6,
+    "attendanceType": "percentage",
+    "attendanceValue": 70,
+    "categories": [
+      "Design",
+      "Hybrid"
+    ],
+    "tags": [
+      "Design",
+      "Figma",
+      "Live Classes",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "Figma to Frontend Workflow Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core Figma to Frontend Workflow Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "QA Automation with Playwright",
+    "slug": "qa-automation-with-playwright",
+    "shortDescription": "QA Automation with Playwright gives learners a structured live faculty-led path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>QA Automation with Playwright is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/course-2.jpg",
+    "imageAlt": "QA Automation with Playwright course cover",
+    "priceInr": "6999.00",
+    "priceUsd": "119.00",
+    "duration": "6 weeks",
+    "mode": "faculty_led",
+    "certificate": "Certificate after attendance, assignment review, and final assessment",
+    "experienceLevel": "Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "QA Automation with Playwright Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "monthlyLiveClassLimit": 8,
+    "attendanceType": "percentage",
+    "attendanceValue": 75,
+    "categories": [
+      "Testing",
+      "Faculty Led"
+    ],
+    "tags": [
+      "Testing",
+      "QA",
+      "Live Classes",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "QA Automation with Playwright Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core QA Automation with Playwright Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Cybersecurity for Web Developers",
+    "slug": "cybersecurity-for-web-developers",
+    "shortDescription": "Cybersecurity for Web Developers gives learners a structured self-paced path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>Cybersecurity for Web Developers is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/course-3.png",
+    "imageAlt": "Cybersecurity for Web Developers course cover",
+    "priceInr": "1499.00",
+    "priceUsd": "29.00",
+    "duration": "6 weeks",
+    "mode": "self_learning",
+    "certificate": "Certificate after recorded progress and final assessment",
+    "experienceLevel": "Beginner to Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "Cybersecurity for Web Developers Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "Basic computer comfort required. Prior coding experience is helpful but not mandatory.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "categories": [
+      "Security",
+      "Self Learning"
+    ],
+    "tags": [
+      "Security",
+      "Cybersecurity",
+      "Recorded Lessons",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "Cybersecurity for Web Developers Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core Cybersecurity for Web Developers Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "React Native App Launchpad",
+    "slug": "react-native-app-launchpad",
+    "shortDescription": "React Native App Launchpad gives learners a structured live faculty-led path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>React Native App Launchpad is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/course-4.png",
+    "imageAlt": "React Native App Launchpad course cover",
+    "priceInr": "5499.00",
+    "priceUsd": "99.00",
+    "duration": "8 weeks",
+    "mode": "faculty_led",
+    "certificate": "Certificate after attendance, assignment review, and final assessment",
+    "experienceLevel": "Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "React Native App Launchpad Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "monthlyLiveClassLimit": 8,
+    "attendanceType": "percentage",
+    "attendanceValue": 75,
+    "categories": [
+      "Mobile Development",
+      "Faculty Led"
+    ],
+    "tags": [
+      "Mobile Development",
+      "React",
+      "Live Classes",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "React Native App Launchpad Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core React Native App Launchpad Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "AI Tools for Developer Productivity",
+    "slug": "ai-tools-for-developer-productivity",
+    "shortDescription": "AI Tools for Developer Productivity gives learners a structured self-paced path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>AI Tools for Developer Productivity is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/banner-01.webp",
+    "imageAlt": "AI Tools for Developer Productivity course cover",
+    "priceInr": "2499.00",
+    "priceUsd": "49.00",
+    "duration": "4 weeks",
+    "mode": "self_learning",
+    "certificate": "Certificate after recorded progress and final assessment",
+    "experienceLevel": "Beginner",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "AI Tools for Developer Productivity Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "categories": [
+      "AI Productivity",
+      "Self Learning"
+    ],
+    "tags": [
+      "AI Productivity",
+      "AI",
+      "Recorded Lessons",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "AI Tools for Developer Productivity Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core AI Tools for Developer Productivity Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Technical Writing for Developers",
+    "slug": "technical-writing-for-developers",
+    "shortDescription": "Technical Writing for Developers gives learners a structured self-paced path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>Technical Writing for Developers is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/vedic-nutrition-beginner.png",
+    "imageAlt": "Technical Writing for Developers course cover",
+    "priceInr": "2999.00",
+    "priceUsd": "59.00",
+    "duration": "4 weeks",
+    "mode": "self_learning",
+    "certificate": "Certificate after recorded progress and final assessment",
+    "experienceLevel": "Beginner",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "Technical Writing for Developers Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "categories": [
+      "Career Skills",
+      "Self Learning"
+    ],
+    "tags": [
+      "Career Skills",
+      "Technical",
+      "Recorded Lessons",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "Technical Writing for Developers Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core Technical Writing for Developers Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Spoken English Live Confidence Batch",
+    "slug": "spoken-english-live-confidence-batch",
+    "shortDescription": "Spoken English Live Confidence Batch gives learners a structured live faculty-led path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>Spoken English Live Confidence Batch is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/course-1.jpg",
+    "imageAlt": "Spoken English Live Confidence Batch course cover",
+    "priceInr": "6999.00",
+    "priceUsd": "89.00",
+    "duration": "6 weeks",
+    "mode": "faculty_led",
+    "certificate": "Certificate after attendance, assignment review, and final assessment",
+    "experienceLevel": "Beginner",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "Spoken English  Confidence Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "Basic computer comfort required. Prior coding experience is helpful but not mandatory.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "monthlyLiveClassLimit": 8,
+    "attendanceType": "percentage",
+    "attendanceValue": 75,
+    "categories": [
+      "Communication",
+      "Faculty Led"
+    ],
+    "tags": [
+      "Communication",
+      "Spoken",
+      "Live Classes",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "Spoken English  Confidence Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core Spoken English  Confidence Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Career Prep Resume and Interview Lab",
+    "slug": "career-prep-resume-interview-lab",
+    "shortDescription": "Career Prep Resume and Interview Lab gives learners a structured live faculty-led path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>Career Prep Resume and Interview Lab is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/course-2.jpg",
+    "imageAlt": "Career Prep Resume and Interview Lab course cover",
+    "priceInr": "4999.00",
+    "priceUsd": "99.00",
+    "duration": "5 weeks",
+    "mode": "faculty_led",
+    "certificate": "Certificate after attendance, assignment review, and final assessment",
+    "experienceLevel": "Beginner to Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "Career Prep Resume and Interview Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "monthlyLiveClassLimit": 8,
+    "attendanceType": "percentage",
+    "attendanceValue": 75,
+    "categories": [
+      "Career Skills",
+      "Faculty Led"
+    ],
+    "tags": [
+      "Career Skills",
+      "Career",
+      "Live Classes",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "Career Prep Resume and Interview Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core Career Prep Resume and Interview Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "System Design Foundation Hybrid",
+    "slug": "system-design-foundation-hybrid",
+    "shortDescription": "System Design Foundation Hybrid gives learners a structured hybrid path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>System Design Foundation Hybrid is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/course-3.png",
+    "imageAlt": "System Design Foundation Hybrid course cover",
+    "priceInr": "8499.00",
+    "priceUsd": "169.00",
+    "duration": "8 weeks",
+    "mode": "hybrid",
+    "certificate": "Certificate after attendance, assignment review, and final assessment",
+    "experienceLevel": "Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "System Design Foundation Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "monthlyLiveClassLimit": 6,
+    "attendanceType": "percentage",
+    "attendanceValue": 70,
+    "categories": [
+      "System Design",
+      "Hybrid"
+    ],
+    "tags": [
+      "System Design",
+      "System",
+      "Live Classes",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "System Design Foundation Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core System Design Foundation Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Ecommerce Website Builder Program",
+    "slug": "ecommerce-website-builder-program",
+    "shortDescription": "Ecommerce Website Builder Program gives learners a structured live faculty-led path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>Ecommerce Website Builder Program is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/course-4.png",
+    "imageAlt": "Ecommerce Website Builder Program course cover",
+    "priceInr": "5999.00",
+    "priceUsd": "119.00",
+    "duration": "6 weeks",
+    "mode": "faculty_led",
+    "certificate": "Certificate after attendance, assignment review, and final assessment",
+    "experienceLevel": "Beginner to Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "Ecommerce Website Builder Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "monthlyLiveClassLimit": 8,
+    "attendanceType": "percentage",
+    "attendanceValue": 75,
+    "categories": [
+      "Web Development",
+      "Faculty Led"
+    ],
+    "tags": [
+      "Web Development",
+      "Ecommerce",
+      "Live Classes",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "Ecommerce Website Builder Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core Ecommerce Website Builder Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Freelance Developer Business Kit",
+    "slug": "freelance-developer-business-kit",
+    "shortDescription": "Freelance Developer Business Kit gives learners a structured self-paced path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>Freelance Developer Business Kit is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/banner-01.webp",
+    "imageAlt": "Freelance Developer Business Kit course cover",
+    "priceInr": "2999.00",
+    "priceUsd": "29.00",
+    "duration": "4 weeks",
+    "mode": "self_learning",
+    "certificate": "Certificate after recorded progress and final assessment",
+    "experienceLevel": "Beginner to Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "Freelance Developer Business Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "Basic computer comfort required. Prior coding experience is helpful but not mandatory.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "categories": [
+      "Career Skills",
+      "Self Learning"
+    ],
+    "tags": [
+      "Career Skills",
+      "Freelance",
+      "Recorded Lessons",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "Freelance Developer Business Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core Freelance Developer Business Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Product Analytics and Growth Metrics",
+    "slug": "product-analytics-growth-metrics",
+    "shortDescription": "Product Analytics and Growth Metrics gives learners a structured hybrid path with practical projects, checkpoints, and certificate readiness.",
+    "description": "<p>Product Analytics and Growth Metrics is built for CodeWithKasa learners who need clear lessons, practical assignments, and measurable progress. The course keeps the flow simple: learn the concept, practice it, review the output, and prepare for certification.</p><p>Projects and assessments are designed around real workflows so learners can test the platform, track completion, and build confidence.</p>",
+    "imagePath": "/assets/courses/vedic-nutrition-beginner.png",
+    "imageAlt": "Product Analytics and Growth Metrics course cover",
+    "priceInr": "9999.00",
+    "priceUsd": "159.00",
+    "duration": "7 weeks",
+    "mode": "hybrid",
+    "certificate": "Certificate after attendance, assignment review, and final assessment",
+    "experienceLevel": "Intermediate",
+    "studyMaterial": "Downloadable notes, project checklists, practice tasks, quiz prompts, and reference links.",
+    "additionalBook": "Product Analytics and Growth Metrics Practice Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, stable internet connection, modern browser, and VS Code where coding practice is required.",
+    "eligibilityRequirements": "No degree requirement. Learners should commit time for weekly practice and assignments.",
+    "disclaimer": "Learner outcome depends on regular practice, project completion, attendance where applicable, and assessment performance.",
+    "exams": "Final assessment required for certification",
+    "monthlyLiveClassLimit": 6,
+    "attendanceType": "percentage",
+    "attendanceValue": 70,
+    "categories": [
+      "Data Analytics",
+      "Hybrid"
+    ],
+    "tags": [
+      "Data Analytics",
+      "Product",
+      "Live Classes",
+      "Certificate"
+    ],
+    "chapters": [
+      {
+        "title": "Product Analytics and Growth Metrics Orientation",
+        "description": "Set up the learning workflow, understand goals, and complete the first guided practice.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How this course works",
+            "description": "Understand course structure, assignments, progress tracking, and certificate expectations.",
+            "isFree": true
+          },
+          {
+            "title": "Setup and first practice",
+            "description": "Prepare tools and complete the first small task to confirm readiness."
+          }
+        ]
+      },
+      {
+        "title": "Core Product Analytics and Growth Metrics Practice",
+        "description": "Build the important concepts with practical exercises and feedback checkpoints.",
+        "lectures": [
+          {
+            "title": "Core concept walkthrough",
+            "description": "Learn the main workflow with examples and implementation notes."
+          },
+          {
+            "title": "Guided assignment",
+            "description": "Complete a structured assignment that can be reviewed and improved."
+          }
+        ]
+      },
+      {
+        "title": "Project and Assessment",
+        "description": "Apply the learning in a final project and prepare for the certification assessment.",
+        "lectures": [
+          {
+            "title": "Final project brief",
+            "description": "Understand the project requirements, acceptance checklist, and submission expectations."
+          },
+          {
+            "title": "Assessment preparation",
+            "description": "Review key topics and complete revision tasks before the final assessment."
           }
         ]
       }

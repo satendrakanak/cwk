@@ -102,7 +102,7 @@ type DemoUser = {
   username: string;
   email: string;
   phoneNumber?: string;
-  role: 'admin' | 'faculty' | 'student';
+  role?: 'admin' | 'faculty' | 'student';
   avatarUrl?: string;
   headline?: string;
   facultyProfile?: {
@@ -1066,16 +1066,17 @@ async function seedDemoUsers(dataSource: DataSource) {
   const seededUsers: User[] = [];
 
   for (const demoUser of demoUsers) {
+    const userRole = demoUser.role || 'student';
     const user = await getDemoUser(dataSource, {
       ...demoUser,
-      role: roleMap[demoUser.role],
+      role: roleMap[userRole],
     });
 
     if (demoUser.facultyProfile) {
       await upsertFacultyProfile(dataSource, user, demoUser.facultyProfile);
     }
 
-    if (demoUser.role === 'student') {
+    if (userRole === 'student') {
       await upsertLearnerProfile(
         dataSource,
         user,
