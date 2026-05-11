@@ -31,7 +31,7 @@ export const CourseHero = ({ course }: CourseHeroProps) => {
       <Container className="relative z-10">
         <div className="grid grid-cols-12 items-start gap-8">
           <div className="col-span-12 lg:col-span-7">
-            <div className="mb-5 inline-flex rounded-full border border-white/20 bg-white/12 px-4 py-1.5 text-xs font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_28px_rgba(2,6,23,0.20)] backdrop-blur-md">
+            <div className="mx-auto mb-5 flex w-fit max-w-full rounded-full border border-white/20 bg-white/12 px-4 py-1.5 text-center text-xs font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_28px_rgba(2,6,23,0.20)] backdrop-blur-md lg:mx-0">
               Certified Course
             </div>
 

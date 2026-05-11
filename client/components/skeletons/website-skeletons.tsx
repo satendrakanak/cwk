@@ -84,10 +84,6 @@ export function HomeHeroSkeleton() {
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-[50%] hidden -translate-x-1/2 lg:block">
-          <HeroLine className="h-155 w-90 rounded-t-[44px] bg-white/10" />
-        </div>
-
         <div className="absolute right-10 top-1/2 z-20 hidden w-105 -translate-y-1/2 lg:block">
           <CourseCardSkeleton hero />
         </div>
@@ -96,7 +92,6 @@ export function HomeHeroSkeleton() {
           <div className="w-full max-w-85">
             <CourseCardSkeleton hero />
           </div>
-          <HeroLine className="relative z-20 mt-4 h-72 w-full max-w-85 rounded-t-[40px] bg-white/10" />
         </div>
       </div>
     </section>
