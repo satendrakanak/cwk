@@ -64,8 +64,8 @@ export function ArticleCard({ article }: ArticleCardProps) {
             Read Article
           </span>
 
-          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-muted text-primary transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border bg-muted text-primary transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
           </span>
         </div>
       </div>

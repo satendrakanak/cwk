@@ -44,7 +44,7 @@ export function ArticlesCategoryFilter({
         </div>
       </div>
 
-      <div className="sticky top-[64px] z-40 rounded-2xl border border-border bg-background/92 p-2 shadow-[0_18px_45px_-30px_rgba(15,23,42,0.45)] backdrop-blur-xl md:top-[76px]">
+      <div className="sticky top-[88px] z-40 rounded-2xl border border-border bg-background/92 p-2 shadow-[0_18px_45px_-30px_rgba(15,23,42,0.45)] backdrop-blur-xl md:top-[96px]">
         <div className="no-scrollbar flex gap-2 overflow-x-auto">
           <Link
             href="/articles"
