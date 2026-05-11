@@ -648,58 +648,86 @@ export class InstallerService implements OnModuleInit {
 
     const portalUrl = this.getLicensePortalUrl();
     const instanceId = await this.getOrCreateLicenseInstanceId();
-    const productSlug =
-      this.configService.get<string>('LICENSE_PRODUCT_SLUG')?.trim() ||
-      'codewithkasa';
+    const productSlugs = this.getLicenseProductSlugs();
 
     let response: Response;
-    try {
-      response = await fetch(`${portalUrl}/api/v1/licenses/activate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          licenseKey: normalizedKey,
-          productSlug,
-          instanceId,
-          instanceLabel: options?.instanceLabel || 'CodeWithKasa installation',
-          productVersion:
-            this.configService.get<string>('appConfig.apiVersion') || '0.1.1',
-          metadata: {
-            appUrl: this.configService.get<string>('appConfig.appUrl'),
-            frontEndUrl: this.configService.get<string>('appConfig.fronEndUrl'),
-            environment: this.configService.get<string>('appConfig.environment'),
+    let result: LicensePortalActivationResponse | null = null;
+    let lastMessage =
+      'License could not be activated. Please check the key and try again.';
+
+    for (const productSlug of productSlugs) {
+      try {
+        response = await fetch(`${portalUrl}/api/v1/licenses/activate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        }),
-        signal: AbortSignal.timeout(15000),
-      });
-    } catch (error) {
-      throw new ServiceUnavailableException(
-        error instanceof Error
-          ? `License portal is unreachable: ${error.message}`
-          : 'License portal is unreachable',
-      );
+          body: JSON.stringify({
+            licenseKey: normalizedKey,
+            productSlug,
+            instanceId,
+            instanceLabel: options?.instanceLabel || 'CodeWithKasa installation',
+            productVersion:
+              this.configService.get<string>('appConfig.apiVersion') || '0.1.1',
+            metadata: {
+              appUrl: this.configService.get<string>('appConfig.appUrl'),
+              frontEndUrl: this.configService.get<string>('appConfig.fronEndUrl'),
+              environment: this.configService.get<string>('appConfig.environment'),
+            },
+          }),
+          signal: AbortSignal.timeout(15000),
+        });
+      } catch (error) {
+        throw new ServiceUnavailableException(
+          error instanceof Error
+            ? `License portal is unreachable: ${error.message}`
+            : 'License portal is unreachable',
+        );
+      }
+
+      result = (await response.json().catch(() => null)) as
+        | LicensePortalActivationResponse
+        | null;
+
+      if (result?.ok) {
+        return result;
+      }
+
+      lastMessage = result?.message || lastMessage;
+
+      if (
+        response.ok ||
+        !result ||
+        result.code !== 'LICENSE_NOT_FOUND' ||
+        productSlug === productSlugs[productSlugs.length - 1]
+      ) {
+        break;
+      }
     }
 
-    const result = (await response.json().catch(() => null)) as
-      | LicensePortalActivationResponse
-      | null;
+    throw new BadRequestException(lastMessage);
+  }
 
-    if (!response.ok || !result) {
-      throw new BadRequestException(
-        'License could not be activated. Please check the key and try again.',
-      );
-    }
+  private getLicenseProductSlugs() {
+    const primary =
+      this.configService.get<string>('LICENSE_PRODUCT_SLUG')?.trim() ||
+      'codewithkasa';
+    const configuredAliases =
+      this.configService
+        .get<string>('LICENSE_PRODUCT_SLUG_ALIASES')
+        ?.split(',')
+        .map((slug) => slug.trim())
+        .filter(Boolean) || [];
+    const legacyAliases =
+      primary === 'codewithkasa' ? ['kasa-enterprise'] : [];
 
-    if (!result.ok) {
-      throw new BadRequestException(
-        result.message ||
-          'License could not be activated. Please check the key and try again.',
-      );
-    }
-
-    return result;
+    return Array.from(
+      new Set(
+        [primary, ...configuredAliases, ...legacyAliases].filter(
+          (slug) => slug.length > 0,
+        ),
+      ),
+    );
   }
 
   private getLicensePortalUrl() {
