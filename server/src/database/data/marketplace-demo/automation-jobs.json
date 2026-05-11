@@ -1,0 +1,34 @@
+[
+  {
+    "name": "Daily certificate pending reminder",
+    "slug": "daily-certificate-pending-reminder",
+    "description": "Demo scheduler for nudging learners who have pending certificate steps.",
+    "status": "paused",
+    "triggerType": "cron",
+    "cronExpression": "0 9 * * *",
+    "timezone": "Asia/Kolkata",
+    "actionType": "notification_broadcast",
+    "actionPayload": {
+      "template": "certificate.pending"
+    },
+    "conditions": {
+      "certificateStatus": "pending"
+    }
+  },
+  {
+    "name": "Weekly live class digest",
+    "slug": "weekly-live-class-digest",
+    "description": "Demo scheduler for summarising upcoming live classes every Monday.",
+    "status": "paused",
+    "triggerType": "cron",
+    "cronExpression": "0 10 * * 1",
+    "timezone": "Asia/Kolkata",
+    "actionType": "notification_broadcast",
+    "actionPayload": {
+      "template": "class.weekly_digest"
+    },
+    "conditions": {
+      "hasUpcomingClasses": true
+    }
+  }
+]

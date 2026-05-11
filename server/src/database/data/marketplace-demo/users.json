@@ -1,0 +1,59 @@
+[
+  {
+    "firstName": "Aarav",
+    "lastName": "Kapoor",
+    "username": "demo-admin",
+    "email": "admin@codewithkasa.demo",
+    "phoneNumber": "+919900000001",
+    "role": "admin",
+    "avatarUrl": "/assets/faculty-1.jpg"
+  },
+  {
+    "firstName": "Meera",
+    "lastName": "Sharma",
+    "username": "demo-faculty-meera",
+    "email": "faculty@codewithkasa.demo",
+    "phoneNumber": "+919900000002",
+    "role": "faculty",
+    "avatarUrl": "/assets/faculty-2.jpg",
+    "facultyProfile": {
+      "expertise": "Frontend development, UI systems, and live project mentoring",
+      "designation": "Senior Faculty - Web Development",
+      "experience": "8+ years teaching practical web development"
+    }
+  },
+  {
+    "firstName": "Kabir",
+    "lastName": "Malhotra",
+    "username": "demo-faculty-kabir",
+    "email": "mentor@codewithkasa.demo",
+    "phoneNumber": "+919900000003",
+    "role": "faculty",
+    "avatarUrl": "/assets/faculty-3.jpg",
+    "facultyProfile": {
+      "expertise": "Digital marketing, analytics, spoken communication, and career coaching",
+      "designation": "Faculty Mentor",
+      "experience": "10+ years across training and growth operations"
+    }
+  },
+  {
+    "firstName": "Riya",
+    "lastName": "Verma",
+    "username": "demo-learner",
+    "email": "learner@codewithkasa.demo",
+    "phoneNumber": "+919900000004",
+    "role": "student",
+    "avatarUrl": "/assets/guest-user.webp",
+    "headline": "Frontend learner"
+  },
+  {
+    "firstName": "Arjun",
+    "lastName": "Singh",
+    "username": "demo-learner-arjun",
+    "email": "arjun@codewithkasa.demo",
+    "phoneNumber": "+919900000005",
+    "role": "student",
+    "avatarUrl": "/assets/guest-user.webp",
+    "headline": "Hybrid program learner"
+  }
+]

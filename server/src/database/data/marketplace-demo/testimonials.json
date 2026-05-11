@@ -1,0 +1,35 @@
+[
+  {
+    "name": "Nisha Mehta",
+    "designation": "Frontend Learner",
+    "company": "Career Switcher",
+    "message": "The recorded lessons and final assessment made the learning path very clear. I could revise at my own pace and still track progress properly.",
+    "rating": 5,
+    "avatarPath": "/assets/testimonials/student-1.jpg",
+    "avatarAlt": "Nisha Mehta profile photo",
+    "courseSlugs": ["frontend-developer-starter-kit"],
+    "priority": 1
+  },
+  {
+    "name": "Rohit Bansal",
+    "designation": "Hybrid Program Student",
+    "company": "Junior Developer",
+    "message": "The hybrid model helped me learn the theory first and then clear doubts in live project sessions. The classroom and recordings were very useful.",
+    "rating": 5,
+    "avatarPath": "/assets/testimonials/student-2.jpg",
+    "avatarAlt": "Rohit Bansal profile photo",
+    "courseSlugs": ["full-stack-web-development-mentorship"],
+    "priority": 2
+  },
+  {
+    "name": "Ananya Rao",
+    "designation": "Wellness Coach",
+    "company": "Independent Practitioner",
+    "message": "Live classes, reminders, attendance, and certificate tracking made the Ayurveda program feel structured and professional.",
+    "rating": 5,
+    "avatarPath": "/assets/testimonials/student-3.jpg",
+    "avatarAlt": "Ananya Rao profile photo",
+    "courseSlugs": ["ayurveda-nutrition-live-practitioner-program"],
+    "priority": 3
+  }
+]

@@ -1,0 +1,43 @@
+[
+  {
+    "code": "WELCOME25",
+    "type": "PERCENTAGE",
+    "value": 25,
+    "maxDiscount": 2000,
+    "minOrderValue": 1499,
+    "scope": "GLOBAL",
+    "status": "ACTIVE",
+    "usageLimit": 500,
+    "perUserLimit": 1,
+    "isAutoApply": false
+  },
+  {
+    "code": "LIVECLASS1000",
+    "type": "FIXED",
+    "value": 1000,
+    "minOrderValue": 4999,
+    "scope": "COURSE",
+    "status": "ACTIVE",
+    "usageLimit": 150,
+    "perUserLimit": 1,
+    "courseSlugs": [
+      "ayurveda-nutrition-live-practitioner-program",
+      "full-stack-web-development-mentorship"
+    ]
+  },
+  {
+    "code": "SELFLEARN10",
+    "type": "PERCENTAGE",
+    "value": 10,
+    "maxDiscount": 500,
+    "scope": "COURSE",
+    "status": "ACTIVE",
+    "usageLimit": 300,
+    "perUserLimit": 1,
+    "courseSlugs": [
+      "frontend-developer-starter-kit",
+      "ui-ux-design-essentials",
+      "digital-marketing-launchpad"
+    ]
+  }
+]

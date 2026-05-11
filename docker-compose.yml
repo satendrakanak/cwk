@@ -1,0 +1,114 @@
+name: codewithkasa-dev
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: codewithkasa-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-codewithkasa}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-codewithkasa}
+      POSTGRES_DB: ${POSTGRES_DB:-codewithkasa}
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: codewithkasa-redis-dev
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  server:
+    build:
+      context: ./server
+      target: development
+    container_name: codewithkasa-server-dev
+    restart: unless-stopped
+    env_file:
+      - .env.docker
+    environment:
+      NODE_ENV: development
+      APP_URL: http://localhost:8000
+      APP_PORT: 8000
+      FRONT_END_URL: http://localhost:3000
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_USER: ${POSTGRES_USER:-codewithkasa}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-codewithkasa}
+      DATABASE_NAME: ${POSTGRES_DB:-codewithkasa}
+      DATABASE_SYNC: ${DATABASE_SYNC:-true}
+      DATABASE_AUTO_LOAD: ${DATABASE_AUTO_LOAD:-true}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      LICENSE_PORTAL_URL: ${LICENSE_PORTAL_URL:-http://localhost:5000}
+      LICENSE_PRODUCT_SLUG: ${LICENSE_PRODUCT_SLUG:-codewithkasa}
+    ports:
+      - "${SERVER_PORT:-8000}:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./server:/app
+      - ./.kasa:/app/.kasa
+      - server_node_modules:/app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  client:
+    build:
+      context: ./client
+      target: development
+    container_name: codewithkasa-client-dev
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    command: ["./node_modules/.bin/next", "dev", "--webpack", "--hostname", "0.0.0.0"]
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://server:8000}
+      NEXT_TELEMETRY_DISABLED: 1
+    ports:
+      - "${CLIENT_PORT:-3000}:3000"
+    volumes:
+      - ./client:/app
+      - client_node_modules:/app/node_modules
+      - client_next_cache:/app/.next
+    depends_on:
+      - server
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+    name: ${POSTGRES_VOLUME_NAME:-codewithkasa-dev_postgres_data}
+  redis_data:
+    name: ${REDIS_VOLUME_NAME:-codewithkasa-dev_redis_data}
+  server_node_modules:
+  client_node_modules:
+  client_next_cache:
+
+networks:
+  app-network:
+    driver: bridge

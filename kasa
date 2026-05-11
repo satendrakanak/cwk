@@ -1,0 +1,100 @@
+#!/usr/bin/env sh
+set -eu
+
+is_kasa_project() {
+  [ -d "$1/scripts" ] &&
+    [ -f "$1/docker-compose.yml" ] &&
+    [ -f "$1/client/package.json" ] &&
+    [ -f "$1/server/package.json" ]
+}
+
+find_project_root() {
+  search_dir="$(pwd -P)"
+
+  while :; do
+    if is_kasa_project "$search_dir"; then
+      printf '%s\n' "$search_dir"
+      return 0
+    fi
+
+    parent_dir="$(dirname -- "$search_dir")"
+    if [ "$parent_dir" = "$search_dir" ]; then
+      return 1
+    fi
+    search_dir="$parent_dir"
+  done
+}
+
+if PROJECT_ROOT="$(find_project_root)"; then
+  ROOT_DIR="$PROJECT_ROOT"
+else
+  echo "No Kasa project found from the current directory."
+  echo "Run kasa from a Kasa project folder or one of its subfolders."
+  exit 1
+fi
+
+cd "$ROOT_DIR"
+
+usage() {
+  cat <<'USAGE'
+CodeWithKasa CLI
+
+Usage:
+  kasa install dev [-r|--reset]
+  kasa install prod
+  kasa start dev
+  kasa start prod
+  kasa reset dev
+  kasa stop
+  kasa restart dev
+  kasa restart prod
+
+Examples:
+  kasa install dev
+  kasa install dev -r
+  kasa install prod
+  kasa start dev
+  kasa start prod
+  kasa stop
+USAGE
+}
+
+command="${1:-}"
+target="${2:-}"
+flag="${3:-}"
+
+case "$command:$target" in
+  install:dev)
+    if [ "$flag" = "-r" ] || [ "$flag" = "--reset" ]; then
+      ./scripts/reset-dev.sh
+    fi
+    ./scripts/install-dev.sh
+    ;;
+  install:prod)
+    ./scripts/install-prod.sh
+    ;;
+  start:dev)
+    ./scripts/start-dev.sh
+    ;;
+  start:prod)
+    ./scripts/start-prod.sh
+    ;;
+  reset:dev)
+    ./scripts/reset-dev.sh
+    ;;
+  stop:)
+    ./scripts/stop.sh
+    ;;
+  restart:dev)
+    ./scripts/stop-dev.sh
+    ./scripts/start-dev.sh
+    ;;
+  restart:prod)
+    ./scripts/stop-prod.sh
+    ./scripts/start-prod.sh
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac

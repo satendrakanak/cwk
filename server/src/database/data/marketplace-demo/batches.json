@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Ayurveda Weekend Cohort",
+    "code": "AYU-WEEKEND-DEMO",
+    "description": "Demo live cohort for Ayurveda nutrition learners.",
+    "courseSlug": "ayurveda-nutrition-live-practitioner-program",
+    "facultyEmail": "faculty@codewithkasa.demo",
+    "status": "active",
+    "startOffsetDays": -2,
+    "endOffsetDays": 42,
+    "capacity": 30,
+    "studentEmails": ["learner@codewithkasa.demo", "arjun@codewithkasa.demo"]
+  },
+  {
+    "name": "Full Stack Mentorship May Batch",
+    "code": "FS-MENTOR-MAY-DEMO",
+    "description": "Hybrid mentorship batch with recorded modules and live reviews.",
+    "courseSlug": "full-stack-web-development-mentorship",
+    "facultyEmail": "mentor@codewithkasa.demo",
+    "status": "active",
+    "startOffsetDays": -1,
+    "endOffsetDays": 60,
+    "capacity": 25,
+    "studentEmails": ["arjun@codewithkasa.demo"]
+  }
+]

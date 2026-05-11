@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Welcome to the demo academy",
+    "message": "Explore self-learning, live classes, hybrid programs, certificates, reminders, and dashboards from one demo account.",
+    "href": "/courses",
+    "type": "info",
+    "audience": "all_users",
+    "channels": ["in_app", "push"],
+    "status": "sent"
+  },
+  {
+    "title": "Live class programs are open",
+    "message": "New faculty-led batches include reminders, attendance tracking, and recordings.",
+    "href": "/courses",
+    "type": "class",
+    "audience": "all_users",
+    "channels": ["in_app"],
+    "status": "draft"
+  }
+]

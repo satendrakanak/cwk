@@ -1,0 +1,50 @@
+[
+  {
+    "batchCode": "AYU-WEEKEND-DEMO",
+    "courseSlug": "ayurveda-nutrition-live-practitioner-program",
+    "facultyEmail": "faculty@codewithkasa.demo",
+    "title": "Prakriti and Meal Timing Workshop",
+    "description": "Live discussion on body types, digestion windows, and daily nutrition planning.",
+    "startsInDays": 1,
+    "startHour": 10,
+    "startMinute": 0,
+    "durationMinutes": 75,
+    "timezone": "Asia/Kolkata",
+    "status": "scheduled",
+    "reminderOffsetsMinutes": [1440, 60, 15],
+    "bbbRecord": true,
+    "allowRecordingAccess": true
+  },
+  {
+    "batchCode": "AYU-WEEKEND-DEMO",
+    "courseSlug": "ayurveda-nutrition-live-practitioner-program",
+    "facultyEmail": "faculty@codewithkasa.demo",
+    "title": "Seasonal Diet Planning Lab",
+    "description": "Faculty-led planning session for summer and monsoon diet case examples.",
+    "startsInDays": 4,
+    "startHour": 18,
+    "startMinute": 30,
+    "durationMinutes": 60,
+    "timezone": "Asia/Kolkata",
+    "status": "scheduled",
+    "reminderOffsetsMinutes": [120, 30],
+    "bbbRecord": true,
+    "allowRecordingAccess": false
+  },
+  {
+    "batchCode": "FS-MENTOR-MAY-DEMO",
+    "courseSlug": "full-stack-web-development-mentorship",
+    "facultyEmail": "mentor@codewithkasa.demo",
+    "title": "Project Architecture Review",
+    "description": "Hybrid live review for folder structure, API boundaries, forms, and deployment readiness.",
+    "startsInDays": 2,
+    "startHour": 20,
+    "startMinute": 0,
+    "durationMinutes": 90,
+    "timezone": "Asia/Kolkata",
+    "status": "scheduled",
+    "reminderOffsetsMinutes": [1440, 60, 15],
+    "bbbRecord": true,
+    "allowRecordingAccess": true
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "title": "How to Choose Between Self-Learning, Live, and Hybrid Courses",
+    "slug": "choose-self-learning-live-hybrid-courses",
+    "excerpt": "A practical guide for learners comparing recorded courses, live cohorts, and hybrid mentorship programs.",
+    "content": "<p>Every learner needs a different mix of flexibility, accountability, and feedback. Self-learning works well for independent practice, live cohorts work well for guided participation, and hybrid programs combine both.</p><p>Use goals, schedule, budget, and feedback needs to choose the right format.</p>",
+    "imagePath": "/assets/blog/blog-1.jpg",
+    "imageAlt": "Learner comparing online course formats",
+    "categories": ["Learning Strategy"],
+    "tags": ["Self Learning", "Live Classes", "Hybrid"],
+    "readingTime": 4,
+    "isFeatured": true
+  },
+  {
+    "title": "Why Attendance Rules Matter in Live Online Programs",
+    "slug": "attendance-rules-live-online-programs",
+    "excerpt": "Live programs need clear attendance requirements so learners understand certificate eligibility from day one.",
+    "content": "<p>Attendance rules protect both learners and faculty. They set expectations, encourage timely participation, and help administrators make fair decisions about exam eligibility and certification.</p>",
+    "imagePath": "/assets/blog/blog-2.jpg",
+    "imageAlt": "Calendar showing live class attendance planning",
+    "categories": ["Live Classes"],
+    "tags": ["Attendance", "Certificates", "Live Classes"],
+    "readingTime": 3,
+    "isFeatured": true
+  },
+  {
+    "title": "Building a Certificate Workflow Learners Can Trust",
+    "slug": "certificate-workflow-learners-can-trust",
+    "excerpt": "Certificates feel credible when progress, exams, attendance, and downloads are clearly connected.",
+    "content": "<p>A strong certificate workflow should show the learner what is pending, what is complete, and what action unlocks the certificate. Admin teams also need clear reporting for follow-up.</p>",
+    "imagePath": "/assets/blog/blog-3.jpg",
+    "imageAlt": "Online certificate workflow dashboard",
+    "categories": ["Certificates"],
+    "tags": ["Certificates", "Exams", "Reports"],
+    "readingTime": 5,
+    "isFeatured": false
+  }
+]

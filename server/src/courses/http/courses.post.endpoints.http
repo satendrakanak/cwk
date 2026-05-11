@@ -1,0 +1,7 @@
+POST http://localhost:8000/courses
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjYsImVtYWlsIjoiam9obkBkb2UuY29tIiwiaWF0IjoxNzc1MzYzNDU1LCJleHAiOjE3NzUzNjcwNTUsImF1ZCI6ImxvY2FsaG9zdDozMDAwIiwiaXNzIjoibG9jYWxob3N0OjMwMDAifQ.uq2fKXhnnD39PDN3eu5spTfVdIQdZmowOU-vY9RxeXc
+{
+    "title": "This is Very First Course",
+    "slug": "this-is-very-first-course"
+}

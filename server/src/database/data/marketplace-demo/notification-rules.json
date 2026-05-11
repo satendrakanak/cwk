@@ -1,0 +1,38 @@
+[
+  {
+    "eventKey": "course.created",
+    "label": "New course published",
+    "description": "Send updates when a new course becomes available.",
+    "isEnabled": true,
+    "audience": "all_users",
+    "channels": ["in_app", "push"],
+    "type": "course",
+    "titleTemplate": "New course is available",
+    "messageTemplate": "{{courseTitle}} has been added to the academy.",
+    "hrefTemplate": "/courses/{{courseSlug}}"
+  },
+  {
+    "eventKey": "class.reminder",
+    "label": "Live class reminder",
+    "description": "Remind learners and faculty before live classes.",
+    "isEnabled": true,
+    "audience": "course_enrolled",
+    "channels": ["in_app", "push", "email"],
+    "type": "class",
+    "titleTemplate": "Your live class starts soon",
+    "messageTemplate": "{{classTitle}} starts at {{startsAt}}.",
+    "hrefTemplate": "/classroom/{{sessionId}}"
+  },
+  {
+    "eventKey": "certificate.pending",
+    "label": "Certificate pending nudge",
+    "description": "Encourage learners to complete pending exam or course steps.",
+    "isEnabled": true,
+    "audience": "selected_users",
+    "channels": ["in_app", "email"],
+    "type": "certificate",
+    "titleTemplate": "Your certificate needs one more step",
+    "messageTemplate": "Complete {{courseTitle}} requirements to unlock your certificate.",
+    "hrefTemplate": "/dashboard/certificates"
+  }
+]

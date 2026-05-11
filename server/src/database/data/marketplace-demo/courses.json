@@ -1,0 +1,379 @@
+[
+  {
+    "title": "Frontend Developer Starter Kit",
+    "slug": "frontend-developer-starter-kit",
+    "shortDescription": "A polished self-learning path for HTML, CSS, JavaScript, responsive UI, and portfolio-ready practice.",
+    "description": "<p>Start from the foundations and build real interface confidence. This self-paced course is structured for learners who want clean HTML, responsive CSS, JavaScript interaction, and practical portfolio exercises without needing a live classroom.</p>",
+    "imagePath": "/assets/courses/course-1.jpg",
+    "imageAlt": "Learner building a frontend project on a laptop",
+    "priceInr": "1499.00",
+    "priceUsd": "29.00",
+    "duration": "6 weeks",
+    "mode": "self_learning",
+    "certificate": "Certificate after recorded progress and final assessment",
+    "experienceLevel": "Beginner",
+    "studyMaterial": "Downloadable notes, code checklists, UI practice sheets, and final project prompts.",
+    "additionalBook": "Frontend Foundations Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, modern browser, VS Code, and stable internet connection.",
+    "eligibilityRequirements": "No prior programming experience required. Basic computer comfort is enough.",
+    "disclaimer": "Learner outcome depends on regular practice and completion of assigned projects.",
+    "exams": "Final assessment required for certification",
+    "categories": ["Web Development", "Self Learning"],
+    "tags": ["HTML", "CSS", "JavaScript", "Portfolio"],
+    "chapters": [
+      {
+        "title": "Web Foundations",
+        "description": "Understand browser basics, page structure, assets, semantic HTML, and project setup.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "How websites are built",
+            "description": "A practical introduction to pages, assets, links, developer tools, and deployment thinking.",
+            "isFree": true
+          },
+          {
+            "title": "Semantic HTML starter project",
+            "description": "Create a clean page structure with headings, sections, forms, links, and media."
+          }
+        ]
+      },
+      {
+        "title": "Responsive Interface Design",
+        "description": "Build layouts that stay readable on mobile, tablet, and desktop screens.",
+        "lectures": [
+          {
+            "title": "CSS layout essentials",
+            "description": "Use spacing, typography, flexbox, grid, and reusable layout patterns."
+          },
+          {
+            "title": "Mobile-first landing page",
+            "description": "Turn a simple design into a responsive landing page with polished buttons and cards."
+          }
+        ]
+      },
+      {
+        "title": "JavaScript for Real UI",
+        "description": "Add meaningful interaction using events, DOM updates, validation, and loading states.",
+        "lectures": [
+          {
+            "title": "DOM events and state",
+            "description": "Build interactive menus, tabs, counters, and small interface patterns."
+          },
+          {
+            "title": "Form validation mini project",
+            "description": "Create a practical form flow with validation messages and submit feedback."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "UI UX Design Essentials",
+    "slug": "ui-ux-design-essentials",
+    "shortDescription": "A self-paced design course covering UX research, wireframes, design systems, and handoff basics.",
+    "description": "<p>Learn how to think like a product designer. This course covers user journeys, wireframes, visual hierarchy, accessible interface patterns, and developer handoff.</p>",
+    "imagePath": "/assets/courses/course-3.png",
+    "imageAlt": "Designer reviewing a digital interface prototype",
+    "priceInr": "1999.00",
+    "priceUsd": "39.00",
+    "duration": "5 weeks",
+    "mode": "self_learning",
+    "certificate": "Certificate after design project submission and final quiz",
+    "experienceLevel": "Beginner to Intermediate",
+    "studyMaterial": "UX worksheets, design review checklist, wireframe templates, and handoff notes.",
+    "additionalBook": "Practical UI Review Checklist",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, Figma or browser-based design tool, and internet access.",
+    "eligibilityRequirements": "No design degree required. Suitable for students, founders, and junior designers.",
+    "disclaimer": "Design portfolio quality depends on project effort and feedback iteration.",
+    "exams": "Final design-readiness assessment required for certification",
+    "categories": ["Design", "Self Learning"],
+    "tags": ["UI UX", "Figma", "Design Systems", "Portfolio"],
+    "chapters": [
+      {
+        "title": "UX Thinking",
+        "description": "Learn problem framing, user goals, customer journeys, and simple research notes.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "Understanding users",
+            "description": "Map user goals, pain points, and decisions before designing screens.",
+            "isFree": true
+          },
+          {
+            "title": "Journey map practice",
+            "description": "Create a simple journey map and identify moments where UI can reduce friction."
+          }
+        ]
+      },
+      {
+        "title": "Interface Craft",
+        "description": "Improve hierarchy, spacing, typography, colors, components, and responsive composition.",
+        "lectures": [
+          {
+            "title": "Visual hierarchy basics",
+            "description": "Use size, contrast, grouping, and alignment to make screens easier to scan."
+          },
+          {
+            "title": "Component consistency",
+            "description": "Build repeatable buttons, cards, forms, and navigation patterns."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Digital Marketing Launchpad",
+    "slug": "digital-marketing-launchpad",
+    "shortDescription": "A self-learning course for content planning, SEO basics, campaign funnels, and analytics reports.",
+    "description": "<p>This practical marketing course helps learners understand content strategy, search visibility, paid campaign planning, email sequences, and analytics reporting.</p>",
+    "imagePath": "/assets/courses/course-4.png",
+    "imageAlt": "Marketing dashboard with campaign planning notes",
+    "priceInr": "1799.00",
+    "priceUsd": "35.00",
+    "duration": "4 weeks",
+    "mode": "self_learning",
+    "certificate": "Certificate after campaign plan submission and assessment",
+    "experienceLevel": "Beginner",
+    "studyMaterial": "Campaign planner, SEO checklist, content calendar template, and analytics worksheet.",
+    "additionalBook": "30-Day Marketing Action Planner",
+    "language": "English",
+    "technologyRequirements": "Browser, spreadsheet tool, and access to basic social media or website examples.",
+    "eligibilityRequirements": "Suitable for students, small business owners, creators, and marketing beginners.",
+    "disclaimer": "Marketing results vary by niche, budget, offer, and execution quality.",
+    "exams": "Final marketing strategy assessment required for certification",
+    "categories": ["Marketing", "Self Learning"],
+    "tags": ["SEO", "Content", "Analytics", "Campaigns"],
+    "chapters": [
+      {
+        "title": "Marketing Foundations",
+        "description": "Understand audiences, positioning, offers, channels, and conversion goals.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "Audience and offer clarity",
+            "description": "Define who the campaign is for, what problem it solves, and why it matters.",
+            "isFree": true
+          },
+          {
+            "title": "Channel selection",
+            "description": "Choose the right mix of search, social, email, and content channels."
+          }
+        ]
+      },
+      {
+        "title": "Campaign Execution",
+        "description": "Plan content, landing pages, lead magnets, paid promotion, and email follow-up.",
+        "lectures": [
+          {
+            "title": "Content calendar workflow",
+            "description": "Build a practical publishing calendar with topics, owners, and outcomes."
+          },
+          {
+            "title": "Funnel and email sequence",
+            "description": "Create a simple campaign funnel from awareness to lead capture and conversion."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Ayurveda Nutrition Live Practitioner Program",
+    "slug": "ayurveda-nutrition-live-practitioner-program",
+    "shortDescription": "A faculty-led course with live classes, batch scheduling, attendance rules, and certificate readiness.",
+    "description": "<p>This faculty-led program demonstrates a coaching-style course where learners attend scheduled live sessions instead of recorded lectures.</p>",
+    "imagePath": "/assets/courses/vedic-nutrition-beginner.png",
+    "imageAlt": "Ayurveda nutrition live class with healthy food planning",
+    "priceInr": "6999.00",
+    "priceUsd": "129.00",
+    "duration": "12 weeks",
+    "mode": "faculty_led",
+    "certificate": "Certificate after live attendance requirement and final exam",
+    "experienceLevel": "Beginner to Professional",
+    "studyMaterial": "Live class notes, printable diet planning sheets, case discussion templates, and replay references.",
+    "additionalBook": "Ayurveda Nutrition Casebook",
+    "language": "English and Hindi",
+    "technologyRequirements": "Mobile or laptop, camera and microphone for live sessions, and stable internet.",
+    "eligibilityRequirements": "Open to wellness learners, yoga trainers, nutrition enthusiasts, and healthcare assistants.",
+    "disclaimer": "This course is educational and does not replace medical diagnosis or clinical treatment.",
+    "exams": "Final exam unlocks after attendance requirement is met",
+    "monthlyLiveClassLimit": 8,
+    "attendanceType": "percentage",
+    "attendanceValue": 80,
+    "categories": ["Health and Wellness", "Live Classes"],
+    "tags": ["Ayurveda", "Nutrition", "Faculty Led", "Attendance"],
+    "chapters": [
+      {
+        "title": "Foundations of Ayurvedic Nutrition",
+        "description": "Live sessions cover prakriti, digestion, meal timing, food qualities, and learner Q&A.",
+        "isFree": true
+      },
+      {
+        "title": "Diet Planning Workshops",
+        "description": "Faculty guides learners through practical meal plans, seasonal adjustments, and case examples."
+      },
+      {
+        "title": "Case Discussions and Exam Readiness",
+        "description": "Learners review common client scenarios, revise key concepts, and prepare for assessment."
+      }
+    ]
+  },
+  {
+    "title": "Spoken English Live Confidence Batch",
+    "slug": "spoken-english-live-confidence-batch",
+    "shortDescription": "A live batch program for spoken English fluency, interview practice, and confidence building.",
+    "description": "<p>This course demonstrates how language academies can run live cohorts with scheduled classes and attendance-based certification.</p>",
+    "imagePath": "/assets/courses/course-2.jpg",
+    "imageAlt": "Learners practicing spoken English in a live batch",
+    "priceInr": "3499.00",
+    "priceUsd": "69.00",
+    "duration": "8 weeks",
+    "mode": "faculty_led",
+    "certificate": "Certificate after attendance and speaking assessment",
+    "experienceLevel": "Beginner to Intermediate",
+    "studyMaterial": "Speaking prompts, vocabulary sheets, interview scripts, and weekly practice tasks.",
+    "additionalBook": "Daily Speaking Practice Journal",
+    "language": "English and Hindi",
+    "technologyRequirements": "Mobile or laptop, microphone, camera for live practice, and stable internet.",
+    "eligibilityRequirements": "Learners should be comfortable reading basic English sentences.",
+    "disclaimer": "Fluency improves with regular practice, class participation, and speaking confidence.",
+    "exams": "Speaking assessment and final quiz required for certification",
+    "monthlyLiveClassLimit": 12,
+    "attendanceType": "percentage",
+    "attendanceValue": 70,
+    "categories": ["Language Learning", "Live Classes"],
+    "tags": ["English", "Interview", "Communication", "Faculty Led"],
+    "chapters": [
+      {
+        "title": "Confidence and Pronunciation",
+        "description": "Live speaking drills, pronunciation correction, and confidence-building exercises.",
+        "isFree": true
+      },
+      {
+        "title": "Daily Conversation Practice",
+        "description": "Roleplays for introductions, workplace conversations, calls, and common situations."
+      },
+      {
+        "title": "Interview and Presentation Practice",
+        "description": "Mock interviews, short presentations, feedback rounds, and final speaking assessment."
+      }
+    ]
+  },
+  {
+    "title": "Full Stack Web Development Mentorship",
+    "slug": "full-stack-web-development-mentorship",
+    "shortDescription": "A hybrid mentorship program with recorded modules, live project reviews, attendance, exams, and certificates.",
+    "description": "<p>This premium hybrid course combines recorded lessons with faculty-led live implementation sessions.</p>",
+    "imagePath": "/assets/courses/banner-01.webp",
+    "imageAlt": "Hybrid full stack development mentorship dashboard",
+    "priceInr": "8999.00",
+    "priceUsd": "179.00",
+    "duration": "16 weeks",
+    "mode": "hybrid",
+    "certificate": "Certificate after progress, attendance, project review, and final exam",
+    "experienceLevel": "Beginner to Intermediate",
+    "studyMaterial": "Recorded modules, live class notes, Git workflow guide, project briefs, and review checklists.",
+    "additionalBook": "Full Stack Project Workbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, Node.js, VS Code, Git, modern browser, webcam, microphone, and internet.",
+    "eligibilityRequirements": "Basic computer skills required. Prior coding experience is helpful but not mandatory.",
+    "disclaimer": "Project readiness depends on completing both recorded and live learning requirements.",
+    "exams": "Final assessment unlocks after progress and attendance requirements are met",
+    "monthlyLiveClassLimit": 10,
+    "attendanceType": "percentage",
+    "attendanceValue": 75,
+    "categories": ["Web Development", "Hybrid Programs"],
+    "tags": ["Full Stack", "Mentorship", "Live Classes", "Projects"],
+    "chapters": [
+      {
+        "title": "Recorded Foundations",
+        "description": "Self-paced modules prepare learners for productive live project sessions.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "Development environment setup",
+            "description": "Install and configure Node.js, VS Code, Git, browser tools, and project folders.",
+            "isFree": true
+          },
+          {
+            "title": "JavaScript and TypeScript essentials",
+            "description": "Revise variables, functions, async flows, types, and practical debugging habits."
+          }
+        ]
+      },
+      {
+        "title": "Frontend Application Build",
+        "description": "Build authenticated screens, dashboards, forms, tables, and reusable UI patterns.",
+        "lectures": [
+          {
+            "title": "Component planning",
+            "description": "Break screens into maintainable components, states, and data-fetching boundaries."
+          },
+          {
+            "title": "Forms and validation",
+            "description": "Create polished form flows with validation, loading states, and helpful errors."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Data Analytics Career Track",
+    "slug": "data-analytics-career-track",
+    "shortDescription": "A hybrid analytics course with recorded Excel and SQL modules, live dashboard workshops, and portfolio review.",
+    "description": "<p>This hybrid analytics track is designed for learners who need structured practice and live review.</p>",
+    "imagePath": "/assets/courses/course-3.png",
+    "imageAlt": "Data analytics dashboard and learner notes",
+    "priceInr": "5999.00",
+    "priceUsd": "119.00",
+    "duration": "10 weeks",
+    "mode": "hybrid",
+    "certificate": "Certificate after analytics portfolio, attendance, and final assessment",
+    "experienceLevel": "Beginner to Intermediate",
+    "studyMaterial": "Practice datasets, dashboard templates, SQL exercises, and case study briefs.",
+    "additionalBook": "Analytics Portfolio Playbook",
+    "language": "English",
+    "technologyRequirements": "Laptop or desktop, spreadsheet software, browser, SQL practice tool, and stable internet.",
+    "eligibilityRequirements": "Suitable for students, analysts, operations teams, and career switchers.",
+    "disclaimer": "Portfolio quality depends on completed practice assignments and review participation.",
+    "exams": "Final analytics assessment and portfolio review required for certification",
+    "monthlyLiveClassLimit": 6,
+    "attendanceType": "percentage",
+    "attendanceValue": 75,
+    "categories": ["Data Analytics", "Hybrid Programs"],
+    "tags": ["Excel", "SQL", "Dashboards", "Career Track"],
+    "chapters": [
+      {
+        "title": "Analytics Foundations",
+        "description": "Learn data cleaning, metrics, spreadsheet logic, and practical analysis habits.",
+        "isFree": true,
+        "lectures": [
+          {
+            "title": "Data thinking for beginners",
+            "description": "Understand rows, columns, metrics, dimensions, and business questions.",
+            "isFree": true
+          },
+          {
+            "title": "Spreadsheet cleanup workflow",
+            "description": "Practice cleaning messy data and preparing it for charts and reports."
+          }
+        ]
+      },
+      {
+        "title": "SQL and Reporting",
+        "description": "Use SQL queries and reporting patterns to answer practical business questions.",
+        "lectures": [
+          {
+            "title": "SQL select and filters",
+            "description": "Write simple queries, filter records, sort outputs, and avoid common mistakes."
+          },
+          {
+            "title": "Report storytelling",
+            "description": "Turn metrics into clear observations, risks, and recommendations."
+          }
+        ]
+      }
+    ]
+  }
+]

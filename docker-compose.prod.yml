@@ -1,0 +1,111 @@
+name: codewithkasa-prod
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-codewithkasa}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-codewithkasa}
+      POSTGRES_DB: ${POSTGRES_DB:-codewithkasa}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  server:
+    image: ${SERVER_IMAGE:-codewithkasa-server:local-prod}
+    build:
+      context: ./server
+      target: production
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      APP_URL: ${APP_URL}
+      APP_PORT: ${APP_PORT:-8000}
+      FRONT_END_URL: ${FRONT_END_URL}
+      API_VERSION: ${API_VERSION:-0.1.1}
+      DATABASE_HOST: ${DATABASE_HOST:-postgres}
+      DATABASE_PORT: ${DATABASE_PORT:-5432}
+      DATABASE_USER: ${DATABASE_USER:-codewithkasa}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME:-codewithkasa}
+      DATABASE_SYNC: "false"
+      DATABASE_AUTO_LOAD: "true"
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_TOKEN_AUDIENCE: ${JWT_TOKEN_AUDIENCE}
+      JWT_TOKEN_ISSUER: ${JWT_TOKEN_ISSUER}
+      JWT_ACCESS_TOKEN_TTL: ${JWT_ACCESS_TOKEN_TTL:-3600}
+      JWT_REFRESH_TOKEN_TTL: ${JWT_REFRESH_TOKEN_TTL:-86400}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY}
+      LICENSE_PORTAL_URL: ${LICENSE_PORTAL_URL:-http://localhost:5000}
+      LICENSE_PRODUCT_SLUG: ${LICENSE_PRODUCT_SLUG:-codewithkasa}
+    volumes:
+      - ./.kasa:/app/.kasa
+    ports:
+      - "${SERVER_PORT:-8000}:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  client:
+    image: ${CLIENT_IMAGE:-codewithkasa-client:local-prod}
+    build:
+      context: ./client
+      target: production
+      args:
+        NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://server:8000}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL}
+      NEXT_PUBLIC_API_BASE_URL: http://server:8000
+    ports:
+      - "${CLIENT_PORT:-3000}:3000"
+    depends_on:
+      - server
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+    name: ${POSTGRES_VOLUME_NAME:-codewithkasa-prod_postgres_data}
+    external: ${POSTGRES_VOLUME_EXTERNAL:-false}
+  redis_data:
+    name: ${REDIS_VOLUME_NAME:-codewithkasa-prod_redis_data}
+    external: ${REDIS_VOLUME_EXTERNAL:-false}
+
+networks:
+  app-network:
+    driver: bridge
