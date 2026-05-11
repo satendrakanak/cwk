@@ -598,6 +598,7 @@
 
 .related-courses-slider .swiper,
 .related-articles-slider .swiper {
+  --swiper-navigation-size: 10px;
   padding: 4px 4px 12px;
 }
 
@@ -610,8 +611,10 @@
 .related-courses-slider .swiper-button-next,
 .related-articles-slider .swiper-button-prev,
 .related-articles-slider .swiper-button-next {
-  width: 36px;
-  height: 36px;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px;
+  margin-top: -14px !important;
   border-radius: 999px;
   background: var(--surface-panel-strong);
   border: 1px solid var(--border);
@@ -623,7 +626,7 @@
 .related-courses-slider .swiper-button-next::after,
 .related-articles-slider .swiper-button-prev::after,
 .related-articles-slider .swiper-button-next::after {
-  font-size: 13px;
+  font-size: 10px !important;
   font-weight: 800;
 }
 

@@ -20,8 +20,8 @@ export function ArticlesCategoryFilter({
   totalArticles,
 }: ArticleCategoryFilterProps) {
   return (
-    <div className="academy-card overflow-hidden p-0">
-      <div className="flex flex-col gap-5 border-b border-border bg-muted/35 p-5 md:flex-row md:items-center md:justify-between">
+    <div className="space-y-3">
+      <div className="academy-card flex flex-col gap-5 p-5 md:flex-row md:items-center md:justify-between">
         <div className="flex items-start gap-3">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/15">
             <Sparkles className="h-5 w-5" />
@@ -44,57 +44,59 @@ export function ArticlesCategoryFilter({
         </div>
       </div>
 
-      <div className="flex gap-3 overflow-x-auto px-5 py-4">
-        <Link
-          href="/articles"
-          className={cn(
-            "inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors",
-            !selectedCategory
-              ? "border-primary bg-primary text-primary-foreground shadow-[0_14px_34px_color-mix(in_oklab,var(--primary)_24%,transparent)]"
-              : "border-border bg-background text-muted-foreground hover:border-primary/35 hover:bg-primary/10 hover:text-primary",
-          )}
-        >
-          All Articles
-          <span
+      <div className="sticky top-[64px] z-40 rounded-2xl border border-border bg-background/92 p-2 shadow-[0_18px_45px_-30px_rgba(15,23,42,0.45)] backdrop-blur-xl md:top-[76px]">
+        <div className="no-scrollbar flex gap-2 overflow-x-auto">
+          <Link
+            href="/articles"
             className={cn(
-              "rounded-full px-2 py-0.5 text-xs",
+              "inline-flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-2 text-sm font-semibold transition-colors",
               !selectedCategory
-                ? "bg-primary-foreground/20 text-primary-foreground"
-                : "bg-muted text-muted-foreground",
+                ? "border-primary bg-primary text-primary-foreground shadow-[0_14px_34px_color-mix(in_oklab,var(--primary)_24%,transparent)]"
+                : "border-border bg-background text-muted-foreground hover:border-primary/35 hover:bg-primary/10 hover:text-primary",
             )}
           >
-            {totalArticles}
-          </span>
-        </Link>
-
-        {categories.map((category) => {
-          const isActive = selectedCategory === category.slug;
-
-          return (
-            <Link
-              key={category.id}
-              href={`/articles?category=${category.slug}`}
+            All Articles
+            <span
               className={cn(
-                "inline-flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors",
-                isActive
-                  ? "border-primary bg-primary text-primary-foreground shadow-[0_14px_34px_color-mix(in_oklab,var(--primary)_24%,transparent)]"
-                  : "border-border bg-background text-muted-foreground hover:border-primary/35 hover:bg-primary/10 hover:text-primary",
+                "rounded-full px-2 py-0.5 text-xs",
+                !selectedCategory
+                  ? "bg-primary-foreground/20 text-primary-foreground"
+                  : "bg-muted text-muted-foreground",
               )}
             >
-              {category.name}
-              <span
+              {totalArticles}
+            </span>
+          </Link>
+
+          {categories.map((category) => {
+            const isActive = selectedCategory === category.slug;
+
+            return (
+              <Link
+                key={category.id}
+                href={`/articles?category=${category.slug}`}
                 className={cn(
-                  "rounded-full px-2 py-0.5 text-xs",
+                  "inline-flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-2 text-sm font-semibold transition-colors",
                   isActive
-                    ? "bg-primary-foreground/20 text-primary-foreground"
-                    : "bg-muted text-muted-foreground",
+                    ? "border-primary bg-primary text-primary-foreground shadow-[0_14px_34px_color-mix(in_oklab,var(--primary)_24%,transparent)]"
+                    : "border-border bg-background text-muted-foreground hover:border-primary/35 hover:bg-primary/10 hover:text-primary",
                 )}
               >
-                {category.count}
-              </span>
-            </Link>
-          );
-        })}
+                {category.name}
+                <span
+                  className={cn(
+                    "rounded-full px-2 py-0.5 text-xs",
+                    isActive
+                      ? "bg-primary-foreground/20 text-primary-foreground"
+                      : "bg-muted text-muted-foreground",
+                  )}
+                >
+                  {category.count}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
