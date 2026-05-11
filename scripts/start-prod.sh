@@ -11,7 +11,7 @@ if [ ! -f .env ]; then
 fi
 
 echo "Starting CodeWithKasa production stack..."
-docker compose --env-file .env -f docker-compose.prod.yml up -d
+docker compose --env-file .env -f docker-compose.prod.yml up --build -d
 
 echo ""
 echo "CodeWithKasa production stack is running."

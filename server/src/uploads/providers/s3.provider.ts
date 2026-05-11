@@ -31,22 +31,21 @@ export class S3Provider implements OnModuleInit {
       .getAwsStorageSettingsForRuntime()
       .catch(() => this.getEnvFallback());
 
-    this.config = {
+    this.config = this.normalizeConfig({
       ...this.getEnvFallback(),
       ...nextConfig,
-    };
-    this.client = this.hasClientConfig(this.config)
-      ? this.buildClient(this.config)
-      : null;
+    });
+    this.client = null;
   }
 
   async getClient(): Promise<S3Client> {
     await this.refreshRuntimeConfig();
-    if (!this.client) {
+    if (!this.hasClientConfig(this.config)) {
       throw new Error(
         'AWS storage is not configured. Please save AWS storage settings before using media uploads.',
       );
     }
+    this.client = this.buildClient(this.config);
     return this.client;
   }
 
@@ -82,6 +81,17 @@ export class S3Provider implements OnModuleInit {
     return Boolean(
       config.region && config.accessKeyId && config.accessKeySecret,
     );
+  }
+
+  private normalizeConfig(config: AwsRuntimeSettings): AwsRuntimeSettings {
+    return {
+      isEnabled: Boolean(config.isEnabled),
+      region: String(config.region || '').trim(),
+      bucketName: String(config.bucketName || '').trim(),
+      cloudfrontUrl: String(config.cloudfrontUrl || '').trim(),
+      accessKeyId: String(config.accessKeyId || '').trim(),
+      accessKeySecret: String(config.accessKeySecret || '').trim(),
+    };
   }
 
   private getEnvFallback(): AwsRuntimeSettings {
