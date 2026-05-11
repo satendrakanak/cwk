@@ -141,6 +141,6 @@ jobs:
             echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin
             export SERVER_IMAGE="$SERVER_IMAGE"
             export CLIENT_IMAGE="$CLIENT_IMAGE"
-            docker compose --env-file .env.production -f docker-compose.prod.yml pull server client
-            docker compose --env-file .env.production -f docker-compose.prod.yml up -d --no-build --remove-orphans
+            docker compose --env-file .env -f docker-compose.prod.yml pull server client
+            docker compose --env-file .env -f docker-compose.prod.yml up -d --no-build --remove-orphans
             docker image prune -f

@@ -25,25 +25,25 @@ print_installation_state() {
 
 print_dev_status() {
   echo "Development"
-  if [ ! -f .env.docker ]; then
-    echo "Environment: missing .env.docker"
+  if [ ! -f .env.development ]; then
+    echo "Environment: missing .env.development"
     echo "Next: kasa install dev"
     return
   fi
 
-  docker compose --env-file .env.docker ps
+  docker compose --env-file .env.development ps
   print_installation_state dev
 }
 
 print_prod_status() {
   echo "Production"
-  if [ ! -f .env.production ]; then
-    echo "Environment: missing .env.production"
+  if [ ! -f .env ]; then
+    echo "Environment: missing .env"
     echo "Next: kasa install prod"
     return
   fi
 
-  docker compose --env-file .env.production -f docker-compose.prod.yml ps
+  docker compose --env-file .env -f docker-compose.prod.yml ps
   print_installation_state prod
 }
 

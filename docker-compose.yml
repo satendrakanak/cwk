@@ -42,7 +42,7 @@ services:
     container_name: codewithkasa-server-dev
     restart: unless-stopped
     env_file:
-      - .env.docker
+      - .env.development
     environment:
       NODE_ENV: development
       APP_URL: http://localhost:8000

@@ -13,19 +13,19 @@ status:
 	./scripts/status.sh
 
 dev:
-	docker compose --env-file .env.docker up --build
+	docker compose --env-file .env.development up --build
 
 dev-down:
-	docker compose --env-file .env.docker down
+	docker compose --env-file .env.development down
 
 dev-logs:
-	docker compose --env-file .env.docker logs -f
+	docker compose --env-file .env.development logs -f
 
 prod:
-	docker compose --env-file .env.production -f docker-compose.prod.yml up --build -d
+	docker compose --env-file .env -f docker-compose.prod.yml up --build -d
 
 prod-down:
-	docker compose --env-file .env.production -f docker-compose.prod.yml down
+	docker compose --env-file .env -f docker-compose.prod.yml down
 
 prod-logs:
-	docker compose --env-file .env.production -f docker-compose.prod.yml logs -f
+	docker compose --env-file .env -f docker-compose.prod.yml logs -f

@@ -4,8 +4,8 @@ set -eu
 ROOT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
 cd "$ROOT_DIR"
 
-if [ ! -f .env.docker ]; then
-  echo ".env.docker not found."
+if [ ! -f .env.development ]; then
+  echo ".env.development not found."
   echo "Run first-time setup with: kasa install dev"
   exit 1
 fi
@@ -18,4 +18,4 @@ echo "Useful URLs after the containers are ready:"
 echo "App:       http://localhost:3000"
 echo "API:       http://localhost:8000"
 echo ""
-docker compose --env-file .env.docker up
+docker compose --env-file .env.development up

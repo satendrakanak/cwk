@@ -31,7 +31,7 @@ For local testing, run the CodeWithKasa License Portal on port `5000`, generate 
 When CodeWithKasa runs in Docker, it automatically routes that localhost URL
 to the host machine internally.
 
-Database name is configurable in `.env.docker` through `POSTGRES_DB`. On a new
+Database name is configurable in `.env.development` through `POSTGRES_DB`. On a new
 Docker volume, PostgreSQL creates that database automatically.
 
 Local PostgreSQL is exposed on host port `5433` by default so it does not clash
@@ -57,23 +57,23 @@ make dev-down
 
 What they do:
 
-- `kasa install dev`: creates `.env.docker` if needed, builds the development stack, and streams live logs in the terminal.
-- `kasa install dev -r`: stops the development stack, removes bundled Docker data, keeps `.env.docker` in place, and starts a fresh installer.
-- `kasa install prod`: uses `.env.production` and starts the production stack.
+- `kasa install dev`: creates `.env.development` if needed, builds the development stack, and streams live logs in the terminal.
+- `kasa install dev -r`: stops the development stack, removes bundled Docker data, keeps `.env.development` in place, and starts a fresh installer.
+- `kasa install prod`: uses `.env` and starts the production stack.
 - `kasa start dev`: starts an already-installed development stack with live logs in the terminal.
 - `kasa start`: starts the production stack.
 - `kasa status`: shows Docker state and installation state for development and production.
 - `kasa stop`: stops development and production stacks so ports are free.
 - `kasa restart dev`: stops and starts the development stack without reinstalling.
 - `kasa restart prod`: stops and starts the production stack without reinstalling.
-- `make install-dev`: creates `.env.docker` if needed, builds the development stack, and streams live logs in the terminal.
+- `make install-dev`: creates `.env.development` if needed, builds the development stack, and streams live logs in the terminal.
 - `make dev`: starts the development Docker stack with hot reload.
 
 Raw Docker command:
 
 ```bash
-cp .env.docker.example .env.docker
-docker compose --env-file .env.docker up --build
+kasa install dev
+docker compose --env-file .env.development up --build
 ```
 
 Full infrastructure and CI/CD notes are in [docs/INFRA_AND_DEPLOYMENT.md](./docs/INFRA_AND_DEPLOYMENT.md).
@@ -407,12 +407,14 @@ http://localhost:8000
 
 ## Environment Variables
 
-For Docker development, copy `.env.docker.example` to `.env.docker` and edit
-only local secrets or port overrides when needed. Runtime platform settings such
-as branding, storage, mail, payment gateway, live classes, and push keys are
-managed from the installer and site settings dashboard.
+Docker development uses `.env.development`. Production uses `.env`.
+Both files are local/runtime files and are not pushed to GitHub. Runtime platform
+settings such as branding, storage, mail, payment gateway, live classes, and push
+keys are managed from the installer and site settings dashboard.
 
-Real `.env` files should not be pushed to GitHub.
+Run `kasa install dev` to create `.env.development`. On the production server,
+run `kasa install prod` once to create `.env`, fill real secrets/domains, then
+run `kasa install prod` again.
 
 ---
 
