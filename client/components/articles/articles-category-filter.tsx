@@ -20,7 +20,7 @@ export function ArticlesCategoryFilter({
   totalArticles,
 }: ArticleCategoryFilterProps) {
   return (
-    <div className="space-y-3">
+    <>
       <div className="academy-card flex flex-col gap-5 p-5 md:flex-row md:items-center md:justify-between">
         <div className="flex items-start gap-3">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/15">
@@ -44,7 +44,7 @@ export function ArticlesCategoryFilter({
         </div>
       </div>
 
-      <div className="sticky top-[88px] z-40 rounded-2xl border border-border bg-background/92 p-2 shadow-[0_18px_45px_-30px_rgba(15,23,42,0.45)] backdrop-blur-xl md:top-[96px]">
+      <div className="sticky top-[88px] z-40 rounded-2xl border border-border bg-background/92 p-2 shadow-[0_18px_45px_-30px_rgba(15,23,42,0.45)] backdrop-blur-xl md:top-[98px] lg:top-[92px]">
         <div className="no-scrollbar flex gap-2 overflow-x-auto">
           <Link
             href="/articles"
@@ -98,6 +98,6 @@ export function ArticlesCategoryFilter({
           })}
         </div>
       </div>
-    </div>
+    </>
   );
 }
