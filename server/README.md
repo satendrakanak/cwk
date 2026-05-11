@@ -231,45 +231,9 @@ npm run start:prod
 
 ## Environment Variables
 
-Create a `.env` file inside the `server/` folder.
-
-```env
-PORT=5000
-
-DATABASE_HOST=localhost
-DATABASE_PORT=5432
-DATABASE_USER=postgres
-DATABASE_PASSWORD=your_postgres_password
-DATABASE_NAME=codewithkasa
-
-JWT_SECRET=your_jwt_secret
-JWT_EXPIRE=7d
-
-CLIENT_URL=http://localhost:3000
-```
-
-Also keep a public example file:
-
-```env
-PORT=5000
-
-DATABASE_HOST=localhost
-DATABASE_PORT=5432
-DATABASE_USER=postgres
-DATABASE_PASSWORD=your_postgres_password
-DATABASE_NAME=codewithkasa
-
-JWT_SECRET=your_jwt_secret
-JWT_EXPIRE=7d
-
-CLIENT_URL=http://localhost:3000
-```
-
-File name:
-
-```txt
-server/.env.example
-```
+Do not create env files inside `server/`. Development uses the root
+`.env.development` file, and production uses the root `.env` file. Docker passes
+the required variables into the server container.
 
 ---
 
@@ -402,7 +366,6 @@ Before deployment:
 - Keep DTOs and validations organized.
 - Keep guards and role checks properly applied.
 - Keep database credentials private.
-- Use `.env.example` for public reference.
 - Keep business logic inside services.
 - Keep route handlers clean inside controllers.
 

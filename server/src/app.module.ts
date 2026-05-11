@@ -56,12 +56,16 @@ import { EngagementModule } from './engagement/engagement.module';
 import { InstallerModule } from './installer/installer.module';
 
 const ENV = process.env.NODE_ENV;
+const envFilePath =
+  ENV === 'development'
+    ? ['../.env.development', '.env.development']
+    : ['../.env', '.env'];
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: !ENV ? '.env' : `.env.${ENV}`,
+      envFilePath,
       load: [appConfig, databaseConfig],
       validationSchema: environmentValidation,
     }),

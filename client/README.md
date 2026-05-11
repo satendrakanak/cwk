@@ -204,23 +204,9 @@ npm start
 
 ## Environment Variables
 
-Create a `.env` file inside the `client/` folder.
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:5000
-```
-
-Also keep a public example file:
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:5000
-```
-
-File name:
-
-```txt
-client/.env.example
-```
+Do not create env files inside `client/`. Development uses the root
+`.env.development` file, and production uses the root `.env` file. Docker passes
+the required public variables into the client container.
 
 ---
 
@@ -229,7 +215,7 @@ client/.env.example
 The frontend communicates with the backend API using:
 
 ```env
-NEXT_PUBLIC_API_URL
+NEXT_PUBLIC_API_BASE_URL
 ```
 
 Make sure the backend server is running before testing API-based pages such as login, dashboard, orders, coupons, course purchase, exams, progress, and admin modules.
