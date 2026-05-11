@@ -10,11 +10,13 @@ if [ ! -f .env.docker ]; then
   exit 1
 fi
 
-echo "Starting CodeWithKasa development stack..."
-docker compose --env-file .env.docker up -d
-
 echo ""
-echo "CodeWithKasa development stack is running."
-echo "App:       http://localhost:3000"
+echo "Starting CodeWithKasa development stack with live logs..."
+echo "Press Ctrl+C to stop the development stack."
+echo ""
+echo "Useful URLs after the containers are ready:"
 echo "Installer: http://localhost:3000/install"
+echo "App:       http://localhost:3000"
 echo "API:       http://localhost:8000"
+echo ""
+docker compose --env-file .env.docker up

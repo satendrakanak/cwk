@@ -61,15 +61,15 @@ make prod-down
 
 What they do:
 
-- `kasa install dev`: creates `.env.docker` if needed, starts the development stack, and prints setup URLs.
+- `kasa install dev`: creates `.env.docker` if needed, builds the development stack, and streams live logs in the terminal.
 - `kasa install dev -r`: stops the development stack, removes bundled Docker data, keeps `.env.docker` in place, and starts a fresh installer.
 - `kasa install prod`: creates `.env.production.local` if needed, starts the local production test stack, and prints setup URLs.
-- `kasa start dev`: starts an already-installed development stack without resetting setup.
+- `kasa start dev`: starts an already-installed development stack with live logs in the terminal.
 - `kasa start prod`: starts an already-installed local production test stack without resetting setup.
 - `kasa stop`: stops both development and local production test stacks so ports are free.
 - `kasa restart dev`: stops and starts the development stack without reinstalling.
 - `kasa restart prod`: stops and starts the local production test stack without reinstalling.
-- `make install-dev`: creates `.env.docker` if needed, starts the development stack, and prints setup URLs.
+- `make install-dev`: creates `.env.docker` if needed, builds the development stack, and streams live logs in the terminal.
 - `make install-prod`: creates `.env.production.local` if needed, starts the local production test stack, and prints setup URLs.
 - `make dev`: starts the development Docker stack with hot reload.
 - `make prod`: builds and starts the local production Docker stack for final testing.
