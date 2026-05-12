@@ -23,6 +23,10 @@ export default function ContactPage() {
           pageTitle="Contact Us"
           pageHeadline="Talk to the academy team with context, not confusion."
           pageDescription="Ask about admissions, course fit, faculty, support, or next steps and we will guide you clearly."
+          breadcrumbs={[
+            { label: "Home", href: "/" },
+            { label: "Contact" },
+          ]}
         />
 
         <section className="py-12 pb-20">

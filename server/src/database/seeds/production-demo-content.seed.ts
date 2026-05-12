@@ -10,7 +10,10 @@ import { CouponStatus } from 'src/coupons/enums/couponStatus.enum';
 import { CouponType } from 'src/coupons/enums/couponType.enum';
 import { Course } from 'src/courses/course.entity';
 import { CourseDeliveryMode } from 'src/courses/constants/course-delivery-mode';
+import { CourseReview } from 'src/course-reviews/course-review.entity';
+import { FacultyReview } from 'src/faculty-reviews/faculty-review.entity';
 import { Article } from 'src/articles/article.entity';
+import { ArticleComment } from 'src/article-comments/article-comment.entity';
 import { AutomationJob } from 'src/engagement/automation-job.entity';
 import { AutomationJobStatus } from 'src/engagement/enums/automation-job-status.enum';
 import { AutomationTriggerType } from 'src/engagement/enums/automation-trigger-type.enum';
@@ -25,8 +28,13 @@ import { BatchStudentStatus } from 'src/faculty-workspace/enums/batch-student-st
 import { ClassSessionStatus } from 'src/faculty-workspace/enums/class-session-status.enum';
 import { CourseBatchStatus } from 'src/faculty-workspace/enums/course-batch-status.enum';
 import { Lecture } from 'src/lectures/lecture.entity';
+import { Attachment } from 'src/attachments/attachment.entity';
 import { NotificationChannel } from 'src/notifications/enums/notification-channel.enum';
 import { NotificationType } from 'src/notifications/enums/notification-type.enum';
+import { Enrollment } from 'src/enrollments/enrollment.entity';
+import { Order } from 'src/orders/order.entity';
+import { OrderItem } from 'src/orders/order-item.entity';
+import { OrderStatus } from 'src/orders/enums/orderStatus.enum';
 import { FacultyProfile } from 'src/profiles/faculty-profile.entity';
 import { UserProfile } from 'src/profiles/user-profile.entity';
 import { Role } from 'src/roles-permissions/role.entity';
@@ -43,22 +51,143 @@ import * as bcrypt from 'bcrypt';
 
 const createId = (value: string) => value;
 const DEMO_PASSWORD = 'Demo@12345';
-const DEMO_DATA_DIR = join(__dirname, '..', 'data', 'marketplace-demo');
+const DEMO_DATA_DIRS = [
+  join(process.cwd(), 'src', 'database', 'data', 'marketplace-demo'),
+  join(__dirname, '..', 'data', 'marketplace-demo'),
+  join(__dirname, '..', '..', 'src', 'database', 'data', 'marketplace-demo'),
+];
+const demoVideoPaths = Array.from(
+  { length: 15 },
+  (_, index) =>
+    `/assets/demo-videos/${String(index + 1).padStart(2, '0')}-${[
+      'online-class-with-laptop',
+      'student-using-his-laptop',
+      'student-using-laptop-at-home',
+      'laptop-learning-at-home',
+      'online-class-study-desk',
+      'students-using-laptops',
+      'virtual-meeting-learning-setup',
+      'male-student-using-laptop',
+      'programming-on-laptop',
+      'person-encoding-on-laptop',
+      'man-coding-on-laptop',
+      'students-working-on-laptop-in-classroom',
+      'teacher-in-online-class',
+      'teacher-recording-an-online-class',
+      'teacher-and-student-in-online-class',
+    ][index]}.mp4`,
+);
+const demoAttachmentPaths = [
+  '/assets/demo-attachments/ai-productivity-playbook.pdf',
+  '/assets/demo-attachments/analytics-dashboard-template.pdf',
+  '/assets/demo-attachments/career-interview-kit.pdf',
+  '/assets/demo-attachments/communication-practice-pack.pdf',
+  '/assets/demo-attachments/database-design-sheet.pdf',
+  '/assets/demo-attachments/devops-release-checklist.pdf',
+  '/assets/demo-attachments/frontend-practice-worksheet.pdf',
+  '/assets/demo-attachments/fullstack-project-brief.pdf',
+  '/assets/demo-attachments/marketing-content-calendar.pdf',
+  '/assets/demo-attachments/node-api-workbook.pdf',
+];
 
 function readDemoJson<T>(fileName: string, fallback: T): T {
-  const filePath = join(DEMO_DATA_DIR, fileName);
+  const filePath = DEMO_DATA_DIRS.map((dir) => join(dir, fileName)).find(
+    (candidate) => existsSync(candidate),
+  );
 
-  if (!existsSync(filePath)) {
+  if (!filePath) {
     return fallback;
   }
 
   return JSON.parse(readFileSync(filePath, 'utf8')) as T;
 }
 
+function enrichDemoCourse(course: DemoCourse, courseIndex: number): DemoCourse {
+  const existingChapters = course.chapters || [];
+  const needsRichContent =
+    existingChapters.length < 15 ||
+    existingChapters.some((chapter) => (chapter.lectures?.length || 0) < 8) ||
+    !course.videoPath;
+
+  if (!needsRichContent) return course;
+
+  const topics = [
+    'Orientation and learning roadmap',
+    'Core concepts and terminology',
+    'Tooling and environment setup',
+    'Practical workflow foundations',
+    'Research and planning methods',
+    'Implementation patterns',
+    'Quality checklist and review',
+    'Common mistakes and fixes',
+    'Real-world case study',
+    'Hands-on practice lab',
+    'Portfolio-ready assignment',
+    'Automation and productivity',
+    'Assessment preparation',
+    'Capstone build session',
+    'Final review and next steps',
+  ];
+  const lessonTypes = [
+    'Concept walkthrough',
+    'Environment setup',
+    'Guided practice',
+    'Common mistakes review',
+    'Mini assignment briefing',
+    'Practice implementation',
+    'Debugging session',
+    'Resource review',
+    'Checkpoint quiz',
+    'Portfolio task',
+  ];
+
+  return {
+    ...course,
+    videoPath: course.videoPath || demoVideoPaths[courseIndex % demoVideoPaths.length],
+    chapters: topics.map((topic, chapterIndex) => ({
+      title: topic,
+      description: `${topic} for ${course.title}. This module gives learners a practical, testable path with clear tasks and review material.`,
+      isFree: chapterIndex < 1,
+      lectures: lessonTypes.map((lessonType, lectureIndex) => ({
+        title: `${lessonType}: ${topic}`,
+        description: `Learn ${topic.toLowerCase()} in ${course.title}. This lesson includes focused explanation, practical examples, and a review checklist for demo testing.`,
+        isFree:
+          course.mode === CourseDeliveryMode.FacultyLed ||
+          (chapterIndex === 0 && lectureIndex < 2),
+        attachmentPaths: [
+          demoAttachmentPaths[
+            (courseIndex + chapterIndex + lectureIndex) %
+              demoAttachmentPaths.length
+          ],
+        ],
+        videoPath:
+          course.mode === CourseDeliveryMode.FacultyLed
+            ? undefined
+            : demoVideoPaths[
+                (courseIndex + chapterIndex + lectureIndex) %
+                  demoVideoPaths.length
+              ],
+      })),
+    })),
+  };
+}
+
+function mergeDemoCourses(coursesFromJson: DemoCourse[]) {
+  const courseMap = new Map<string, DemoCourse>();
+
+  [...fallbackDemoCourses, ...coursesFromJson].forEach((course, index) => {
+    courseMap.set(course.slug, enrichDemoCourse(course, index));
+  });
+
+  return [...courseMap.values()];
+}
+
 type DemoLecture = {
   title: string;
   description: string;
   isFree?: boolean;
+  videoPath?: string;
+  attachmentPaths?: string[];
 };
 
 type DemoChapter = {
@@ -75,6 +204,7 @@ type DemoCourse = {
   description: string;
   imagePath: string;
   imageAlt: string;
+  videoPath?: string;
   priceInr: string;
   priceUsd: string;
   duration: string;
@@ -93,6 +223,7 @@ type DemoCourse = {
   attendanceValue?: number | null;
   showInHero?: boolean;
   showInPopular?: boolean;
+  showInMegaMenu?: boolean;
   isFeatured?: boolean;
   categories: string[];
   tags: string[];
@@ -802,9 +933,8 @@ const fallbackDemoCourses: DemoCourse[] = [
   },
 ];
 
-const demoCourses = readDemoJson<DemoCourse[]>(
-  'courses.json',
-  fallbackDemoCourses,
+const demoCourses = mergeDemoCourses(
+  readDemoJson<DemoCourse[]>('courses.json', []),
 );
 const demoUsers = readDemoJson<DemoUser[]>('users.json', fallbackDemoUsers);
 const demoCoupons = readDemoJson<DemoCoupon[]>('coupons.json', []);
@@ -971,12 +1101,26 @@ async function getDemoUser(
   });
 
   const password = await bcrypt.hash(DEMO_PASSWORD, 10);
+  const phoneNumber = payload.phoneNumber
+    ? await userRepository
+        .createQueryBuilder('user')
+        .select(['user.id'])
+        .where('user.phoneNumber = :phoneNumber', {
+          phoneNumber: payload.phoneNumber,
+        })
+        .getOne()
+        .then((phoneOwner) =>
+          !phoneOwner || phoneOwner.id === existingUser?.id
+            ? payload.phoneNumber
+            : null,
+        )
+    : null;
 
   if (existingUser) {
     existingUser.firstName = payload.firstName;
     existingUser.lastName = payload.lastName;
     existingUser.username = payload.username;
-    existingUser.phoneNumber = payload.phoneNumber || null;
+    existingUser.phoneNumber = phoneNumber;
     existingUser.password = password;
     existingUser.avatarUrl = payload.avatarUrl || null;
     existingUser.emailVerified = existingUser.emailVerified || new Date();
@@ -990,7 +1134,7 @@ async function getDemoUser(
       lastName: payload.lastName,
       username: payload.username,
       email: payload.email,
-      phoneNumber: payload.phoneNumber || null,
+      phoneNumber,
       password,
       avatarUrl: payload.avatarUrl || null,
       emailVerified: new Date(),
@@ -1023,6 +1167,46 @@ async function upsertLearnerProfile(
   profile.isPublic = true;
   profile.showCourses = true;
   profile.showCertificates = true;
+
+  await profileRepository.save(profile);
+}
+
+async function upsertInstructorPublicProfile(
+  dataSource: DataSource,
+  user: User,
+  index: number,
+) {
+  const profileRepository = dataSource.getRepository(UserProfile);
+  const existingProfile = await profileRepository.findOne({
+    where: { user: { id: user.id } },
+    relations: { user: true },
+  });
+
+  const profile =
+    existingProfile ||
+    profileRepository.create({
+      user,
+    });
+  const slug = `${user.firstName}-${user.lastName || user.username}`
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+
+  profile.headline = profile.headline || 'CodeWithKasa instructor';
+  profile.bio =
+    profile.bio ||
+    `${user.firstName} mentors learners through practical CodeWithKasa projects, review sessions, and career-focused learning paths.`;
+  profile.location = profile.location || 'India';
+  profile.isPublic = true;
+  profile.showCourses = true;
+  profile.showCertificates = true;
+  profile.linkedin = `https://www.linkedin.com/in/${slug}`;
+  profile.instagram = `https://www.instagram.com/${slug}`;
+  profile.twitter = `https://x.com/${slug}`;
+  profile.youtube =
+    index % 3 === 0 ? `https://www.youtube.com/@${slug}` : profile.youtube;
+  profile.facebook =
+    index % 4 === 0 ? `https://www.facebook.com/${slug}` : profile.facebook;
 
   await profileRepository.save(profile);
 }
@@ -1077,6 +1261,7 @@ async function seedDemoUsers(dataSource: DataSource) {
 
     if (demoUser.facultyProfile) {
       await upsertFacultyProfile(dataSource, user, demoUser.facultyProfile);
+      await upsertInstructorPublicProfile(dataSource, user, seededUsers.length);
     }
 
     if (userRole === 'student') {
@@ -1101,6 +1286,7 @@ async function seedDemoUsers(dataSource: DataSource) {
     learnerUsers: seededUsers.filter((user) =>
       user.roles?.some((role) => role.name === 'student'),
     ),
+    allUsers: seededUsers,
   };
 }
 
@@ -1108,15 +1294,24 @@ async function getUpload(dataSource: DataSource, path: string, name: string) {
   const uploadRepository = dataSource.getRepository(Upload);
   const existingUpload = await uploadRepository.findOne({ where: { path } });
 
-  const mime = path.endsWith('.webp')
-    ? 'image/webp'
-    : path.endsWith('.png')
-      ? 'image/png'
-      : 'image/jpeg';
+  const isVideo = path.endsWith('.mp4') || path.endsWith('.webm');
+  const type = isVideo ? FileTypes.VIDEO : FileTypes.IMAGE;
+  const mime = path.endsWith('.mp4')
+    ? 'video/mp4'
+    : path.endsWith('.webm')
+      ? 'video/webm'
+      : path.endsWith('.pdf')
+        ? 'application/pdf'
+      : path.endsWith('.webp')
+        ? 'image/webp'
+        : path.endsWith('.png')
+          ? 'image/png'
+          : 'image/jpeg';
+  const uploadType = path.endsWith('.pdf') ? FileTypes.PDF : type;
 
   if (existingUpload) {
     existingUpload.name = name;
-    existingUpload.type = FileTypes.IMAGE;
+    existingUpload.type = uploadType;
     existingUpload.mime = mime;
     existingUpload.status = UploadStatus.COMPLETED;
     return uploadRepository.save(existingUpload);
@@ -1126,7 +1321,7 @@ async function getUpload(dataSource: DataSource, path: string, name: string) {
     uploadRepository.create({
       name,
       path,
-      type: FileTypes.IMAGE,
+      type: uploadType,
       mime,
       size: 0,
       status: UploadStatus.COMPLETED,
@@ -1526,22 +1721,363 @@ async function seedDemoSettings(dataSource: DataSource) {
   }
 }
 
+const demoCourseReviewComments = [
+  'The course flow is practical and the examples feel close to real project work.',
+  'Lessons are easy to follow, and the checkpoints helped me revise quickly.',
+  'Good balance of theory, practice, and portfolio-style tasks.',
+  'The faculty explanations are clear and the resources are useful for revision.',
+  'I liked the structure because every section ends with something hands-on.',
+  'This helped me understand the topic with real implementation confidence.',
+  'Assignments and resource PDFs made the learning path feel complete.',
+  'Great for building consistency because the lectures are short and focused.',
+  'The course examples match the kind of work I wanted to practice.',
+  'Very useful demo curriculum for testing learning progress and reviews.',
+];
+
+async function seedDemoCourseReviews(
+  dataSource: DataSource,
+  courses: Course[],
+  users: User[],
+) {
+  if (!courses.length || !users.length) return;
+
+  const reviewRepository = dataSource.getRepository(CourseReview);
+  const ratingPattern = [
+    5, 5, 5, 5, 4, 5, 4, 5, 5, 4, 5, 3, 5, 2, 1, 5, 4, 5, 5, 4,
+  ];
+
+  for (const [courseIndex, course] of courses.entries()) {
+    const reviewCount = Math.min(users.length, 45 + (courseIndex % 6));
+    const reviews: CourseReview[] = [];
+
+    for (let index = 0; index < reviewCount; index += 1) {
+      const user = users[(courseIndex * 11 + index) % users.length];
+      let review = await reviewRepository.findOne({
+        where: { course: { id: course.id }, user: { id: user.id } },
+        relations: { course: true, user: true },
+        withDeleted: true,
+      });
+
+      if (!review) {
+        review = reviewRepository.create({ course, user });
+      }
+
+      review.rating =
+        ratingPattern[(courseIndex + index) % ratingPattern.length];
+      review.comment = `${
+        demoCourseReviewComments[
+          (courseIndex + index) % demoCourseReviewComments.length
+        ]
+      } ${course.title} has a clean learning path for demo testing.`;
+      review.isPublished = true;
+      review.deletedAt = null as unknown as Date;
+
+      reviews.push(review);
+    }
+
+    await reviewRepository.save(reviews);
+  }
+}
+
+const demoFacultyReviewComments = [
+  'Clear explanations, practical examples, and patient guidance throughout the learning path.',
+  'The instructor connects concepts with real project decisions, which made the sessions useful.',
+  'Supportive teaching style with strong feedback on assignments and portfolio work.',
+  'Very structured mentoring and helpful answers during doubt-clearing discussions.',
+  'The examples felt realistic and the instructor kept the pace comfortable.',
+  'Strong subject knowledge and practical suggestions for improving project quality.',
+];
+
+async function seedDemoFacultyReviews(
+  dataSource: DataSource,
+  faculties: User[],
+  users: User[],
+) {
+  if (!faculties.length || !users.length) return;
+
+  const reviewRepository = dataSource.getRepository(FacultyReview);
+  const ratingPattern = [
+    5, 5, 5, 4, 5, 4, 5, 5, 3, 5, 4, 5, 2, 5, 5, 4, 5, 3, 5, 4,
+  ];
+
+  for (const [facultyIndex, faculty] of faculties.entries()) {
+    const reviewCount = Math.min(users.length, 40 + (facultyIndex % 8));
+    const reviews: FacultyReview[] = [];
+
+    for (let index = 0; index < reviewCount; index += 1) {
+      const user = users[(facultyIndex * 7 + index) % users.length];
+      if (user.id === faculty.id) continue;
+
+      let review = await reviewRepository.findOne({
+        where: { faculty: { id: faculty.id }, user: { id: user.id } },
+        relations: { faculty: true, user: true },
+        withDeleted: true,
+      });
+
+      if (!review) {
+        review = reviewRepository.create({ faculty, user });
+      }
+
+      review.rating =
+        ratingPattern[(facultyIndex + index) % ratingPattern.length];
+      review.comment = `${
+        demoFacultyReviewComments[
+          (facultyIndex + index) % demoFacultyReviewComments.length
+        ]
+      } ${faculty.firstName} brings practical instructor energy to the demo academy.`;
+      review.isPublished = true;
+      review.deletedAt = null as unknown as Date;
+
+      reviews.push(review);
+    }
+
+    await reviewRepository.save(reviews);
+  }
+}
+
+async function seedDemoEnrollments(
+  dataSource: DataSource,
+  courses: Course[],
+  users: User[],
+) {
+  if (!courses.length || !users.length) return;
+
+  const orderRepository = dataSource.getRepository(Order);
+  const orderItemRepository = dataSource.getRepository(OrderItem);
+  const enrollmentRepository = dataSource.getRepository(Enrollment);
+
+  for (const [courseIndex, course] of courses.entries()) {
+    const enrollmentCount = Math.min(users.length, 45 + (courseIndex % 6));
+
+    for (let index = 0; index < enrollmentCount; index += 1) {
+      const user = users[(courseIndex * 11 + index) % users.length];
+      const totalAmount = Number(course.priceInr || 0);
+      const orderCode = `cwk_demo_${course.id}_${user.id}`;
+      const paidAt = new Date(
+        Date.now() - (courseIndex * 3 + index + 1) * 24 * 60 * 60 * 1000,
+      );
+
+      let order = await orderRepository.findOne({
+        where: { orderId: orderCode },
+        relations: { user: true, items: true },
+      });
+
+      if (!order) {
+        order = await orderRepository.save(
+          orderRepository.create({
+            user,
+            subTotal: totalAmount,
+            discount: 0,
+            autoDiscount: 0,
+            manualDiscount: 0,
+            tax: 0,
+            totalAmount,
+            currency: 'INR',
+            paymentId: `pay_${orderCode}`,
+            orderId: orderCode,
+            paymentAttempts: 1,
+            paidAt,
+            paymentMethod: 'DEMO',
+            paymentMode: 'demo_seed',
+            status: OrderStatus.PAID,
+            billingAddress: {
+              firstName: user.firstName,
+              lastName: user.lastName || '',
+              email: user.email,
+              phoneNumber: user.phoneNumber || '+91-9809-000000',
+              address: 'CodeWithKasa demo billing address',
+              country: 'India',
+              state: 'Delhi',
+              city: 'New Delhi',
+              pincode: '110001',
+            },
+          }),
+        );
+      } else {
+        order.user = user;
+        order.subTotal = totalAmount;
+        order.discount = 0;
+        order.autoDiscount = 0;
+        order.manualDiscount = 0;
+        order.tax = 0;
+        order.totalAmount = totalAmount;
+        order.currency = 'INR';
+        order.paymentId = order.paymentId || `pay_${orderCode}`;
+        order.paymentAttempts = 1;
+        order.paidAt = order.paidAt || paidAt;
+        order.paymentMethod = 'DEMO';
+        order.paymentMode = 'demo_seed';
+        order.status = OrderStatus.PAID;
+        await orderRepository.save(order);
+      }
+
+      const existingItem = await orderItemRepository.findOne({
+        where: { order: { id: order.id }, course: { id: course.id } },
+      });
+
+      if (!existingItem) {
+        await orderItemRepository.save(
+          orderItemRepository.create({
+            order,
+            course,
+            price: totalAmount,
+            quantity: 1,
+          }),
+        );
+      }
+
+      let enrollment = await enrollmentRepository.findOne({
+        where: { user: { id: user.id }, course: { id: course.id } },
+        relations: { user: true, course: true, order: true },
+      });
+
+      if (!enrollment) {
+        enrollment = enrollmentRepository.create({
+          user,
+          course,
+          order,
+        });
+      }
+
+      enrollment.isActive = true;
+      enrollment.order = order;
+      enrollment.progress = Math.min(98, 12 + ((courseIndex * 7 + index) % 87));
+
+      await enrollmentRepository.save(enrollment);
+    }
+  }
+}
+
+const demoArticleCommentMessages = [
+  'This article makes the topic easy to connect with practical learning.',
+  'The examples feel useful for learners who are building real projects.',
+  'I liked the structure and the checklist-style explanation.',
+  'Helpful points for planning the next practice session.',
+  'This gives a clear direction without making the topic feel heavy.',
+  'The article is useful for both beginners and people revising the concept.',
+  'Good reminder to focus on implementation, not only theory.',
+  'The CodeWithKasa examples make the advice easier to apply.',
+  'This helped me think through the learning path more clearly.',
+  'Nice practical read for learners preparing a portfolio.',
+];
+
+async function seedDemoArticleComments(dataSource: DataSource, users: User[]) {
+  if (!users.length) return;
+
+  const articleRepository = dataSource.getRepository(Article);
+  const commentRepository = dataSource.getRepository(ArticleComment);
+  const articles = await articleRepository.find({
+    where: demoArticles.map((article) => ({ slug: article.slug })),
+    order: { id: 'ASC' },
+  });
+
+  for (const [articleIndex, article] of articles.entries()) {
+    const commentCount = Math.min(users.length, 45 + (articleIndex % 6));
+    const rootComments: ArticleComment[] = [];
+
+    for (let index = 0; index < commentCount; index += 1) {
+      const user = users[(articleIndex * 13 + index) % users.length];
+      const content = `${
+        demoArticleCommentMessages[
+          (articleIndex + index) % demoArticleCommentMessages.length
+        ]
+      } (${article.title})`;
+
+      let comment = await commentRepository.findOne({
+        where: {
+          article: { id: article.id },
+          user: { id: user.id },
+          content,
+        },
+        relations: { article: true, user: true, likedBy: true },
+      });
+
+      if (!comment) {
+        comment = commentRepository.create({
+          article,
+          user,
+          content,
+        });
+      }
+
+      const likedBy = [1, 2, 3]
+        .map((offset) => users[(articleIndex + index + offset) % users.length])
+        .filter((likeUser) => likeUser.id !== user.id);
+
+      comment.parent = null;
+      comment.isPublished = true;
+      comment.likedBy = likedBy;
+
+      rootComments.push(await commentRepository.save(comment));
+    }
+
+    for (let index = 0; index < Math.min(10, rootComments.length); index += 1) {
+      const parent = rootComments[index];
+      const user = users[(articleIndex * 17 + index + 9) % users.length];
+      const content = `Replying to this point because it connects well with demo learning workflows for ${article.title}.`;
+
+      let reply = await commentRepository.findOne({
+        where: {
+          article: { id: article.id },
+          user: { id: user.id },
+          parent: { id: parent.id },
+          content,
+        },
+        relations: { article: true, user: true, parent: true, likedBy: true },
+      });
+
+      if (!reply) {
+        reply = commentRepository.create({
+          article,
+          user,
+          parent,
+          content,
+        });
+      }
+
+      reply.isPublished = true;
+      reply.likedBy = [
+        users[(articleIndex + index + 4) % users.length],
+        users[(articleIndex + index + 7) % users.length],
+      ].filter((likeUser) => likeUser.id !== user.id);
+
+      await commentRepository.save(reply);
+    }
+  }
+}
+
 export async function seedProductionDemoContent(dataSource: DataSource) {
   const courseRepository = dataSource.getRepository(Course);
   const chapterRepository = dataSource.getRepository(Chapter);
   const lectureRepository = dataSource.getRepository(Lecture);
+  const attachmentRepository = dataSource.getRepository(Attachment);
+  const userRepository = dataSource.getRepository(User);
   const seededDemoUsers = await seedDemoUsers(dataSource);
   const systemUser = seededDemoUsers.admin;
-  const facultyUsers = seededDemoUsers.facultyUsers.length
-    ? seededDemoUsers.facultyUsers
+  const allFacultyUsers = await userRepository
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.roles', 'roles')
+    .where('roles.name = :roleName', { roleName: 'faculty' })
+    .getMany();
+  const allReviewUsers = await userRepository.find();
+  const facultyUsers = allFacultyUsers.length
+    ? allFacultyUsers
     : [systemUser];
+  const savedCourses: Course[] = [];
 
-  for (const demoCourse of demoCourses) {
+  for (const [courseIndex, demoCourse] of demoCourses.entries()) {
     const image = await getUpload(
       dataSource,
       demoCourse.imagePath,
       `${demoCourse.title} cover`,
     );
+    const video = demoCourse.videoPath
+      ? await getUpload(
+          dataSource,
+          demoCourse.videoPath,
+          `${demoCourse.title} preview video`,
+        )
+      : null;
     const categories = await Promise.all(
       demoCourse.categories.map((category) =>
         getCategory(dataSource, category, systemUser),
@@ -1575,10 +2111,12 @@ export async function seedProductionDemoContent(dataSource: DataSource) {
     course.metaDescription = demoCourse.shortDescription.slice(0, 160);
     course.image = image;
     course.imageAlt = demoCourse.imageAlt;
+    course.video = video;
     course.isFree = false;
     course.isFeatured = Boolean(demoCourse.isFeatured);
     course.showInHero = Boolean(demoCourse.showInHero);
     course.showInPopular = Boolean(demoCourse.showInPopular);
+    course.showInMegaMenu = Boolean(demoCourse.showInMegaMenu);
     course.isPublished = true;
     course.priceInr = demoCourse.priceInr;
     course.priceUsd = demoCourse.priceUsd;
@@ -1602,13 +2140,11 @@ export async function seedProductionDemoContent(dataSource: DataSource) {
     course.exam = createDemoExam(demoCourse.title);
     course.categories = categories;
     course.tags = tags;
-    course.faculties =
-      demoCourse.mode === CourseDeliveryMode.SelfLearning
-        ? []
-        : [facultyUsers[demoCourses.indexOf(demoCourse) % facultyUsers.length]];
+    course.faculties = [facultyUsers[courseIndex % facultyUsers.length]];
     course.updatedBy = systemUser;
 
     const savedCourse = await courseRepository.save(course);
+    savedCourses.push(savedCourse);
 
     for (const [chapterIndex, demoChapter] of demoCourse.chapters.entries()) {
       const chapter = await chapterRepository.save(
@@ -1625,22 +2161,60 @@ export async function seedProductionDemoContent(dataSource: DataSource) {
       for (const [lectureIndex, demoLecture] of (
         demoChapter.lectures ?? []
       ).entries()) {
-        await lectureRepository.save(
+        const lecture = await lectureRepository.save(
           lectureRepository.create({
             title: demoLecture.title,
             description: demoLecture.description,
             position: lectureIndex + 1,
             isPublished: true,
             isFree: Boolean(demoLecture.isFree),
+            video: demoLecture.videoPath
+              ? await getUpload(
+                  dataSource,
+                  demoLecture.videoPath,
+                  `${demoLecture.title} preview video`,
+                )
+              : null,
             chapter,
           }),
         );
+
+        for (const attachmentPath of demoLecture.attachmentPaths ?? []) {
+          const file = await getUpload(
+            dataSource,
+            attachmentPath,
+            `${demoLecture.title} resource`,
+          );
+          await attachmentRepository.save(
+            attachmentRepository.create({
+              name: `${demoLecture.title} resource`,
+              file,
+              lecture,
+            }),
+          );
+        }
       }
     }
   }
 
+  await seedDemoCourseReviews(
+    dataSource,
+    savedCourses,
+    allReviewUsers.length ? allReviewUsers : seededDemoUsers.allUsers,
+  );
+  await seedDemoFacultyReviews(
+    dataSource,
+    allFacultyUsers,
+    allReviewUsers.length ? allReviewUsers : seededDemoUsers.allUsers,
+  );
+  await seedDemoEnrollments(
+    dataSource,
+    savedCourses,
+    allReviewUsers.length ? allReviewUsers : seededDemoUsers.allUsers,
+  );
   await seedDemoCoupons(dataSource);
   await seedDemoArticles(dataSource, systemUser);
+  await seedDemoArticleComments(dataSource, seededDemoUsers.allUsers);
   await seedDemoTestimonials(dataSource);
   await seedDemoEngagement(dataSource, systemUser);
   await seedDemoLiveOperations(dataSource);

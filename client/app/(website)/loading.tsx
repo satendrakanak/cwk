@@ -1,5 +1,5 @@
-import { HomePageSkeleton } from "@/components/skeletons/website-skeletons";
+import { ListingPageSkeleton } from "@/components/skeletons/website-skeletons";
 
 export default function Loading() {
-  return <HomePageSkeleton />;
+  return <ListingPageSkeleton type="course" withStats count={6} />;
 }

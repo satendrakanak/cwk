@@ -261,6 +261,7 @@ export class UpdateCourseProvider {
       'isFeatured',
       'showInHero',
       'showInPopular',
+      'showInMegaMenu',
       'isFree',
       'priceInr',
       'priceUsd',

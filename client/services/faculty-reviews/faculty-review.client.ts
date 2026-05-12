@@ -1,16 +1,35 @@
 import { apiClient, withAuthRetry } from "@/lib/api/client";
-import { ApiResponse } from "@/types/api";
+import { ApiResponse, Paginated } from "@/types/api";
 import {
   CreateFacultyReviewPayload,
+  FacultyReviewFilter,
   FacultyReview,
   FacultyReviewSummary,
 } from "@/types/faculty-review";
 
+type FacultyReviewsQuery = {
+  page?: number;
+  limit?: number;
+  filter?: FacultyReviewFilter;
+};
+
+const buildQueryString = (params: Record<string, string | number | undefined>) =>
+  Object.entries(params)
+    .filter(([, value]) => value !== undefined && value !== "")
+    .map(
+      ([key, value]) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`,
+    )
+    .join("&");
+
 export const facultyReviewClientService = {
-  getByFaculty: (facultyId: number) =>
-    apiClient.get<ApiResponse<FacultyReview[]>>(
-      `/api/faculty-reviews/faculty/${facultyId}`,
-    ),
+  getByFaculty: (facultyId: number, query: FacultyReviewsQuery = {}) => {
+    const queryString = buildQueryString(query);
+
+    return apiClient.get<ApiResponse<Paginated<FacultyReview>>>(
+      `/api/faculty-reviews/faculty/${facultyId}${queryString ? `?${queryString}` : ""}`,
+    );
+  },
 
   getSummary: (facultyId: number) =>
     apiClient.get<ApiResponse<FacultyReviewSummary>>(

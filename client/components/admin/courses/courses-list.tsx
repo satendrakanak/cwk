@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { usePathname, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { BookOpen, Eye, Star, TrendingUp } from "lucide-react";
+import { BookOpen, Eye, LayoutPanelTop, Star, TrendingUp } from "lucide-react";
 
 import { ConfirmDeleteDialog } from "@/components/modals/confirm-dialog";
 import { Course } from "@/types/course";
@@ -65,9 +65,13 @@ export const CoursesList = ({ courses, dateRange }: CoursesListProps) => {
               ? nextValue
                 ? "Course added to home hero"
                 : "Course removed from home hero"
-              : nextValue
-                ? "Course added to popular courses"
-                : "Course removed from popular courses",
+              : field === "showInPopular"
+                ? nextValue
+                  ? "Course added to popular courses"
+                  : "Course removed from popular courses"
+                : nextValue
+                  ? "Course added to mega menu"
+                  : "Course removed from mega menu",
           );
           router.refresh();
         } catch (error: unknown) {
@@ -147,6 +151,11 @@ export const CoursesList = ({ courses, dateRange }: CoursesListProps) => {
             value: courses.filter((course) => course.showInPopular).length,
             icon: TrendingUp,
           },
+          {
+            label: "Mega Menu",
+            value: courses.filter((course) => course.showInMegaMenu).length,
+            icon: LayoutPanelTop,
+          },
         ]}
         actions={
           <>
@@ -176,6 +185,7 @@ export const CoursesList = ({ courses, dateRange }: CoursesListProps) => {
           Published: course.isPublished ? "Yes" : "No",
           HomeHero: course.showInHero ? "Yes" : "No",
           Popular: course.showInPopular ? "Yes" : "No",
+          MegaMenu: course.showInMegaMenu ? "Yes" : "No",
           Categories: course.categories?.map((category) => category.name).join(", ") ?? "",
           CreatedAt: course.createdAt,
         })}

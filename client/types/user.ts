@@ -61,6 +61,9 @@ export type User = {
   profile: UserProfile;
   facultyProfile: FacultyProfile;
   taughtCourses?: Course[];
+  taughtCoursesCount?: number;
+  averageRating?: number;
+  totalReviews?: number;
 
   createdAt: string;
   updatedAt: string;

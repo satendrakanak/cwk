@@ -97,6 +97,9 @@ export const userClientService = {
   getFacultyProfile: (id: number) =>
     apiClient.get<ApiResponse<User>>(`/api/users/faculty-profile/${id}`),
 
+  getFacultyProfileBySlug: (slug: string) =>
+    apiClient.get<ApiResponse<User>>(`/api/users/faculty-profile/slug/${slug}`),
+
   getPublicProfile: (username: string) =>
     apiClient.get<ApiResponse<PublicProfileBundle | null>>(
       `/api/users/public-profile/${username}`,

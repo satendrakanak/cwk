@@ -15,6 +15,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import { Course } from "@/types/course";
+import { getCourseDeliveryLabel } from "@/lib/course-delivery";
 
 interface CourseDetailsProps {
   course: Course;
@@ -22,11 +23,14 @@ interface CourseDetailsProps {
 
 export const CourseDetails = ({ course }: CourseDetailsProps) => {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const delivery = getCourseDeliveryLabel(course.mode);
+  const categories = course.categories?.map((category) => category.name).join(", ");
+  const tags = course.tags?.map((tag) => tag.name).join(", ");
 
   const items = [
     {
       label: "Course Type",
-      value: "100% Online Courses",
+      value: delivery.label,
       icon: Monitor,
     },
     {
@@ -51,12 +55,22 @@ export const CourseDetails = ({ course }: CourseDetailsProps) => {
     },
     {
       label: "Study Material",
-      value: "Included in the course",
+      value: course.studyMaterial || "Included in the course",
       icon: BookOpen,
     },
     {
       label: "Additional Book",
-      value: "Everyday Ayurveda : Daily Habits That Can Change Your Life",
+      value: course.additionalBook || "Practice workbook and reference notes",
+      icon: Book,
+    },
+    {
+      label: "Categories",
+      value: categories || "General learning",
+      icon: BookOpen,
+    },
+    {
+      label: "Tags",
+      value: tags || "CodeWithKasa",
       icon: Book,
     },
     {

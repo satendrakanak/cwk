@@ -16,9 +16,10 @@ export const getVideoDuration = (url: string): Promise<number> => {
     video.preload = "metadata";
 
     video.onloadedmetadata = () => {
+      const duration = Number.isFinite(video.duration) ? video.duration : 0;
       video.removeAttribute("src");
       video.load();
-      resolve(video.duration || 0);
+      resolve(duration);
     };
 
     video.onerror = () => {
@@ -52,9 +53,11 @@ export const formatTotalDuration = (seconds: number) => {
 
   const hrs = Math.floor(seconds / 3600);
   const mins = Math.floor((seconds % 3600) / 60);
+  const secs = Math.floor(seconds % 60);
 
-  if (hrs > 0) return `${hrs}h ${mins}m`;
-  return `${mins}m`;
+  if (hrs > 0) return `${hrs} h ${mins} m`;
+  if (mins > 0) return secs ? `${mins} m ${secs} s` : `${mins} m`;
+  return `${secs} s`;
 };
 
 /**

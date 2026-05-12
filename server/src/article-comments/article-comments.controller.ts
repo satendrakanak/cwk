@@ -15,6 +15,7 @@ import { AuthType } from 'src/auth/enums/auth-type.enum';
 import type { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
 import { ArticleCommentsService } from './providers/article-comments.service';
 import { CreateArticleCommentDto } from './dtos/create-article-comment.dto';
+import { GetArticleCommentsDto } from './dtos/get-article-comments.dto';
 
 @Controller('article-comments')
 export class ArticleCommentsController {
@@ -24,8 +25,11 @@ export class ArticleCommentsController {
 
   @Auth(AuthType.None)
   @Get('article/:articleId')
-  getByArticle(@Param('articleId', ParseIntPipe) articleId: number) {
-    return this.articleCommentsService.getByArticle(articleId);
+  getByArticle(
+    @Param('articleId', ParseIntPipe) articleId: number,
+    @Query() query: GetArticleCommentsDto,
+  ) {
+    return this.articleCommentsService.getByArticle(articleId, query);
   }
 
   @Get('article/:articleId/mine')

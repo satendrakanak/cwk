@@ -7,7 +7,14 @@ import { checkCoursePublish } from "@/helpers/publish-rules";
 import { cn } from "@/lib/utils";
 import { courseClientService } from "@/services/courses/course.client";
 import { Course } from "@/types/course";
-import { CheckCircle, RotateCcw, Star, Trash2, TrendingUp } from "lucide-react";
+import {
+  CheckCircle,
+  LayoutPanelTop,
+  RotateCcw,
+  Star,
+  Trash2,
+  TrendingUp,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -60,6 +67,25 @@ export const CourseHeader = ({
         course.showInPopular
           ? "Removed from popular courses"
           : "Added to popular courses",
+      );
+
+      router.refresh();
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
+    }
+  };
+
+  const handleToggleMegaMenu = async () => {
+    try {
+      await courseClientService.update(course.id, {
+        showInMegaMenu: !course.showInMegaMenu,
+      });
+
+      toast.success(
+        course.showInMegaMenu
+          ? "Removed from mega menu"
+          : "Added to mega menu",
       );
 
       router.refresh();
@@ -131,6 +157,11 @@ export const CourseHeader = ({
                 Popular
               </Badge>
             )}
+            {course.showInMegaMenu && (
+              <Badge className="border border-sky-200 bg-sky-100 text-xs text-sky-700 dark:border-sky-400/30 dark:bg-sky-500/12 dark:text-sky-200">
+                Mega Menu
+              </Badge>
+            )}
 
             <p className="text-sm text-muted-foreground">
               Manage your course settings
@@ -166,6 +197,19 @@ export const CourseHeader = ({
           >
             <TrendingUp className="size-4" />
             {course.showInPopular ? "Remove Popular" : "Popular"}
+          </Button>
+          <Button
+            size="sm"
+            onClick={handleToggleMegaMenu}
+            className={cn(
+              "flex items-center gap-1 transition",
+              course.showInMegaMenu
+                ? "bg-sky-600 hover:bg-sky-700"
+                : "bg-gray-700 hover:bg-gray-800",
+            )}
+          >
+            <LayoutPanelTop className="size-4" />
+            {course.showInMegaMenu ? "Remove Menu" : "Mega Menu"}
           </Button>
           {/* Publish / Unpublish */}
           <TooltipProvider>

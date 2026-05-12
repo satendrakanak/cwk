@@ -1,55 +1,64 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { BookOpen, Star } from "lucide-react";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedinIn,
+  FaXTwitter,
+  FaYoutube,
+} from "react-icons/fa6";
 
 import Container from "@/components/container";
 import { CourseCard } from "@/components/courses/course-card";
 import { FacultyReviewsSection } from "@/components/faculty/faculty-reviews-section";
+import { WebsiteBreadcrumbs } from "@/components/layout/website-breadcrumbs";
 import { getSession } from "@/lib/auth";
+import { getFacultyHref } from "@/lib/faculty-slug";
 import { buildMetadata } from "@/lib/seo";
 import { userServerService } from "@/services/users/user.server";
 
 type PageProps = {
-  params: Promise<{ facultyId: string }>;
+  params: Promise<{ facultySlug: string }>;
 };
 
 export async function generateMetadata({ params }: PageProps) {
-  const { facultyId } = await params;
+  const { facultySlug } = await params;
 
   try {
-    const response = await userServerService.getFacultyProfile(
-      Number(facultyId),
-    );
+    const response =
+      await userServerService.getFacultyProfileBySlug(facultySlug);
     const faculty = response.data;
 
     const fullName =
       [faculty.firstName, faculty.lastName].filter(Boolean).join(" ") ||
-      "Faculty";
+      "Instructor";
 
     return buildMetadata({
       title: fullName,
       description:
         faculty.profile?.bio ||
         faculty.facultyProfile?.expertise ||
-        "Meet our faculty and explore learner feedback.",
-      path: `/our-faculty/${faculty.id}`,
+        "Meet our instructor and explore learner feedback.",
+      path: getFacultyHref(faculty),
       image:
         faculty.avatar?.path || faculty.avatarUrl || faculty.coverImage?.path || null,
     });
   } catch {
     return buildMetadata({
-      title: "Faculty",
-      description: "Meet the faculty behind CodeWithKasa.",
-      path: `/our-faculty/${facultyId}`,
+      title: "Instructor",
+      description: "Meet the instructors behind CodeWithKasa.",
+      path: `/instructors/${facultySlug}`,
     });
   }
 }
 
 export default async function FacultyDetailPage({ params }: PageProps) {
-  const { facultyId } = await params;
+  const { facultySlug } = await params;
 
   const [profileResponse, session] = await Promise.all([
-    userServerService.getFacultyProfile(Number(facultyId)),
+    userServerService.getFacultyProfileBySlug(facultySlug),
     getSession(),
   ]).catch(() => notFound());
 
@@ -87,6 +96,36 @@ export default async function FacultyDetailPage({ params }: PageProps) {
   const enrolledCount = taughtCourses.filter(
     (course) => course.isEnrolled,
   ).length;
+  const courseCount = faculty.taughtCoursesCount || taughtCourses.length;
+  const averageRating = faculty.averageRating || 0;
+  const totalReviews = faculty.totalReviews || 0;
+  const socialLinks = [
+    {
+      href: faculty.profile?.linkedin,
+      icon: FaLinkedinIn,
+      label: "LinkedIn",
+    },
+    {
+      href: faculty.profile?.instagram,
+      icon: FaInstagram,
+      label: "Instagram",
+    },
+    {
+      href: faculty.profile?.facebook,
+      icon: FaFacebookF,
+      label: "Facebook",
+    },
+    {
+      href: faculty.profile?.twitter,
+      icon: FaXTwitter,
+      label: "X",
+    },
+    {
+      href: faculty.profile?.youtube,
+      icon: FaYoutube,
+      label: "YouTube",
+    },
+  ].filter((item) => Boolean(item.href));
 
   return (
     <div className="relative min-h-screen bg-background">
@@ -114,28 +153,50 @@ export default async function FacultyDetailPage({ params }: PageProps) {
           <Container className="relative z-10">
             <div className="grid gap-8 lg:grid-cols-[1.18fr_0.82fr] lg:items-center">
               <div>
+                <WebsiteBreadcrumbs
+                  contained={false}
+                  variant="hero"
+                  className="mb-4 pt-0"
+                  items={[
+                    { label: "Home", href: "/" },
+                    { label: "Instructors", href: "/instructors" },
+                    { label: fullName || "Instructor" },
+                  ]}
+                />
+
                 <Link
-                  href="/our-faculty"
+                  href="/instructors"
                   className="inline-flex rounded-full border border-white/20 bg-white/12 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_28px_rgba(2,6,23,0.20)] backdrop-blur-md"
                 >
-                  Faculty profile
+                  Instructor profile
                 </Link>
 
                 <h1 className="mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-white md:text-5xl lg:text-[46px]">
-                  {fullName || "Faculty"}
+                  {fullName || "Instructor"}
                 </h1>
 
                 <p className="mt-3 text-base font-medium text-white/85 md:text-lg">
-                  {faculty.facultyProfile?.designation || "Faculty Mentor"}
+                  {faculty.facultyProfile?.designation || "Instructor"}
                 </p>
 
                 <p className="mt-4 max-w-2xl text-sm leading-7 text-white/75 md:text-base">
                   {faculty.profile?.bio ||
                     faculty.facultyProfile?.expertise ||
-                    "Experienced faculty member helping learners build practical confidence."}
+                    "Experienced instructor helping learners build practical confidence."}
                 </p>
 
                 <div className="mt-6 flex flex-wrap gap-3">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white/90 backdrop-blur-md">
+                    <BookOpen className="h-4 w-4 text-primary" />
+                    {courseCount} course{courseCount === 1 ? "" : "s"}
+                  </span>
+
+                  <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white/90 backdrop-blur-md">
+                    <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                    {averageRating.toFixed(1)} rating ({totalReviews} review
+                    {totalReviews === 1 ? "" : "s"})
+                  </span>
+
                   {faculty.facultyProfile?.experience ? (
                     <span className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white/90 backdrop-blur-md">
                       {faculty.facultyProfile.experience} years experience
@@ -157,10 +218,31 @@ export default async function FacultyDetailPage({ params }: PageProps) {
                   {session && enrolledCount > 0 ? (
                     <span className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white/90 backdrop-blur-md">
                       You are enrolled in {enrolledCount} course
-                      {enrolledCount > 1 ? "s" : ""} by this faculty
+                      {enrolledCount > 1 ? "s" : ""} by this instructor
                     </span>
                   ) : null}
                 </div>
+
+                {socialLinks.length ? (
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {socialLinks.map((social) => {
+                      const Icon = social.icon;
+
+                      return (
+                        <a
+                          key={social.label}
+                          href={social.href}
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label={social.label}
+                          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white/85 backdrop-blur-md transition hover:border-primary hover:bg-primary hover:text-primary-foreground"
+                        >
+                          <Icon className="h-4 w-4" />
+                        </a>
+                      );
+                    })}
+                  </div>
+                ) : null}
               </div>
 
               <div className="relative mx-auto w-full max-w-sm lg:justify-self-end">
@@ -168,7 +250,7 @@ export default async function FacultyDetailPage({ params }: PageProps) {
                   <div className="relative aspect-square overflow-hidden rounded-[24px] bg-white/10">
                     <Image
                       src={avatarSrc}
-                      alt={fullName || "Faculty"}
+                      alt={fullName || "Instructor"}
                       fill
                       priority
                       sizes="(max-width: 1024px) 100vw, 384px"
@@ -190,7 +272,7 @@ export default async function FacultyDetailPage({ params }: PageProps) {
                 <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-                      Courses by faculty
+                      Courses by instructor
                     </p>
 
                     <h2 className="mt-2 text-3xl font-semibold text-foreground">
@@ -199,7 +281,7 @@ export default async function FacultyDetailPage({ params }: PageProps) {
                   </div>
 
                   <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
-                    Explore the programs this faculty currently teaches inside
+                    Explore the programs this instructor currently teaches inside
                     the academy.
                   </p>
                 </div>

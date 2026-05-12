@@ -59,17 +59,39 @@ export class TestimonialsService {
   async findPublic(
     getTestimonialsDto: GetTestimonialsDto,
   ): Promise<Paginated<Testimonial>> {
-    const result = await this.paginationProvider.paginateQuery(
+    const queryBuilder = this.testimonialsRepository
+      .createQueryBuilder('testimonial')
+      .leftJoinAndSelect('testimonial.avatar', 'avatar')
+      .leftJoinAndSelect('testimonial.video', 'video')
+      .leftJoinAndSelect('testimonial.courses', 'courses')
+      .where('testimonial.isActive = :isActive', { isActive: true })
+      .andWhere('testimonial.status = :status', {
+        status: TestimonialStatus.APPROVED,
+      })
+      .orderBy('testimonial.priority', 'ASC')
+      .addOrderBy('testimonial.createdAt', 'DESC');
+
+    if (getTestimonialsDto.type) {
+      queryBuilder.andWhere('testimonial.type = :type', {
+        type: getTestimonialsDto.type,
+      });
+    }
+
+    if (getTestimonialsDto.isFeatured !== undefined) {
+      queryBuilder.andWhere('testimonial.isFeatured = :isFeatured', {
+        isFeatured: getTestimonialsDto.isFeatured,
+      });
+    }
+
+    if (getTestimonialsDto.courseId !== undefined) {
+      queryBuilder.andWhere('courses.id = :courseId', {
+        courseId: getTestimonialsDto.courseId,
+      });
+    }
+
+    const result = await this.paginationProvider.paginateQueryBuilder(
       getTestimonialsDto,
-      this.testimonialsRepository,
-      {
-        where: this.buildWhere(getTestimonialsDto, true),
-        relations: ['avatar', 'video', 'courses', 'courses.image', 'courses.video'],
-        order: {
-          priority: 'ASC',
-          createdAt: 'DESC',
-        },
-      },
+      queryBuilder,
     );
 
     result.data = this.mediaFileMappingService.mapTestimonials(result.data);

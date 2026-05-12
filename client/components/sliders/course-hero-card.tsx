@@ -2,6 +2,7 @@
 
 import { Course } from "@/types/course";
 import { formatPrice, getDiscountPercent } from "@/utils/prices";
+import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 interface CourseHeroCardProps {
@@ -20,6 +21,8 @@ export default function CourseHeroCard({
   variant,
 }: CourseHeroCardProps) {
   const isMobile = variant === "mobile";
+  const averageRating = course.averageRating || 0;
+  const totalReviews = course.totalReviews || 0;
   return (
     <div
       className={isMobile ? "academy-card p-3 text-left" : "academy-card p-5"}
@@ -78,11 +81,15 @@ export default function CourseHeroCard({
         <div
           className={
             isMobile
-              ? "mt-2 text-xs text-yellow-500"
-              : "mb-3 text-sm text-yellow-500"
+              ? "mt-2 flex items-center gap-1.5 text-xs"
+              : "mb-3 flex items-center gap-1.5 text-sm"
           }
         >
-          ⭐⭐⭐⭐⭐ <span className="text-muted-foreground">(15)</span>
+          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+          <span className="font-semibold text-card-foreground">
+            {averageRating.toFixed(1)}
+          </span>
+          <span className="text-muted-foreground">({totalReviews})</span>
         </div>
 
         <div

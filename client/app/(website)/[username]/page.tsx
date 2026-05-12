@@ -12,6 +12,7 @@ import {
 import { FaInstagram, FaLinkedinIn } from "react-icons/fa";
 
 import Container from "@/components/container";
+import { WebsiteBreadcrumbs } from "@/components/layout/website-breadcrumbs";
 import { ProfileCover } from "@/components/profile/profile-cover";
 import { ProfileHeader } from "@/components/profile/profile-header";
 import ProgressChart from "@/components/profile/progress-chart";
@@ -39,6 +40,7 @@ const reserved = [
   "contact",
   "cart",
   "checkout",
+  "instructors",
   "our-faculty",
   "client-testimonials",
   "auth",
@@ -75,6 +77,15 @@ export default async function PublicProfilePage({ params }: PageProps) {
 
       <Container className="relative z-10">
         <div className="pb-12 pt-6">
+          <WebsiteBreadcrumbs
+            contained={false}
+            className="mb-5 pt-0"
+            items={[
+              { label: "Home", href: "/" },
+              { label: user.username || user.firstName || "Profile" },
+            ]}
+          />
+
           <ProfileCover coverImage={user.coverImage?.path} isOwner={false} />
 
           <div className="relative z-10 px-2 md:px-6">

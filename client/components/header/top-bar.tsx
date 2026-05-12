@@ -24,27 +24,27 @@ const Topbar = ({ hidden }: TopbarProps) => {
     {
       name: "Facebook",
       href: site.facebookUrl,
-      icon: <FaFacebook className="h-3.5 w-3.5 text-blue-500 md:h-4 md:w-4" />,
+      icon: <FaFacebook className="h-2.5 w-2.5 text-blue-500 md:h-3 md:w-3" />,
     },
     {
       name: "Youtube",
       href: site.youtubeUrl,
-      icon: <FaYoutube className="h-3.5 w-3.5 text-red-500 md:h-4 md:w-4" />,
+      icon: <FaYoutube className="h-2.5 w-2.5 text-red-500 md:h-3 md:w-3" />,
     },
     {
       name: "Instagram",
       href: site.instagramUrl,
-      icon: <FaInstagram className="h-3.5 w-3.5 text-pink-500 md:h-4 md:w-4" />,
+      icon: <FaInstagram className="h-2.5 w-2.5 text-pink-500 md:h-3 md:w-3" />,
     },
     {
       name: "Twitter",
       href: site.twitterUrl,
-      icon: <FaTwitter className="h-3.5 w-3.5 text-blue-400 md:h-4 md:w-4" />,
+      icon: <FaTwitter className="h-2.5 w-2.5 text-blue-400 md:h-3 md:w-3" />,
     },
     {
       name: "LinkedIn",
       href: site.linkedinUrl,
-      icon: <FaLinkedin className="h-3.5 w-3.5 text-blue-500 md:h-4 md:w-4" />,
+      icon: <FaLinkedin className="h-2.5 w-2.5 text-blue-500 md:h-3 md:w-3" />,
     },
   ].filter((item) => item.href);
 
@@ -56,9 +56,9 @@ const Topbar = ({ hidden }: TopbarProps) => {
       )}
     >
       <Container>
-        <div className="flex min-h-9 flex-col items-center justify-center gap-1.5 py-1.5 sm:min-h-10 sm:flex-row sm:justify-between sm:gap-4 sm:py-0">
+        <div className="flex min-h-8 flex-col items-center justify-center gap-1 py-1 sm:flex-row sm:justify-between sm:gap-4 sm:py-0 md:min-h-9">
           {/* Social Icons */}
-          <div className="flex items-center gap-1.5 md:gap-2">
+          <div className="flex items-center gap-1.5">
             {socialLinks.map((link) => (
               <a
                 key={link.name}
@@ -66,7 +66,7 @@ const Topbar = ({ hidden }: TopbarProps) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={link.name}
-                className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-white/95 transition hover:-translate-y-0.5 hover:bg-white md:h-8 md:w-8"
+                className="flex h-5 w-5 items-center justify-center rounded-full border border-white/10 bg-white/95 transition hover:-translate-y-0.5 hover:bg-white md:h-6 md:w-6"
               >
                 {link.icon}
               </a>
@@ -74,13 +74,13 @@ const Topbar = ({ hidden }: TopbarProps) => {
           </div>
 
           {/* Contact */}
-          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] leading-none text-white/85 md:gap-x-5 md:text-sm">
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[10px] leading-none text-white/85 md:gap-x-4 md:text-xs">
             {site.supportPhone && (
               <a
                 href={`tel:${site.supportPhone}`}
                 className="flex items-center gap-1.5 transition hover:text-white"
               >
-                <FaPhoneVolume className="h-3 w-3 md:h-3.5 md:w-3.5" />
+                <FaPhoneVolume className="h-2.5 w-2.5 md:h-3 md:w-3" />
                 <span>{site.supportPhone}</span>
               </a>
             )}
@@ -90,7 +90,7 @@ const Topbar = ({ hidden }: TopbarProps) => {
                 href={`mailto:${site.supportEmail}`}
                 className="flex min-w-0 items-center gap-1.5 transition hover:text-white"
               >
-                <TfiEmail className="h-3 w-3 shrink-0 md:h-3.5 md:w-3.5" />
+                <TfiEmail className="h-2.5 w-2.5 shrink-0 md:h-3 md:w-3" />
                 <span className="max-w-[170px] truncate sm:max-w-[220px]">
                   {site.supportEmail}
                 </span>

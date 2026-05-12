@@ -40,6 +40,9 @@ import { CreateUserOptions } from '../interfaces/create-user-options.interface';
 import { Enrollment } from 'src/enrollments/enrollment.entity';
 import { Certificate } from 'src/certificates/certificate.entity';
 import { CourseExamAttempt } from 'src/course-exams/course-exam-attempt.entity';
+import { FacultyReview } from 'src/faculty-reviews/faculty-review.entity';
+import { CourseReview } from 'src/course-reviews/course-review.entity';
+import { Course } from 'src/courses/course.entity';
 
 @Injectable()
 export class UsersService {
@@ -59,6 +62,12 @@ export class UsersService {
 
     @InjectRepository(CourseExamAttempt)
     private readonly courseExamAttemptRepository: Repository<CourseExamAttempt>,
+
+    @InjectRepository(FacultyReview)
+    private readonly facultyReviewRepository: Repository<FacultyReview>,
+
+    @InjectRepository(CourseReview)
+    private readonly courseReviewRepository: Repository<CourseReview>,
 
     /**
      * Inject createUserProvider
@@ -137,6 +146,127 @@ export class UsersService {
     private readonly profilesService: ProfilesService,
   ) {}
 
+  private slugifyFacultyName(value: string) {
+    return value
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+  }
+
+  private getFacultyProfileQuery() {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.roles', 'roles')
+      .leftJoinAndSelect('user.profile', 'profile')
+      .leftJoinAndSelect('user.facultyProfile', 'facultyProfile')
+      .leftJoinAndSelect('user.avatar', 'avatar')
+      .leftJoinAndSelect('user.coverImage', 'coverImage')
+      .leftJoinAndSelect(
+        'user.taughtCourses',
+        'taughtCourses',
+        'taughtCourses.isPublished = :isPublished',
+        { isPublished: true },
+      )
+      .leftJoinAndSelect('taughtCourses.image', 'taughtCoursesImage')
+      .leftJoinAndSelect('taughtCourses.faculties', 'taughtCoursesFaculties')
+      .leftJoinAndSelect(
+        'taughtCoursesFaculties.avatar',
+        'taughtCoursesFacultiesAvatar',
+      )
+      .leftJoinAndSelect('taughtCourses.createdBy', 'taughtCoursesCreatedBy')
+      .leftJoinAndSelect('taughtCourses.categories', 'taughtCoursesCategories')
+      .leftJoinAndSelect('taughtCourses.tags', 'taughtCoursesTags');
+  }
+
+  private mapFacultyProfile(user: User) {
+    const mappedUser = this.mediaFileMappingService.mapUser(user);
+
+    mappedUser.taughtCourses =
+      mappedUser.taughtCourses?.map((course) =>
+        this.mediaFileMappingService.mapCourse(course),
+      ) || [];
+
+    return mappedUser;
+  }
+
+  private async attachCourseReviewStats(courses: Course[]) {
+    if (!courses.length) return courses;
+
+    const courseIds = courses.map((course) => course.id);
+    const reviewRows = await this.courseReviewRepository
+      .createQueryBuilder('review')
+      .select('review.courseId', 'id')
+      .addSelect('COUNT(review.id)', 'total')
+      .addSelect('AVG(review.rating)', 'average')
+      .where('review.courseId IN (:...courseIds)', { courseIds })
+      .andWhere('review.isPublished = true')
+      .groupBy('review.courseId')
+      .getRawMany<{ id: string; total: string; average: string }>();
+
+    const reviewMap = new Map(
+      reviewRows.map((row) => [
+        Number(row.id),
+        {
+          totalReviews: Number(row.total || 0),
+          averageRating: Number(Number(row.average || 0).toFixed(1)),
+        },
+      ]),
+    );
+
+    return courses.map((course) =>
+      Object.assign(course, {
+        totalReviews: reviewMap.get(course.id)?.totalReviews || 0,
+        averageRating: reviewMap.get(course.id)?.averageRating || 0,
+      }),
+    );
+  }
+
+  private async attachFacultyStats(users: User[]) {
+    if (!users.length) return users;
+    const ids = users.map((user) => user.id);
+
+    const [courseRows, reviewRows] = await Promise.all([
+      this.userRepository
+        .createQueryBuilder('user')
+        .leftJoin('user.taughtCourses', 'course', 'course.isPublished = true')
+        .select('user.id', 'id')
+        .addSelect('COUNT(course.id)', 'count')
+        .where('user.id IN (:...ids)', { ids })
+        .groupBy('user.id')
+        .getRawMany<{ id: string; count: string }>(),
+      this.facultyReviewRepository
+        .createQueryBuilder('review')
+        .select('review.facultyId', 'id')
+        .addSelect('COUNT(review.id)', 'total')
+        .addSelect('AVG(review.rating)', 'average')
+        .where('review.facultyId IN (:...ids)', { ids })
+        .andWhere('review.isPublished = true')
+        .groupBy('review.facultyId')
+        .getRawMany<{ id: string; total: string; average: string }>(),
+    ]);
+
+    const courseMap = new Map(
+      courseRows.map((row) => [Number(row.id), Number(row.count || 0)]),
+    );
+    const reviewMap = new Map(
+      reviewRows.map((row) => [
+        Number(row.id),
+        {
+          totalReviews: Number(row.total || 0),
+          averageRating: Number(Number(row.average || 0).toFixed(1)),
+        },
+      ]),
+    );
+
+    return users.map((user) =>
+      Object.assign(user, {
+        taughtCoursesCount: courseMap.get(user.id) || 0,
+        averageRating: reviewMap.get(user.id)?.averageRating || 0,
+        totalReviews: reviewMap.get(user.id)?.totalReviews || 0,
+      }),
+    );
+  }
+
   public async findAll(getUsersDto: GetUsersDto): Promise<Paginated<User>> {
     const queryBuilder = this.userRepository
       .createQueryBuilder('user')
@@ -206,29 +336,7 @@ export class UsersService {
   }
 
   async getFacultyProfile(id: number): Promise<User> {
-    const user = await this.userRepository
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.roles', 'roles')
-      .leftJoinAndSelect('user.profile', 'profile')
-      .leftJoinAndSelect('user.facultyProfile', 'facultyProfile')
-      .leftJoinAndSelect('user.avatar', 'avatar')
-      .leftJoinAndSelect('user.coverImage', 'coverImage')
-
-      // ✅ only published taught courses
-      .leftJoinAndSelect(
-        'user.taughtCourses',
-        'taughtCourses',
-        'taughtCourses.isPublished = :isPublished',
-        { isPublished: true },
-      )
-
-      .leftJoinAndSelect('taughtCourses.image', 'taughtCoursesImage')
-      .leftJoinAndSelect('taughtCourses.faculties', 'taughtCoursesFaculties')
-      .leftJoinAndSelect(
-        'taughtCoursesFaculties.avatar',
-        'taughtCoursesFacultiesAvatar',
-      )
-      .leftJoinAndSelect('taughtCourses.createdBy', 'taughtCoursesCreatedBy')
+    const user = await this.getFacultyProfileQuery()
       .where('user.id = :id', { id })
       .getOne();
 
@@ -236,14 +344,40 @@ export class UsersService {
       throw new NotFoundException('Faculty not found');
     }
 
-    const mappedUser = this.mediaFileMappingService.mapUser(user);
+    const [withStats] = await this.attachFacultyStats([user]);
+    withStats.taughtCourses = await this.attachCourseReviewStats(
+      withStats.taughtCourses || [],
+    );
+    return this.mapFacultyProfile(withStats);
+  }
 
-    mappedUser.taughtCourses =
-      mappedUser.taughtCourses?.map((course) =>
-        this.mediaFileMappingService.mapCourse(course),
-      ) || [];
+  async getFacultyProfileBySlug(slug: string): Promise<User> {
+    const normalizedSlug = this.slugifyFacultyName(slug);
+    const users = await this.getFacultyProfileQuery()
+      .where('roles.name = :roleName', { roleName: 'faculty' })
+      .andWhere(
+        `(user.username = :slug OR LOWER(CONCAT(user.firstName, ' ', COALESCE(user.lastName, ''))) = :name)`,
+        { slug, name: normalizedSlug.replace(/-/g, ' ') },
+      )
+      .getMany();
 
-    return mappedUser;
+    const user = users.find((faculty) => {
+      const nameSlug = this.slugifyFacultyName(
+        [faculty.firstName, faculty.lastName].filter(Boolean).join(' '),
+      );
+
+      return nameSlug === normalizedSlug || faculty.username === slug;
+    });
+
+    if (!user) {
+      throw new NotFoundException('Faculty not found');
+    }
+
+    const [withStats] = await this.attachFacultyStats([user]);
+    withStats.taughtCourses = await this.attachCourseReviewStats(
+      withStats.taughtCourses || [],
+    );
+    return this.mapFacultyProfile(withStats);
   }
 
   async getUserWithProfile(userId: number): Promise<User> {
@@ -285,6 +419,9 @@ export class UsersService {
       return null;
     }
 
+    user.taughtCourses = await this.attachCourseReviewStats(
+      user.taughtCourses || [],
+    );
     const mappedUser = this.mediaFileMappingService.mapUser(user);
     mappedUser.taughtCourses =
       mappedUser.taughtCourses?.map((course) =>
@@ -356,21 +493,31 @@ export class UsersService {
       existing.passed = existing.passed || attempt.passed;
     }
 
+    const enrolledCoursesWithStats = await this.attachCourseReviewStats(
+      enrollments.map((enrollment) => enrollment.course),
+    );
+    const enrolledCourseStatsMap = new Map(
+      enrolledCoursesWithStats.map((course) => [course.id, course]),
+    );
+
     return {
       user: mappedUser,
       stats,
       weeklyProgress,
-      courses: enrollments.map((enrollment) =>
-        this.mediaFileMappingService.mapCourse({
-          ...enrollment.course,
+      courses: enrollments.map((enrollment) => {
+        const courseWithStats =
+          enrolledCourseStatsMap.get(enrollment.course.id) || enrollment.course;
+
+        return this.mediaFileMappingService.mapCourse({
+          ...courseWithStats,
           isEnrolled: true,
           progress: {
             isCompleted: enrollment.progress >= 100,
             progress: Math.round(enrollment.progress || 0),
             lastTime: 0,
           },
-        } as any),
-      ),
+        } as any);
+      }),
       certificates: certificates.map((certificate) => ({
         id: certificate.id,
         certificateNumber: certificate.certificateNumber,
@@ -538,7 +685,9 @@ export class UsersService {
       queryBuilder,
     );
 
-    result.data = this.mediaFileMappingService.mapUsers(result.data);
+    result.data = this.mediaFileMappingService.mapUsers(
+      await this.attachFacultyStats(result.data),
+    );
 
     return result;
   }

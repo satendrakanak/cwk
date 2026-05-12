@@ -78,7 +78,14 @@ export default async function ArticlesPage({
       </div>
 
       <div className="relative z-10">
-        <ArticleHeader />
+        <ArticleHeader
+          totalArticles={allArticlesResponse.data.meta.totalItems}
+          totalCategories={categories.length}
+          breadcrumbs={[
+            { label: "Home", href: "/" },
+            { label: "Articles" },
+          ]}
+        />
 
         <section className="relative py-12 pb-20">
           <Container>

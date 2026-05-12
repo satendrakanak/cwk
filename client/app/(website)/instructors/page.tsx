@@ -4,14 +4,15 @@ import { PageHero } from "@/components/sliders/page-hero";
 import { getErrorMessage } from "@/lib/error-handler";
 import { buildMetadata } from "@/lib/seo";
 import { userServerService } from "@/services/users/user.server";
+import { GraduationCap, Star, UsersRound } from "lucide-react";
 
 const PAGE_SIZE = 8;
 
 export const metadata = buildMetadata({
-  title: "Our Faculty",
+  title: "Our Instructors",
   description:
-    "Meet experienced CodeWithKasa faculty across programming, software development, projects, and career-focused learning.",
-  path: "/our-faculty",
+    "Meet experienced CodeWithKasa instructors across programming, software development, projects, and career-focused learning.",
+  path: "/instructors",
 });
 
 export default async function FacultiesPage() {
@@ -31,9 +32,30 @@ export default async function FacultiesPage() {
 
       <div className="relative z-10">
         <PageHero
-          pageTitle="Faculty Network"
+          pageTitle="Instructor Network"
           pageHeadline="Meet the minds behind the learning experience."
-          pageDescription="Learn from experienced faculty across programming, software development, and project-based learning who bring both depth and real practice into every session."
+          pageDescription="Learn from experienced instructors across programming, software development, and project-based learning who bring both depth and real practice into every session."
+          snapshotItems={[
+            {
+              icon: UsersRound,
+              value: `${facultiesPage.meta.totalItems}+`,
+              label: "Instructors",
+            },
+            {
+              icon: Star,
+              value: "Rated",
+              label: "Learner feedback",
+            },
+            {
+              icon: GraduationCap,
+              value: "Live",
+              label: "Mentor support",
+            },
+          ]}
+          breadcrumbs={[
+            { label: "Home", href: "/" },
+            { label: "Instructors" },
+          ]}
         />
 
         <section className="py-12 pb-20">

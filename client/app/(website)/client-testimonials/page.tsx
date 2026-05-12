@@ -1,12 +1,13 @@
 import Container from "@/components/container";
+import { WebsiteBreadcrumbs } from "@/components/layout/website-breadcrumbs";
 import { InfiniteTestimonialsGrid } from "@/components/testimonials/infinite-testimonials-grid";
 import { TestimonialsFilterBar } from "@/components/testimonials/testimonials-filter-bar";
 import { getErrorMessage } from "@/lib/error-handler";
 import { buildMetadata } from "@/lib/seo";
 import { courseServerService } from "@/services/courses/course.server";
 import { testimonialServerService } from "@/services/testimonials/testimonial.server";
-import { Course } from "@/types/course";
 import { TestimonialType } from "@/types/testimonial";
+import { MessageSquareQuote, PlayCircle, Star } from "lucide-react";
 
 const PAGE_SIZE = 9;
 
@@ -32,25 +33,19 @@ export default async function ClientTestimonialsPage({
 
   const selectedCourseId = courseId ? Number(courseId) : undefined;
 
-  const testimonialsResponse = await testimonialServerService
-    .getPublic({
-      type: selectedType,
-      courseId: Number.isNaN(selectedCourseId) ? undefined : selectedCourseId,
-      page: 1,
-      limit: PAGE_SIZE,
-    })
-    .catch((error: unknown) => {
-      throw new Error(getErrorMessage(error));
-    });
-
-  let courses: Course[] = [];
+  let testimonialsResponse;
+  let coursesResponse;
 
   try {
-    const response = await courseServerService.getPublicCourses({
-      page: 1,
-      limit: 100,
-    });
-    courses = response.data.data;
+    [testimonialsResponse, coursesResponse] = await Promise.all([
+      testimonialServerService.getPublic({
+        type: selectedType,
+        courseId: Number.isNaN(selectedCourseId) ? undefined : selectedCourseId,
+        page: 1,
+        limit: PAGE_SIZE,
+      }),
+      courseServerService.getPublicCourseOptions(),
+    ]);
   } catch (error: unknown) {
     throw new Error(getErrorMessage(error));
   }
@@ -80,7 +75,18 @@ export default async function ClientTestimonialsPage({
           </div>
 
           <Container className="relative z-10">
-            <div className="max-w-3xl">
+            <div className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
+              <div className="max-w-3xl">
+              <WebsiteBreadcrumbs
+                contained={false}
+                variant="hero"
+                className="mb-4 pt-0"
+                items={[
+                  { label: "Home", href: "/" },
+                  { label: "Client Testimonials" },
+                ]}
+              />
+
               <span className="mb-4 inline-flex rounded-full border border-white/20 bg-white/12 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.26em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_28px_rgba(2,6,23,0.20)] backdrop-blur-md">
                 Client Testimonials
               </span>
@@ -94,6 +100,50 @@ export default async function ClientTestimonialsPage({
                 drill down by course to see exactly how learners experienced
                 CodeWithKasa.
               </p>
+              </div>
+
+              <div className="rounded-3xl border border-white/15 bg-white/10 p-4 shadow-[0_20px_60px_rgba(2,6,23,0.22)] backdrop-blur-xl md:p-5">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-white/75">
+                  Snapshot
+                </p>
+
+                <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                  {[
+                    {
+                      icon: MessageSquareQuote,
+                      value: `${testimonialsResponse.data.meta.totalItems}+`,
+                      label: "Stories",
+                    },
+                    {
+                      icon: PlayCircle,
+                      value: "Video",
+                      label: "Learner clips",
+                    },
+                    {
+                      icon: Star,
+                      value: "Rated",
+                      label: "Course feedback",
+                    },
+                  ].map((item) => {
+                    const Icon = item.icon;
+
+                    return (
+                      <div
+                        key={item.label}
+                        className="rounded-2xl border border-white/10 bg-white/10 p-3 backdrop-blur-md"
+                      >
+                        <Icon className="mb-2 h-4 w-4 text-white/80" />
+                        <p className="text-2xl font-bold text-white">
+                          {item.value}
+                        </p>
+                        <p className="mt-1 text-xs leading-5 text-white/70">
+                          {item.label}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           </Container>
         </section>
@@ -103,7 +153,7 @@ export default async function ClientTestimonialsPage({
           <Container>
             <div className="space-y-8">
               <div className="academy-card p-4 md:p-5">
-                <TestimonialsFilterBar courses={courses} />
+                <TestimonialsFilterBar courses={coursesResponse.data} />
               </div>
 
               <InfiniteTestimonialsGrid

@@ -63,6 +63,13 @@ export const userServerService = {
     apiServer.get<ApiResponse<User>>(`/users/faculty-profile/${facultyId}`, {
       next: { revalidate: PUBLIC_REVALIDATE_SECONDS },
     }),
+  getFacultyProfileBySlug: (facultySlug: string) =>
+    apiServer.get<ApiResponse<User>>(
+      `/users/faculty-profile/slug/${facultySlug}`,
+      {
+        next: { revalidate: PUBLIC_REVALIDATE_SECONDS },
+      },
+    ),
   getPublicProfile: (username: string) =>
     apiServer.get<ApiResponse<PublicProfileBundle | null>>(
       `/users/public-profile/${username}`,

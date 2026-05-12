@@ -1,8 +1,40 @@
 "use client";
 
-import Container from "../container";
+import { BookOpenText, Layers, PenLine } from "lucide-react";
 
-export function ArticleHeader() {
+import Container from "../container";
+import {
+  BreadcrumbItemData,
+  WebsiteBreadcrumbs,
+} from "@/components/layout/website-breadcrumbs";
+
+export function ArticleHeader({
+  breadcrumbs,
+  totalArticles = 30,
+  totalCategories = 8,
+}: {
+  breadcrumbs?: BreadcrumbItemData[];
+  totalArticles?: number;
+  totalCategories?: number;
+}) {
+  const stats = [
+    {
+      icon: BookOpenText,
+      value: `${totalArticles}+`,
+      label: "Published articles",
+    },
+    {
+      icon: Layers,
+      value: `${totalCategories}+`,
+      label: "Topic categories",
+    },
+    {
+      icon: PenLine,
+      value: "Practical",
+      label: "Actionable reading",
+    },
+  ];
+
   return (
     <section className="relative overflow-hidden py-14 text-white md:py-16">
       <div className="pointer-events-none absolute inset-0">
@@ -21,7 +53,17 @@ export function ArticleHeader() {
       </div>
 
       <Container className="relative z-10">
-        <div className="max-w-3xl">
+        <div className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
+          <div className="max-w-3xl">
+          {breadcrumbs ? (
+            <WebsiteBreadcrumbs
+              contained={false}
+              variant="hero"
+              className="mb-4 pt-0"
+              items={breadcrumbs}
+            />
+          ) : null}
+
           <span className="mb-4 inline-flex rounded-full border border-white/20 bg-white/12 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.26em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_28px_rgba(2,6,23,0.20)] backdrop-blur-md">
             Articles
           </span>
@@ -34,6 +76,36 @@ export function ArticleHeader() {
             Explore wellness, learning, nutrition, and career-oriented insights
             written for thoughtful readers.
           </p>
+          </div>
+
+          <div className="rounded-3xl border border-white/15 bg-white/10 p-4 shadow-[0_20px_60px_rgba(2,6,23,0.22)] backdrop-blur-xl md:p-5">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-white/75">
+              Snapshot
+            </p>
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              {stats.map((item) => {
+                const Icon = item.icon;
+
+                return (
+                  <div
+                    key={item.label}
+                    className="rounded-2xl border border-white/10 bg-white/10 p-3 backdrop-blur-md"
+                  >
+                    <Icon className="mb-2 h-4 w-4 text-white/80" />
+
+                    <p className="text-2xl font-bold text-white">
+                      {item.value}
+                    </p>
+
+                    <p className="mt-1 text-xs leading-5 text-white/70">
+                      {item.label}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </Container>
     </section>

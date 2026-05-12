@@ -25,7 +25,7 @@ export default function FooterCta() {
     {
       icon: Headphones,
       value: "Live",
-      label: "Faculty support",
+      label: "Instructor support",
       desc: "Human-first learning",
     },
   ];

@@ -63,11 +63,11 @@ export function InfiniteFacultyGrid({
     return (
       <div className="academy-card border-dashed p-10 text-center">
         <p className="text-sm font-semibold text-card-foreground">
-          No faculty profiles found
+          No instructor profiles found
         </p>
 
         <p className="mt-1 text-sm text-muted-foreground">
-          Faculty profiles will appear here once they are added.
+          Instructor profiles will appear here once they are added.
         </p>
       </div>
     );

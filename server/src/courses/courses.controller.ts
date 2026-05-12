@@ -58,6 +58,18 @@ export class CoursesController {
   }
 
   @Auth(AuthType.Optional)
+  @Get('mega-menu')
+  async getMegaMenuCourses(@ActiveUser() user: ActiveUserData) {
+    return await this.coursesService.getMegaMenuCourses(user);
+  }
+
+  @Auth(AuthType.None)
+  @Get('public-options')
+  async getPublicCourseOptions() {
+    return await this.coursesService.getPublicCourseOptions();
+  }
+
+  @Auth(AuthType.Optional)
   @Get('related/:id')
   async getRelatedCourses(
     @Param('id', ParseIntPipe) id: number,

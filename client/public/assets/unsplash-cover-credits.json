@@ -1,0 +1,427 @@
+{
+  "generatedAt": "2026-05-11T20:28:34.390Z",
+  "license": "Unsplash License",
+  "note": "Real Unsplash source photographs optimized to WebP with subtle CodeWithKasa watermark.",
+  "items": [
+    {
+      "file": "/assets/demo-courses/01-frontend-developer-starter-kit.webp",
+      "kind": "course",
+      "title": "Frontend Developer Starter Kit",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-0"
+    },
+    {
+      "file": "/assets/demo-courses/02-javascript-mastery-self-learning-path.webp",
+      "kind": "course",
+      "title": "JavaScript Mastery Self Learning Path",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-1"
+    },
+    {
+      "file": "/assets/demo-courses/03-typescript-for-practical-developers.webp",
+      "kind": "course",
+      "title": "TypeScript for Practical Developers",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-2"
+    },
+    {
+      "file": "/assets/demo-courses/04-react-project-builder-bootcamp.webp",
+      "kind": "course",
+      "title": "React Project Builder Bootcamp",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-3"
+    },
+    {
+      "file": "/assets/demo-courses/05-next-js-production-apps-mentorship.webp",
+      "kind": "course",
+      "title": "Next.js Production Apps Mentorship",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-4"
+    },
+    {
+      "file": "/assets/demo-courses/06-node-js-api-development-live-cohort.webp",
+      "kind": "course",
+      "title": "Node.js API Development Live Cohort",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-5"
+    },
+    {
+      "file": "/assets/demo-courses/07-nestjs-backend-architecture-program.webp",
+      "kind": "course",
+      "title": "NestJS Backend Architecture Program",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-6"
+    },
+    {
+      "file": "/assets/demo-courses/08-postgresql-and-database-design.webp",
+      "kind": "course",
+      "title": "PostgreSQL and Database Design",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-7"
+    },
+    {
+      "file": "/assets/demo-courses/09-full-stack-web-development-mentorship.webp",
+      "kind": "course",
+      "title": "Full Stack Web Development Mentorship",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-8"
+    },
+    {
+      "file": "/assets/demo-courses/10-python-programming-foundations.webp",
+      "kind": "course",
+      "title": "Python Programming Foundations",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-9"
+    },
+    {
+      "file": "/assets/demo-courses/11-data-analytics-career-track.webp",
+      "kind": "course",
+      "title": "Data Analytics Career Track",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-10"
+    },
+    {
+      "file": "/assets/demo-courses/12-excel-sql-and-dashboard-reporting.webp",
+      "kind": "course",
+      "title": "Excel SQL and Dashboard Reporting",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-11"
+    },
+    {
+      "file": "/assets/demo-courses/13-dsa-interview-practice-live.webp",
+      "kind": "course",
+      "title": "DSA Interview Practice Live",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-12"
+    },
+    {
+      "file": "/assets/demo-courses/14-git-and-github-team-workflow.webp",
+      "kind": "course",
+      "title": "Git and GitHub Team Workflow",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-13"
+    },
+    {
+      "file": "/assets/demo-courses/15-docker-devops-starter-course.webp",
+      "kind": "course",
+      "title": "Docker DevOps Starter Course",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-14"
+    },
+    {
+      "file": "/assets/demo-courses/16-aws-cloud-deployment-essentials.webp",
+      "kind": "course",
+      "title": "AWS Cloud Deployment Essentials",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-15"
+    },
+    {
+      "file": "/assets/demo-courses/17-web-performance-optimization-lab.webp",
+      "kind": "course",
+      "title": "Web Performance Optimization Lab",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-16"
+    },
+    {
+      "file": "/assets/demo-courses/18-ui-ux-design-essentials.webp",
+      "kind": "course",
+      "title": "UI UX Design Essentials",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1544717297-fa95b6ee9643?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-17"
+    },
+    {
+      "file": "/assets/demo-courses/19-figma-to-frontend-workflow.webp",
+      "kind": "course",
+      "title": "Figma to Frontend Workflow",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-18"
+    },
+    {
+      "file": "/assets/demo-courses/20-qa-automation-with-playwright.webp",
+      "kind": "course",
+      "title": "QA Automation with Playwright",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-19"
+    },
+    {
+      "file": "/assets/demo-courses/21-cybersecurity-for-web-developers.webp",
+      "kind": "course",
+      "title": "Cybersecurity for Web Developers",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-20"
+    },
+    {
+      "file": "/assets/demo-courses/22-react-native-app-launchpad.webp",
+      "kind": "course",
+      "title": "React Native App Launchpad",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-21"
+    },
+    {
+      "file": "/assets/demo-courses/23-ai-tools-for-developer-productivity.webp",
+      "kind": "course",
+      "title": "AI Tools for Developer Productivity",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-22"
+    },
+    {
+      "file": "/assets/demo-courses/24-technical-writing-for-developers.webp",
+      "kind": "course",
+      "title": "Technical Writing for Developers",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-23"
+    },
+    {
+      "file": "/assets/demo-courses/25-spoken-english-live-confidence-batch.webp",
+      "kind": "course",
+      "title": "Spoken English Live Confidence Batch",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-24"
+    },
+    {
+      "file": "/assets/demo-courses/26-career-prep-resume-and-interview-lab.webp",
+      "kind": "course",
+      "title": "Career Prep Resume and Interview Lab",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-25"
+    },
+    {
+      "file": "/assets/demo-courses/27-system-design-foundation-hybrid.webp",
+      "kind": "course",
+      "title": "System Design Foundation Hybrid",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-26"
+    },
+    {
+      "file": "/assets/demo-courses/28-ecommerce-website-builder-program.webp",
+      "kind": "course",
+      "title": "Ecommerce Website Builder Program",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-27"
+    },
+    {
+      "file": "/assets/demo-courses/29-freelance-developer-business-kit.webp",
+      "kind": "course",
+      "title": "Freelance Developer Business Kit",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-28"
+    },
+    {
+      "file": "/assets/demo-courses/30-product-analytics-and-growth-metrics.webp",
+      "kind": "course",
+      "title": "Product Analytics and Growth Metrics",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-29"
+    },
+    {
+      "file": "/assets/demo-articles/01-how-to-choose-between-self-learning-live-and-hybrid-courses.webp",
+      "kind": "article",
+      "title": "How to Choose Between Self Learning Live and Hybrid Courses",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-30"
+    },
+    {
+      "file": "/assets/demo-articles/02-why-attendance-rules-matter-in-live-online-programs.webp",
+      "kind": "article",
+      "title": "Why Attendance Rules Matter in Live Online Programs",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-31"
+    },
+    {
+      "file": "/assets/demo-articles/03-building-a-certificate-workflow-learners-can-trust.webp",
+      "kind": "article",
+      "title": "Building a Certificate Workflow Learners Can Trust",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-32"
+    },
+    {
+      "file": "/assets/demo-articles/04-how-to-plan-your-first-frontend-portfolio.webp",
+      "kind": "article",
+      "title": "How to Plan Your First Frontend Portfolio",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1519452575417-564c1401ecc0?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-33"
+    },
+    {
+      "file": "/assets/demo-articles/05-react-practice-habits-that-actually-improve-skill.webp",
+      "kind": "article",
+      "title": "React Practice Habits That Actually Improve Skill",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-34"
+    },
+    {
+      "file": "/assets/demo-articles/06-a-simple-roadmap-for-learning-javascript.webp",
+      "kind": "article",
+      "title": "A Simple Roadmap for Learning JavaScript",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-35"
+    },
+    {
+      "file": "/assets/demo-articles/07-what-makes-a-good-full-stack-project.webp",
+      "kind": "article",
+      "title": "What Makes a Good Full Stack Project",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-37"
+    },
+    {
+      "file": "/assets/demo-articles/08-how-live-doubt-sessions-improve-completion.webp",
+      "kind": "article",
+      "title": "How Live Doubt Sessions Improve Completion",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-38"
+    },
+    {
+      "file": "/assets/demo-articles/09-database-basics-every-developer-should-know.webp",
+      "kind": "article",
+      "title": "Database Basics Every Developer Should Know",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-39"
+    },
+    {
+      "file": "/assets/demo-articles/10-docker-for-local-development-without-confusion.webp",
+      "kind": "article",
+      "title": "Docker for Local Development Without Confusion",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-40"
+    },
+    {
+      "file": "/assets/demo-articles/11-how-to-use-github-like-a-professional.webp",
+      "kind": "article",
+      "title": "How to Use GitHub Like a Professional",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1560264280-88b68371db39?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-41"
+    },
+    {
+      "file": "/assets/demo-articles/12-design-systems-for-small-learning-projects.webp",
+      "kind": "article",
+      "title": "Design Systems for Small Learning Projects",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-42"
+    },
+    {
+      "file": "/assets/demo-articles/13-how-to-review-your-own-code-before-submission.webp",
+      "kind": "article",
+      "title": "How to Review Your Own Code Before Submission",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-43"
+    },
+    {
+      "file": "/assets/demo-articles/14-preparing-for-dsa-without-burning-out.webp",
+      "kind": "article",
+      "title": "Preparing for DSA Without Burning Out",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-44"
+    },
+    {
+      "file": "/assets/demo-articles/15-the-right-way-to-track-course-progress.webp",
+      "kind": "article",
+      "title": "The Right Way to Track Course Progress",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-45"
+    },
+    {
+      "file": "/assets/demo-articles/16-what-learners-need-from-a-faculty-dashboard.webp",
+      "kind": "article",
+      "title": "What Learners Need From a Faculty Dashboard",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-46"
+    },
+    {
+      "file": "/assets/demo-articles/17-how-to-make-recorded-lessons-more-useful.webp",
+      "kind": "article",
+      "title": "How to Make Recorded Lessons More Useful",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1553028826-f4804a6dba3b?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-47"
+    },
+    {
+      "file": "/assets/demo-articles/18-beginner-guide-to-api-projects.webp",
+      "kind": "article",
+      "title": "Beginner Guide to API Projects",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-48"
+    },
+    {
+      "file": "/assets/demo-articles/19-why-project-feedback-beats-random-tutorials.webp",
+      "kind": "article",
+      "title": "Why Project Feedback Beats Random Tutorials",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-49"
+    },
+    {
+      "file": "/assets/demo-articles/20-how-to-prepare-for-a-technical-interview.webp",
+      "kind": "article",
+      "title": "How to Prepare for a Technical Interview",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-50"
+    },
+    {
+      "file": "/assets/demo-articles/21-cloud-deployment-checklist-for-beginners.webp",
+      "kind": "article",
+      "title": "Cloud Deployment Checklist for Beginners",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-51"
+    },
+    {
+      "file": "/assets/demo-articles/22-testing-mindset-for-new-developers.webp",
+      "kind": "article",
+      "title": "Testing Mindset for New Developers",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-52"
+    },
+    {
+      "file": "/assets/demo-articles/23-web-security-basics-for-students.webp",
+      "kind": "article",
+      "title": "Web Security Basics for Students",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-53"
+    },
+    {
+      "file": "/assets/demo-articles/24-how-to-use-ai-tools-while-still-learning.webp",
+      "kind": "article",
+      "title": "How to Use AI Tools While Still Learning",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-54"
+    },
+    {
+      "file": "/assets/demo-articles/25-mobile-app-learning-path-for-web-developers.webp",
+      "kind": "article",
+      "title": "Mobile App Learning Path for Web Developers",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-55"
+    },
+    {
+      "file": "/assets/demo-articles/26-how-to-build-confidence-in-spoken-english.webp",
+      "kind": "article",
+      "title": "How to Build Confidence in Spoken English",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-56"
+    },
+    {
+      "file": "/assets/demo-articles/27-analytics-dashboards-that-tell-a-clear-story.webp",
+      "kind": "article",
+      "title": "Analytics Dashboards That Tell a Clear Story",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-57"
+    },
+    {
+      "file": "/assets/demo-articles/28-freelance-project-delivery-checklist.webp",
+      "kind": "article",
+      "title": "Freelance Project Delivery Checklist",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1556155092-490a1ba16284?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-58"
+    },
+    {
+      "file": "/assets/demo-articles/29-system-design-concepts-for-early-developers.webp",
+      "kind": "article",
+      "title": "System Design Concepts for Early Developers",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-59"
+    },
+    {
+      "file": "/assets/demo-articles/30-how-to-keep-learning-speed-high-without-chaos.webp",
+      "kind": "article",
+      "title": "How to Keep Learning Speed High Without Chaos",
+      "provider": "Unsplash",
+      "source": "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=1600&h=900&q=86&ixid=codewithkasa-60"
+    }
+  ]
+}

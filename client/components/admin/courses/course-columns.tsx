@@ -23,7 +23,7 @@ export const getCourseColumns = (
   onDuplicate: (course: Course) => void,
   onToggleDisplay: (
     course: Course,
-    field: "showInHero" | "showInPopular",
+    field: "showInHero" | "showInPopular" | "showInMegaMenu",
     nextValue: boolean,
   ) => void,
 ): ColumnDef<Course>[] => [
@@ -137,6 +137,24 @@ export const getCourseColumns = (
           checked={Boolean(course.showInPopular)}
           onCheckedChange={(checked) =>
             onToggleDisplay(course, "showInPopular", checked)
+          }
+        />
+      );
+    },
+  },
+
+  {
+    accessorKey: "showInMegaMenu",
+    header: "Mega Menu",
+    cell: ({ row }) => {
+      const course = row.original;
+
+      return (
+        <Switch
+          aria-label={`Show ${course.title} in courses mega menu`}
+          checked={Boolean(course.showInMegaMenu)}
+          onCheckedChange={(checked) =>
+            onToggleDisplay(course, "showInMegaMenu", checked)
           }
         />
       );

@@ -26,7 +26,7 @@ export function ProfileMenu({ isOwner }: ProfileMenuProps) {
 
   return (
     <div className="mt-8">
-      <div className="flex gap-2 overflow-x-auto rounded-3xl border border-border bg-card p-2 shadow-(--shadow-card)">
+      <div className="no-scrollbar flex gap-2 overflow-x-auto rounded-3xl border border-border bg-card p-2 shadow-(--shadow-card)">
         {menu.map((item) => {
           const href = `/${item.key}`;
 

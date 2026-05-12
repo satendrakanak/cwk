@@ -59,6 +59,14 @@ export class UsersController {
   }
 
   @Auth(AuthType.None)
+  @Get('faculty-profile/slug/:slug')
+  public async getFacultyProfileBySlug(
+    @Param('slug') slug: string,
+  ): Promise<User> {
+    return await this.usersService.getFacultyProfileBySlug(slug);
+  }
+
+  @Auth(AuthType.None)
   @Get('faculty-profile/:id')
   public async getFacultyProfile(
     @Param('id', ParseIntPipe) id: number,

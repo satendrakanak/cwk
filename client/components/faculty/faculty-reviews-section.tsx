@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import Link from "next/link";
-import { Star, Trash2 } from "lucide-react";
+import { Filter, Loader, Star, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,10 +10,15 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useSession } from "@/context/session-context";
 import { getErrorMessage } from "@/lib/error-handler";
+import { getFacultyHref } from "@/lib/faculty-slug";
 import { getUserAvatarUrl } from "@/lib/user-avatar";
 import { cn } from "@/lib/utils";
 import { facultyReviewClientService } from "@/services/faculty-reviews/faculty-review.client";
-import { FacultyReview, FacultyReviewSummary } from "@/types/faculty-review";
+import {
+  FacultyReview,
+  FacultyReviewFilter,
+  FacultyReviewSummary,
+} from "@/types/faculty-review";
 import { User } from "@/types/user";
 import { formatDate } from "@/utils/formate-date";
 
@@ -23,21 +28,71 @@ const emptySummary: FacultyReviewSummary = {
   breakdown: [5, 4, 3, 2, 1].map((rating) => ({ rating, count: 0 })),
 };
 
+const REVIEWS_PAGE_SIZE = 5;
+
+const reviewFilters: { value: FacultyReviewFilter; label: string }[] = [
+  { value: "recent", label: "Recent" },
+  { value: "oldest", label: "Oldest" },
+  { value: "positive", label: "Positive" },
+  { value: "average", label: "Average" },
+  { value: "negative", label: "Negative" },
+];
+
 export function FacultyReviewsSection({ faculty }: { faculty: User }) {
   const [reviews, setReviews] = useState<FacultyReview[]>([]);
   const [summary, setSummary] = useState<FacultyReviewSummary>(emptySummary);
   const [myReview, setMyReview] = useState<FacultyReview | null>(null);
+  const [totalReviews, setTotalReviews] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [reviewFilter, setReviewFilter] =
+    useState<FacultyReviewFilter>("recent");
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [isPending, startTransition] = useTransition();
 
   const { user } = useSession();
 
+  const loadReviewsPage = useCallback(
+    async (page = 1, mode: "replace" | "append" = "replace") => {
+      if (mode === "replace") {
+        setIsInitialLoading(true);
+      } else {
+        setIsLoadingMore(true);
+      }
+
+      const reviewsResponse = await facultyReviewClientService.getByFaculty(
+        faculty.id,
+        {
+          page,
+          limit: REVIEWS_PAGE_SIZE,
+          filter: reviewFilter,
+        },
+      );
+
+      setReviews((current) =>
+        mode === "append"
+          ? mergeReviewPages(current, reviewsResponse.data.data)
+          : reviewsResponse.data.data,
+      );
+      setTotalReviews(reviewsResponse.data.meta.totalItems);
+      setCurrentPage(reviewsResponse.data.meta.currentPage);
+      setIsInitialLoading(false);
+      setIsLoadingMore(false);
+    },
+    [faculty.id, reviewFilter],
+  );
+
   const loadReviews = async () => {
     try {
       const [reviewsResponse, summaryResponse, mineResponse] =
         await Promise.all([
-          facultyReviewClientService.getByFaculty(faculty.id),
+          facultyReviewClientService.getByFaculty(faculty.id, {
+            page: 1,
+            limit: REVIEWS_PAGE_SIZE,
+            filter: reviewFilter,
+          }),
           facultyReviewClientService.getSummary(faculty.id),
           user
             ? facultyReviewClientService.getMine(faculty.id).catch(() => null)
@@ -47,7 +102,9 @@ export function FacultyReviewsSection({ faculty }: { faculty: User }) {
       const ownReview = mineResponse?.data || null;
 
       setMyReview(ownReview);
-      setReviews(mergeReviews(reviewsResponse.data, ownReview));
+      setReviews(mergeReviews(reviewsResponse.data.data, ownReview));
+      setTotalReviews(reviewsResponse.data.meta.totalItems);
+      setCurrentPage(1);
       setSummary(summaryResponse.data || emptySummary);
 
       if (ownReview) {
@@ -60,9 +117,47 @@ export function FacultyReviewsSection({ faculty }: { faculty: User }) {
   };
 
   useEffect(() => {
-    void loadReviews();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [faculty.id, user?.id]);
+    let isMounted = true;
+    setIsInitialLoading(true);
+
+    Promise.all([
+      facultyReviewClientService.getByFaculty(faculty.id, {
+        page: 1,
+        limit: REVIEWS_PAGE_SIZE,
+        filter: reviewFilter,
+      }),
+      facultyReviewClientService.getSummary(faculty.id),
+      user
+        ? facultyReviewClientService.getMine(faculty.id).catch(() => null)
+        : Promise.resolve(null),
+    ])
+      .then(([reviewsResponse, summaryResponse, mineResponse]) => {
+        if (!isMounted) return;
+
+        const ownReview = mineResponse?.data || null;
+        setMyReview(ownReview);
+        setReviews(mergeReviews(reviewsResponse.data.data, ownReview));
+        setTotalReviews(reviewsResponse.data.meta.totalItems);
+        setCurrentPage(1);
+        setSummary(summaryResponse.data || emptySummary);
+        setIsInitialLoading(false);
+
+        if (ownReview) {
+          setRating(ownReview.rating);
+          setComment(ownReview.comment || "");
+        }
+      })
+      .catch((error) => {
+        if (isMounted) {
+          toast.error(getErrorMessage(error));
+          setIsInitialLoading(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [faculty.id, reviewFilter, user]);
 
   const submitReview = () => {
     startTransition(async () => {
@@ -79,12 +174,23 @@ export function FacultyReviewsSection({ faculty }: { faculty: User }) {
           });
         }
 
-        toast.success("Faculty review saved");
+        toast.success("Instructor review saved");
         await loadReviews();
       } catch (error) {
         toast.error(getErrorMessage(error));
       }
     });
+  };
+
+  const hasMoreReviews = reviews.length < totalReviews;
+
+  const loadMoreReviews = async () => {
+    try {
+      await loadReviewsPage(currentPage + 1, "append");
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+      setIsLoadingMore(false);
+    }
   };
 
   const deleteReview = (reviewId: number) => {
@@ -109,7 +215,7 @@ export function FacultyReviewsSection({ faculty }: { faculty: User }) {
       <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
         <div className="rounded-3xl border border-border bg-muted/50 p-5">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-primary">
-            Faculty rating
+            Instructor rating
           </p>
 
           <div className="mt-5 flex items-end gap-2">
@@ -163,7 +269,7 @@ export function FacultyReviewsSection({ faculty }: { faculty: User }) {
               </h2>
 
               <p className="mt-1 text-sm text-muted-foreground">
-                Honest reviews from learners who interacted with this faculty.
+                Honest reviews from learners who interacted with this instructor.
               </p>
             </div>
           </div>
@@ -232,9 +338,9 @@ export function FacultyReviewsSection({ faculty }: { faculty: User }) {
             </div>
           ) : (
             <div className="mt-5 rounded-3xl border border-dashed border-border bg-muted/50 p-5 text-sm text-muted-foreground">
-              Sign in to rate this faculty and share your experience.
+              Sign in to rate this instructor and share your experience.
               <Link
-                href={`/auth/sign-in?callbackUrl=/our-faculty/${faculty.id}`}
+                href={`/auth/sign-in?callbackUrl=${getFacultyHref(faculty)}`}
                 className="ml-2 font-semibold text-primary underline-offset-4 hover:underline"
               >
                 Go to sign in
@@ -243,7 +349,36 @@ export function FacultyReviewsSection({ faculty }: { faculty: User }) {
           )}
 
           <div className="mt-6 space-y-4">
-            {reviews.length ? (
+            <div className="flex flex-col gap-3 rounded-3xl border border-border bg-muted/40 p-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <Filter className="h-4 w-4" />
+                </span>
+                Filter reviews
+              </div>
+
+              <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1 sm:pb-0">
+                {reviewFilters.map((filter) => (
+                  <button
+                    key={filter.value}
+                    type="button"
+                    onClick={() => setReviewFilter(filter.value)}
+                    className={cn(
+                      "shrink-0 cursor-pointer rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
+                      reviewFilter === filter.value
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-background text-muted-foreground hover:border-primary/30 hover:bg-primary/10 hover:text-primary",
+                    )}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {isInitialLoading ? (
+              <ReviewSkeletonList />
+            ) : reviews.length ? (
               reviews.map((review) => (
                 <article
                   key={review.id}
@@ -290,14 +425,57 @@ export function FacultyReviewsSection({ faculty }: { faculty: User }) {
                 </p>
 
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Be the first learner to review this faculty.
+                  Be the first learner to review this instructor.
                 </p>
               </div>
             )}
+
+            {hasMoreReviews ? (
+              <div className="pt-2 text-center">
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={isLoadingMore}
+                  onClick={loadMoreReviews}
+                  className="rounded-full border-border bg-background px-6 font-semibold text-foreground hover:border-primary/30 hover:bg-primary/10 hover:text-primary"
+                >
+                  {isLoadingMore ? (
+                    <>
+                      <Loader className="h-4 w-4 animate-spin" />
+                      Loading reviews
+                    </>
+                  ) : (
+                    "Show next reviews"
+                  )}
+                </Button>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function ReviewSkeletonList() {
+  return (
+    <div className="space-y-4">
+      {Array.from({ length: REVIEWS_PAGE_SIZE }).map((_, index) => (
+        <div key={index} className="rounded-3xl border border-border bg-card p-4">
+          <div className="flex items-center gap-3">
+            <div className="h-11 w-11 animate-pulse rounded-full bg-muted" />
+            <div className="flex-1 space-y-2">
+              <div className="h-4 w-36 animate-pulse rounded-full bg-muted" />
+              <div className="h-3 w-28 animate-pulse rounded-full bg-muted" />
+            </div>
+          </div>
+          <div className="mt-4 space-y-2">
+            <div className="h-3 w-full animate-pulse rounded-full bg-muted" />
+            <div className="h-3 w-4/5 animate-pulse rounded-full bg-muted" />
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -342,4 +520,15 @@ function mergeReviews(
   }
 
   return [ownReview, ...publicReviews];
+}
+
+function mergeReviewPages(
+  current: FacultyReview[],
+  nextReviews: FacultyReview[],
+) {
+  const map = new Map<number, FacultyReview>();
+  [...current, ...nextReviews].forEach((review) => {
+    map.set(review.id, review);
+  });
+  return [...map.values()];
 }

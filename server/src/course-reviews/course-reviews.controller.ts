@@ -14,6 +14,7 @@ import { Auth } from 'src/auth/decorators/auth.decorator';
 import { AuthType } from 'src/auth/enums/auth-type.enum';
 import type { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
 import { CreateCourseReviewDto } from './dtos/create-course-review.dto';
+import { GetCourseReviewsDto } from './dtos/get-course-reviews.dto';
 import { CourseReviewsService } from './providers/course-reviews.service';
 
 @Controller('course-reviews')
@@ -22,8 +23,11 @@ export class CourseReviewsController {
 
   @Auth(AuthType.None)
   @Get('course/:courseId')
-  getByCourse(@Param('courseId', ParseIntPipe) courseId: number) {
-    return this.courseReviewsService.getByCourse(courseId);
+  getByCourse(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Query() query: GetCourseReviewsDto,
+  ) {
+    return this.courseReviewsService.getByCourse(courseId, query);
   }
 
   @Auth(AuthType.None)

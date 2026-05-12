@@ -1,6 +1,6 @@
 import { IntersectionType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDate, IsOptional } from 'class-validator';
+import { IsBoolean, IsDate, IsOptional, IsString } from 'class-validator';
 import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
 
 class GetCoursesBaseDto {
@@ -18,6 +18,18 @@ class GetCoursesBaseDto {
   @IsBoolean()
   @Type(() => Boolean)
   isPublished?: boolean;
+
+  @IsOptional()
+  @IsString()
+  mode?: string;
+
+  @IsOptional()
+  @IsString()
+  category?: string;
+
+  @IsOptional()
+  @IsString()
+  tag?: string;
 }
 
 export class GetCoursesDto extends IntersectionType(

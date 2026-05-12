@@ -11,11 +11,17 @@ import { Course } from "@/types/course";
 type InfiniteCoursesGridProps = {
   initialPage: Paginated<Course>;
   pageSize: number;
+  mode?: string;
+  category?: string;
+  tag?: string;
 };
 
 export function InfiniteCoursesGrid({
   initialPage,
   pageSize,
+  mode,
+  category,
+  tag,
 }: InfiniteCoursesGridProps) {
   const [courses, setCourses] = useState(initialPage.data);
   const [meta, setMeta] = useState(initialPage.meta);
@@ -32,6 +38,9 @@ export function InfiniteCoursesGrid({
       const response = await courseClientService.getPublicCourses({
         page: meta.currentPage + 1,
         limit: pageSize,
+        mode,
+        category,
+        tag,
       });
 
       setCourses((current) => [...current, ...response.data.data]);
@@ -39,7 +48,7 @@ export function InfiniteCoursesGrid({
     } finally {
       setIsLoading(false);
     }
-  }, [hasMore, isLoading, meta.currentPage, pageSize]);
+  }, [category, hasMore, isLoading, meta.currentPage, mode, pageSize, tag]);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -61,7 +70,19 @@ export function InfiniteCoursesGrid({
 
   return (
     <div className="space-y-10">
-      <CouponBulkClient courses={courses} />
+      {courses.length ? (
+        <CouponBulkClient courses={courses} />
+      ) : (
+        <div className="academy-card border-dashed p-10 text-center">
+          <p className="text-sm font-semibold text-card-foreground">
+            No courses found
+          </p>
+
+          <p className="mt-1 text-sm text-muted-foreground">
+            Try another format, topic, or skill filter.
+          </p>
+        </div>
+      )}
 
       <div ref={sentinelRef} className="flex min-h-12 items-center justify-center">
         {isLoading && (

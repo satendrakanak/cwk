@@ -100,6 +100,9 @@ export class Course {
   showInPopular!: boolean;
 
   @Column({ type: 'boolean', default: false })
+  showInMegaMenu!: boolean;
+
+  @Column({ type: 'boolean', default: false })
   isPublished!: boolean;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
@@ -188,6 +191,10 @@ export class Course {
 
   @OneToMany(() => Enrollment, (enrollment) => enrollment.course)
   enrollments!: Enrollment[];
+
+  enrollmentCount?: number;
+  averageRating?: number;
+  totalReviews?: number;
 
   @ManyToMany(() => Testimonial, (testimonial) => testimonial.courses)
   testimonials!: Testimonial[];

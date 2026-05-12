@@ -98,7 +98,7 @@ export const CourseTabs = ({
       <div
         ref={tabsRef}
         className={cn(
-          "z-40 mb-8 rounded-3xl border border-border bg-card p-2 shadow-[0_18px_55px_rgba(15,23,42,0.06)] transition-all duration-300",
+          "z-40 mb-6 rounded-2xl border border-border bg-card p-1.5 shadow-[0_18px_55px_rgba(15,23,42,0.06)] transition-all duration-300 sm:mb-8 sm:rounded-3xl sm:p-2",
           isSticky &&
             "sticky top-20 bg-card/85 shadow-[0_18px_65px_color-mix(in_oklab,var(--primary)_14%,transparent)] backdrop-blur-xl",
         )}
@@ -113,7 +113,7 @@ export const CourseTabs = ({
                 type="button"
                 onClick={() => handleScroll(tab.id)}
                 className={cn(
-                  "relative inline-flex h-10 shrink-0 cursor-pointer items-center justify-center rounded-full px-4 text-xs font-bold uppercase tracking-[0.14em] transition-colors duration-300",
+                  "relative inline-flex h-9 shrink-0 cursor-pointer items-center justify-center rounded-full px-3 text-[11px] font-bold uppercase tracking-[0.12em] transition-colors duration-300 sm:h-10 sm:px-4 sm:text-xs sm:tracking-[0.14em]",
                   "text-muted-foreground hover:bg-primary/10 hover:text-primary",
                   isCurrent &&
                     "bg-primary text-primary-foreground shadow-[0_12px_30px_color-mix(in_oklab,var(--primary)_28%,transparent)] hover:bg-primary hover:text-primary-foreground",

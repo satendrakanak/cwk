@@ -5,8 +5,10 @@ import { CourseTabs } from "@/components/course/course-tabs";
 import { RelatedCourses } from "@/components/course/related-courses";
 import { getErrorMessage } from "@/lib/error-handler";
 import { courseServerService } from "@/services/courses/course.server";
+import { courseReviewServerService } from "@/services/course-reviews/course-review.server";
 import { testimonialServerService } from "@/services/testimonials/testimonial.server";
 import { Course } from "@/types/course";
+import { CourseReviewSummary } from "@/types/course-review";
 import { Testimonial } from "@/types/testimonial";
 import { buildMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
@@ -63,18 +65,25 @@ export default async function CourseSlugPage({ params }: CoursePageProps) {
 
   let relatedCourses: Course[] = [];
   let testimonials: Testimonial[] = [];
+  let reviewSummary: CourseReviewSummary = {
+    average: 0,
+    total: 0,
+    breakdown: [5, 4, 3, 2, 1].map((rating) => ({ rating, count: 0 })),
+  };
 
   try {
-    const [relatedCoursesResponse, testimonialsResponse] = await Promise.all([
+    const [relatedCoursesResponse, testimonialsResponse, reviewSummaryResponse] = await Promise.all([
       courseServerService.getRealtedCourses(course.id),
       testimonialServerService.getPublic({
         courseId: course.id,
         limit: 6,
       }),
+      courseReviewServerService.getSummary(course.id),
     ]);
 
     relatedCourses = relatedCoursesResponse.data;
     testimonials = testimonialsResponse.data.data;
+    reviewSummary = reviewSummaryResponse.data;
   } catch (error: unknown) {
     const message = getErrorMessage(error);
     throw new Error(message);
@@ -88,7 +97,7 @@ export default async function CourseSlugPage({ params }: CoursePageProps) {
 
       <div className="relative z-10">
         {/* HERO */}
-        <CourseHero course={course} />
+        <CourseHero course={course} reviewSummary={reviewSummary} />
 
         <Container>
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_25rem] lg:items-start lg:gap-10">

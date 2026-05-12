@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpen, Sparkles, Star } from "lucide-react";
 
 import {
   FaFacebookF,
@@ -12,6 +12,7 @@ import {
   FaYoutube,
 } from "react-icons/fa6";
 import { User } from "@/types/user";
+import { getFacultyHref } from "@/lib/faculty-slug";
 
 interface FacultyCardProps {
   faculty: User;
@@ -19,8 +20,11 @@ interface FacultyCardProps {
 
 export function FacultyCard({ faculty }: FacultyCardProps) {
   const name = `${faculty.firstName} ${faculty.lastName || ""}`.trim();
-  const designation = faculty.facultyProfile?.designation || "Faculty Mentor";
+  const designation = faculty.facultyProfile?.designation || "Instructor";
   const avatarSrc = faculty.avatar?.path || faculty.avatarUrl || "/assets/default.png";
+  const experience = faculty.facultyProfile?.experience;
+  const averageRating = faculty.averageRating || 0;
+  const totalReviews = faculty.totalReviews || 0;
 
   const socials = [
     {
@@ -52,7 +56,7 @@ export function FacultyCard({ faculty }: FacultyCardProps) {
 
   return (
     <Link
-      href={`/our-faculty/${faculty.id}`}
+      href={getFacultyHref(faculty)}
       className="academy-card group relative block h-full overflow-hidden p-3 transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-[0_28px_80px_color-mix(in_oklab,var(--primary)_18%,transparent)]"
     >
       <div className="pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100">
@@ -62,7 +66,7 @@ export function FacultyCard({ faculty }: FacultyCardProps) {
       <div className="relative h-56 overflow-hidden rounded-[22px] border border-border bg-muted">
         <Image
           src={avatarSrc}
-          alt={name || "Faculty"}
+          alt={name || "Instructor"}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           className="object-cover transition duration-500 group-hover:scale-105"
@@ -85,10 +89,27 @@ export function FacultyCard({ faculty }: FacultyCardProps) {
 
       <div className="relative z-10 px-2 pb-2 pt-4">
         <h3 className="line-clamp-1 text-lg font-semibold text-card-foreground">
-          {name || "Faculty"}
+          {name || "Instructor"}
         </h3>
 
-        <div className="mt-4 flex items-center justify-between gap-3">
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted/60 px-2.5 py-1 text-[11px] font-semibold text-muted-foreground">
+            <BookOpen className="h-3.5 w-3.5 text-primary" />
+            {faculty.taughtCoursesCount || faculty.taughtCourses?.length || 0} courses
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted/60 px-2.5 py-1 text-[11px] font-semibold text-muted-foreground">
+            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+            {averageRating.toFixed(1)} ({totalReviews})
+          </span>
+        </div>
+
+        {experience ? (
+          <p className="mt-2 line-clamp-1 text-xs font-medium text-muted-foreground">
+            {experience} years experience
+          </p>
+        ) : null}
+
+        <div className="mt-3 flex items-center justify-between gap-3">
           {socials.length > 0 ? (
             <div className="flex items-center gap-2">
               {socials.map((social) => {
@@ -97,16 +118,19 @@ export function FacultyCard({ faculty }: FacultyCardProps) {
                 return (
                   <span
                     key={social.label}
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-muted text-muted-foreground transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
+                    className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border bg-muted text-muted-foreground transition-colors group-hover:border-primary/25 group-hover:text-primary"
                     title={social.label}
                   >
-                    <Icon className="h-4 w-4" />
+                    <Icon className="h-3.5 w-3.5" />
                   </span>
                 );
               })}
             </div>
           ) : (
-            <span />
+            <span className="inline-flex h-7 items-center gap-1.5 rounded-full border border-border bg-muted px-2.5 text-[11px] font-semibold text-muted-foreground">
+              <Star className="h-3.5 w-3.5 text-primary" />
+              Instructor
+            </span>
           )}
 
           <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-muted text-muted-foreground transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">

@@ -22,6 +22,7 @@ import { authService } from "@/services/auth.service";
 import { GuestCheckoutVerificationDialog } from "./guest-checkout-verification-dialog";
 import { orderClientService } from "@/services/orders/order.client";
 import Container from "../container";
+import { WebsiteBreadcrumbs } from "@/components/layout/website-breadcrumbs";
 import { Order } from "@/types/order";
 
 interface CheckoutClientProps {
@@ -195,7 +196,16 @@ const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
           <div className="absolute inset-0 bg-(--surface-shell)" />
         </div>
 
-        <Container className="relative z-10">
+        <WebsiteBreadcrumbs
+          className="pt-0"
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Cart", href: "/cart" },
+            { label: "Checkout" },
+          ]}
+        />
+
+        <Container className="relative z-10 mt-6">
           <div className="flex min-h-[60vh] items-center justify-center">
             <div className="academy-card p-8 text-center">
               <Loader className="mx-auto mb-4 h-8 w-8 animate-spin text-primary" />
@@ -255,6 +265,14 @@ const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
           onSubmit={handleSubmit(handlePaymentSubmit)}
           className="relative z-10"
         >
+          <WebsiteBreadcrumbs
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Cart", href: "/cart" },
+              { label: "Checkout" },
+            ]}
+          />
+
           <Container>
             <div className="py-10 md:py-12">
               <div className="academy-card mb-8 p-5 md:p-6">

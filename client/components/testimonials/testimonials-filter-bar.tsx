@@ -6,12 +6,29 @@ import { RotateCcw, SlidersHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
-import { Course } from "@/types/course";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-export const TestimonialsFilterBar = ({ courses }: { courses: Course[] }) => {
+type TestimonialCourseOption = {
+  id: number;
+  title: string;
+};
+
+const selectTriggerClass =
+  "h-11 w-full rounded-full border-border bg-background/80 px-4 text-sm font-semibold text-foreground shadow-none transition hover:border-primary/35 hover:bg-primary/5 focus:ring-primary/20 sm:w-56";
+
+const selectContentClass =
+  "rounded-2xl border-border bg-popover p-1 shadow-[0_20px_55px_rgba(15,23,42,0.18)]";
+
+export const TestimonialsFilterBar = ({
+  courses,
+}: {
+  courses: TestimonialCourseOption[];
+}) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -56,35 +73,45 @@ export const TestimonialsFilterBar = ({ courses }: { courses: Course[] }) => {
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row">
-        <NativeSelect
-          aria-label="Filter by testimonial type"
-          className="h-11 w-full rounded-full border-border bg-muted px-4 text-sm font-medium text-foreground shadow-none focus:ring-primary sm:w-52"
+        <Select
           value={searchParams.get("type") || "all"}
-          onChange={(event) => updateFilters({ type: event.target.value })}
+          onValueChange={(value) => updateFilters({ type: value })}
         >
-          <NativeSelectOption value="all">All Types</NativeSelectOption>
-          <NativeSelectOption value="TEXT">
-            Text Testimonials
-          </NativeSelectOption>
-          <NativeSelectOption value="VIDEO">
-            Video Testimonials
-          </NativeSelectOption>
-        </NativeSelect>
+          <SelectTrigger
+            aria-label="Filter by testimonial type"
+            className={selectTriggerClass}
+          >
+            <SelectValue placeholder="All Types" />
+          </SelectTrigger>
 
-        <NativeSelect
-          aria-label="Filter by course"
-          className="h-11 w-full rounded-full border-border bg-muted px-4 text-sm font-medium text-foreground shadow-none focus:ring-primary sm:w-72"
+          <SelectContent className={selectContentClass}>
+            <SelectItem value="all">All Types</SelectItem>
+            <SelectItem value="TEXT">Text Testimonials</SelectItem>
+            <SelectItem value="VIDEO">Video Testimonials</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select
           value={searchParams.get("courseId") || "all"}
-          onChange={(event) => updateFilters({ courseId: event.target.value })}
+          onValueChange={(value) => updateFilters({ courseId: value })}
         >
-          <NativeSelectOption value="all">All Courses</NativeSelectOption>
+          <SelectTrigger
+            aria-label="Filter by course"
+            className={`${selectTriggerClass} sm:w-72`}
+          >
+            <SelectValue placeholder="All Courses" />
+          </SelectTrigger>
 
-          {courses.map((course) => (
-            <NativeSelectOption key={course.id} value={String(course.id)}>
-              {course.title}
-            </NativeSelectOption>
-          ))}
-        </NativeSelect>
+          <SelectContent className={selectContentClass}>
+            <SelectItem value="all">All Courses</SelectItem>
+
+            {courses.map((course) => (
+              <SelectItem key={course.id} value={String(course.id)}>
+                {course.title}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
         <Button
           type="button"
