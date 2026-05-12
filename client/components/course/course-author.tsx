@@ -9,9 +9,13 @@ interface CourseAuthorProps {
   href?: string;
 }
 
-const CourseAuthor = ({ authorName, authorPhoto, href = "/" }: CourseAuthorProps) => {
+const CourseAuthor = ({
+  authorName,
+  authorPhoto,
+  href = "/",
+}: CourseAuthorProps) => {
   return (
-    <div className="flex items-center justify-center gap-2 text-sm text-white/80 md:my-4 md:justify-start">
+    <div className="flex items-center justify-center gap-2 text-sm text-white/80 md:justify-start">
       <Image
         src={authorPhoto}
         alt={authorName}

@@ -65,7 +65,7 @@ export const CourseHero = ({ course, reviewSummary }: CourseHeroProps) => {
   const learners = course.enrollmentCount || reviewSummary.total || 0;
 
   return (
-    <section className="relative overflow-hidden py-16 text-white lg:py-20">
+    <section className="relative overflow-hidden py-10 text-white md:py-12 lg:py-14">
       <div className="pointer-events-none absolute inset-0">
         <div className="academy-hero-animated-bg-light dark:academy-hero-animated-bg-dark absolute inset-0" />
 
@@ -82,12 +82,12 @@ export const CourseHero = ({ course, reviewSummary }: CourseHeroProps) => {
       </div>
 
       <Container className="relative z-10">
-        <div className="grid grid-cols-12 items-start gap-8">
+        <div className="grid grid-cols-12 items-start gap-6">
           <div className="col-span-12 lg:col-span-7">
             <WebsiteBreadcrumbs
               contained={false}
               variant="hero"
-              className="mb-5 flex justify-center pt-0 lg:justify-start"
+              className="mb-3 flex justify-center pt-0 lg:justify-start"
               items={[
                 { label: "Home", href: "/" },
                 { label: "Courses", href: "/courses" },
@@ -95,30 +95,30 @@ export const CourseHero = ({ course, reviewSummary }: CourseHeroProps) => {
               ]}
             />
 
-            <div className="mx-auto mb-5 flex w-fit max-w-full rounded-full border border-white/20 bg-white/12 px-4 py-1.5 text-center text-xs font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_28px_rgba(2,6,23,0.20)] backdrop-blur-md lg:mx-0">
+            <div className="mx-auto mb-3 flex w-fit max-w-full rounded-full border border-white/20 bg-white/12 px-3 py-1 text-center text-[11px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_28px_rgba(2,6,23,0.20)] backdrop-blur-md lg:mx-0">
               Certified Course
             </div>
 
-            <h1 className="mb-4 text-center text-3xl font-semibold leading-tight tracking-tight text-white md:text-5xl lg:text-left lg:text-[50px]">
+            <h1 className="mb-3 max-w-3xl text-center text-3xl font-semibold leading-[1.08] tracking-tight text-white md:text-4xl lg:text-left lg:text-[42px]">
               {course.title}
             </h1>
 
             {course.shortDescription && (
-              <p className="mx-auto mb-5 max-w-2xl text-center text-sm leading-7 text-white/75 md:text-base lg:mx-0 lg:text-left">
+              <p className="mx-auto mb-4 max-w-2xl text-center text-sm leading-6 text-white/75 md:text-[15px] lg:mx-0 lg:text-left">
                 {course.shortDescription}
               </p>
             )}
 
-            <div className="mx-auto mb-5 flex max-w-2xl flex-wrap justify-center gap-2 lg:mx-0 lg:justify-start">
+            <div className="mx-auto mb-4 flex max-w-2xl flex-wrap justify-center gap-2 lg:mx-0 lg:justify-start">
               {heroChips.map((chip) => (
                 <span
                   key={chip.key}
                   className={
                     chip.tone === "solid"
-                      ? "rounded-full border border-white/20 bg-white/18 px-3 py-1 text-xs font-semibold text-white shadow-sm backdrop-blur-md"
+                      ? "rounded-full border border-white/20 bg-white/18 px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm backdrop-blur-md"
                       : chip.tone === "primary"
-                        ? "rounded-full border border-primary/35 bg-primary/20 px-3 py-1 text-xs font-semibold text-white shadow-sm backdrop-blur-md"
-                        : "rounded-full border border-white/15 bg-black/18 px-3 py-1 text-xs font-semibold text-white/85 backdrop-blur-md"
+                        ? "rounded-full border border-primary/35 bg-primary/20 px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm backdrop-blur-md"
+                        : "rounded-full border border-white/15 bg-black/18 px-2.5 py-1 text-[11px] font-semibold text-white/85 backdrop-blur-md"
                   }
                 >
                   {chip.label}
@@ -126,7 +126,7 @@ export const CourseHero = ({ course, reviewSummary }: CourseHeroProps) => {
               ))}
             </div>
 
-            <div className="mb-5">
+            <div className="mb-4">
               <CourseRatingDetails
                 rating={rating || 4.8}
                 reviews={reviewSummary.total}
@@ -134,14 +134,14 @@ export const CourseHero = ({ course, reviewSummary }: CourseHeroProps) => {
               />
             </div>
 
-            <div className="flex flex-col items-center gap-4 lg:items-start">
+            <div className="flex flex-col items-center gap-3 lg:items-start">
               <CourseAuthor
                 authorName={authorName}
                 authorPhoto={authorPhoto}
                 href={authorHref}
               />
 
-              <div className="inline-flex rounded-2xl border border-white/15 bg-white/10 px-4 py-3 shadow-[0_18px_55px_rgba(2,6,23,0.22)] backdrop-blur-xl">
+              <div className="inline-flex rounded-2xl border border-white/15 bg-white/10 px-3 py-2 shadow-[0_18px_55px_rgba(2,6,23,0.22)] backdrop-blur-xl">
                 <CourseUpdateDetails
                   lastUpdateDate={formatDate(course.updatedAt)}
                   language={course.language || "English"}

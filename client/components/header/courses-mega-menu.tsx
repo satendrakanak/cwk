@@ -33,7 +33,12 @@ function getCourseMeta(course: Course) {
     .join(" · ");
 }
 
-export function CoursesMegaMenu() {
+type CoursesMegaMenuProps = {
+  open: boolean;
+  onNavigate: () => void;
+};
+
+export function CoursesMegaMenu({ open, onNavigate }: CoursesMegaMenuProps) {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -69,11 +74,19 @@ export function CoursesMegaMenu() {
   }, [courses]);
 
   return (
-    <div className="invisible absolute left-1/2 top-[calc(100%+0.75rem)] z-50 w-[min(860px,calc(100vw-2rem))] -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+    <div
+      className={cn(
+        "absolute left-1/2 top-[calc(100%+0.75rem)] z-50 w-[min(860px,calc(100vw-2rem))] -translate-x-1/2 transition-all duration-200",
+        open
+          ? "visible translate-y-0 opacity-100"
+          : "invisible translate-y-2 opacity-0",
+      )}
+    >
       <div className="overflow-hidden rounded-[1.75rem] border border-border/80 bg-popover shadow-[0_24px_70px_color-mix(in_oklab,var(--foreground)_18%,transparent)]">
         <div className="grid min-h-[300px] grid-cols-[230px_1fr]">
           <Link
             href="/courses"
+            onClick={onNavigate}
             className="group/feature relative flex overflow-hidden bg-primary p-6 text-primary-foreground"
           >
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_35%_15%,rgba(255,255,255,0.28),transparent_38%)]" />
@@ -122,6 +135,7 @@ export function CoursesMegaMenu() {
                     <Link
                       key={course.id}
                       href={`/course/${course.slug}`}
+                      onClick={onNavigate}
                       className="group/course flex items-center gap-3 rounded-2xl p-1.5 transition hover:bg-muted/70"
                     >
                       <div className="relative h-12 w-16 shrink-0 overflow-hidden rounded-xl bg-muted">
@@ -167,6 +181,7 @@ export function CoursesMegaMenu() {
                   <Link
                     key={title}
                     href={index === 3 ? "/courses?tag=free" : "/courses"}
+                    onClick={onNavigate}
                     className="block rounded-2xl p-2 transition hover:bg-muted/70"
                   >
                     <p className="text-sm font-bold text-popover-foreground">
@@ -190,6 +205,7 @@ export function CoursesMegaMenu() {
                   <Link
                     key={item}
                     href="/courses"
+                    onClick={onNavigate}
                     className={cn(
                       "flex items-start gap-3 rounded-2xl p-3 transition",
                       "hover:bg-muted/70",

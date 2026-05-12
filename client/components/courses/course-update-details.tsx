@@ -30,16 +30,16 @@ const CourseUpdateDetails = ({
   ];
 
   return (
-    <div className="flex flex-wrap items-center justify-center gap-2 text-sm lg:justify-start">
+    <div className="flex flex-wrap items-center justify-center gap-1.5 text-xs lg:justify-start">
       {items.map((item) => {
         const Icon = item.icon;
 
         return (
           <div
             key={item.label}
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-white/80 backdrop-blur-md"
+            className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-2.5 py-1.5 text-white/80 backdrop-blur-md"
           >
-            <Icon className="h-4 w-4 shrink-0 text-white/85" />
+            <Icon className="h-3.5 w-3.5 shrink-0 text-white/85" />
             <span className="whitespace-nowrap">{item.label}</span>
           </div>
         );
