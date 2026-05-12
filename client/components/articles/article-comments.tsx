@@ -527,7 +527,9 @@ function CommentNode({
             type="button"
             onClick={() => onToggleLike(comment.id)}
             disabled={isPending}
-            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:border-primary/25 hover:bg-primary/10 hover:text-primary disabled:opacity-70 cursor-pointer"
+            className="inline-flex h-9 min-w-9 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-border bg-background px-2.5 text-sm font-semibold text-muted-foreground transition-colors hover:border-primary/25 hover:bg-primary/10 hover:text-primary disabled:opacity-70"
+            aria-label="Like comment"
+            title="Like"
           >
             <Heart className="h-4 w-4" />
             {likeCount}
@@ -537,10 +539,11 @@ function CommentNode({
             type="button"
             onClick={() => onToggleReply(comment.id)}
             disabled={isPending}
-            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:border-primary/25 hover:bg-primary/10 hover:text-primary disabled:opacity-70 cursor-pointer"
+            className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:border-primary/25 hover:bg-primary/10 hover:text-primary disabled:opacity-70"
+            aria-label="Reply to comment"
+            title="Reply"
           >
             <Reply className="h-4 w-4" />
-            Reply
           </button>
 
           {canManage ? (
@@ -549,20 +552,22 @@ function CommentNode({
                 type="button"
                 onClick={() => onStartEdit(comment)}
                 disabled={isPending}
-                className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:border-primary/25 hover:bg-primary/10 hover:text-primary disabled:opacity-70 cursor-pointer"
+                className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:border-primary/25 hover:bg-primary/10 hover:text-primary disabled:opacity-70"
+                aria-label="Edit comment"
+                title="Edit"
               >
                 <Pencil className="h-4 w-4" />
-                Edit
               </button>
 
               <button
                 type="button"
                 onClick={() => onDelete(comment.id)}
                 disabled={isPending}
-                className="inline-flex items-center gap-1.5 rounded-full border border-destructive/20 bg-destructive/10 px-3 py-1.5 text-sm font-semibold text-destructive transition-colors hover:bg-destructive hover:text-white disabled:opacity-70 cursor-pointer"
+                className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-destructive/20 bg-destructive/10 text-destructive transition-colors hover:bg-destructive hover:text-white disabled:opacity-70"
+                aria-label="Delete comment"
+                title="Delete"
               >
                 <Trash2 className="h-4 w-4" />
-                Delete
               </button>
             </>
           ) : null}

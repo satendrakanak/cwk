@@ -292,21 +292,7 @@ export function CourseRatingReviews({ course }: { course: Course }) {
           </div>
 
           {course.isEnrolled ? (
-            <div className="relative mt-5 rounded-3xl border border-border bg-muted/50 p-4">
-              {myReview ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon-sm"
-                  disabled={isPending}
-                  onClick={() => deleteReview(myReview.id)}
-                  className="absolute right-4 top-4 rounded-full border-border bg-background text-destructive hover:border-destructive hover:bg-destructive hover:text-white **:text-inherit"
-                  aria-label="Delete review"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              ) : null}
-
+            <div className="mt-5 rounded-3xl border border-border bg-muted/50 p-4">
               <p className="mb-3 text-sm font-semibold text-card-foreground">
                 Share your experience
               </p>
@@ -411,10 +397,23 @@ export function CourseRatingReviews({ course }: { course: Course }) {
                 return (
                   <article
                     key={review.id}
-                    className="rounded-3xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-primary/25 hover:bg-primary/5 sm:p-5"
+                    className="relative rounded-3xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-primary/25 hover:bg-primary/5 sm:p-5"
                   >
+                    {isOwnReview ? (
+                      <button
+                        type="button"
+                        disabled={isPending}
+                        onClick={() => deleteReview(review.id)}
+                        className="absolute right-4 top-4 inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:border-destructive hover:bg-destructive hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+                        aria-label="Delete review"
+                        title="Delete review"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    ) : null}
+
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                      <div className="flex min-w-0 items-center gap-3">
+                      <div className="flex min-w-0 items-center gap-3 pr-10">
                         <Avatar className="h-11 w-11 border border-border">
                           <AvatarImage src={avatarUrl} alt={reviewerName} />
 
@@ -446,17 +445,6 @@ export function CourseRatingReviews({ course }: { course: Course }) {
                         </div>
                       </div>
 
-                      {isOwnReview ? (
-                        <button
-                          type="button"
-                          disabled={isPending}
-                          onClick={() => deleteReview(review.id)}
-                        className="inline-flex h-9 w-9 cursor-pointer items-center justify-center self-end rounded-full border border-border bg-background text-muted-foreground transition-colors hover:border-destructive hover:bg-destructive hover:text-white disabled:cursor-not-allowed disabled:opacity-60 sm:self-auto"
-                          aria-label="Delete review"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      ) : null}
                     </div>
 
                     {review.comment ? (
