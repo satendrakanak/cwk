@@ -10,6 +10,8 @@ import { courseExamsServerService } from "@/services/course-exams/course-exams.s
 import { ExamHistoryRecord } from "@/types/exam";
 import { facultyWorkspaceServer } from "@/services/faculty/faculty-workspace.server";
 import type { FacultyClassSession } from "@/types/faculty-workspace";
+import { assignmentServerService } from "@/services/assignments/assignment.server";
+import type { Assignment } from "@/types/assignment";
 
 export default async function DashboardPage() {
   const session = await getSession();
@@ -28,6 +30,7 @@ export default async function DashboardPage() {
   let orders: Order[] = [];
   let examHistory: ExamHistoryRecord[] = [];
   let upcomingClasses: FacultyClassSession[] = [];
+  let assignments: Assignment[] = [];
 
   try {
     const [
@@ -37,6 +40,7 @@ export default async function DashboardPage() {
       ordersRes,
       examHistoryRes,
       upcomingClassesRes,
+      assignmentsRes,
     ] = await Promise.all([
       userServerService.getDashboardStats(session.id),
       userServerService.getEnrolledCourses(session.id),
@@ -44,6 +48,7 @@ export default async function DashboardPage() {
       orderServerService.getMine(),
       courseExamsServerService.getMyHistory(),
       facultyWorkspaceServer.getMyUpcomingSessions(),
+      assignmentServerService.getMyAssignments(),
     ]);
 
     stats = statsRes.data;
@@ -52,6 +57,7 @@ export default async function DashboardPage() {
     orders = ordersRes.data;
     examHistory = examHistoryRes.data;
     upcomingClasses = upcomingClassesRes;
+    assignments = assignmentsRes.data;
   } catch (error: unknown) {
     const message = getErrorMessage(error);
     throw new Error(message);
@@ -77,6 +83,7 @@ export default async function DashboardPage() {
         examHistory={examHistory}
         user={session}
         upcomingClasses={upcomingClasses}
+        assignments={assignments}
       />
     </div>
   );
