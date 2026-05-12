@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState, useTransition } from "react";
+import { FormEvent, useEffect, useMemo, useState, useTransition } from "react";
 import type { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -8,6 +8,7 @@ import {
   ClipboardList,
   Clock3,
   FileCheck2,
+  Pencil,
   PenLine,
   Plus,
   RotateCcw,
@@ -74,6 +75,13 @@ const submissionTypeLabel: Record<AssignmentSubmissionType, string> = {
   mixed: "Mixed",
 };
 
+const toDateTimeInputValue = (value?: string | null) => {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toISOString().slice(0, 16);
+};
+
 export function AssignmentAdminWorkspace({
   mode,
   assignments,
@@ -83,6 +91,7 @@ export function AssignmentAdminWorkspace({
   currentTime,
 }: AssignmentAdminWorkspaceProps) {
   const [createOpen, setCreateOpen] = useState(false);
+  const [editing, setEditing] = useState<Assignment | null>(null);
   const [reviewing, setReviewing] = useState<AssignmentSubmission | null>(null);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -192,6 +201,14 @@ export function AssignmentAdminWorkspace({
                     <Button
                       variant="outline"
                       size="sm"
+                      onClick={() => setEditing(assignment)}
+                    >
+                      <Pencil className="size-4" />
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
                       disabled={isPending}
                       onClick={() => deleteAssignment(assignment)}
                     >
@@ -222,12 +239,22 @@ export function AssignmentAdminWorkspace({
         </TabsContent>
       </Tabs>
 
-      <CreateAssignmentDialog
+      <AssignmentFormDialog
         open={createOpen}
         onOpenChange={setCreateOpen}
         courses={courses}
         faculties={faculties}
         mode={mode}
+      />
+      <AssignmentFormDialog
+        open={Boolean(editing)}
+        onOpenChange={(open) => {
+          if (!open) setEditing(null);
+        }}
+        courses={courses}
+        faculties={faculties}
+        mode={mode}
+        assignment={editing}
       />
 
       <ReviewSubmissionDialog
@@ -240,33 +267,59 @@ export function AssignmentAdminWorkspace({
   );
 }
 
-function CreateAssignmentDialog({
+function AssignmentFormDialog({
   open,
   onOpenChange,
   courses,
   faculties,
   mode,
+  assignment,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   courses: AssignmentCourseOption[];
   faculties: User[];
   mode: "admin" | "faculty";
+  assignment?: Assignment | null;
 }) {
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
+  const initialFacultyIds =
+    mode === "faculty"
+      ? faculties.map((faculty) => faculty.id)
+      : assignment?.faculties?.map((faculty) => faculty.id) ?? [];
   const [form, setForm] = useState<AssignmentPayload>({
-    title: "",
-    description: "",
-    instructions: "",
-    courseId: courses[0]?.id ?? 0,
-    facultyIds: mode === "faculty" ? faculties.map((faculty) => faculty.id) : [],
-    status: "draft",
-    submissionType: "mixed",
-    dueAt: "",
-    points: 100,
-    allowResubmission: true,
+    title: assignment?.title ?? "",
+    description: assignment?.description ?? "",
+    instructions: assignment?.instructions ?? "",
+    courseId: assignment?.course?.id ?? courses[0]?.id ?? 0,
+    facultyIds: initialFacultyIds,
+    status: assignment?.status ?? "draft",
+    submissionType: assignment?.submissionType ?? "mixed",
+    dueAt: toDateTimeInputValue(assignment?.dueAt),
+    points: assignment?.points ?? 100,
+    allowResubmission: assignment?.allowResubmission ?? true,
   });
+
+  useEffect(() => {
+    const facultyIds =
+      mode === "faculty"
+        ? faculties.map((faculty) => faculty.id)
+        : assignment?.faculties?.map((faculty) => faculty.id) ?? [];
+
+    setForm({
+      title: assignment?.title ?? "",
+      description: assignment?.description ?? "",
+      instructions: assignment?.instructions ?? "",
+      courseId: assignment?.course?.id ?? courses[0]?.id ?? 0,
+      facultyIds,
+      status: assignment?.status ?? "draft",
+      submissionType: assignment?.submissionType ?? "mixed",
+      dueAt: toDateTimeInputValue(assignment?.dueAt),
+      points: assignment?.points ?? 100,
+      allowResubmission: assignment?.allowResubmission ?? true,
+    });
+  }, [assignment, courses, faculties, mode, open]);
 
   const facultyOptions = useMemo(
     () =>
@@ -289,13 +342,21 @@ function CreateAssignmentDialog({
     setIsSaving(true);
 
     try {
-      await assignmentClientService.create({
+      const payload = {
         ...form,
         facultyIds: form.facultyIds?.length ? form.facultyIds : undefined,
         dueAt: form.dueAt || undefined,
         points: form.points ? Number(form.points) : undefined,
-      });
-      toast.success("Assignment created");
+      };
+
+      if (assignment) {
+        await assignmentClientService.update(assignment.id, payload);
+        toast.success("Assignment updated");
+      } else {
+        await assignmentClientService.create(payload);
+        toast.success("Assignment created");
+      }
+
       onOpenChange(false);
       router.refresh();
     } catch (error) {
@@ -309,7 +370,9 @@ function CreateAssignmentDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Create assignment</DialogTitle>
+          <DialogTitle>
+            {assignment ? "Edit assignment" : "Create assignment"}
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
@@ -444,7 +507,7 @@ function CreateAssignmentDialog({
               Cancel
             </Button>
             <Button type="submit" disabled={isSaving || !courses.length}>
-              {isSaving ? "Saving..." : "Create"}
+              {isSaving ? "Saving..." : assignment ? "Update" : "Create"}
             </Button>
           </DialogFooter>
         </form>
