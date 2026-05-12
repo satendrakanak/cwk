@@ -17,10 +17,7 @@ import {
 } from "@/components/admin/shared/admin-resource-dashboard";
 import { getErrorMessage } from "@/lib/error-handler";
 import { DateRangeFilter } from "@/components/dashboard/date-range-filter";
-import {
-  DateRangeValue,
-  updateDateRangeSearchParams,
-} from "@/lib/date-range";
+import { DateRangeValue, updateDateRangeSearchParams } from "@/lib/date-range";
 
 interface CouponsListProps {
   coupons: Coupon[];
@@ -68,7 +65,9 @@ export const CouponsList = ({ coupons, dateRange }: CouponsListProps) => {
     try {
       setLoading(true);
       await Promise.all(
-        selectedForDelete.map((coupon) => couponClientService.delete(coupon.id)),
+        selectedForDelete.map((coupon) =>
+          couponClientService.delete(coupon.id),
+        ),
       );
       toast.success(`${selectedForDelete.length} coupons deleted`);
       setBulkDeleteOpen(false);
@@ -90,7 +89,7 @@ export const CouponsList = ({ coupons, dateRange }: CouponsListProps) => {
       <AdminResourceDashboard
         eyebrow="Promotions"
         title="Coupons dashboard"
-        description="Track coupon codes, activation status, usage counts, and export discount data."
+        description="Track discount value, scope, validity, auto-apply behavior, and redemption usage."
         data={coupons}
         columns={columns}
         searchPlaceholder="Search coupons by code, type, or status"
@@ -99,17 +98,27 @@ export const CouponsList = ({ coupons, dateRange }: CouponsListProps) => {
           (coupon) => coupon.type,
           (coupon) => coupon.status,
           (coupon) => coupon.scope,
+          (coupon) => (coupon.isAutoApply ? "auto apply" : "manual"),
         ]}
         stats={[
-          { label: "Total Coupons", value: coupons.length, icon: TicketPercent },
+          {
+            label: "Total Coupons",
+            value: coupons.length,
+            icon: TicketPercent,
+          },
           {
             label: "Active",
-            value: coupons.filter((coupon) => coupon.status === CouponStatus.ACTIVE).length,
+            value: coupons.filter(
+              (coupon) => coupon.status === CouponStatus.ACTIVE,
+            ).length,
             icon: CircleCheck,
           },
           {
             label: "Redemptions",
-            value: coupons.reduce((sum, coupon) => sum + (coupon.usedCount || 0), 0),
+            value: coupons.reduce(
+              (sum, coupon) => sum + (coupon.usedCount || 0),
+              0,
+            ),
             icon: BadgePercent,
           },
         ]}
@@ -120,7 +129,10 @@ export const CouponsList = ({ coupons, dateRange }: CouponsListProps) => {
               redirectPath="/admin/coupons"
               FormComponent={CreateCouponForm}
             />
-            <DateRangeFilter value={dateRange} onChange={handleDateRangeApply} />
+            <DateRangeFilter
+              value={dateRange}
+              onChange={handleDateRangeApply}
+            />
           </>
         }
         selectedActions={(selectedRows) => (
@@ -137,10 +149,18 @@ export const CouponsList = ({ coupons, dateRange }: CouponsListProps) => {
           ID: coupon.id,
           Code: coupon.code,
           Type: coupon.type,
-          Value: coupon.value,
+          Value:
+            coupon.type === "PERCENTAGE"
+              ? `${coupon.value || 0}%`
+              : `₹${coupon.value || 0}`,
+          MaxDiscount: coupon.maxDiscount ?? "",
+          MinOrderValue: coupon.minOrderValue ?? "",
           Scope: coupon.scope,
           Status: coupon.status,
+          AutoApply: coupon.isAutoApply ? "Yes" : "No",
           UsedCount: coupon.usedCount,
+          UsageLimit: coupon.usageLimit ?? "Unlimited",
+          PerUserLimit: coupon.perUserLimit ?? 1,
           ValidFrom: coupon.validFrom,
           ValidTill: coupon.validTill,
         })}
