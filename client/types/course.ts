@@ -102,6 +102,9 @@ export type CreateCoursePayload = {
   isFree?: boolean;
   isPublished?: boolean;
   isFeatured?: boolean;
+  showInHero?: boolean;
+  showInPopular?: boolean;
+  showInMegaMenu?: boolean;
   priceInr?: string;
   priceUsd?: string;
 
@@ -152,6 +155,9 @@ export type Course = {
   isFree: boolean;
   isPublished: boolean;
   isFeatured: boolean;
+  showInHero: boolean;
+  showInPopular: boolean;
+  showInMegaMenu: boolean;
   priceInr: string | null;
   priceUsd: string | null;
   duration: string | null;
@@ -176,6 +182,9 @@ export type Course = {
   categories: Category[];
   tags: Tag[];
   isEnrolled?: boolean;
+  enrollmentCount?: number;
+  averageRating?: number;
+  totalReviews?: number;
   progress: {
     isCompleted: boolean;
     progress: number;

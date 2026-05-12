@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { usePathname, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { BookOpen, Eye, Sparkles } from "lucide-react";
+import { BookOpen, Eye, LayoutPanelTop, Star, TrendingUp } from "lucide-react";
 
 import { ConfirmDeleteDialog } from "@/components/modals/confirm-dialog";
 import { Course } from "@/types/course";
@@ -54,6 +54,28 @@ export const CoursesList = ({ courses, dateRange }: CoursesListProps) => {
           toast.error(getErrorMessage(error));
         } finally {
           setLoading(false);
+        }
+      }, async (course, field, nextValue) => {
+        try {
+          await courseClientService.update(course.id, {
+            [field]: nextValue,
+          });
+          toast.success(
+            field === "showInHero"
+              ? nextValue
+                ? "Course added to home hero"
+                : "Course removed from home hero"
+              : field === "showInPopular"
+                ? nextValue
+                  ? "Course added to popular courses"
+                  : "Course removed from popular courses"
+                : nextValue
+                  ? "Course added to mega menu"
+                  : "Course removed from mega menu",
+          );
+          router.refresh();
+        } catch (error: unknown) {
+          toast.error(getErrorMessage(error));
         }
       }),
     [router],
@@ -120,9 +142,19 @@ export const CoursesList = ({ courses, dateRange }: CoursesListProps) => {
             icon: Eye,
           },
           {
-            label: "Featured",
-            value: courses.filter((course) => course.isFeatured).length,
-            icon: Sparkles,
+            label: "Home Hero",
+            value: courses.filter((course) => course.showInHero).length,
+            icon: Star,
+          },
+          {
+            label: "Popular",
+            value: courses.filter((course) => course.showInPopular).length,
+            icon: TrendingUp,
+          },
+          {
+            label: "Mega Menu",
+            value: courses.filter((course) => course.showInMegaMenu).length,
+            icon: LayoutPanelTop,
           },
         ]}
         actions={
@@ -151,7 +183,9 @@ export const CoursesList = ({ courses, dateRange }: CoursesListProps) => {
           Slug: course.slug,
           PriceINR: course.priceInr ?? "",
           Published: course.isPublished ? "Yes" : "No",
-          Featured: course.isFeatured ? "Yes" : "No",
+          HomeHero: course.showInHero ? "Yes" : "No",
+          Popular: course.showInPopular ? "Yes" : "No",
+          MegaMenu: course.showInMegaMenu ? "Yes" : "No",
           Categories: course.categories?.map((category) => category.name).join(", ") ?? "",
           CreatedAt: course.createdAt,
         })}

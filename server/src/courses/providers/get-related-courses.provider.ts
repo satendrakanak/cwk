@@ -6,6 +6,7 @@ import { MediaFileMappingService } from 'src/common/media-file-mapping/providers
 import { EnrollmentsService } from 'src/enrollments/providers/enrollments.service';
 import { UserProgressService } from 'src/user-progress/providers/user-progress.service';
 import { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
+import { CourseReview } from 'src/course-reviews/course-review.entity';
 
 @Injectable()
 export class GetRelatedCoursesProvider {
@@ -16,6 +17,9 @@ export class GetRelatedCoursesProvider {
 
     @InjectRepository(Course)
     private readonly courseRepository: Repository<Course>,
+
+    @InjectRepository(CourseReview)
+    private readonly courseReviewRepository: Repository<CourseReview>,
 
     /**
      * Inject mediaFileMappingService
@@ -44,18 +48,15 @@ export class GetRelatedCoursesProvider {
         'video',
         'categories',
         'tags',
-        'chapters',
-        'chapters.lectures',
-        'chapters.lectures.video',
-        'chapters.lectures.attachments',
-        'chapters.lectures.attachments.file',
       ],
       order: {
         createdAt: 'DESC',
       },
+      take: 8,
     });
 
-    const mapped = this.mediaFileMappingService.mapCourses(courses);
+    const coursesWithStats = await this.attachCourseStats(courses);
+    const mapped = this.mediaFileMappingService.mapCourses(coursesWithStats);
     if (!user) {
       return mapped.map((c) => ({
         ...c,
@@ -81,5 +82,37 @@ export class GetRelatedCoursesProvider {
         lastTime: 0,
       },
     }));
+  }
+
+  private async attachCourseStats(courses: Course[]) {
+    if (!courses.length) return courses;
+
+    const courseIds = courses.map((course) => course.id);
+    const reviewRows = await this.courseReviewRepository
+      .createQueryBuilder('review')
+      .select('review.courseId', 'id')
+      .addSelect('COUNT(review.id)', 'total')
+      .addSelect('AVG(review.rating)', 'average')
+      .where('review.courseId IN (:...courseIds)', { courseIds })
+      .andWhere('review.isPublished = true')
+      .groupBy('review.courseId')
+      .getRawMany<{ id: string; total: string; average: string }>();
+
+    const reviewMap = new Map(
+      reviewRows.map((row) => [
+        Number(row.id),
+        {
+          totalReviews: Number(row.total || 0),
+          averageRating: Number(Number(row.average || 0).toFixed(1)),
+        },
+      ]),
+    );
+
+    return courses.map((course) =>
+      Object.assign(course, {
+        totalReviews: reviewMap.get(course.id)?.totalReviews || 0,
+        averageRating: reviewMap.get(course.id)?.averageRating || 0,
+      }),
+    );
   }
 }

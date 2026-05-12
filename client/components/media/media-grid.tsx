@@ -5,7 +5,6 @@ import {
   UploadCloud,
   Loader,
   Images,
-  Loader2,
   File,
   Video,
 } from "lucide-react";
@@ -99,7 +98,7 @@ export const MediaGrid = ({
               <div className="flex flex-col items-center gap-2 text-white">
                 {/* 🔥 Circular Loader */}
                 <div className="relative h-10 w-10">
-                  <Loader2 className="animate-spin h-10 w-10" />
+                  <Loader className="animate-spin h-10 w-10" />
 
                   {/* % center me */}
                   <span className="absolute inset-0 flex items-center justify-center text-[10px] font-semibold">

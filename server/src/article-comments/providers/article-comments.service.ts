@@ -7,9 +7,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Article } from 'src/articles/article.entity';
 import { MediaFileMappingService } from 'src/common/media-file-mapping/providers/media-file-mapping.service';
 import { User } from 'src/users/user.entity';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { ArticleComment } from '../article-comment.entity';
 import { CreateArticleCommentDto } from '../dtos/create-article-comment.dto';
+import { GetArticleCommentsDto } from '../dtos/get-article-comments.dto';
 
 @Injectable()
 export class ArticleCommentsService {
@@ -23,16 +24,55 @@ export class ArticleCommentsService {
     private readonly mediaFileMappingService: MediaFileMappingService,
   ) {}
 
-  async getByArticle(articleId: number) {
-    const comments = await this.articleCommentRepository.find({
-      where: { article: { id: articleId }, isPublished: true },
-      relations: ['user', 'user.avatar', 'likedBy', 'parent'],
-      order: { createdAt: 'ASC' },
+  async getByArticle(articleId: number, query: GetArticleCommentsDto = {}) {
+    const page = Math.max(1, Number(query.page || 1));
+    const limit = Math.min(20, Math.max(1, Number(query.limit || 5)));
+    const sort = query.sort || 'recent';
+    const [roots, totalItems] = await this.articleCommentRepository.findAndCount(
+      {
+        where: {
+          article: { id: articleId },
+          isPublished: true,
+          parent: IsNull(),
+        },
+        relations: ['user', 'user.avatar', 'likedBy'],
+        order: { createdAt: sort === 'oldest' ? 'ASC' : 'DESC' },
+        skip: (page - 1) * limit,
+        take: limit,
+      },
+    );
+
+    const rootIds = roots.map((comment) => comment.id);
+    const replies = rootIds.length
+      ? await this.articleCommentRepository.find({
+          where: rootIds.map((id) => ({
+            article: { id: articleId },
+            parent: { id },
+            isPublished: true,
+          })),
+          relations: ['user', 'user.avatar', 'likedBy', 'parent'],
+          order: { createdAt: 'ASC' },
+        })
+      : [];
+
+    const repliesByParent = new Map<number, ArticleComment[]>();
+    replies.forEach((reply) => {
+      this.mapCommentMedia(reply);
+      const parentId = reply.parent?.id;
+      if (!parentId) return;
+      repliesByParent.set(parentId, [
+        ...(repliesByParent.get(parentId) || []),
+        reply,
+      ]);
     });
 
-    return this.buildTree(comments).sort(
-      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
-    );
+    const data = roots.map((comment) => {
+      this.mapCommentMedia(comment);
+      comment.replies = repliesByParent.get(comment.id) || [];
+      return comment;
+    });
+
+    return this.paginateResponse(data, totalItems, page, limit);
   }
 
   async getMineByArticle(articleId: number, userId: number) {
@@ -236,5 +276,31 @@ export class ArticleCommentsService {
     })) as User[];
 
     return comment;
+  }
+
+  private paginateResponse<T>(
+    data: T[],
+    totalItems: number,
+    page: number,
+    limit: number,
+  ) {
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return {
+      data,
+      meta: {
+        itemsPerPage: limit,
+        totalItems,
+        currentPage: page,
+        totalPages,
+      },
+      links: {
+        first: '',
+        last: '',
+        current: '',
+        next: '',
+        previous: '',
+      },
+    };
   }
 }

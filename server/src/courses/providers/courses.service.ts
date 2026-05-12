@@ -22,6 +22,7 @@ import { generateSlug } from 'src/common/utils/slug.util';
 import { Chapter } from 'src/chapters/chapter.entity';
 import { Lecture } from 'src/lectures/lecture.entity';
 import { Attachment } from 'src/attachments/attachment.entity';
+import { CourseReview } from 'src/course-reviews/course-review.entity';
 
 @Injectable()
 export class CoursesService {
@@ -31,6 +32,9 @@ export class CoursesService {
      */
     @InjectRepository(Course)
     private readonly courseRepository: Repository<Course>,
+
+    @InjectRepository(CourseReview)
+    private readonly courseReviewRepository: Repository<CourseReview>,
 
     /**
      * Inject createCourseProvider
@@ -95,7 +99,8 @@ export class CoursesService {
     user?: ActiveUserData,
   ): Promise<Paginated<Course> | Course[]> {
     /**
-     * 🔥 NO PAGINATION (website case)
+     * Public website case: infinite-scroll pages request pagination, while
+     * small homepage sections can still fetch their scoped endpoints.
      */
     if (getCoursesDto.isPublished) {
       const courseQuery = this.courseRepository
@@ -107,11 +112,6 @@ export class CoursesService {
         .leftJoinAndSelect('course.categories', 'categories')
         .leftJoinAndSelect('course.faculties', 'faculties')
         .leftJoinAndSelect('course.tags', 'tags')
-        .leftJoinAndSelect('course.chapters', 'chapters')
-        .leftJoinAndSelect('chapters.lectures', 'lectures')
-        .leftJoinAndSelect('lectures.video', 'lectureVideo')
-        .leftJoinAndSelect('lectures.attachments', 'attachments')
-        .leftJoinAndSelect('attachments.file', 'attachmentFile')
         .where('course.isPublished = :isPublished', { isPublished: true })
         .orderBy('course.createdAt', 'DESC');
 
@@ -127,35 +127,41 @@ export class CoursesService {
         });
       }
 
+      if (getCoursesDto.mode) {
+        courseQuery.andWhere('course.mode = :mode', {
+          mode: getCoursesDto.mode,
+        });
+      }
+
+      if (getCoursesDto.category) {
+        courseQuery.andWhere('categories.slug = :category', {
+          category: getCoursesDto.category,
+        });
+      }
+
+      if (getCoursesDto.tag) {
+        courseQuery.andWhere('tags.slug = :tag', {
+          tag: getCoursesDto.tag,
+        });
+      }
+
+      if (getCoursesDto.page || getCoursesDto.limit) {
+        const result = await this.paginationProvider.paginateQueryBuilder(
+          {
+            limit: getCoursesDto.limit ?? 9,
+            page: getCoursesDto.page ?? 1,
+          },
+          courseQuery,
+        );
+
+        result.data = await this.attachCourseState(result.data, user);
+
+        return result;
+      }
+
       const courses = await courseQuery.getMany();
 
-      const mapped = this.mediaFileMappingService.mapCourses(courses);
-      if (!user) {
-        return mapped.map((c) => ({
-          ...c,
-          isEnrolled: false,
-          progress: null,
-        }));
-      }
-      const courseIds = mapped.map((c) => c.id);
-
-      const [enrollmentMap, progressMap] = await Promise.all([
-        this.enrollmentsService.checkMultipleEnrollments(user.sub, courseIds),
-        this.userProgressService.getMultipleCourseProgressSummary(
-          user,
-          courseIds,
-        ),
-      ]);
-
-      return mapped.map((course) => ({
-        ...course,
-        isEnrolled: enrollmentMap[course.id] ?? false,
-        progress: progressMap[course.id] ?? {
-          isCompleted: false,
-          progress: 0,
-          lastTime: 0,
-        },
-      }));
+      return this.attachCourseState(courses, user);
     }
 
     /**
@@ -178,6 +184,24 @@ export class CoursesService {
     if (getCoursesDto.endDate) {
       queryBuilder.andWhere('course.createdAt <= :endDate', {
         endDate: getCoursesDto.endDate,
+      });
+    }
+
+    if (getCoursesDto.mode) {
+      queryBuilder.andWhere('course.mode = :mode', {
+        mode: getCoursesDto.mode,
+      });
+    }
+
+    if (getCoursesDto.category) {
+      queryBuilder.andWhere('categories.slug = :category', {
+        category: getCoursesDto.category,
+      });
+    }
+
+    if (getCoursesDto.tag) {
+      queryBuilder.andWhere('tags.slug = :tag', {
+        tag: getCoursesDto.tag,
       });
     }
 
@@ -233,6 +257,21 @@ export class CoursesService {
     });
   }
 
+  async getPublicCourseOptions() {
+    return await this.courseRepository.find({
+      select: {
+        id: true,
+        title: true,
+      },
+      where: {
+        isPublished: true,
+      },
+      order: {
+        title: 'ASC',
+      },
+    });
+  }
+
   async findOneBySlug(slug: string, user?: ActiveUserData): Promise<Course> {
     return await this.findOneBySlugProvider.findOneBySlug(slug, user);
   }
@@ -241,8 +280,83 @@ export class CoursesService {
     return await this.findOneBySlugProvider.getCourseForLearning(slug, user);
   }
 
+  private async attachCourseStats(courses: Course[]) {
+    if (!courses.length) return courses;
+
+    const courseIds = courses.map((course) => course.id);
+    const reviewRows = await this.courseReviewRepository
+      .createQueryBuilder('review')
+      .select('review.courseId', 'id')
+      .addSelect('COUNT(review.id)', 'total')
+      .addSelect('AVG(review.rating)', 'average')
+      .where('review.courseId IN (:...courseIds)', { courseIds })
+      .andWhere('review.isPublished = true')
+      .groupBy('review.courseId')
+      .getRawMany<{ id: string; total: string; average: string }>();
+
+    const reviewMap = new Map(
+      reviewRows.map((row) => [
+        Number(row.id),
+        {
+          totalReviews: Number(row.total || 0),
+          averageRating: Number(Number(row.average || 0).toFixed(1)),
+        },
+      ]),
+    );
+
+    return courses.map((course) =>
+      Object.assign(course, {
+        totalReviews: reviewMap.get(course.id)?.totalReviews || 0,
+        averageRating: reviewMap.get(course.id)?.averageRating || 0,
+      }),
+    );
+  }
+
+  private async attachCourseState(courses: Course[], user?: ActiveUserData) {
+    const coursesWithStats = await this.attachCourseStats(courses);
+    const mapped = this.mediaFileMappingService.mapCourses(coursesWithStats);
+    if (!user) {
+      return mapped.map((c) => ({
+        ...c,
+        isEnrolled: false,
+        progress: null,
+      }));
+    }
+    const courseIds = mapped.map((c) => c.id);
+
+    const [enrollmentMap, progressMap] = await Promise.all([
+      this.enrollmentsService.checkMultipleEnrollments(user.sub, courseIds),
+      this.userProgressService.getMultipleCourseProgressSummary(
+        user,
+        courseIds,
+      ),
+    ]);
+
+    return mapped.map((course) => ({
+      ...course,
+      isEnrolled: enrollmentMap[course.id] ?? false,
+      progress: progressMap[course.id] ?? {
+        isCompleted: false,
+        progress: 0,
+        lastTime: 0,
+      },
+    }));
+  }
+
   async getFeaturedCourses(user?: ActiveUserData) {
     return await this.getFeaturedCoursesProvider.getFeaturedCourses(user);
+  }
+
+  async getHeroCourses(user?: ActiveUserData) {
+    return await this.getFeaturedCoursesProvider.getHeroCourses(user);
+  }
+
+  async getPopularCourses(user?: ActiveUserData) {
+    return await this.getFeaturedCoursesProvider.getPopularCourses(user);
+  }
+
+  async getMegaMenuCourses(user?: ActiveUserData) {
+    return await this.getFeaturedCoursesProvider.getMegaMenuCourses(user);
   }
 
   async getRelatedCourses(courseId: number, user?: ActiveUserData) {
@@ -336,6 +450,9 @@ export class CoursesService {
           video: sourceCourse.video ?? null,
           isFree: sourceCourse.isFree,
           isFeatured: false,
+          showInHero: false,
+          showInPopular: false,
+          showInMegaMenu: false,
           isPublished: false,
           priceInr: sourceCourse.priceInr,
           priceUsd: sourceCourse.priceUsd,

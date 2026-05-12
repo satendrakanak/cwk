@@ -36,38 +36,39 @@ export default async function Home() {
     redirect("/install");
   }
 
-  try {
-    const [
-      coursesResponse,
-      articlesResponse,
-      testimonialsResponse,
-      facultiesResponse,
-    ] = await Promise.all([
-      courseServerService.getPopularCourses(),
-      articleServerService.getAll(),
-      testimonialServerService.getFeatured(6),
-      userServerService.getFaculties(),
-    ]);
-
-    const courses: Course[] = coursesResponse.data;
-    const articles: Article[] = articlesResponse.data;
-    const testimonials: Testimonial[] = testimonialsResponse.data;
-    const faculties: User[] = facultiesResponse.data;
-
-    return (
-      <div>
-        <Hero courses={courses} />
-        <StatsTimeline />
-        <WhyJoinOurCourses />
-        <PopularCourses courses={courses} />
-        <HowItWorks />
-        <FeaturedTestimonialsSection testimonials={testimonials} />
-        <Faculty faculties={faculties} />
-        <ArticlesSection articles={articles} />
-      </div>
-    );
-  } catch (error) {
+  const [
+    heroCoursesResponse,
+    popularCoursesResponse,
+    articlesResponse,
+    testimonialsResponse,
+    facultiesResponse,
+  ] = await Promise.all([
+    courseServerService.getHeroCourses(),
+    courseServerService.getPopularCourses(),
+    articleServerService.getFeaturedArticles(),
+    testimonialServerService.getFeatured(6),
+    userServerService.getFaculties(),
+  ]).catch((error) => {
     const message = getErrorMessage(error);
     throw new Error(message);
-  }
+  });
+
+  const heroCourses: Course[] = heroCoursesResponse.data;
+  const popularCourses: Course[] = popularCoursesResponse.data;
+  const articles: Article[] = articlesResponse.data;
+  const testimonials: Testimonial[] = testimonialsResponse.data;
+  const faculties: User[] = facultiesResponse.data;
+
+  return (
+    <div>
+      <Hero courses={heroCourses} />
+      <StatsTimeline />
+      <WhyJoinOurCourses />
+      <PopularCourses courses={popularCourses} />
+      <HowItWorks />
+      <FeaturedTestimonialsSection testimonials={testimonials} />
+      <Faculty faculties={faculties} />
+      <ArticlesSection articles={articles} />
+    </div>
+  );
 }

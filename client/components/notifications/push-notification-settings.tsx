@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BellRing, Loader2 } from "lucide-react";
+import { BellRing, Loader } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -180,7 +180,7 @@ export function PushNotificationSettings() {
               disabled={isTesting}
               onClick={handleSendTestPush}
             >
-              {isTesting ? <Loader2 className="size-4 animate-spin" /> : null}
+              {isTesting ? <Loader className="size-4 animate-spin" /> : null}
               Send test push
             </Button>
             <Button
@@ -189,7 +189,7 @@ export function PushNotificationSettings() {
               disabled={isSaving}
               onClick={handleDisable}
             >
-              {isSaving ? <Loader2 className="size-4 animate-spin" /> : null}
+              {isSaving ? <Loader className="size-4 animate-spin" /> : null}
               Disable push
             </Button>
           </div>
@@ -199,7 +199,7 @@ export function PushNotificationSettings() {
             disabled={!supported || !isEnabled || isSaving}
             onClick={handleEnable}
           >
-            {isSaving ? <Loader2 className="size-4 animate-spin" /> : null}
+            {isSaving ? <Loader className="size-4 animate-spin" /> : null}
             Enable push
           </Button>
         )}

@@ -6,9 +6,14 @@ import { MediaFileMappingService } from 'src/common/media-file-mapping/providers
 import { EnrollmentsService } from 'src/enrollments/providers/enrollments.service';
 import { UserProgressService } from 'src/user-progress/providers/user-progress.service';
 import { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
+import { CourseReview } from 'src/course-reviews/course-review.entity';
 
 @Injectable()
 export class GetFeaturedCoursesProvider {
+  private readonly heroCourseLimit = 3;
+  private readonly popularCourseLimit = 6;
+  private readonly megaMenuCourseLimit = 6;
+
   constructor(
     /**
      * Inject courseRepository
@@ -16,6 +21,9 @@ export class GetFeaturedCoursesProvider {
 
     @InjectRepository(Course)
     private readonly courseRepository: Repository<Course>,
+
+    @InjectRepository(CourseReview)
+    private readonly courseReviewRepository: Repository<CourseReview>,
 
     /**
      * Inject mediaFileMappingService
@@ -33,9 +41,41 @@ export class GetFeaturedCoursesProvider {
   ) {}
 
   async getFeaturedCourses(user?: ActiveUserData) {
-    const courses = await this.courseRepository.find({
+    return this.getCoursesByFlag('isFeatured', undefined, user);
+  }
+
+  async getHeroCourses(user?: ActiveUserData) {
+    return this.getCoursesByFlag(
+      'showInHero',
+      this.heroCourseLimit,
+      user,
+    );
+  }
+
+  async getPopularCourses(user?: ActiveUserData) {
+    return this.getCoursesByFlag(
+      'showInPopular',
+      this.popularCourseLimit,
+      user,
+    );
+  }
+
+  async getMegaMenuCourses(user?: ActiveUserData) {
+    return this.getCoursesByFlag(
+      'showInMegaMenu',
+      this.megaMenuCourseLimit,
+      user,
+    );
+  }
+
+  private async getCoursesByFlag(
+    flag: 'isFeatured' | 'showInHero' | 'showInPopular' | 'showInMegaMenu',
+    limit?: number,
+    user?: ActiveUserData,
+  ) {
+    let courses = await this.courseRepository.find({
       where: {
-        isFeatured: true,
+        [flag]: true,
         isPublished: true,
       },
       relations: [
@@ -45,18 +85,37 @@ export class GetFeaturedCoursesProvider {
         'video',
         'categories',
         'tags',
-        'chapters',
-        'chapters.lectures',
-        'chapters.lectures.video',
-        'chapters.lectures.attachments',
-        'chapters.lectures.attachments.file',
       ],
       order: {
         createdAt: 'DESC',
       },
+      take: limit,
     });
 
-    const mapped = this.mediaFileMappingService.mapCourses(courses);
+    if (!courses.length && flag === 'showInMegaMenu') {
+      courses = await this.courseRepository.find({
+        where: {
+          isPublished: true,
+        },
+        relations: [
+          'createdBy',
+          'updatedBy',
+          'image',
+          'video',
+          'categories',
+          'tags',
+        ],
+        order: {
+          showInPopular: 'DESC',
+          showInHero: 'DESC',
+          createdAt: 'DESC',
+        },
+        take: limit,
+      });
+    }
+
+    const coursesWithStats = await this.attachCourseStats(courses);
+    const mapped = this.mediaFileMappingService.mapCourses(coursesWithStats);
     if (!user) {
       return mapped.map((c) => ({
         ...c,
@@ -82,5 +141,37 @@ export class GetFeaturedCoursesProvider {
         lastTime: 0,
       },
     }));
+  }
+
+  private async attachCourseStats(courses: Course[]) {
+    if (!courses.length) return courses;
+
+    const courseIds = courses.map((course) => course.id);
+    const reviewRows = await this.courseReviewRepository
+      .createQueryBuilder('review')
+      .select('review.courseId', 'id')
+      .addSelect('COUNT(review.id)', 'total')
+      .addSelect('AVG(review.rating)', 'average')
+      .where('review.courseId IN (:...courseIds)', { courseIds })
+      .andWhere('review.isPublished = true')
+      .groupBy('review.courseId')
+      .getRawMany<{ id: string; total: string; average: string }>();
+
+    const reviewMap = new Map(
+      reviewRows.map((row) => [
+        Number(row.id),
+        {
+          totalReviews: Number(row.total || 0),
+          averageRating: Number(Number(row.average || 0).toFixed(1)),
+        },
+      ]),
+    );
+
+    return courses.map((course) =>
+      Object.assign(course, {
+        totalReviews: reviewMap.get(course.id)?.totalReviews || 0,
+        averageRating: reviewMap.get(course.id)?.averageRating || 0,
+      }),
+    );
   }
 }

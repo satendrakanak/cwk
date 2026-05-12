@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState, useTransition } from "react";
-import { Loader2, MailCheck, AlertCircle } from "lucide-react";
+import { Loader, MailCheck, AlertCircle } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { CardWrapper } from "@/components/auth/card-wrapper";
@@ -61,7 +61,7 @@ export const VerificationForm = () => {
         {!success && !error ? (
           <>
             <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-primary/10 text-primary ring-1 ring-primary/15">
-              <Loader2 className="h-10 w-10 animate-spin" />
+              <Loader className="h-10 w-10 animate-spin" />
             </div>
 
             <h2 className="text-2xl font-semibold text-foreground">

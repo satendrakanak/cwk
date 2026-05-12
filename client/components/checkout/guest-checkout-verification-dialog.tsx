@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Loader2, MailCheck } from "lucide-react";
+import { Loader, MailCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -106,7 +106,7 @@ export function GuestCheckoutVerificationDialog({
             className="h-11 rounded-full border-slate-200 bg-white px-5 font-semibold text-slate-700 hover:bg-slate-100 dark:border-white/10 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/15"
           >
             {isResending ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader className="mr-2 h-4 w-4 animate-spin" />
             ) : null}
             Resend code
           </Button>
@@ -118,7 +118,7 @@ export function GuestCheckoutVerificationDialog({
             className="h-11 rounded-full bg-blue-600 px-5 font-semibold text-white shadow-[0_14px_35px_rgba(37,99,235,0.24)] hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-rose-200 dark:text-black dark:hover:bg-rose-300"
           >
             {isSubmitting ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader className="mr-2 h-4 w-4 animate-spin" />
             ) : null}
             Verify and continue
           </Button>

@@ -6,6 +6,8 @@ import {
 import { Course } from '../course.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Chapter } from 'src/chapters/chapter.entity';
+import { FacultyReview } from 'src/faculty-reviews/faculty-review.entity';
 import { MediaFileMappingService } from 'src/common/media-file-mapping/providers/media-file-mapping.service';
 import { EnrollmentsService } from 'src/enrollments/providers/enrollments.service';
 import { UserProgressService } from 'src/user-progress/providers/user-progress.service';
@@ -24,6 +26,12 @@ export class FindOneBySlugProvider {
 
     @InjectRepository(Course)
     private readonly courseRepository: Repository<Course>,
+
+    @InjectRepository(Chapter)
+    private readonly chapterRepository: Repository<Chapter>,
+
+    @InjectRepository(FacultyReview)
+    private readonly facultyReviewRepository: Repository<FacultyReview>,
 
     /**
      * Inject mediaFileMappingService
@@ -48,10 +56,11 @@ export class FindOneBySlugProvider {
   ): Promise<CourseWithAccess> {
     const course = await this.courseRepository
       .createQueryBuilder('course')
-
-      // 🔥 RELATIONS
       .leftJoinAndSelect('course.createdBy', 'createdBy')
+      .leftJoinAndSelect('createdBy.avatar', 'createdByAvatar')
       .leftJoinAndSelect('course.updatedBy', 'updatedBy')
+      .leftJoinAndSelect('updatedBy.avatar', 'updatedByAvatar')
+      .leftJoinAndSelect('updatedBy.roles', 'updatedByRoles')
       .leftJoinAndSelect('course.image', 'image')
       .leftJoinAndSelect('course.video', 'video')
       .leftJoinAndSelect('course.categories', 'categories')
@@ -60,43 +69,82 @@ export class FindOneBySlugProvider {
       .leftJoinAndSelect('faculties.avatar', 'facultyAvatar')
       .leftJoinAndSelect('faculties.facultyProfile', 'facultyProfile')
       .leftJoinAndSelect('faculties.profile', 'profile')
-
-      // 🔥 CHAPTERS (ONLY PUBLISHED)
-      .leftJoinAndSelect(
-        'course.chapters',
-        'chapters',
-        'chapters.isPublished = :chapterPublished',
-        { chapterPublished: true },
+      .loadRelationCountAndMap(
+        'faculties.taughtCoursesCount',
+        'faculties.taughtCourses',
+        'facultyCourses',
+        (qb) =>
+          qb.andWhere('facultyCourses.isPublished = :facultyCoursePublished', {
+            facultyCoursePublished: true,
+          }),
       )
-
-      // 🔥 LECTURES (ONLY PUBLISHED)
-      .leftJoinAndSelect(
-        'chapters.lectures',
-        'lectures',
-        'lectures.isPublished = :lecturePublished',
-        { lecturePublished: true },
+      .loadRelationCountAndMap(
+        'course.enrollmentCount',
+        'course.enrollments',
+        'enrollment',
+        (qb) =>
+          qb.andWhere('enrollment.isActive = :enrollmentActive', {
+            enrollmentActive: true,
+          }),
       )
-
-      // 🔥 NESTED RELATIONS
-      .leftJoinAndSelect('lectures.video', 'lectureVideo')
-      .leftJoinAndSelect('lectures.attachments', 'attachments')
-      .leftJoinAndSelect('attachments.file', 'file')
-
-      // 🔥 COURSE FILTER
       .where('course.slug = :slug', { slug })
       .andWhere('course.isPublished = :coursePublished', {
         coursePublished: true,
       })
-
-      // 🔥 ORDERING
-      .orderBy('chapters.position', 'ASC')
-      .addOrderBy('lectures.position', 'ASC')
-
       .getOne();
 
     if (!course) {
       throw new NotFoundException('Course not found');
     }
+
+    course.chapters = await this.chapterRepository
+      .createQueryBuilder('chapter')
+      .leftJoinAndSelect(
+        'chapter.lectures',
+        'lectures',
+        'lectures.isPublished = :lecturePublished',
+        { lecturePublished: true },
+      )
+      .leftJoinAndSelect('lectures.video', 'lectureVideo')
+      .leftJoinAndSelect('lectures.attachments', 'attachments')
+      .leftJoinAndSelect('attachments.file', 'file')
+      .where('chapter.courseId = :courseId', { courseId: course.id })
+      .andWhere('chapter.isPublished = :chapterPublished', {
+        chapterPublished: true,
+      })
+      .orderBy('chapter.position', 'ASC')
+      .addOrderBy('lectures.position', 'ASC')
+      .getMany();
+
+    if (course.faculties?.length) {
+      const facultyIds = course.faculties.map((faculty) => faculty.id);
+      const reviewRows = await this.facultyReviewRepository
+        .createQueryBuilder('review')
+        .select('review.facultyId', 'id')
+        .addSelect('COUNT(review.id)', 'total')
+        .addSelect('AVG(review.rating)', 'average')
+        .where('review.facultyId IN (:...facultyIds)', { facultyIds })
+        .andWhere('review.isPublished = true')
+        .groupBy('review.facultyId')
+        .getRawMany<{ id: string; total: string; average: string }>();
+      const reviewMap = new Map(
+        reviewRows.map((row) => [
+          Number(row.id),
+          {
+            totalReviews: Number(row.total || 0),
+            averageRating: Number(Number(row.average || 0).toFixed(1)),
+          },
+        ]),
+      );
+
+      course.faculties = course.faculties.map((faculty) =>
+        Object.assign(faculty, {
+          totalReviews: reviewMap.get(faculty.id)?.totalReviews || 0,
+          averageRating: reviewMap.get(faculty.id)?.averageRating || 0,
+        }),
+      );
+    }
+
     const mappedCourse = this.mediaFileMappingService.mapCourse(course);
     let isEnrolled = false;
     let progress: CourseProgress = {

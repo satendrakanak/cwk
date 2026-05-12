@@ -44,11 +44,11 @@ const VideoPlayIcon = ({
       >
         {canPreview ? (
           <>
-            <span className="absolute h-20 w-20 rounded-full border-2 border-primary-foreground/70 bg-primary-foreground/10 animate-ping" />
+            <span className="absolute h-20 w-20 rounded-full border-2 border-primary bg-primary-foreground/10 animate-ping" />
 
             <IoMdPlayCircle
               className={cn(
-                "relative z-10 h-20 w-20 text-primary-foreground drop-shadow-[0_12px_32px_rgba(0,0,0,0.35)] transition-transform group-hover:scale-110",
+                "relative z-10 h-20 w-20 text-primary drop-shadow-[0_12px_32px_rgba(0,0,0,0.35)] transition-transform group-hover:scale-110",
                 className,
               )}
             />

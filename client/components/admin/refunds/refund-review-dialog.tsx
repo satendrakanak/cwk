@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2 } from "lucide-react";
+import { Loader } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -245,7 +245,7 @@ export function RefundReviewDialog({
             >
               {isSyncing ? (
                 <>
-                  <Loader2 className="size-4 animate-spin" />
+                  <Loader className="size-4 animate-spin" />
                   Syncing
                 </>
               ) : (
@@ -263,7 +263,7 @@ export function RefundReviewDialog({
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
-                  <Loader2 className="size-4 animate-spin" />
+                  <Loader className="size-4 animate-spin" />
                 ) : null}
                 Reject
               </Button>
@@ -274,7 +274,7 @@ export function RefundReviewDialog({
               >
                 {isSubmitting ? (
                   <>
-                    <Loader2 className="size-4 animate-spin" />
+                    <Loader className="size-4 animate-spin" />
                     Processing
                   </>
                 ) : (

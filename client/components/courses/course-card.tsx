@@ -3,7 +3,16 @@
 import { Course } from "@/types/course";
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart, Check } from "lucide-react";
+import {
+  BookOpen,
+  Check,
+  MonitorPlay,
+  RadioTower,
+  ShoppingCart,
+  SplitSquareHorizontal,
+  Star,
+  Tags,
+} from "lucide-react";
 import { useCartStore } from "@/store/cart-store";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -47,14 +56,21 @@ const getInstructorLabel = (course: Course) => {
 
 export function CourseCard({ course, coupon }: CourseCardProps) {
   const addToCart = useCartStore((s) => s.addToCart);
-  const [meta, setMeta] = useState({
+  const [meta, setMeta] = useState<{
+    totalLectures: number;
+    totalDuration: string;
+  } | null>({
     totalLectures: 0,
-    totalDuration: "0m",
+    totalDuration: course.duration || "0m",
   });
 
   const router = useRouter();
 
   useEffect(() => {
+    if (!course.chapters?.length) {
+      return;
+    }
+
     const loadMeta = async () => {
       const data = await getCourseMeta(course);
       setMeta(data);
@@ -72,10 +88,23 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
   const delivery = getCourseDeliveryLabel(course.mode);
   const recordedLearning = hasRecordedLearning(course);
   const liveClasses = hasLiveClasses(course);
+  const totalLectures = meta?.totalLectures ?? 0;
+  const totalDuration = meta?.totalDuration || course.duration || "Self-paced";
   const basePrice = Number(course.priceInr);
   const finalPrice = coupon?.finalAmount ?? basePrice;
   const discount = coupon?.discount ?? 0;
   const couponCode = coupon?.code;
+  const modeIcon =
+    course.mode === "faculty_led"
+      ? RadioTower
+      : course.mode === "hybrid"
+        ? SplitSquareHorizontal
+        : MonitorPlay;
+  const ModeIcon = modeIcon;
+  const primaryCategory = course.categories?.[0];
+  const visibleTags = course.tags?.slice(0, 2) || [];
+  const averageRating = course.averageRating || 0;
+  const totalReviews = course.totalReviews || 0;
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -89,8 +118,8 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
       price: Number(course.priceInr),
       image: course.image?.path,
       instructor: getInstructorLabel(course),
-      totalDuration: meta.totalDuration,
-      totalLectures: meta.totalLectures,
+      totalDuration,
+      totalLectures,
       slug: course.slug,
     });
 
@@ -112,6 +141,7 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
             src={course.image?.path || "/assets/default.png"}
             alt={course.imageAlt || course.title}
             fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
             className="object-cover transition duration-500 group-hover:scale-105"
           />
         </Link>
@@ -125,6 +155,13 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
         >
           {isEnrolled ? "Enrolled" : delivery.shortLabel}
         </span>
+
+        {primaryCategory ? (
+          <span className="absolute bottom-3 left-3 inline-flex max-w-[calc(100%-1.5rem)] items-center gap-1.5 rounded-full border border-white/15 bg-background/90 px-3 py-1 text-xs font-semibold text-foreground shadow-sm backdrop-blur-md">
+            <BookOpen className="h-3.5 w-3.5 text-primary" />
+            <span className="truncate">{primaryCategory.name}</span>
+          </span>
+        ) : null}
       </div>
 
       {/* CONTENT */}
@@ -139,15 +176,38 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
           {course.shortDescription}
         </p>
 
-        <div className="mb-3 text-sm text-yellow-500">
-          ⭐⭐⭐⭐⭐ <span className="text-muted-foreground">(120)</span>
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+            <ModeIcon className="h-3.5 w-3.5" />
+            {delivery.shortLabel}
+          </span>
+
+          {visibleTags.map((tag) => (
+            <span
+              key={tag.id}
+              className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground"
+            >
+              <Tags className="h-3 w-3 text-primary" />
+              {tag.name}
+            </span>
+          ))}
+        </div>
+
+        <div className="mb-3 flex items-center gap-1.5 text-sm">
+          <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+          <span className="font-semibold text-card-foreground">
+            {averageRating.toFixed(1)}
+          </span>
+          <span className="text-muted-foreground">({totalReviews})</span>
         </div>
 
         <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
           {recordedLearning ? (
             <>
-              <span>🎬 {meta.totalLectures} lectures</span>
-              <span>⏱ {meta.totalDuration}</span>
+              {totalLectures > 0 ? (
+                <span>🎬 {totalLectures} lectures</span>
+              ) : null}
+              <span>⏱ {totalDuration}</span>
             </>
           ) : null}
           {liveClasses ? <span>📅 Live batches</span> : null}

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { ComponentProps } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Video } from "lucide-react";
+import { Loader, Video } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -44,7 +44,7 @@ export function OpenClassroomButton({
       }}
     >
       {opening ? (
-        <Loader2 className="size-4 animate-spin" />
+        <Loader className="size-4 animate-spin" />
       ) : (
         <Video className="size-4" />
       )}

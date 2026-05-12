@@ -6,34 +6,426 @@
     "email": "admin@codewithkasa.demo",
     "phoneNumber": "+919900000001",
     "role": "admin",
-    "avatarUrl": "/assets/faculty-1.jpg"
+    "avatarUrl": "/assets/users/user-boy-01.webp"
   },
   {
     "firstName": "Meera",
     "lastName": "Sharma",
-    "username": "demo-faculty-meera",
+    "username": "demo-faculty-meera-1",
     "email": "faculty@codewithkasa.demo",
     "phoneNumber": "+919900000002",
     "role": "faculty",
-    "avatarUrl": "/assets/faculty-2.jpg",
+    "avatarUrl": "/assets/users/user-girl-01.webp",
     "facultyProfile": {
       "expertise": "Frontend development, UI systems, and live project mentoring",
       "designation": "Senior Faculty - Web Development",
-      "experience": "8+ years teaching practical web development"
+      "experience": "7+ years in teaching and industry mentoring"
     }
   },
   {
     "firstName": "Kabir",
     "lastName": "Malhotra",
-    "username": "demo-faculty-kabir",
+    "username": "demo-faculty-kabir-2",
     "email": "mentor@codewithkasa.demo",
     "phoneNumber": "+919900000003",
     "role": "faculty",
-    "avatarUrl": "/assets/faculty-3.jpg",
+    "avatarUrl": "/assets/users/user-boy-02.webp",
     "facultyProfile": {
       "expertise": "Digital marketing, analytics, spoken communication, and career coaching",
       "designation": "Faculty Mentor",
-      "experience": "10+ years across training and growth operations"
+      "experience": "8+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Anika",
+    "lastName": "Rao",
+    "username": "demo-faculty-anika-3",
+    "email": "faculty03@codewithkasa.demo",
+    "phoneNumber": "+919900000004",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-girl-02.webp",
+    "facultyProfile": {
+      "expertise": "React, Next.js, accessibility, and frontend architecture",
+      "designation": "Lead React Faculty",
+      "experience": "9+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Dev",
+    "lastName": "Iyer",
+    "username": "demo-faculty-dev-4",
+    "email": "faculty04@codewithkasa.demo",
+    "phoneNumber": "+919900000005",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-03.webp",
+    "facultyProfile": {
+      "expertise": "JavaScript fundamentals, TypeScript, and practical problem solving",
+      "designation": "JavaScript Faculty",
+      "experience": "10+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Sana",
+    "lastName": "Khan",
+    "username": "demo-faculty-sana-5",
+    "email": "faculty05@codewithkasa.demo",
+    "phoneNumber": "+919900000006",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-girl-03.webp",
+    "facultyProfile": {
+      "expertise": "Python, data analysis, dashboards, and business reporting",
+      "designation": "Data Analytics Faculty",
+      "experience": "11+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Raghav",
+    "lastName": "Menon",
+    "username": "demo-faculty-raghav-6",
+    "email": "faculty06@codewithkasa.demo",
+    "phoneNumber": "+919900000007",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-04.webp",
+    "facultyProfile": {
+      "expertise": "Node.js, NestJS, APIs, authentication, and backend workflows",
+      "designation": "Backend Engineering Faculty",
+      "experience": "12+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Priya",
+    "lastName": "Nair",
+    "username": "demo-faculty-priya-7",
+    "email": "faculty07@codewithkasa.demo",
+    "phoneNumber": "+919900000008",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-girl-04.webp",
+    "facultyProfile": {
+      "expertise": "UI UX design, product thinking, Figma, and design systems",
+      "designation": "UI UX Faculty",
+      "experience": "13+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Vikram",
+    "lastName": "Sethi",
+    "username": "demo-faculty-vikram-8",
+    "email": "faculty08@codewithkasa.demo",
+    "phoneNumber": "+919900000009",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-05.webp",
+    "facultyProfile": {
+      "expertise": "DevOps basics, Docker, CI/CD, and cloud deployment practice",
+      "designation": "DevOps Faculty",
+      "experience": "14+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Aditi",
+    "lastName": "Bose",
+    "username": "demo-faculty-aditi-9",
+    "email": "faculty09@codewithkasa.demo",
+    "phoneNumber": "+919900000010",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-06.webp",
+    "facultyProfile": {
+      "expertise": "DSA foundations, interview practice, and coding discipline",
+      "designation": "DSA Faculty",
+      "experience": "15+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Naman",
+    "lastName": "Gupta",
+    "username": "demo-faculty-naman-10",
+    "email": "faculty10@codewithkasa.demo",
+    "phoneNumber": "+919900000011",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-07.webp",
+    "facultyProfile": {
+      "expertise": "Full stack project building, code reviews, and portfolio mentoring",
+      "designation": "Full Stack Faculty",
+      "experience": "7+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Tara",
+    "lastName": "Mehta",
+    "username": "demo-faculty-tara-11",
+    "email": "faculty11@codewithkasa.demo",
+    "phoneNumber": "+919900000012",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-08.webp",
+    "facultyProfile": {
+      "expertise": "Cybersecurity awareness, secure coding, and web application basics",
+      "designation": "Security Faculty",
+      "experience": "8+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Ishaan",
+    "lastName": "Kapoor",
+    "username": "demo-faculty-ishaan-12",
+    "email": "faculty12@codewithkasa.demo",
+    "phoneNumber": "+919900000013",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-09.webp",
+    "facultyProfile": {
+      "expertise": "Database design, SQL, Postgres, and query optimization",
+      "designation": "Database Faculty",
+      "experience": "9+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Leena",
+    "lastName": "Thomas",
+    "username": "demo-faculty-leena-13",
+    "email": "faculty13@codewithkasa.demo",
+    "phoneNumber": "+919900000014",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-10.webp",
+    "facultyProfile": {
+      "expertise": "Quality assurance, automation testing, Playwright, and test strategy",
+      "designation": "QA Automation Faculty",
+      "experience": "10+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Arnav",
+    "lastName": "Bansal",
+    "username": "demo-faculty-arnav-14",
+    "email": "faculty14@codewithkasa.demo",
+    "phoneNumber": "+919900000015",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-11.webp",
+    "facultyProfile": {
+      "expertise": "Git, GitHub workflows, teamwork, and developer productivity",
+      "designation": "Developer Tools Faculty",
+      "experience": "11+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Kavya",
+    "lastName": "Joshi",
+    "username": "demo-faculty-kavya-15",
+    "email": "faculty15@codewithkasa.demo",
+    "phoneNumber": "+919900000016",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-girl-05.webp",
+    "facultyProfile": {
+      "expertise": "Mobile app fundamentals, React Native, and app publishing basics",
+      "designation": "Mobile Development Faculty",
+      "experience": "12+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Rehan",
+    "lastName": "Ali",
+    "username": "demo-faculty-rehan-16",
+    "email": "faculty16@codewithkasa.demo",
+    "phoneNumber": "+919900000017",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-12.webp",
+    "facultyProfile": {
+      "expertise": "Cloud fundamentals, AWS services, and production readiness",
+      "designation": "Cloud Faculty",
+      "experience": "13+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Maya",
+    "lastName": "Saxena",
+    "username": "demo-faculty-maya-17",
+    "email": "faculty17@codewithkasa.demo",
+    "phoneNumber": "+919900000018",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-01.webp",
+    "facultyProfile": {
+      "expertise": "AI tools for developers, prompt workflows, and productivity systems",
+      "designation": "AI Tools Faculty",
+      "experience": "14+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Om",
+    "lastName": "Patel",
+    "username": "demo-faculty-om-18",
+    "email": "faculty18@codewithkasa.demo",
+    "phoneNumber": "+919900000019",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-02.webp",
+    "facultyProfile": {
+      "expertise": "Web performance, Lighthouse, bundle analysis, and Core Web Vitals",
+      "designation": "Performance Faculty",
+      "experience": "15+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Neha",
+    "lastName": "Chauhan",
+    "username": "demo-faculty-neha-19",
+    "email": "faculty19@codewithkasa.demo",
+    "phoneNumber": "+919900000020",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-girl-06.webp",
+    "facultyProfile": {
+      "expertise": "Career preparation, resumes, interviews, and communication practice",
+      "designation": "Career Mentor",
+      "experience": "7+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Harsh",
+    "lastName": "Agarwal",
+    "username": "demo-faculty-harsh-20",
+    "email": "faculty20@codewithkasa.demo",
+    "phoneNumber": "+919900000021",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-03.webp",
+    "facultyProfile": {
+      "expertise": "Java backend foundations, Spring Boot, and API design",
+      "designation": "Java Faculty",
+      "experience": "8+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Ritika",
+    "lastName": "Sen",
+    "username": "demo-faculty-ritika-21",
+    "email": "faculty21@codewithkasa.demo",
+    "phoneNumber": "+919900000022",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-04.webp",
+    "facultyProfile": {
+      "expertise": "Product analytics, funnels, experimentation, and reporting dashboards",
+      "designation": "Product Analytics Faculty",
+      "experience": "9+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Yash",
+    "lastName": "Arora",
+    "username": "demo-faculty-yash-22",
+    "email": "faculty22@codewithkasa.demo",
+    "phoneNumber": "+919900000023",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-05.webp",
+    "facultyProfile": {
+      "expertise": "WordPress, no-code workflows, SEO setup, and small business websites",
+      "designation": "No-Code Faculty",
+      "experience": "10+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Simran",
+    "lastName": "Gill",
+    "username": "demo-faculty-simran-23",
+    "email": "faculty23@codewithkasa.demo",
+    "phoneNumber": "+919900000024",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-girl-07.webp",
+    "facultyProfile": {
+      "expertise": "Spoken English, workplace communication, and presentation confidence",
+      "designation": "Communication Faculty",
+      "experience": "11+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Kunal",
+    "lastName": "Verma",
+    "username": "demo-faculty-kunal-24",
+    "email": "faculty24@codewithkasa.demo",
+    "phoneNumber": "+919900000025",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-06.webp",
+    "facultyProfile": {
+      "expertise": "Microservices basics, API contracts, and service design",
+      "designation": "Backend Mentor",
+      "experience": "12+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Pooja",
+    "lastName": "Mishra",
+    "username": "demo-faculty-pooja-25",
+    "email": "faculty25@codewithkasa.demo",
+    "phoneNumber": "+919900000026",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-girl-08.webp",
+    "facultyProfile": {
+      "expertise": "Excel, SQL, BI reports, and beginner analytics workflows",
+      "designation": "BI Faculty",
+      "experience": "13+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Rohan",
+    "lastName": "Desai",
+    "username": "demo-faculty-rohan-26",
+    "email": "faculty26@codewithkasa.demo",
+    "phoneNumber": "+919900000027",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-07.webp",
+    "facultyProfile": {
+      "expertise": "System design fundamentals, scaling basics, and architecture thinking",
+      "designation": "System Design Faculty",
+      "experience": "14+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Ira",
+    "lastName": "Mukherjee",
+    "username": "demo-faculty-ira-27",
+    "email": "faculty27@codewithkasa.demo",
+    "phoneNumber": "+919900000028",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-girl-09.webp",
+    "facultyProfile": {
+      "expertise": "Content strategy, technical writing, and developer documentation",
+      "designation": "Technical Writing Faculty",
+      "experience": "15+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Manav",
+    "lastName": "Chopra",
+    "username": "demo-faculty-manav-28",
+    "email": "faculty28@codewithkasa.demo",
+    "phoneNumber": "+919900000029",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-08.webp",
+    "facultyProfile": {
+      "expertise": "Freelancing workflows, client delivery, and project estimation",
+      "designation": "Freelance Mentor",
+      "experience": "7+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Zoya",
+    "lastName": "Qureshi",
+    "username": "demo-faculty-zoya-29",
+    "email": "faculty29@codewithkasa.demo",
+    "phoneNumber": "+919900000030",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-09.webp",
+    "facultyProfile": {
+      "expertise": "E-commerce stores, checkout UX, and marketing automation",
+      "designation": "E-commerce Faculty",
+      "experience": "8+ years in teaching and industry mentoring"
+    }
+  },
+  {
+    "firstName": "Parth",
+    "lastName": "Trivedi",
+    "username": "demo-faculty-parth-30",
+    "email": "faculty30@codewithkasa.demo",
+    "phoneNumber": "+919900000031",
+    "role": "faculty",
+    "avatarUrl": "/assets/users/user-boy-10.webp",
+    "facultyProfile": {
+      "expertise": "Computer science basics, logic building, and beginner-friendly coding",
+      "designation": "Foundation Coding Faculty",
+      "experience": "9+ years in teaching and industry mentoring"
     }
   },
   {
@@ -41,9 +433,8 @@
     "lastName": "Verma",
     "username": "demo-learner",
     "email": "learner@codewithkasa.demo",
-    "phoneNumber": "+919900000004",
-    "role": "student",
-    "avatarUrl": "/assets/guest-user.webp",
+    "phoneNumber": "+919901000001",
+    "avatarUrl": "/assets/users/user-girl-10.webp",
     "headline": "Frontend learner"
   },
   {
@@ -51,9 +442,161 @@
     "lastName": "Singh",
     "username": "demo-learner-arjun",
     "email": "arjun@codewithkasa.demo",
-    "phoneNumber": "+919900000005",
-    "role": "student",
-    "avatarUrl": "/assets/guest-user.webp",
+    "phoneNumber": "+919901000002",
+    "avatarUrl": "/assets/users/user-boy-11.webp",
     "headline": "Hybrid program learner"
+  },
+  {
+    "firstName": "Nisha",
+    "lastName": "Mehta",
+    "username": "demo-student-nisha-3",
+    "email": "student03@codewithkasa.demo",
+    "phoneNumber": "+919901000003",
+    "avatarUrl": "/assets/users/user-girl-11.webp",
+    "headline": "Career switcher"
+  },
+  {
+    "firstName": "Rohit",
+    "lastName": "Bansal",
+    "username": "demo-student-rohit-4",
+    "email": "student04@codewithkasa.demo",
+    "phoneNumber": "+919901000004",
+    "avatarUrl": "/assets/users/user-boy-12.webp",
+    "headline": "Junior developer"
+  },
+  {
+    "firstName": "Ananya",
+    "lastName": "Rao",
+    "username": "demo-student-ananya-5",
+    "email": "student05@codewithkasa.demo",
+    "phoneNumber": "+919901000005",
+    "avatarUrl": "/assets/users/user-girl-12.webp",
+    "headline": "Data learner"
+  },
+  {
+    "firstName": "Sahil",
+    "lastName": "Jain",
+    "username": "demo-student-sahil-6",
+    "email": "student06@codewithkasa.demo",
+    "phoneNumber": "+919901000006",
+    "avatarUrl": "/assets/users/user-boy-01.webp",
+    "headline": "JavaScript learner"
+  },
+  {
+    "firstName": "Tanvi",
+    "lastName": "Shah",
+    "username": "demo-student-tanvi-7",
+    "email": "student07@codewithkasa.demo",
+    "phoneNumber": "+919901000007",
+    "avatarUrl": "/assets/users/user-girl-01.webp",
+    "headline": "UI UX learner"
+  },
+  {
+    "firstName": "Mohit",
+    "lastName": "Yadav",
+    "username": "demo-student-mohit-8",
+    "email": "student08@codewithkasa.demo",
+    "phoneNumber": "+919901000008",
+    "avatarUrl": "/assets/users/user-boy-02.webp",
+    "headline": "Backend learner"
+  },
+  {
+    "firstName": "Kriti",
+    "lastName": "Kapoor",
+    "username": "demo-student-kriti-9",
+    "email": "student09@codewithkasa.demo",
+    "phoneNumber": "+919901000009",
+    "avatarUrl": "/assets/users/user-girl-02.webp",
+    "headline": "Python learner"
+  },
+  {
+    "firstName": "Aman",
+    "lastName": "Raj",
+    "username": "demo-student-aman-10",
+    "email": "student10@codewithkasa.demo",
+    "phoneNumber": "+919901000010",
+    "avatarUrl": "/assets/users/user-boy-03.webp",
+    "headline": "DSA learner"
+  },
+  {
+    "firstName": "Sneha",
+    "lastName": "Pillai",
+    "username": "demo-student-sneha-11",
+    "email": "student11@codewithkasa.demo",
+    "phoneNumber": "+919901000011",
+    "avatarUrl": "/assets/users/user-girl-03.webp",
+    "headline": "Cloud learner"
+  },
+  {
+    "firstName": "Laksh",
+    "lastName": "Malik",
+    "username": "demo-student-laksh-12",
+    "email": "student12@codewithkasa.demo",
+    "phoneNumber": "+919901000012",
+    "avatarUrl": "/assets/users/user-boy-04.webp",
+    "headline": "QA learner"
+  },
+  {
+    "firstName": "Diya",
+    "lastName": "Suri",
+    "username": "demo-student-diya-13",
+    "email": "student13@codewithkasa.demo",
+    "phoneNumber": "+919901000013",
+    "avatarUrl": "/assets/users/user-girl-04.webp",
+    "headline": "Career prep learner"
+  },
+  {
+    "firstName": "Varun",
+    "lastName": "Bhatt",
+    "username": "demo-student-varun-14",
+    "email": "student14@codewithkasa.demo",
+    "phoneNumber": "+919901000014",
+    "avatarUrl": "/assets/users/user-boy-05.webp",
+    "headline": "Full stack learner"
+  },
+  {
+    "firstName": "Isha",
+    "lastName": "Gupta",
+    "username": "demo-student-isha-15",
+    "email": "student15@codewithkasa.demo",
+    "phoneNumber": "+919901000015",
+    "avatarUrl": "/assets/users/user-girl-05.webp",
+    "headline": "Analytics learner"
+  },
+  {
+    "firstName": "Neil",
+    "lastName": "Dutta",
+    "username": "demo-student-neil-16",
+    "email": "student16@codewithkasa.demo",
+    "phoneNumber": "+919901000016",
+    "avatarUrl": "/assets/users/user-boy-06.webp",
+    "headline": "Security learner"
+  },
+  {
+    "firstName": "Avni",
+    "lastName": "Kohli",
+    "username": "demo-student-avni-17",
+    "email": "student17@codewithkasa.demo",
+    "phoneNumber": "+919901000017",
+    "avatarUrl": "/assets/users/user-girl-06.webp",
+    "headline": "Mobile app learner"
+  },
+  {
+    "firstName": "Dhruv",
+    "lastName": "Sinha",
+    "username": "demo-student-dhruv-18",
+    "email": "student18@codewithkasa.demo",
+    "phoneNumber": "+919901000018",
+    "avatarUrl": "/assets/users/user-boy-07.webp",
+    "headline": "DevOps learner"
+  },
+  {
+    "firstName": "Mitali",
+    "lastName": "Roy",
+    "username": "demo-student-mitali-19",
+    "email": "student19@codewithkasa.demo",
+    "phoneNumber": "+919901000019",
+    "avatarUrl": "/assets/users/user-girl-07.webp",
+    "headline": "Product analytics learner"
   }
 ]

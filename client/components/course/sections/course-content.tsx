@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { FileText, Lock, Minus, PlayCircle, Plus } from "lucide-react";
 
 import VideoPreviewModal from "@/components/modals/video-preview-modal";
-import { getVideoDuration, formatDuration } from "@/helpers/get-section-stats";
+import {
+  formatDuration,
+  formatTotalDuration,
+  getVideoDuration,
+} from "@/helpers/get-section-stats";
 import { hasRecordedLearning, isFacultyLedCourse } from "@/lib/course-delivery";
 import { cn } from "@/lib/utils";
 import { Course } from "@/types/course";
@@ -40,20 +44,24 @@ export const CourseContent = ({ course }: CourseContentProps) => {
       const lectureDurations: Record<number, number> = {};
       const sectionDurations: Record<number, number> = {};
 
-      for (const chapter of course.chapters ?? []) {
-        let total = 0;
+      await Promise.all(
+        (course.chapters ?? []).map(async (chapter) => {
+          const durations = await Promise.all(
+            (chapter.lectures ?? []).map(async (lecture) => {
+              if (!lecture.video?.path) return 0;
 
-        for (const lecture of chapter.lectures ?? []) {
-          if (!lecture.video?.path) continue;
+              const duration = await getVideoDuration(lecture.video.path);
+              lectureDurations[lecture.id] = duration;
+              return duration;
+            }),
+          );
 
-          const duration = await getVideoDuration(lecture.video.path);
-
-          lectureDurations[lecture.id] = duration;
-          total += duration;
-        }
-
-        sectionDurations[chapter.id] = total;
-      }
+          sectionDurations[chapter.id] = durations.reduce(
+            (total, duration) => total + duration,
+            0,
+          );
+        }),
+      );
 
       if (!isMounted) return;
 
@@ -70,7 +78,7 @@ export const CourseContent = ({ course }: CourseContentProps) => {
 
   return (
     <>
-      <div className="academy-card p-5 md:p-6">
+      <div className="academy-card p-4 sm:p-5 md:p-6">
         <div className="mb-5 border-b border-border pb-4">
           <h2 className="text-xl font-semibold text-card-foreground">
             Course Content
@@ -100,7 +108,7 @@ export const CourseContent = ({ course }: CourseContentProps) => {
                 <button
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="flex w-full cursor-pointer items-center justify-between gap-4 p-4 text-left transition-colors hover:bg-primary/5"
+                  className="flex w-full cursor-pointer items-center justify-between gap-3 p-3 text-left transition-colors hover:bg-primary/5 sm:gap-4 sm:p-4"
                 >
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -125,7 +133,7 @@ export const CourseContent = ({ course }: CourseContentProps) => {
 
                       {recordedLearning && sectionDuration[chapter.id] > 0 && (
                         <span className="text-xs font-medium text-muted-foreground">
-                          {formatDuration(sectionDuration[chapter.id])}
+                          {formatTotalDuration(sectionDuration[chapter.id])}
                         </span>
                       )}
                     </div>
@@ -133,7 +141,7 @@ export const CourseContent = ({ course }: CourseContentProps) => {
 
                   <span
                     className={cn(
-                      "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-colors",
+                      "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-colors sm:h-9 sm:w-9",
                       isOpen
                         ? "border-primary bg-primary text-primary-foreground"
                         : "border-border bg-background text-muted-foreground",
@@ -150,10 +158,10 @@ export const CourseContent = ({ course }: CourseContentProps) => {
                 <div
                   className={cn(
                     "overflow-hidden transition-all duration-300",
-                    isOpen ? "max-h-300" : "max-h-0",
+                    isOpen ? "max-h-none" : "max-h-0",
                   )}
                 >
-                  <div className="border-t border-border px-4 py-4">
+                  <div className="border-t border-border px-3 py-3 sm:px-4 sm:py-4">
                     {chapter.description && (
                       <div className="mb-4 rounded-2xl border border-border bg-muted/50 p-4 text-sm leading-7 text-muted-foreground">
                         {chapter.description}
@@ -164,7 +172,7 @@ export const CourseContent = ({ course }: CourseContentProps) => {
                       <div className="space-y-2">
                         {chapter.lectures?.map((lecture) => {
                         const isLocked =
-                          recordedLearning && (!lecture.isFree || !chapter.isFree);
+                          recordedLearning && !lecture.isFree;
                         const hasVideo = Boolean(lecture.video?.path);
                         const hasAttachment = Boolean(
                           lecture.attachments?.length,
@@ -174,34 +182,48 @@ export const CourseContent = ({ course }: CourseContentProps) => {
                         return (
                           <div
                             key={lecture.id}
-                            className="rounded-2xl border border-border bg-card px-3 py-3 transition-colors hover:border-primary/25 hover:bg-primary/5"
+                            className="rounded-2xl border border-border bg-card px-3 py-3 transition-colors hover:border-primary/25 hover:bg-primary/5 sm:px-4"
                           >
-                            <div className="flex items-start justify-between gap-4">
-                              <div className="flex min-w-0 items-start gap-3">
-                                <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                            <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                              <div className="flex min-w-0 items-start gap-2.5 sm:gap-3">
+                                <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground sm:h-8 sm:w-8">
                                   {isLocked ? (
-                                    <Lock className="h-4 w-4" />
+                                    <Lock className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                                   ) : recordedLearning && hasVideo ? (
-                                    <PlayCircle className="h-4 w-4 text-primary" />
+                                    <PlayCircle className="h-3.5 w-3.5 text-primary sm:h-4 sm:w-4" />
                                   ) : (
-                                    <FileText className="h-4 w-4" />
+                                    <FileText className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                                   )}
                                 </span>
 
-                                <div className="min-w-0">
-                                  <p className="line-clamp-2 text-sm font-medium text-card-foreground">
+                                <div className="min-w-0 flex-1">
+                                  <p className="text-sm font-medium leading-5 text-card-foreground sm:line-clamp-2">
                                     {lecture.title}
                                   </p>
 
+                                  <div className="mt-1 flex flex-wrap gap-2">
+                                    {!isLocked ? (
+                                      <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary">
+                                        Free preview
+                                      </span>
+                                    ) : null}
+
+                                    {hasAttachment ? (
+                                      <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                                        {lecture.attachments?.length} resource
+                                      </span>
+                                    ) : null}
+                                  </div>
+
                                   {lecture.description && (
-                                    <div className="mt-2 text-xs leading-6 text-muted-foreground">
+                                    <div className="mt-2 max-w-full text-xs leading-6 text-muted-foreground break-words">
                                       {lecture.description}
                                     </div>
                                   )}
                                 </div>
                               </div>
 
-                              <div className="flex shrink-0 items-center gap-3 text-xs text-muted-foreground">
+                              <div className="flex min-w-0 flex-wrap items-center gap-2 pl-9 text-xs text-muted-foreground sm:shrink-0 sm:gap-3 sm:pl-0">
                                 {recordedLearning && !isLocked && hasVideo && (
                                   <button
                                     type="button"
@@ -211,14 +233,14 @@ export const CourseContent = ({ course }: CourseContentProps) => {
                                         title: lecture.title,
                                       })
                                     }
-                                    className="rounded-full bg-primary/10 px-3 py-1 font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+                                    className="rounded-full bg-primary/10 px-2.5 py-1 font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground sm:px-3"
                                   >
                                     Preview
                                   </button>
                                 )}
 
                                 {recordedLearning && hasVideo && duration && (
-                                  <span className="whitespace-nowrap">
+                                  <span className="whitespace-nowrap rounded-full bg-muted px-2 py-1">
                                     {formatDuration(duration)}
                                   </span>
                                 )}
@@ -231,6 +253,33 @@ export const CourseContent = ({ course }: CourseContentProps) => {
                           </div>
                         );
                         })}
+                      </div>
+                    ) : facultyLedOnly ? (
+                      <div className="space-y-2">
+                        {chapter.lectures?.map((lecture) => (
+                          <div
+                            key={lecture.id}
+                            className="rounded-2xl border border-border bg-card px-3 py-3 transition-colors hover:border-primary/25 hover:bg-primary/5"
+                          >
+                            <div className="flex min-w-0 items-start gap-2.5 sm:gap-3">
+                              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary sm:h-8 sm:w-8">
+                                <FileText className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                              </span>
+
+                              <div className="min-w-0 flex-1">
+                                <p className="text-sm font-medium leading-5 text-card-foreground sm:line-clamp-2">
+                                  {lecture.title}
+                                </p>
+
+                                {lecture.description && (
+                                  <p className="mt-2 max-w-full text-xs leading-6 text-muted-foreground break-words">
+                                    {lecture.description}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     ) : null}
                   </div>

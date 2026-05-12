@@ -11,4 +11,4 @@ echo "Stopping CodeWithKasa Docker stacks..."
 
 echo ""
 echo "CodeWithKasa stacks are stopped."
-echo "Ports should now be free for a fresh dev or production test run."
+echo "Ports should now be free."

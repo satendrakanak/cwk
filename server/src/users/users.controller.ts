@@ -45,9 +45,25 @@ export class UsersController {
   }
 
   @Auth(AuthType.None)
+  @Get('faculty')
+  public async getFacultyPage(
+    @Query() getUsersDto: GetUsersDto,
+  ): Promise<Paginated<User>> {
+    return await this.usersService.getFacultyPage(getUsersDto);
+  }
+
+  @Auth(AuthType.None)
   @Get('all-faculty')
   public async getAllFaculty() {
     return await this.usersService.getAllFaculty();
+  }
+
+  @Auth(AuthType.None)
+  @Get('faculty-profile/slug/:slug')
+  public async getFacultyProfileBySlug(
+    @Param('slug') slug: string,
+  ): Promise<User> {
+    return await this.usersService.getFacultyProfileBySlug(slug);
   }
 
   @Auth(AuthType.None)

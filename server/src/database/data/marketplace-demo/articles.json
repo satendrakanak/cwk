@@ -1,38 +1,513 @@
 [
   {
-    "title": "How to Choose Between Self-Learning, Live, and Hybrid Courses",
+    "title": "How to Choose Between Self Learning Live and Hybrid Courses",
     "slug": "choose-self-learning-live-hybrid-courses",
-    "excerpt": "A practical guide for learners comparing recorded courses, live cohorts, and hybrid mentorship programs.",
-    "content": "<p>Every learner needs a different mix of flexibility, accountability, and feedback. Self-learning works well for independent practice, live cohorts work well for guided participation, and hybrid programs combine both.</p><p>Use goals, schedule, budget, and feedback needs to choose the right format.</p>",
-    "imagePath": "/assets/blog/blog-1.jpg",
-    "imageAlt": "Learner comparing online course formats",
-    "categories": ["Learning Strategy"],
-    "tags": ["Self Learning", "Live Classes", "Hybrid"],
-    "readingTime": 4,
+    "excerpt": "How to Choose Between Self Learning Live and Hybrid Courses explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>How to Choose Between Self Learning Live and Hybrid Courses is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/01-how-to-choose-between-self-learning-live-and-hybrid-courses.webp",
+    "imageAlt": "How to Choose Between Self Learning Live and Hybrid Courses CodeWithKasa article cover photo",
+    "categories": [
+      "Learning Strategy"
+    ],
+    "tags": [
+      "Self Learning",
+      "Live Classes",
+      "Hybrid"
+    ],
+    "readingTime": 3,
     "isFeatured": true
   },
   {
     "title": "Why Attendance Rules Matter in Live Online Programs",
     "slug": "attendance-rules-live-online-programs",
-    "excerpt": "Live programs need clear attendance requirements so learners understand certificate eligibility from day one.",
-    "content": "<p>Attendance rules protect both learners and faculty. They set expectations, encourage timely participation, and help administrators make fair decisions about exam eligibility and certification.</p>",
-    "imagePath": "/assets/blog/blog-2.jpg",
-    "imageAlt": "Calendar showing live class attendance planning",
-    "categories": ["Live Classes"],
-    "tags": ["Attendance", "Certificates", "Live Classes"],
-    "readingTime": 3,
+    "excerpt": "Why Attendance Rules Matter in Live Online Programs explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>Why Attendance Rules Matter in Live Online Programs is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/02-why-attendance-rules-matter-in-live-online-programs.webp",
+    "imageAlt": "Why Attendance Rules Matter in Live Online Programs CodeWithKasa article cover photo",
+    "categories": [
+      "Live Classes"
+    ],
+    "tags": [
+      "Attendance",
+      "Certificates"
+    ],
+    "readingTime": 4,
     "isFeatured": true
   },
   {
     "title": "Building a Certificate Workflow Learners Can Trust",
     "slug": "certificate-workflow-learners-can-trust",
-    "excerpt": "Certificates feel credible when progress, exams, attendance, and downloads are clearly connected.",
-    "content": "<p>A strong certificate workflow should show the learner what is pending, what is complete, and what action unlocks the certificate. Admin teams also need clear reporting for follow-up.</p>",
-    "imagePath": "/assets/blog/blog-3.jpg",
-    "imageAlt": "Online certificate workflow dashboard",
-    "categories": ["Certificates"],
-    "tags": ["Certificates", "Exams", "Reports"],
+    "excerpt": "Building a Certificate Workflow Learners Can Trust explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>Building a Certificate Workflow Learners Can Trust is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/03-building-a-certificate-workflow-learners-can-trust.webp",
+    "imageAlt": "Building a Certificate Workflow Learners Can Trust CodeWithKasa article cover photo",
+    "categories": [
+      "Certificates"
+    ],
+    "tags": [
+      "Exams",
+      "Reports"
+    ],
     "readingTime": 5,
+    "isFeatured": true
+  },
+  {
+    "title": "How to Plan Your First Frontend Portfolio",
+    "slug": "plan-first-frontend-portfolio",
+    "excerpt": "How to Plan Your First Frontend Portfolio explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>How to Plan Your First Frontend Portfolio is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/04-how-to-plan-your-first-frontend-portfolio.webp",
+    "imageAlt": "How to Plan Your First Frontend Portfolio CodeWithKasa article cover photo",
+    "categories": [
+      "Web Development"
+    ],
+    "tags": [
+      "Portfolio",
+      "Frontend"
+    ],
+    "readingTime": 6,
+    "isFeatured": true
+  },
+  {
+    "title": "React Practice Habits That Actually Improve Skill",
+    "slug": "react-practice-habits-improve-skill",
+    "excerpt": "React Practice Habits That Actually Improve Skill explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>React Practice Habits That Actually Improve Skill is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/05-react-practice-habits-that-actually-improve-skill.webp",
+    "imageAlt": "React Practice Habits That Actually Improve Skill CodeWithKasa article cover photo",
+    "categories": [
+      "Web Development"
+    ],
+    "tags": [
+      "React",
+      "Practice"
+    ],
+    "readingTime": 7,
+    "isFeatured": true
+  },
+  {
+    "title": "A Simple Roadmap for Learning JavaScript",
+    "slug": "simple-roadmap-learning-javascript",
+    "excerpt": "A Simple Roadmap for Learning JavaScript explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>A Simple Roadmap for Learning JavaScript is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/06-a-simple-roadmap-for-learning-javascript.webp",
+    "imageAlt": "A Simple Roadmap for Learning JavaScript CodeWithKasa article cover photo",
+    "categories": [
+      "Programming"
+    ],
+    "tags": [
+      "JavaScript",
+      "Beginner"
+    ],
+    "readingTime": 3,
+    "isFeatured": true
+  },
+  {
+    "title": "What Makes a Good Full Stack Project",
+    "slug": "what-makes-good-full-stack-project",
+    "excerpt": "What Makes a Good Full Stack Project explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>What Makes a Good Full Stack Project is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/07-what-makes-a-good-full-stack-project.webp",
+    "imageAlt": "What Makes a Good Full Stack Project CodeWithKasa article cover photo",
+    "categories": [
+      "Projects"
+    ],
+    "tags": [
+      "Full Stack",
+      "Portfolio"
+    ],
+    "readingTime": 4,
+    "isFeatured": false
+  },
+  {
+    "title": "How Live Doubt Sessions Improve Completion",
+    "slug": "live-doubt-sessions-improve-completion",
+    "excerpt": "How Live Doubt Sessions Improve Completion explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>How Live Doubt Sessions Improve Completion is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/08-how-live-doubt-sessions-improve-completion.webp",
+    "imageAlt": "How Live Doubt Sessions Improve Completion CodeWithKasa article cover photo",
+    "categories": [
+      "Live Classes"
+    ],
+    "tags": [
+      "Mentorship",
+      "Completion"
+    ],
+    "readingTime": 5,
+    "isFeatured": false
+  },
+  {
+    "title": "Database Basics Every Developer Should Know",
+    "slug": "database-basics-every-developer-should-know",
+    "excerpt": "Database Basics Every Developer Should Know explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>Database Basics Every Developer Should Know is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/09-database-basics-every-developer-should-know.webp",
+    "imageAlt": "Database Basics Every Developer Should Know CodeWithKasa article cover photo",
+    "categories": [
+      "Database"
+    ],
+    "tags": [
+      "SQL",
+      "Postgres"
+    ],
+    "readingTime": 6,
+    "isFeatured": false
+  },
+  {
+    "title": "Docker for Local Development Without Confusion",
+    "slug": "docker-local-development-without-confusion",
+    "excerpt": "Docker for Local Development Without Confusion explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>Docker for Local Development Without Confusion is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/10-docker-for-local-development-without-confusion.webp",
+    "imageAlt": "Docker for Local Development Without Confusion CodeWithKasa article cover photo",
+    "categories": [
+      "DevOps"
+    ],
+    "tags": [
+      "Docker",
+      "Development"
+    ],
+    "readingTime": 7,
+    "isFeatured": false
+  },
+  {
+    "title": "How to Use GitHub Like a Professional",
+    "slug": "use-github-like-professional",
+    "excerpt": "How to Use GitHub Like a Professional explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>How to Use GitHub Like a Professional is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/11-how-to-use-github-like-a-professional.webp",
+    "imageAlt": "How to Use GitHub Like a Professional CodeWithKasa article cover photo",
+    "categories": [
+      "Developer Tools"
+    ],
+    "tags": [
+      "GitHub",
+      "Teams"
+    ],
+    "readingTime": 3,
+    "isFeatured": false
+  },
+  {
+    "title": "Design Systems for Small Learning Projects",
+    "slug": "design-systems-small-learning-projects",
+    "excerpt": "Design Systems for Small Learning Projects explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>Design Systems for Small Learning Projects is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/12-design-systems-for-small-learning-projects.webp",
+    "imageAlt": "Design Systems for Small Learning Projects CodeWithKasa article cover photo",
+    "categories": [
+      "Design"
+    ],
+    "tags": [
+      "UI UX",
+      "Systems"
+    ],
+    "readingTime": 4,
+    "isFeatured": false
+  },
+  {
+    "title": "How to Review Your Own Code Before Submission",
+    "slug": "review-own-code-before-submission",
+    "excerpt": "How to Review Your Own Code Before Submission explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>How to Review Your Own Code Before Submission is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/13-how-to-review-your-own-code-before-submission.webp",
+    "imageAlt": "How to Review Your Own Code Before Submission CodeWithKasa article cover photo",
+    "categories": [
+      "Coding Practice"
+    ],
+    "tags": [
+      "Code Review",
+      "Quality"
+    ],
+    "readingTime": 5,
+    "isFeatured": false
+  },
+  {
+    "title": "Preparing for DSA Without Burning Out",
+    "slug": "preparing-dsa-without-burning-out",
+    "excerpt": "Preparing for DSA Without Burning Out explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>Preparing for DSA Without Burning Out is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/14-preparing-for-dsa-without-burning-out.webp",
+    "imageAlt": "Preparing for DSA Without Burning Out CodeWithKasa article cover photo",
+    "categories": [
+      "Interview Preparation"
+    ],
+    "tags": [
+      "DSA",
+      "Routine"
+    ],
+    "readingTime": 6,
+    "isFeatured": false
+  },
+  {
+    "title": "The Right Way to Track Course Progress",
+    "slug": "right-way-track-course-progress",
+    "excerpt": "The Right Way to Track Course Progress explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>The Right Way to Track Course Progress is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/15-the-right-way-to-track-course-progress.webp",
+    "imageAlt": "The Right Way to Track Course Progress CodeWithKasa article cover photo",
+    "categories": [
+      "Learning Strategy"
+    ],
+    "tags": [
+      "Progress",
+      "Completion"
+    ],
+    "readingTime": 7,
+    "isFeatured": false
+  },
+  {
+    "title": "What Learners Need From a Faculty Dashboard",
+    "slug": "learners-need-faculty-dashboard",
+    "excerpt": "What Learners Need From a Faculty Dashboard explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>What Learners Need From a Faculty Dashboard is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/16-what-learners-need-from-a-faculty-dashboard.webp",
+    "imageAlt": "What Learners Need From a Faculty Dashboard CodeWithKasa article cover photo",
+    "categories": [
+      "Platform"
+    ],
+    "tags": [
+      "Faculty",
+      "Dashboard"
+    ],
+    "readingTime": 3,
+    "isFeatured": false
+  },
+  {
+    "title": "How to Make Recorded Lessons More Useful",
+    "slug": "make-recorded-lessons-more-useful",
+    "excerpt": "How to Make Recorded Lessons More Useful explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>How to Make Recorded Lessons More Useful is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/17-how-to-make-recorded-lessons-more-useful.webp",
+    "imageAlt": "How to Make Recorded Lessons More Useful CodeWithKasa article cover photo",
+    "categories": [
+      "Self Learning"
+    ],
+    "tags": [
+      "Recorded Lessons",
+      "Revision"
+    ],
+    "readingTime": 4,
+    "isFeatured": false
+  },
+  {
+    "title": "Beginner Guide to API Projects",
+    "slug": "beginner-guide-api-projects",
+    "excerpt": "Beginner Guide to API Projects explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>Beginner Guide to API Projects is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/18-beginner-guide-to-api-projects.webp",
+    "imageAlt": "Beginner Guide to API Projects CodeWithKasa article cover photo",
+    "categories": [
+      "Backend Development"
+    ],
+    "tags": [
+      "API",
+      "Node.js"
+    ],
+    "readingTime": 5,
+    "isFeatured": false
+  },
+  {
+    "title": "Why Project Feedback Beats Random Tutorials",
+    "slug": "project-feedback-beats-random-tutorials",
+    "excerpt": "Why Project Feedback Beats Random Tutorials explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>Why Project Feedback Beats Random Tutorials is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/19-why-project-feedback-beats-random-tutorials.webp",
+    "imageAlt": "Why Project Feedback Beats Random Tutorials CodeWithKasa article cover photo",
+    "categories": [
+      "Mentorship"
+    ],
+    "tags": [
+      "Feedback",
+      "Projects"
+    ],
+    "readingTime": 6,
+    "isFeatured": false
+  },
+  {
+    "title": "How to Prepare for a Technical Interview",
+    "slug": "prepare-technical-interview",
+    "excerpt": "How to Prepare for a Technical Interview explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>How to Prepare for a Technical Interview is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/20-how-to-prepare-for-a-technical-interview.webp",
+    "imageAlt": "How to Prepare for a Technical Interview CodeWithKasa article cover photo",
+    "categories": [
+      "Career Skills"
+    ],
+    "tags": [
+      "Interview",
+      "Resume"
+    ],
+    "readingTime": 7,
+    "isFeatured": false
+  },
+  {
+    "title": "Cloud Deployment Checklist for Beginners",
+    "slug": "cloud-deployment-checklist-beginners",
+    "excerpt": "Cloud Deployment Checklist for Beginners explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>Cloud Deployment Checklist for Beginners is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/21-cloud-deployment-checklist-for-beginners.webp",
+    "imageAlt": "Cloud Deployment Checklist for Beginners CodeWithKasa article cover photo",
+    "categories": [
+      "Cloud"
+    ],
+    "tags": [
+      "AWS",
+      "Deployment"
+    ],
+    "readingTime": 3,
+    "isFeatured": false
+  },
+  {
+    "title": "Testing Mindset for New Developers",
+    "slug": "testing-mindset-new-developers",
+    "excerpt": "Testing Mindset for New Developers explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>Testing Mindset for New Developers is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/22-testing-mindset-for-new-developers.webp",
+    "imageAlt": "Testing Mindset for New Developers CodeWithKasa article cover photo",
+    "categories": [
+      "Testing"
+    ],
+    "tags": [
+      "QA",
+      "Playwright"
+    ],
+    "readingTime": 4,
+    "isFeatured": false
+  },
+  {
+    "title": "Web Security Basics for Students",
+    "slug": "web-security-basics-students",
+    "excerpt": "Web Security Basics for Students explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>Web Security Basics for Students is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/23-web-security-basics-for-students.webp",
+    "imageAlt": "Web Security Basics for Students CodeWithKasa article cover photo",
+    "categories": [
+      "Security"
+    ],
+    "tags": [
+      "Web Security",
+      "Basics"
+    ],
+    "readingTime": 5,
+    "isFeatured": false
+  },
+  {
+    "title": "How to Use AI Tools While Still Learning",
+    "slug": "use-ai-tools-while-still-learning",
+    "excerpt": "How to Use AI Tools While Still Learning explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>How to Use AI Tools While Still Learning is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/24-how-to-use-ai-tools-while-still-learning.webp",
+    "imageAlt": "How to Use AI Tools While Still Learning CodeWithKasa article cover photo",
+    "categories": [
+      "AI Productivity"
+    ],
+    "tags": [
+      "AI Tools",
+      "Learning"
+    ],
+    "readingTime": 6,
+    "isFeatured": false
+  },
+  {
+    "title": "Mobile App Learning Path for Web Developers",
+    "slug": "mobile-app-learning-path-web-developers",
+    "excerpt": "Mobile App Learning Path for Web Developers explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>Mobile App Learning Path for Web Developers is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/25-mobile-app-learning-path-for-web-developers.webp",
+    "imageAlt": "Mobile App Learning Path for Web Developers CodeWithKasa article cover photo",
+    "categories": [
+      "Mobile Development"
+    ],
+    "tags": [
+      "React Native",
+      "Mobile"
+    ],
+    "readingTime": 7,
+    "isFeatured": false
+  },
+  {
+    "title": "How to Build Confidence in Spoken English",
+    "slug": "build-confidence-spoken-english",
+    "excerpt": "How to Build Confidence in Spoken English explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>How to Build Confidence in Spoken English is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/26-how-to-build-confidence-in-spoken-english.webp",
+    "imageAlt": "How to Build Confidence in Spoken English CodeWithKasa article cover photo",
+    "categories": [
+      "Communication"
+    ],
+    "tags": [
+      "Spoken English",
+      "Career"
+    ],
+    "readingTime": 3,
+    "isFeatured": false
+  },
+  {
+    "title": "Analytics Dashboards That Tell a Clear Story",
+    "slug": "analytics-dashboards-clear-story",
+    "excerpt": "Analytics Dashboards That Tell a Clear Story explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>Analytics Dashboards That Tell a Clear Story is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/27-analytics-dashboards-that-tell-a-clear-story.webp",
+    "imageAlt": "Analytics Dashboards That Tell a Clear Story CodeWithKasa article cover photo",
+    "categories": [
+      "Data Analytics"
+    ],
+    "tags": [
+      "Dashboard",
+      "Metrics"
+    ],
+    "readingTime": 4,
+    "isFeatured": false
+  },
+  {
+    "title": "Freelance Project Delivery Checklist",
+    "slug": "freelance-project-delivery-checklist",
+    "excerpt": "Freelance Project Delivery Checklist explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>Freelance Project Delivery Checklist is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/28-freelance-project-delivery-checklist.webp",
+    "imageAlt": "Freelance Project Delivery Checklist CodeWithKasa article cover photo",
+    "categories": [
+      "Career Skills"
+    ],
+    "tags": [
+      "Freelancing",
+      "Delivery"
+    ],
+    "readingTime": 5,
+    "isFeatured": false
+  },
+  {
+    "title": "System Design Concepts for Early Developers",
+    "slug": "system-design-concepts-early-developers",
+    "excerpt": "System Design Concepts for Early Developers explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>System Design Concepts for Early Developers is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/29-system-design-concepts-for-early-developers.webp",
+    "imageAlt": "System Design Concepts for Early Developers CodeWithKasa article cover photo",
+    "categories": [
+      "System Design"
+    ],
+    "tags": [
+      "Architecture",
+      "Scaling"
+    ],
+    "readingTime": 6,
+    "isFeatured": false
+  },
+  {
+    "title": "How to Keep Learning Speed High Without Chaos",
+    "slug": "keep-learning-speed-high-without-chaos",
+    "excerpt": "How to Keep Learning Speed High Without Chaos explained with practical CodeWithKasa examples for learners, faculty, and admins testing real platform workflows.",
+    "content": "<p>How to Keep Learning Speed High Without Chaos is a practical guide for learners who want clear direction instead of random activity. It explains what to focus on, how to measure progress, and where structured practice helps most.</p><p>Use this as a simple checklist while testing courses, progress, live classes, certificates, and learner engagement inside CodeWithKasa.</p>",
+    "imagePath": "/assets/demo-articles/30-how-to-keep-learning-speed-high-without-chaos.webp",
+    "imageAlt": "How to Keep Learning Speed High Without Chaos CodeWithKasa article cover photo",
+    "categories": [
+      "Learning Strategy"
+    ],
+    "tags": [
+      "Speed",
+      "Planning"
+    ],
+    "readingTime": 7,
     "isFeatured": false
   }
 ]

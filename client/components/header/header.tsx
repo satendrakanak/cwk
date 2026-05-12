@@ -35,7 +35,7 @@ export const Header = ({ isHomePage }: HeaderProps) => {
     <header
       className={cn(
         "fixed left-0 z-50 w-full transition-all duration-300",
-        scrolled ? "top-0" : "top-15 md:top-10",
+        scrolled ? "top-0" : "top-14 md:top-9",
         headerClass,
       )}
     >
@@ -44,7 +44,7 @@ export const Header = ({ isHomePage }: HeaderProps) => {
           <div className="pointer-events-none absolute inset-x-0 top-0 h-full bg-[linear-gradient(180deg,rgba(255,255,255,0.14),transparent)] dark:bg-[linear-gradient(180deg,rgba(255,255,255,0.05),transparent)]" />
         ) : null}
         <Container>
-          <div className="min-h-16 md:min-h-18">
+          <div className="min-h-15 md:min-h-16">
             <div className="grid min-h-16 grid-cols-[3rem_1fr_3rem] items-center gap-2 md:hidden">
               <div className="flex justify-start">
                 <MobileMenuIcon />
@@ -57,7 +57,7 @@ export const Header = ({ isHomePage }: HeaderProps) => {
               </div>
             </div>
 
-            <div className="hidden min-h-18 items-center justify-between gap-4 md:flex">
+            <div className="hidden min-h-16 items-center justify-between gap-4 md:flex">
               <div className="flex items-center gap-3">
                 <Logo />
               </div>
@@ -75,7 +75,7 @@ export const Header = ({ isHomePage }: HeaderProps) => {
           </div>
 
           {/* Tablet Navbar */}
-          <div className="mt-1 hidden justify-center border-t border-border/70 pt-3 md:flex lg:hidden">
+          <div className="mt-1 hidden justify-center border-t border-border/70 pt-2 md:flex lg:hidden">
             <Navbar />
           </div>
         </Container>

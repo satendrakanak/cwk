@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, ShoppingCart } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { WebsiteBreadcrumbs } from "@/components/layout/website-breadcrumbs";
 import { useCartStore } from "@/store/cart-store";
 import Container from "../container";
 import { CartItemCard } from "./cart-item-card";
@@ -22,7 +23,15 @@ export const CartClient = () => {
         <div className="absolute inset-0 bg-(--surface-shell)" />
       </div>
 
-      <Container className="relative z-10">
+      <WebsiteBreadcrumbs
+        className="pt-0"
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Cart" },
+        ]}
+      />
+
+      <Container className="relative z-10 mt-6">
         <div className="academy-card mb-8 p-5 md:p-6">
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">
             Cart

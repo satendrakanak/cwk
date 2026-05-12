@@ -7,12 +7,14 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ActiveUser } from 'src/auth/decorators/active-user.decorator';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { AuthType } from 'src/auth/enums/auth-type.enum';
 import type { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
 import { CreateFacultyReviewDto } from './dtos/create-faculty-review.dto';
+import { GetFacultyReviewsDto } from './dtos/get-faculty-reviews.dto';
 import { FacultyReviewsService } from './providers/faculty-reviews.service';
 
 @Controller('faculty-reviews')
@@ -21,8 +23,11 @@ export class FacultyReviewsController {
 
   @Auth(AuthType.None)
   @Get('faculty/:facultyId')
-  getByFaculty(@Param('facultyId', ParseIntPipe) facultyId: number) {
-    return this.facultyReviewsService.getByFaculty(facultyId);
+  getByFaculty(
+    @Param('facultyId', ParseIntPipe) facultyId: number,
+    @Query() query: GetFacultyReviewsDto,
+  ) {
+    return this.facultyReviewsService.getByFaculty(facultyId, query);
   }
 
   @Auth(AuthType.None)

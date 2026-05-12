@@ -4,6 +4,7 @@ import { Course } from "@/types/course";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import { IconDotsVertical } from "@tabler/icons-react";
 import {
   DropdownMenu,
@@ -20,6 +21,11 @@ import { formatDate } from "@/utils/formate-date";
 export const getCourseColumns = (
   onDelete: (course: Course) => void,
   onDuplicate: (course: Course) => void,
+  onToggleDisplay: (
+    course: Course,
+    field: "showInHero" | "showInPopular" | "showInMegaMenu",
+    nextValue: boolean,
+  ) => void,
 ): ColumnDef<Course>[] => [
   // ✅ Select
   {
@@ -99,6 +105,60 @@ export const getCourseColumns = (
         {row.original.isPublished ? "Published" : "Draft"}
       </Badge>
     ),
+  },
+
+  {
+    accessorKey: "showInHero",
+    header: "Hero",
+    cell: ({ row }) => {
+      const course = row.original;
+
+      return (
+        <Switch
+          aria-label={`Show ${course.title} in home hero`}
+          checked={Boolean(course.showInHero)}
+          onCheckedChange={(checked) =>
+            onToggleDisplay(course, "showInHero", checked)
+          }
+        />
+      );
+    },
+  },
+
+  {
+    accessorKey: "showInPopular",
+    header: "Popular",
+    cell: ({ row }) => {
+      const course = row.original;
+
+      return (
+        <Switch
+          aria-label={`Show ${course.title} in popular courses`}
+          checked={Boolean(course.showInPopular)}
+          onCheckedChange={(checked) =>
+            onToggleDisplay(course, "showInPopular", checked)
+          }
+        />
+      );
+    },
+  },
+
+  {
+    accessorKey: "showInMegaMenu",
+    header: "Mega Menu",
+    cell: ({ row }) => {
+      const course = row.original;
+
+      return (
+        <Switch
+          aria-label={`Show ${course.title} in courses mega menu`}
+          checked={Boolean(course.showInMegaMenu)}
+          onCheckedChange={(checked) =>
+            onToggleDisplay(course, "showInMegaMenu", checked)
+          }
+        />
+      );
+    },
   },
 
   // ✅ Created Date

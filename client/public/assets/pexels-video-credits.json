@@ -1,0 +1,157 @@
+{
+  "generatedAt": "2026-05-11T20:43:35.926Z",
+  "license": "Pexels free-to-use license",
+  "note": "Course preview stock videos from Pexels, normalized to 8 seconds, 960x540 MP4, with a low-volume audio track added for demo playback consistency.",
+  "items": [
+    {
+      "file": "/assets/demo-videos/01-online-class-with-laptop.mp4",
+      "provider": "Pexels",
+      "source": "https://www.pexels.com/video/4495983/",
+      "download": "https://videos.pexels.com/video-files/4495983/4495983-sd_960_540_25fps.mp4",
+      "title": "Online class with laptop",
+      "creator": "Julia M Cameron",
+      "hasAudioMarker": true,
+      "audioNote": "Low-volume demo audio track added during local optimization."
+    },
+    {
+      "file": "/assets/demo-videos/02-student-using-his-laptop.mp4",
+      "provider": "Pexels",
+      "source": "https://www.pexels.com/video/6985337/",
+      "download": "https://videos.pexels.com/video-files/6985337/6985337-sd_960_540_25fps.mp4",
+      "title": "Student using his laptop",
+      "creator": "Diva Plavalaguna",
+      "hasAudioMarker": true,
+      "audioNote": "Low-volume demo audio track added during local optimization."
+    },
+    {
+      "file": "/assets/demo-videos/03-student-using-laptop-at-home.mp4",
+      "provider": "Pexels",
+      "source": "https://www.pexels.com/video/6985334/",
+      "download": "https://videos.pexels.com/video-files/6985334/6985334-sd_960_540_25fps.mp4",
+      "title": "Student using laptop at home",
+      "creator": "Diva Plavalaguna",
+      "hasAudioMarker": true,
+      "audioNote": "Low-volume demo audio track added during local optimization."
+    },
+    {
+      "file": "/assets/demo-videos/04-laptop-learning-at-home.mp4",
+      "provider": "Pexels",
+      "source": "https://www.pexels.com/video/6985335/",
+      "download": "https://videos.pexels.com/video-files/6985335/6985335-sd_960_540_25fps.mp4",
+      "title": "Laptop learning at home",
+      "creator": "Diva Plavalaguna",
+      "hasAudioMarker": true,
+      "audioNote": "Low-volume demo audio track added during local optimization."
+    },
+    {
+      "file": "/assets/demo-videos/05-online-class-study-desk.mp4",
+      "provider": "Pexels",
+      "source": "https://www.pexels.com/video/4487958/",
+      "download": "https://videos.pexels.com/video-files/4487958/4487958-sd_960_540_25fps.mp4",
+      "title": "Online class study desk",
+      "creator": "olia danilevich",
+      "hasAudioMarker": true,
+      "audioNote": "Low-volume demo audio track added during local optimization."
+    },
+    {
+      "file": "/assets/demo-videos/06-students-using-laptops.mp4",
+      "provider": "Pexels",
+      "source": "https://www.pexels.com/video/7777997/",
+      "download": "https://videos.pexels.com/video-files/7777997/7777997-sd_960_540_25fps.mp4",
+      "title": "Students using laptops",
+      "creator": "Mikhail Nilov",
+      "hasAudioMarker": true,
+      "audioNote": "Low-volume demo audio track added during local optimization."
+    },
+    {
+      "file": "/assets/demo-videos/07-virtual-meeting-learning-setup.mp4",
+      "provider": "Pexels",
+      "source": "https://www.pexels.com/video/6324565/",
+      "download": "https://videos.pexels.com/video-files/6324565/6324565-uhd_2160_3840_24fps.mp4",
+      "title": "Virtual meeting learning setup",
+      "creator": "Vanessa Garcia",
+      "hasAudioMarker": true,
+      "audioNote": "Low-volume demo audio track added during local optimization."
+    },
+    {
+      "file": "/assets/demo-videos/08-male-student-using-laptop.mp4",
+      "provider": "Pexels",
+      "source": "https://www.pexels.com/video/6145960/",
+      "download": "https://videos.pexels.com/video-files/6145960/6145960-uhd_2160_3840_24fps.mp4",
+      "title": "Male student using laptop",
+      "creator": "Keira Burton",
+      "hasAudioMarker": true,
+      "audioNote": "Low-volume demo audio track added during local optimization."
+    },
+    {
+      "file": "/assets/demo-videos/09-programming-on-laptop.mp4",
+      "provider": "Pexels",
+      "source": "https://www.pexels.com/video/13522087/",
+      "download": "https://videos.pexels.com/video-files/13522087/13522087-sd_960_540_24fps.mp4",
+      "title": "Programming on laptop",
+      "creator": "Raddy",
+      "hasAudioMarker": true,
+      "audioNote": "Low-volume demo audio track added during local optimization."
+    },
+    {
+      "file": "/assets/demo-videos/10-person-encoding-on-laptop.mp4",
+      "provider": "Pexels",
+      "source": "https://www.pexels.com/video/5925283/",
+      "download": "https://videos.pexels.com/video-files/5925283/5925283-uhd_2160_3840_24fps.mp4",
+      "title": "Person encoding on laptop",
+      "creator": "Sora Shimazaki",
+      "hasAudioMarker": true,
+      "audioNote": "Low-volume demo audio track added during local optimization."
+    },
+    {
+      "file": "/assets/demo-videos/11-man-coding-on-laptop.mp4",
+      "provider": "Pexels",
+      "source": "https://www.pexels.com/video/6331337/",
+      "download": "https://videos.pexels.com/video-files/6331337/6331337-hd_1080_1920_30fps.mp4",
+      "title": "Man coding on laptop",
+      "creator": "Matias Mango",
+      "hasAudioMarker": true,
+      "audioNote": "Low-volume demo audio track added during local optimization."
+    },
+    {
+      "file": "/assets/demo-videos/12-students-working-on-laptop-in-classroom.mp4",
+      "provider": "Pexels",
+      "source": "https://www.pexels.com/video/5200028/",
+      "download": "https://videos.pexels.com/video-files/5200028/5200028-sd_960_540_25fps.mp4",
+      "title": "Students working on laptop in classroom",
+      "creator": "Max Fischer",
+      "hasAudioMarker": true,
+      "audioNote": "Low-volume demo audio track added during local optimization."
+    },
+    {
+      "file": "/assets/demo-videos/13-teacher-in-online-class.mp4",
+      "provider": "Pexels",
+      "source": "https://www.pexels.com/video/6324852/",
+      "download": "https://videos.pexels.com/video-files/6324852/6324852-uhd_2160_3840_24fps.mp4",
+      "title": "Teacher in online class",
+      "creator": "Vanessa Garcia",
+      "hasAudioMarker": true,
+      "audioNote": "Low-volume demo audio track added during local optimization."
+    },
+    {
+      "file": "/assets/demo-videos/14-teacher-recording-an-online-class.mp4",
+      "provider": "Pexels",
+      "source": "https://www.pexels.com/video/6324558/",
+      "download": "https://videos.pexels.com/video-files/6324558/6324558-uhd_2160_3840_24fps.mp4",
+      "title": "Teacher recording an online class",
+      "creator": "Vanessa Garcia",
+      "hasAudioMarker": true,
+      "audioNote": "Low-volume demo audio track added during local optimization."
+    },
+    {
+      "file": "/assets/demo-videos/15-teacher-and-student-in-online-class.mp4",
+      "provider": "Pexels",
+      "source": "https://www.pexels.com/video/7013887/",
+      "download": "https://videos.pexels.com/video-files/7013887/7013887-uhd_4096_2160_25fps.mp4",
+      "title": "Teacher and student in online class",
+      "creator": "cottonbro studio",
+      "hasAudioMarker": true,
+      "audioNote": "Low-volume demo audio track added during local optimization."
+    }
+  ]
+}

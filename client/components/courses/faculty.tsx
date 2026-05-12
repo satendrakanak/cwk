@@ -35,7 +35,7 @@ export default function Faculty({ faculties }: { faculties: User[] }) {
             </span>
 
             <h2 className="text-4xl font-semibold tracking-tight text-white lg:text-5xl">
-              Meet the faculty shaping thoughtful practitioners.
+              Meet the instructors shaping thoughtful practitioners.
             </h2>
 
             <p className="mt-4 max-w-2xl text-base leading-7 text-white/75">
@@ -45,10 +45,10 @@ export default function Faculty({ faculties }: { faculties: User[] }) {
           </div>
 
           <Link
-            href="/our-faculty"
+            href="/instructors"
             className="group inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/12 px-6 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_14px_40px_rgba(2,6,23,0.22)] backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white hover:text-primary"
           >
-            View All Faculty
+            View All Instructors
             <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
           </Link>
         </div>

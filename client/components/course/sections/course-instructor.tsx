@@ -10,6 +10,7 @@ import {
   FaXTwitter,
 } from "react-icons/fa6";
 
+import { getFacultyHref } from "@/lib/faculty-slug";
 import { Course } from "@/types/course";
 
 interface CourseInstructorProps {
@@ -53,7 +54,7 @@ export const CourseInstructor = ({ course }: CourseInstructorProps) => {
         </h2>
 
         <p className="mt-1 text-sm text-muted-foreground">
-          Meet the faculty guiding this course with practical experience and
+          Meet the instructor guiding this course with practical experience and
           subject depth.
         </p>
       </div>
@@ -66,7 +67,12 @@ export const CourseInstructor = ({ course }: CourseInstructorProps) => {
             instructor.lastName || ""
           }`.trim();
 
-          const avatar = instructor.avatar?.path || "/assets/default.png";
+          const avatar =
+            instructor.avatar?.path || instructor.avatarUrl || "/assets/default.png";
+          const courseCount =
+            instructor.taughtCoursesCount || instructor.taughtCourses?.length || 0;
+          const averageRating = instructor.averageRating || 0;
+          const totalReviews = instructor.totalReviews || 0;
 
           const socials = [
             {
@@ -114,7 +120,7 @@ export const CourseInstructor = ({ course }: CourseInstructorProps) => {
                 <div className="min-w-0 flex-1 text-center md:text-left">
                   <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                     <div className="min-w-0">
-                      <Link href={`/our-faculty/${instructor.id}`}>
+                      <Link href={getFacultyHref(instructor)}>
                         <h3 className="text-lg font-semibold text-card-foreground transition-colors hover:text-primary">
                           {name || "Course Instructor"}
                         </h3>
@@ -150,17 +156,17 @@ export const CourseInstructor = ({ course }: CourseInstructorProps) => {
                   <div className="mt-4 flex flex-wrap justify-center gap-2 text-xs font-medium text-muted-foreground md:justify-start">
                     <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5">
                       <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
-                      -- Rating
+                      {averageRating.toFixed(1)} Rating ({totalReviews})
                     </span>
 
                     <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5">
                       <Users className="h-3.5 w-3.5 text-primary" />
-                      -- Students
+                      {totalReviews} review{totalReviews === 1 ? "" : "s"}
                     </span>
 
                     <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5">
                       <BookOpen className="h-3.5 w-3.5 text-primary" />
-                      -- Courses
+                      {courseCount} course{courseCount === 1 ? "" : "s"}
                     </span>
                   </div>
 

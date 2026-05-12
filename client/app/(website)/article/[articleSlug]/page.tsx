@@ -63,19 +63,19 @@ export default async function ArticleSlugPage({ params }: ArticlePageProps) {
   }
 
   let relatedArticles: Article[] = [];
-
-  try {
-    const response = await articleServerService.getRealtedArticles(article.id);
-    relatedArticles = response.data;
-  } catch (error: unknown) {
-    throw new Error(getErrorMessage(error));
-  }
-
   let allArticles: Article[] = [];
 
   try {
-    const response = await articleServerService.getAll();
-    allArticles = response.data;
+    const [relatedResponse, allResponse] = await Promise.all([
+      articleServerService.getRealtedArticles(article.id),
+      articleServerService.getPublicArticles({
+        page: 1,
+        limit: 1000,
+      }),
+    ]);
+
+    relatedArticles = relatedResponse.data;
+    allArticles = allResponse.data.data;
   } catch (error: unknown) {
     throw new Error(getErrorMessage(error));
   }

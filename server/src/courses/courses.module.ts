@@ -19,10 +19,14 @@ import { GetRelatedCoursesProvider } from './providers/get-related-courses.provi
 import { GetEnrolledCoursesProvider } from './providers/get-enrolled-courses.provider';
 import { UsersModule } from 'src/users/users.module';
 import { EngagementModule } from 'src/engagement/engagement.module';
+import { CourseDisplayFlagsSchemaProvider } from './providers/course-display-flags-schema.provider';
+import { Chapter } from 'src/chapters/chapter.entity';
+import { FacultyReview } from 'src/faculty-reviews/faculty-review.entity';
+import { CourseReview } from 'src/course-reviews/course-review.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Course]),
+    TypeOrmModule.forFeature([Course, Chapter, FacultyReview, CourseReview]),
     SlugModule,
     PaginationModule,
     UploadsModule,
@@ -44,6 +48,7 @@ import { EngagementModule } from 'src/engagement/engagement.module';
     GetFeaturedCoursesProvider,
     GetRelatedCoursesProvider,
     GetEnrolledCoursesProvider,
+    CourseDisplayFlagsSchemaProvider,
   ],
   exports: [CoursesService],
 })

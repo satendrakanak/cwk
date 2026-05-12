@@ -7,7 +7,14 @@ import { checkCoursePublish } from "@/helpers/publish-rules";
 import { cn } from "@/lib/utils";
 import { courseClientService } from "@/services/courses/course.client";
 import { Course } from "@/types/course";
-import { CheckCircle, RotateCcw, Trash2 } from "lucide-react";
+import {
+  CheckCircle,
+  LayoutPanelTop,
+  RotateCcw,
+  Star,
+  Trash2,
+  TrendingUp,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -34,14 +41,51 @@ export const CourseHeader = ({
   const [isDeleting, setIsDeleting] = useState(false);
   const { canPublish, reasons } = checkCoursePublish(course);
 
-  const handleToggleFeatured = async () => {
+  const handleToggleHero = async () => {
     try {
       await courseClientService.update(course.id, {
-        isFeatured: !course.isFeatured,
+        showInHero: !course.showInHero,
       });
 
       toast.success(
-        course.isFeatured ? "Removed from featured" : "Marked as featured",
+        course.showInHero ? "Removed from home hero" : "Added to home hero",
+      );
+
+      router.refresh();
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
+    }
+  };
+  const handleTogglePopular = async () => {
+    try {
+      await courseClientService.update(course.id, {
+        showInPopular: !course.showInPopular,
+      });
+
+      toast.success(
+        course.showInPopular
+          ? "Removed from popular courses"
+          : "Added to popular courses",
+      );
+
+      router.refresh();
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
+    }
+  };
+
+  const handleToggleMegaMenu = async () => {
+    try {
+      await courseClientService.update(course.id, {
+        showInMegaMenu: !course.showInMegaMenu,
+      });
+
+      toast.success(
+        course.showInMegaMenu
+          ? "Removed from mega menu"
+          : "Added to mega menu",
       );
 
       router.refresh();
@@ -103,9 +147,19 @@ export const CourseHeader = ({
             >
               {course.isPublished ? "Published" : "Draft"}
             </Badge>
-            {course.isFeatured && (
-              <Badge className="border border-purple-200 bg-purple-100 text-xs text-purple-700 dark:border-purple-400/30 dark:bg-purple-500/12 dark:text-purple-200">
-                Featured
+            {course.showInHero && (
+              <Badge className="border border-amber-200 bg-amber-100 text-xs text-amber-700 dark:border-amber-400/30 dark:bg-amber-500/12 dark:text-amber-200">
+                Home Hero
+              </Badge>
+            )}
+            {course.showInPopular && (
+              <Badge className="border border-emerald-200 bg-emerald-100 text-xs text-emerald-700 dark:border-emerald-400/30 dark:bg-emerald-500/12 dark:text-emerald-200">
+                Popular
+              </Badge>
+            )}
+            {course.showInMegaMenu && (
+              <Badge className="border border-sky-200 bg-sky-100 text-xs text-sky-700 dark:border-sky-400/30 dark:bg-sky-500/12 dark:text-sky-200">
+                Mega Menu
               </Badge>
             )}
 
@@ -120,15 +174,42 @@ export const CourseHeader = ({
           <div className="flex flex-wrap items-center gap-2 lg:justify-end">
           <Button
             size="sm"
-            onClick={handleToggleFeatured}
+            onClick={handleToggleHero}
             className={cn(
               "flex items-center gap-1 transition",
-              course.isFeatured
-                ? "bg-purple-500 hover:bg-purple-600"
+              course.showInHero
+                ? "bg-amber-500 hover:bg-amber-600"
                 : "bg-gray-700 hover:bg-gray-800",
             )}
           >
-            {course.isFeatured ? <>⭐ Unfeature</> : <>⭐ Feature</>}
+            <Star className="size-4" />
+            {course.showInHero ? "Remove Hero" : "Home Hero"}
+          </Button>
+          <Button
+            size="sm"
+            onClick={handleTogglePopular}
+            className={cn(
+              "flex items-center gap-1 transition",
+              course.showInPopular
+                ? "bg-emerald-600 hover:bg-emerald-700"
+                : "bg-gray-700 hover:bg-gray-800",
+            )}
+          >
+            <TrendingUp className="size-4" />
+            {course.showInPopular ? "Remove Popular" : "Popular"}
+          </Button>
+          <Button
+            size="sm"
+            onClick={handleToggleMegaMenu}
+            className={cn(
+              "flex items-center gap-1 transition",
+              course.showInMegaMenu
+                ? "bg-sky-600 hover:bg-sky-700"
+                : "bg-gray-700 hover:bg-gray-800",
+            )}
+          >
+            <LayoutPanelTop className="size-4" />
+            {course.showInMegaMenu ? "Remove Menu" : "Mega Menu"}
           </Button>
           {/* Publish / Unpublish */}
           <TooltipProvider>

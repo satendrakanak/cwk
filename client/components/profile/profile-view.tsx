@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import {
   Briefcase,
   Globe,
-  Loader2,
+  Loader,
   MapPin,
   Save,
   Sparkles,
@@ -354,7 +354,7 @@ export default function ProfileView({ user }: ProfileViewProps) {
             >
               {isSavingProfile ? (
                 <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader className="h-4 w-4 animate-spin" />
                   Saving...
                 </>
               ) : (
@@ -447,7 +447,7 @@ export default function ProfileView({ user }: ProfileViewProps) {
             >
               {isSavingProfile ? (
                 <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader className="h-4 w-4 animate-spin" />
                   Saving...
                 </>
               ) : (
@@ -557,7 +557,7 @@ export default function ProfileView({ user }: ProfileViewProps) {
               >
                 {isSavingFaculty ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader className="h-4 w-4 animate-spin" />
                     Saving...
                   </>
                 ) : (

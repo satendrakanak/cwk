@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Camera, Loader2 } from "lucide-react";
+import { Camera, Loader } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -90,7 +90,7 @@ export function ProfileAvatar({
           </svg>
 
           <span className="absolute flex items-center gap-1 text-sm font-semibold text-primary-foreground">
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            <Loader className="h-3.5 w-3.5 animate-spin" />
             {normalizedProgress}%
           </span>
         </div>

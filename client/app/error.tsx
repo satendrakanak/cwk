@@ -8,7 +8,7 @@ import {
   ArrowRight,
   BookOpenCheck,
   GraduationCap,
-  Loader2,
+  Loader,
   LockKeyhole,
   LogIn,
   RefreshCcw,
@@ -73,10 +73,10 @@ export default function GlobalError({
 
   if (!isAuthExpired) {
     return (
-      <main className="flex min-h-screen items-center justify-center overflow-hidden bg-[linear-gradient(135deg,#f8fbff_0%,#ffffff_42%,#eef4ff_100%)] px-4 py-10 text-slate-950 dark:bg-[radial-gradient(circle_at_top_left,rgba(86,114,255,0.16),transparent_24%),linear-gradient(180deg,rgba(9,16,31,0.98),rgba(15,24,43,1))] dark:text-white">
-        <section className="w-full max-w-md rounded-3xl border border-border bg-card p-6 text-center shadow-xl dark:border-white/10">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-destructive/10 text-destructive">
-            <AlertTriangle className="h-8 w-8" />
+      <main className="flex min-h-screen items-center justify-center overflow-hidden bg-[linear-gradient(135deg,#f8fbff_0%,#ffffff_42%,#ecfff6_100%)] px-4 py-10 text-slate-950 dark:bg-[radial-gradient(circle_at_top_left,rgba(84,199,139,0.18),transparent_24%),linear-gradient(180deg,rgba(9,16,31,0.98),rgba(15,24,43,1))] dark:text-white">
+        <section className="w-full max-w-md rounded-3xl border border-emerald-500/15 bg-card p-6 text-center shadow-xl shadow-emerald-950/10 dark:border-emerald-300/15">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-500 dark:bg-emerald-300/10 dark:text-emerald-300">
+            <AlertTriangle className="h-7 w-7" />
           </div>
           <h1 className="mt-5 text-2xl font-semibold tracking-tight">
             Something went wrong
@@ -85,11 +85,18 @@ export default function GlobalError({
             {error.message || "Unexpected error occurred. Please try again."}
           </p>
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            <Button onClick={() => reset()} className="w-full gap-2">
+            <Button
+              onClick={() => reset()}
+              className="w-full gap-2 bg-emerald-500 text-emerald-950 hover:bg-emerald-400"
+            >
               <RefreshCcw className="h-4 w-4" />
               Try again
             </Button>
-            <Button variant="outline" asChild className="w-full">
+            <Button
+              variant="outline"
+              asChild
+              className="w-full border-emerald-500/20 hover:bg-emerald-500/10 hover:text-emerald-700 dark:hover:text-emerald-200"
+            >
               <Link href="/">Go home</Link>
             </Button>
           </div>
@@ -133,7 +140,7 @@ export default function GlobalError({
                 className="h-11 w-full gap-2 bg-emerald-400 font-semibold text-emerald-950 hover:bg-emerald-300"
               >
                 {isRecovering ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader className="h-4 w-4 animate-spin" />
                 ) : (
                   <RefreshCcw className="h-4 w-4" />
                 )}
@@ -181,7 +188,7 @@ export default function GlobalError({
             </div>
             <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl border border-emerald-300/20 bg-emerald-300/10 text-emerald-200 shadow-2xl shadow-emerald-950/40">
               {isRecovering ? (
-                <Loader2 className="h-10 w-10 animate-spin" />
+                <Loader className="h-10 w-10 animate-spin" />
               ) : (
                 <LockKeyhole className="h-10 w-10" />
               )}

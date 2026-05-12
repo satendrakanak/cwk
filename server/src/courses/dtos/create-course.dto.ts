@@ -271,6 +271,18 @@ export class CreateCourseDto {
   @IsOptional()
   isFeatured?: boolean;
 
+  @IsBoolean()
+  @IsOptional()
+  showInHero?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  showInPopular?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  showInMegaMenu?: boolean;
+
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })

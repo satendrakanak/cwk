@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
-import { Camera, Loader2 } from "lucide-react";
+import { Camera, Loader } from "lucide-react";
 import { toast } from "sonner";
 
 import { getErrorMessage } from "@/lib/error-handler";
@@ -109,7 +109,7 @@ export function ProfileCover({ coverImage, isOwner }: ProfileCoverProps) {
           className="absolute right-4 top-4 inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-primary-foreground/20 bg-foreground/45 text-primary-foreground shadow-lg backdrop-blur-md transition-colors hover:bg-primary hover:text-primary-foreground disabled:cursor-not-allowed disabled:opacity-70 md:h-11 md:w-11"
         >
           {isUploading ? (
-            <Loader2 className="h-5 w-5 animate-spin" />
+            <Loader className="h-5 w-5 animate-spin" />
           ) : (
             <Camera className="h-5 w-5" />
           )}

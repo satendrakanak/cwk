@@ -1,5 +1,5 @@
 import { apiServer } from "@/lib/api/server";
-import { ApiResponse } from "@/types/api";
+import { ApiResponse, Paginated } from "@/types/api";
 import { Course } from "@/types/course";
 
 const PUBLIC_REVALIDATE_SECONDS = 60;
@@ -9,6 +9,9 @@ type DateRangeQuery = {
   endDate?: string;
   page?: number;
   limit?: number;
+  mode?: string;
+  category?: string;
+  tag?: string;
 };
 
 function withQuery(path: string, query?: DateRangeQuery) {
@@ -19,6 +22,9 @@ function withQuery(path: string, query?: DateRangeQuery) {
   if (query?.endDate) params.set("endDate", query.endDate);
   if (query?.page) params.set("page", String(query.page));
   if (query?.limit) params.set("limit", String(query.limit));
+  if (query?.mode) params.set("mode", query.mode);
+  if (query?.category) params.set("category", query.category);
+  if (query?.tag) params.set("tag", query.tag);
 
   const search = params.toString();
   return search ? `${basePath}?${search}` : basePath;
@@ -27,13 +33,33 @@ function withQuery(path: string, query?: DateRangeQuery) {
 export const courseServerService = {
   getAll: () =>
     apiServer.get<ApiResponse<Course[]>>("/courses?isPublished=true"),
+  getPublicCourses: (query?: DateRangeQuery) =>
+    apiServer.get<ApiResponse<Paginated<Course>>>(
+      withQuery("/courses?isPublished=true", query),
+      { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } },
+    ),
+  getPublicCourseOptions: () =>
+    apiServer.get<ApiResponse<Array<{ id: number; title: string }>>>(
+      "/courses/public-options",
+      { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } },
+    ),
   getAllCourses: (query?: DateRangeQuery) =>
     apiServer.get<ApiResponse<{ data: Course[] }>>(
       withQuery("/courses", query),
     ),
 
   getPopularCourses: () =>
-    apiServer.get<ApiResponse<Course[]>>("/courses/featured", {
+    apiServer.get<ApiResponse<Course[]>>("/courses/popular", {
+      next: { revalidate: PUBLIC_REVALIDATE_SECONDS },
+    }),
+
+  getHeroCourses: () =>
+    apiServer.get<ApiResponse<Course[]>>("/courses/hero", {
+      next: { revalidate: PUBLIC_REVALIDATE_SECONDS },
+    }),
+
+  getMegaMenuCourses: () =>
+    apiServer.get<ApiResponse<Course[]>>("/courses/mega-menu", {
       next: { revalidate: PUBLIC_REVALIDATE_SECONDS },
     }),
 

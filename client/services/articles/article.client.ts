@@ -1,5 +1,6 @@
 import { apiClient, withAuthRetry } from "@/lib/api/client";
 import { ApiResponse } from "@/types/api";
+import type { Paginated } from "@/types/api";
 import {
   Article,
   CreateArticePayload,
@@ -9,6 +10,19 @@ import {
 export const articleClientService = {
   getAll: () =>
     apiClient.get<ApiResponse<{ data: Article[] }>>("/api/articles"),
+  getPublicArticles: (
+    query: { page?: number; limit?: number; category?: string } = {},
+  ) => {
+    const params = new URLSearchParams({ isPublished: "true" });
+
+    if (query.page) params.set("page", String(query.page));
+    if (query.limit) params.set("limit", String(query.limit));
+    if (query.category) params.set("category", query.category);
+
+    return apiClient.get<ApiResponse<Paginated<Article>>>(
+      `/api/articles?${params.toString()}`,
+    );
+  },
   getById: (id: number) =>
     apiClient.get<ApiResponse<Article>>(`/api/articles/${id}`),
   create: (data: CreateArticePayload) =>

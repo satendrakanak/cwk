@@ -33,6 +33,8 @@ import { ClassAttendance } from 'src/faculty-workspace/class-attendance.entity';
 import { ClassSession } from 'src/faculty-workspace/class-session.entity';
 import { UserProgres } from 'src/user-progress/user-progres.entity';
 import { Course } from 'src/courses/course.entity';
+import { FacultyReview } from 'src/faculty-reviews/faculty-review.entity';
+import { CourseReview } from 'src/course-reviews/course-review.entity';
 
 @Module({
   imports: [
@@ -46,6 +48,8 @@ import { Course } from 'src/courses/course.entity';
       Course,
       ClassSession,
       ClassAttendance,
+      FacultyReview,
+      CourseReview,
     ]),
     forwardRef(() => AuthModule),
     ConfigModule.forFeature(jwtConfig),

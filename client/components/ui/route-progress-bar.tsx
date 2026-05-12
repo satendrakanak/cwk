@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+import { Loader } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -120,16 +121,31 @@ export function RouteProgressBar() {
   }, [pathname, searchParams, active]);
 
   return (
-    <div
-      className={cn(
-        "fixed inset-x-0 top-0 z-[90] h-[3px] origin-left bg-transparent",
-        active ? "opacity-100" : "opacity-0",
-      )}
-    >
+    <>
       <div
-        className="h-full bg-[linear-gradient(90deg,var(--brand-500),#5f7bff,var(--primary))] shadow-[0_0_18px_rgba(95,123,255,0.55)] transition-[width] duration-150 ease-out"
-        style={{ width: `${progress}%` }}
-      />
-    </div>
+        className={cn(
+          "fixed inset-x-0 top-0 z-[90] h-[3px] origin-left bg-transparent",
+          active ? "opacity-100" : "opacity-0",
+        )}
+      >
+        <div
+          className="h-full bg-[linear-gradient(90deg,var(--brand-500),#5f7bff,var(--primary))] shadow-[0_0_18px_rgba(95,123,255,0.55)] transition-[width] duration-150 ease-out"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+
+      <div
+        className={cn(
+          "pointer-events-none fixed inset-0 z-[89] flex items-center justify-center bg-background/28 backdrop-blur-[2px] transition-opacity duration-150",
+          active ? "opacity-100" : "opacity-0",
+        )}
+        aria-hidden={!active}
+      >
+        <div className="inline-flex items-center gap-3 rounded-full border border-border bg-card/92 px-5 py-3 text-sm font-semibold text-card-foreground shadow-[0_24px_80px_color-mix(in_oklab,var(--foreground)_16%,transparent)]">
+          <Loader className="h-5 w-5 animate-spin text-primary" />
+          Loading
+        </div>
+      </div>
+    </>
   );
 }

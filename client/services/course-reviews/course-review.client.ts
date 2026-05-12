@@ -1,5 +1,5 @@
 import { apiClient, withAuthRetry } from "@/lib/api/client";
-import { ApiResponse } from "@/types/api";
+import { ApiResponse, Paginated } from "@/types/api";
 import {
   CourseReview,
   CourseReviewSummary,
@@ -7,10 +7,24 @@ import {
 } from "@/types/course-review";
 
 export const courseReviewClientService = {
-  getByCourse: (courseId: number) =>
-    apiClient.get<ApiResponse<CourseReview[]>>(
-      `/api/course-reviews/course/${courseId}`,
-    ),
+  getByCourse: (
+    courseId: number,
+    params?: {
+      page?: number;
+      limit?: number;
+      filter?: "recent" | "oldest" | "positive" | "average" | "negative";
+    },
+  ) => {
+    const searchParams = new URLSearchParams();
+    if (params?.page) searchParams.set("page", String(params.page));
+    if (params?.limit) searchParams.set("limit", String(params.limit));
+    if (params?.filter) searchParams.set("filter", params.filter);
+    const query = searchParams.toString();
+
+    return apiClient.get<ApiResponse<Paginated<CourseReview>>>(
+      `/api/course-reviews/course/${courseId}${query ? `?${query}` : ""}`,
+    );
+  },
 
   getSummary: (courseId: number) =>
     apiClient.get<ApiResponse<CourseReviewSummary>>(

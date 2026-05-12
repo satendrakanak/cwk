@@ -1,11 +1,14 @@
 import { CouponBulkClient } from "../coupon/coupon-bulk-client";
 import { Course } from "@/types/course";
+import Link from "next/link";
 
 interface PopularCoursesProps {
   courses: Course[];
 }
 
 export default function PopularCourses({ courses }: PopularCoursesProps) {
+  const visibleCourses = courses.slice(0, 6);
+
   return (
     <section className="academy-section relative bg-background">
       <div className="pointer-events-none absolute inset-0">
@@ -34,7 +37,16 @@ export default function PopularCourses({ courses }: PopularCoursesProps) {
           </p>
         </div>
 
-        <CouponBulkClient courses={courses} />
+        <CouponBulkClient courses={visibleCourses} />
+
+        <div className="mt-10 flex justify-center">
+          <Link
+            href="/courses"
+            className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-7 text-sm font-semibold text-primary-foreground shadow-[0_16px_40px_color-mix(in_oklab,var(--primary)_24%,transparent)] transition hover:-translate-y-0.5 hover:bg-primary/90"
+          >
+            View More Courses
+          </Link>
+        </div>
       </div>
     </section>
   );

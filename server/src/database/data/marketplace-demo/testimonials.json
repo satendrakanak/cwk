@@ -2,34 +2,521 @@
   {
     "name": "Nisha Mehta",
     "designation": "Frontend Learner",
-    "company": "Career Switcher",
-    "message": "The recorded lessons and final assessment made the learning path very clear. I could revise at my own pace and still track progress properly.",
-    "rating": 5,
-    "avatarPath": "/assets/testimonials/student-1.jpg",
+    "company": "Independent Learner",
+    "message": "The recorded lessons in Frontend Developer Starter Kit helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 4,
+    "avatarPath": "/assets/users/user-girl-01.webp",
     "avatarAlt": "Nisha Mehta profile photo",
-    "courseSlugs": ["frontend-developer-starter-kit"],
+    "courseSlugs": [
+      "frontend-developer-starter-kit"
+    ],
     "priority": 1
   },
   {
     "name": "Rohit Bansal",
-    "designation": "Hybrid Program Student",
+    "designation": "Career Switcher",
     "company": "Junior Developer",
-    "message": "The hybrid model helped me learn the theory first and then clear doubts in live project sessions. The classroom and recordings were very useful.",
+    "message": "The recorded lessons in JavaScript Mastery Self Learning Path helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-2.jpg",
+    "avatarPath": "/assets/users/user-boy-01.webp",
     "avatarAlt": "Rohit Bansal profile photo",
-    "courseSlugs": ["full-stack-web-development-mentorship"],
+    "courseSlugs": [
+      "javascript-mastery-self-learning-path"
+    ],
     "priority": 2
   },
   {
     "name": "Ananya Rao",
-    "designation": "Wellness Coach",
-    "company": "Independent Practitioner",
-    "message": "Live classes, reminders, attendance, and certificate tracking made the Ayurveda program feel structured and professional.",
+    "designation": "CodeWithKasa Student",
+    "company": "Student",
+    "message": "The recorded lessons in TypeScript for Practical Developers helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
     "rating": 5,
-    "avatarPath": "/assets/testimonials/student-3.jpg",
+    "avatarPath": "/assets/users/user-girl-02.webp",
     "avatarAlt": "Ananya Rao profile photo",
-    "courseSlugs": ["ayurveda-nutrition-live-practitioner-program"],
+    "courseSlugs": [
+      "typescript-for-practical-developers"
+    ],
     "priority": 3
+  },
+  {
+    "name": "Sahil Jain",
+    "designation": "Frontend Learner",
+    "company": "Working Professional",
+    "message": "The live faculty sessions in React Project Builder Bootcamp helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-boy-02.webp",
+    "avatarAlt": "Sahil Jain profile photo",
+    "courseSlugs": [
+      "react-project-builder-bootcamp"
+    ],
+    "priority": 4
+  },
+  {
+    "name": "Tanvi Shah",
+    "designation": "Career Switcher",
+    "company": "Independent Learner",
+    "message": "The hybrid learning flow in Next.js Production Apps Mentorship helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-girl-03.webp",
+    "avatarAlt": "Tanvi Shah profile photo",
+    "courseSlugs": [
+      "nextjs-production-apps-mentorship"
+    ],
+    "priority": 5
+  },
+  {
+    "name": "Mohit Yadav",
+    "designation": "CodeWithKasa Student",
+    "company": "Junior Developer",
+    "message": "The live faculty sessions in Node.js API Development Live Cohort helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-boy-03.webp",
+    "avatarAlt": "Mohit Yadav profile photo",
+    "courseSlugs": [
+      "nodejs-api-development-live-cohort"
+    ],
+    "priority": 6
+  },
+  {
+    "name": "Kriti Kapoor",
+    "designation": "Frontend Learner",
+    "company": "Student",
+    "message": "The live faculty sessions in NestJS Backend Architecture Program helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-girl-04.webp",
+    "avatarAlt": "Kriti Kapoor profile photo",
+    "courseSlugs": [
+      "nestjs-backend-architecture-program"
+    ],
+    "priority": 7
+  },
+  {
+    "name": "Aman Raj",
+    "designation": "Career Switcher",
+    "company": "Working Professional",
+    "message": "The recorded lessons in PostgreSQL and Database Design helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-boy-04.webp",
+    "avatarAlt": "Aman Raj profile photo",
+    "courseSlugs": [
+      "postgresql-and-database-design"
+    ],
+    "priority": 8
+  },
+  {
+    "name": "Sneha Pillai",
+    "designation": "CodeWithKasa Student",
+    "company": "Independent Learner",
+    "message": "The hybrid learning flow in Full Stack Web Development Mentorship helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-girl-05.webp",
+    "avatarAlt": "Sneha Pillai profile photo",
+    "courseSlugs": [
+      "full-stack-web-development-mentorship"
+    ],
+    "priority": 9
+  },
+  {
+    "name": "Laksh Malik",
+    "designation": "Frontend Learner",
+    "company": "Junior Developer",
+    "message": "The recorded lessons in Python Programming Foundations helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 4,
+    "avatarPath": "/assets/users/user-boy-05.webp",
+    "avatarAlt": "Laksh Malik profile photo",
+    "courseSlugs": [
+      "python-programming-foundations"
+    ],
+    "priority": 10
+  },
+  {
+    "name": "Diya Suri",
+    "designation": "Career Switcher",
+    "company": "Student",
+    "message": "The hybrid learning flow in Data Analytics Career Track helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-girl-06.webp",
+    "avatarAlt": "Diya Suri profile photo",
+    "courseSlugs": [
+      "data-analytics-career-track"
+    ],
+    "priority": 11
+  },
+  {
+    "name": "Varun Bhatt",
+    "designation": "CodeWithKasa Student",
+    "company": "Working Professional",
+    "message": "The live faculty sessions in Excel SQL and Dashboard Reporting helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-boy-06.webp",
+    "avatarAlt": "Varun Bhatt profile photo",
+    "courseSlugs": [
+      "excel-sql-dashboard-reporting"
+    ],
+    "priority": 12
+  },
+  {
+    "name": "Isha Gupta",
+    "designation": "Frontend Learner",
+    "company": "Independent Learner",
+    "message": "The live faculty sessions in DSA Interview Practice Live helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-girl-07.webp",
+    "avatarAlt": "Isha Gupta profile photo",
+    "courseSlugs": [
+      "dsa-interview-practice-live"
+    ],
+    "priority": 13
+  },
+  {
+    "name": "Neil Dutta",
+    "designation": "Career Switcher",
+    "company": "Junior Developer",
+    "message": "The recorded lessons in Git and GitHub Team Workflow helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-boy-07.webp",
+    "avatarAlt": "Neil Dutta profile photo",
+    "courseSlugs": [
+      "git-and-github-team-workflow"
+    ],
+    "priority": 14
+  },
+  {
+    "name": "Avni Kohli",
+    "designation": "CodeWithKasa Student",
+    "company": "Student",
+    "message": "The recorded lessons in Docker DevOps Starter Course helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-girl-08.webp",
+    "avatarAlt": "Avni Kohli profile photo",
+    "courseSlugs": [
+      "docker-devops-starter-course"
+    ],
+    "priority": 15
+  },
+  {
+    "name": "Dhruv Sinha",
+    "designation": "Frontend Learner",
+    "company": "Working Professional",
+    "message": "The live faculty sessions in AWS Cloud Deployment Essentials helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-boy-08.webp",
+    "avatarAlt": "Dhruv Sinha profile photo",
+    "courseSlugs": [
+      "aws-cloud-deployment-essentials"
+    ],
+    "priority": 16
+  },
+  {
+    "name": "Mitali Roy",
+    "designation": "Career Switcher",
+    "company": "Independent Learner",
+    "message": "The live faculty sessions in Web Performance Optimization Lab helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-girl-09.webp",
+    "avatarAlt": "Mitali Roy profile photo",
+    "courseSlugs": [
+      "web-performance-optimization-lab"
+    ],
+    "priority": 17
+  },
+  {
+    "name": "Aarohi Jain",
+    "designation": "CodeWithKasa Student",
+    "company": "Junior Developer",
+    "message": "The recorded lessons in UI UX Design Essentials helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-girl-10.webp",
+    "avatarAlt": "Aarohi Jain profile photo",
+    "courseSlugs": [
+      "ui-ux-design-essentials"
+    ],
+    "priority": 18
+  },
+  {
+    "name": "Karan Mehra",
+    "designation": "Frontend Learner",
+    "company": "Student",
+    "message": "The hybrid learning flow in Figma to Frontend Workflow helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 4,
+    "avatarPath": "/assets/users/user-boy-09.webp",
+    "avatarAlt": "Karan Mehra profile photo",
+    "courseSlugs": [
+      "figma-to-frontend-workflow"
+    ],
+    "priority": 19
+  },
+  {
+    "name": "Sanya Bedi",
+    "designation": "Career Switcher",
+    "company": "Working Professional",
+    "message": "The live faculty sessions in QA Automation with Playwright helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-boy-10.webp",
+    "avatarAlt": "Sanya Bedi profile photo",
+    "courseSlugs": [
+      "qa-automation-with-playwright"
+    ],
+    "priority": 20
+  },
+  {
+    "name": "Vivaan Shah",
+    "designation": "CodeWithKasa Student",
+    "company": "Independent Learner",
+    "message": "The recorded lessons in Cybersecurity for Web Developers helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-boy-11.webp",
+    "avatarAlt": "Vivaan Shah profile photo",
+    "courseSlugs": [
+      "cybersecurity-for-web-developers"
+    ],
+    "priority": 21
+  },
+  {
+    "name": "Mehul Nanda",
+    "designation": "Frontend Learner",
+    "company": "Junior Developer",
+    "message": "The live faculty sessions in React Native App Launchpad helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-boy-12.webp",
+    "avatarAlt": "Mehul Nanda profile photo",
+    "courseSlugs": [
+      "react-native-app-launchpad"
+    ],
+    "priority": 22
+  },
+  {
+    "name": "Rhea Sood",
+    "designation": "Career Switcher",
+    "company": "Student",
+    "message": "The recorded lessons in AI Tools for Developer Productivity helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-girl-11.webp",
+    "avatarAlt": "Rhea Sood profile photo",
+    "courseSlugs": [
+      "ai-tools-for-developer-productivity"
+    ],
+    "priority": 23
+  },
+  {
+    "name": "Aditya Rao",
+    "designation": "CodeWithKasa Student",
+    "company": "Working Professional",
+    "message": "The recorded lessons in Technical Writing for Developers helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-boy-01.webp",
+    "avatarAlt": "Aditya Rao profile photo",
+    "courseSlugs": [
+      "technical-writing-for-developers"
+    ],
+    "priority": 24
+  },
+  {
+    "name": "Prachi Saini",
+    "designation": "Frontend Learner",
+    "company": "Independent Learner",
+    "message": "The live faculty sessions in Spoken English Live Confidence Batch helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-girl-12.webp",
+    "avatarAlt": "Prachi Saini profile photo",
+    "courseSlugs": [
+      "spoken-english-live-confidence-batch"
+    ],
+    "priority": 25
+  },
+  {
+    "name": "Gaurav Saxena",
+    "designation": "Career Switcher",
+    "company": "Junior Developer",
+    "message": "The live faculty sessions in Career Prep Resume and Interview Lab helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-boy-02.webp",
+    "avatarAlt": "Gaurav Saxena profile photo",
+    "courseSlugs": [
+      "career-prep-resume-interview-lab"
+    ],
+    "priority": 26
+  },
+  {
+    "name": "Naina Verma",
+    "designation": "CodeWithKasa Student",
+    "company": "Student",
+    "message": "The hybrid learning flow in System Design Foundation Hybrid helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-girl-01.webp",
+    "avatarAlt": "Naina Verma profile photo",
+    "courseSlugs": [
+      "system-design-foundation-hybrid"
+    ],
+    "priority": 27
+  },
+  {
+    "name": "Aryan Khanna",
+    "designation": "Frontend Learner",
+    "company": "Working Professional",
+    "message": "The live faculty sessions in Ecommerce Website Builder Program helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 4,
+    "avatarPath": "/assets/users/user-boy-03.webp",
+    "avatarAlt": "Aryan Khanna profile photo",
+    "courseSlugs": [
+      "ecommerce-website-builder-program"
+    ],
+    "priority": 28
+  },
+  {
+    "name": "Jiya Menon",
+    "designation": "Career Switcher",
+    "company": "Independent Learner",
+    "message": "The recorded lessons in Freelance Developer Business Kit helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-girl-02.webp",
+    "avatarAlt": "Jiya Menon profile photo",
+    "courseSlugs": [
+      "freelance-developer-business-kit"
+    ],
+    "priority": 29
+  },
+  {
+    "name": "Sameer Ali",
+    "designation": "CodeWithKasa Student",
+    "company": "Junior Developer",
+    "message": "The hybrid learning flow in Product Analytics and Growth Metrics helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-boy-04.webp",
+    "avatarAlt": "Sameer Ali profile photo",
+    "courseSlugs": [
+      "product-analytics-growth-metrics"
+    ],
+    "priority": 30
+  },
+  {
+    "name": "Kiara Bose",
+    "designation": "Frontend Learner",
+    "company": "Student",
+    "message": "The recorded lessons in Frontend Developer Starter Kit helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-girl-03.webp",
+    "avatarAlt": "Kiara Bose profile photo",
+    "courseSlugs": [
+      "frontend-developer-starter-kit"
+    ],
+    "priority": 31
+  },
+  {
+    "name": "Tarun Goyal",
+    "designation": "Career Switcher",
+    "company": "Working Professional",
+    "message": "The recorded lessons in JavaScript Mastery Self Learning Path helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-boy-05.webp",
+    "avatarAlt": "Tarun Goyal profile photo",
+    "courseSlugs": [
+      "javascript-mastery-self-learning-path"
+    ],
+    "priority": 32
+  },
+  {
+    "name": "Bhavna Puri",
+    "designation": "CodeWithKasa Student",
+    "company": "Independent Learner",
+    "message": "The recorded lessons in TypeScript for Practical Developers helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-girl-04.webp",
+    "avatarAlt": "Bhavna Puri profile photo",
+    "courseSlugs": [
+      "typescript-for-practical-developers"
+    ],
+    "priority": 33
+  },
+  {
+    "name": "Uday Chandra",
+    "designation": "Frontend Learner",
+    "company": "Junior Developer",
+    "message": "The live faculty sessions in React Project Builder Bootcamp helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-boy-06.webp",
+    "avatarAlt": "Uday Chandra profile photo",
+    "courseSlugs": [
+      "react-project-builder-bootcamp"
+    ],
+    "priority": 34
+  },
+  {
+    "name": "Rashi Kamat",
+    "designation": "Career Switcher",
+    "company": "Student",
+    "message": "The hybrid learning flow in Next.js Production Apps Mentorship helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-girl-05.webp",
+    "avatarAlt": "Rashi Kamat profile photo",
+    "courseSlugs": [
+      "nextjs-production-apps-mentorship"
+    ],
+    "priority": 35
+  },
+  {
+    "name": "Nikhil Bhatia",
+    "designation": "CodeWithKasa Student",
+    "company": "Working Professional",
+    "message": "The live faculty sessions in Node.js API Development Live Cohort helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-boy-07.webp",
+    "avatarAlt": "Nikhil Bhatia profile photo",
+    "courseSlugs": [
+      "nodejs-api-development-live-cohort"
+    ],
+    "priority": 36
+  },
+  {
+    "name": "Mira Dsouza",
+    "designation": "Frontend Learner",
+    "company": "Independent Learner",
+    "message": "The live faculty sessions in NestJS Backend Architecture Program helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 4,
+    "avatarPath": "/assets/users/user-girl-06.webp",
+    "avatarAlt": "Mira Dsouza profile photo",
+    "courseSlugs": [
+      "nestjs-backend-architecture-program"
+    ],
+    "priority": 37
+  },
+  {
+    "name": "Jay Malhotra",
+    "designation": "Career Switcher",
+    "company": "Junior Developer",
+    "message": "The recorded lessons in PostgreSQL and Database Design helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-boy-08.webp",
+    "avatarAlt": "Jay Malhotra profile photo",
+    "courseSlugs": [
+      "postgresql-and-database-design"
+    ],
+    "priority": 38
+  },
+  {
+    "name": "Tanya Arora",
+    "designation": "CodeWithKasa Student",
+    "company": "Student",
+    "message": "The hybrid learning flow in Full Stack Web Development Mentorship helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-girl-07.webp",
+    "avatarAlt": "Tanya Arora profile photo",
+    "courseSlugs": [
+      "full-stack-web-development-mentorship"
+    ],
+    "priority": 39
+  },
+  {
+    "name": "Abhay Kulkarni",
+    "designation": "Frontend Learner",
+    "company": "Working Professional",
+    "message": "The recorded lessons in Python Programming Foundations helped me stay consistent, complete practice tasks, and understand exactly what was pending before certification.",
+    "rating": 5,
+    "avatarPath": "/assets/users/user-boy-09.webp",
+    "avatarAlt": "Abhay Kulkarni profile photo",
+    "courseSlugs": [
+      "python-programming-foundations"
+    ],
+    "priority": 40
   }
 ]

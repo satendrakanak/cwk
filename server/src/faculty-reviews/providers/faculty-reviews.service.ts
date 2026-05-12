@@ -9,6 +9,7 @@ import { MediaFileMappingService } from 'src/common/media-file-mapping/providers
 import { User } from 'src/users/user.entity';
 import { Repository } from 'typeorm';
 import { CreateFacultyReviewDto } from '../dtos/create-faculty-review.dto';
+import { GetFacultyReviewsDto } from '../dtos/get-faculty-reviews.dto';
 import { FacultyReview } from '../faculty-review.entity';
 
 @Injectable()
@@ -21,14 +22,42 @@ export class FacultyReviewsService {
     private readonly mediaFileMappingService: MediaFileMappingService,
   ) {}
 
-  async getByFaculty(facultyId: number) {
-    const reviews = await this.facultyReviewRepository.find({
-      where: { faculty: { id: facultyId }, isPublished: true },
-      relations: ['user', 'user.avatar'],
-      order: { createdAt: 'DESC' },
-    });
+  async getByFaculty(facultyId: number, query: GetFacultyReviewsDto = {}) {
+    const page = Math.max(1, Number(query.page || 1));
+    const limit = Math.min(20, Math.max(1, Number(query.limit || 5)));
+    const filter = query.filter || 'recent';
 
-    return reviews.map((review) => this.mapReviewMedia(review));
+    const queryBuilder = this.facultyReviewRepository
+      .createQueryBuilder('review')
+      .leftJoinAndSelect('review.user', 'user')
+      .leftJoinAndSelect('user.avatar', 'avatar')
+      .where('review.facultyId = :facultyId', { facultyId })
+      .andWhere('review.isPublished = :isPublished', { isPublished: true });
+
+    if (filter === 'positive') {
+      queryBuilder.andWhere('review.rating >= :rating', { rating: 4 });
+    } else if (filter === 'average') {
+      queryBuilder.andWhere('review.rating = :rating', { rating: 3 });
+    } else if (filter === 'negative') {
+      queryBuilder.andWhere('review.rating <= :rating', { rating: 2 });
+    }
+
+    queryBuilder.orderBy(
+      'review.createdAt',
+      filter === 'oldest' ? 'ASC' : 'DESC',
+    );
+
+    const [reviews, totalItems] = await queryBuilder
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getManyAndCount();
+
+    return this.paginateResponse(
+      reviews.map((review) => this.mapReviewMedia(review)),
+      totalItems,
+      page,
+      limit,
+    );
   }
 
   async getMine(facultyId: number, userId: number) {
@@ -173,5 +202,31 @@ export class FacultyReviewsService {
     }
 
     return review;
+  }
+
+  private paginateResponse<T>(
+    data: T[],
+    totalItems: number,
+    page: number,
+    limit: number,
+  ) {
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return {
+      data,
+      meta: {
+        itemsPerPage: limit,
+        totalItems,
+        currentPage: page,
+        totalPages,
+      },
+      links: {
+        first: '',
+        last: '',
+        current: '',
+        next: '',
+        previous: '',
+      },
+    };
   }
 }

@@ -8,7 +8,7 @@ import {
   CheckCircle2,
   Database,
   KeyRound,
-  Loader2,
+  Loader,
   Play,
   ShieldCheck,
   Sparkles,
@@ -376,7 +376,7 @@ export function InstallationWizard() {
                 {installationProgress.status === "completed" ? (
                   <CheckCircle2 className="size-8" />
                 ) : (
-                  <Loader2 className="size-8 animate-spin" />
+                  <Loader className="size-8 animate-spin" />
                 )}
               </div>
               <h1 className="mt-6 text-3xl font-semibold">
@@ -444,7 +444,7 @@ export function InstallationWizard() {
       <InstallShell>
         <div className="flex min-h-[60vh] items-center justify-center">
           <div className="rounded-2xl border bg-card p-8 text-center shadow-sm">
-            <Loader2 className="mx-auto size-8 animate-spin text-primary" />
+            <Loader className="mx-auto size-8 animate-spin text-primary" />
             <p className="mt-4 text-sm font-medium text-muted-foreground">
               Checking installation status...
             </p>
@@ -794,7 +794,7 @@ export function InstallationWizard() {
                   }
                 >
                   {databaseTesting ? (
-                    <Loader2 className="size-4 animate-spin" />
+                    <Loader className="size-4 animate-spin" />
                   ) : (
                     <Database className="size-4" />
                   )}
@@ -804,7 +804,7 @@ export function InstallationWizard() {
                 </Button>
                 {databaseRestartRequired ? (
                   <div className="flex items-center gap-2 rounded-xl border bg-muted/40 px-4 py-2 text-sm text-muted-foreground">
-                    <Loader2 className="size-4 animate-spin" />
+                    <Loader className="size-4 animate-spin" />
                     Reconnecting database runtime
                   </div>
                 ) : null}
@@ -925,7 +925,7 @@ export function InstallationWizard() {
                   disabled={validating || form.licenseKey.trim().length < 8}
                 >
                   {validating ? (
-                    <Loader2 className="size-4 animate-spin" />
+                    <Loader className="size-4 animate-spin" />
                   ) : (
                     <ShieldCheck className="size-4" />
                   )}
@@ -1011,7 +1011,7 @@ export function InstallationWizard() {
                   }
                 >
                   {submitting ? (
-                    <Loader2 className="size-4 animate-spin" />
+                    <Loader className="size-4 animate-spin" />
                   ) : (
                     <Play className="size-4" />
                   )}

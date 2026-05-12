@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Award, Download, Loader2 } from "lucide-react";
+import { Award, Download, Loader } from "lucide-react";
 import { toast } from "sonner";
 
 import { CourseQaSection } from "@/components/course/sections/course-qa-section";
@@ -232,7 +232,7 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
                 >
                   {isGenerating ? (
                     <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <Loader className="h-4 w-4 animate-spin" />
                       Generating...
                     </>
                   ) : certificate ? (

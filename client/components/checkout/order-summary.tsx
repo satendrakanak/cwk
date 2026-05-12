@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { CreditCard, Loader2, ShieldCheck, Sparkles } from "lucide-react";
+import { CreditCard, Loader, ShieldCheck, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -238,7 +238,7 @@ export const OrderSummary = ({
       >
         {isSubmitting ? (
           <>
-            <Loader2 className="h-5 w-5 animate-spin" />
+            <Loader className="h-5 w-5 animate-spin" />
             Processing...
           </>
         ) : (

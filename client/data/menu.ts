@@ -8,6 +8,7 @@ export const navbarItems = [
     label: "Courses",
     href: "/courses",
     hasChild: false,
+    hasMegaMenu: true,
   },
   {
     label: "Articles",
@@ -21,8 +22,8 @@ export const navbarItems = [
   },
 
   {
-    label: "Our Faculty",
-    href: "/our-faculty",
+    label: "Instructors",
+    href: "/instructors",
     hasChild: false,
   },
 

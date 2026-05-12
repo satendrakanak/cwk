@@ -3,6 +3,7 @@
 import Image from "next/image";
 
 import Container from "@/components/container";
+import { WebsiteBreadcrumbs } from "@/components/layout/website-breadcrumbs";
 import { Article } from "@/types/article";
 
 export function ArticleHero({ article }: { article: Article }) {
@@ -26,6 +27,17 @@ export function ArticleHero({ article }: { article: Article }) {
       <Container className="relative z-10">
         <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <div className="max-w-3xl">
+            <WebsiteBreadcrumbs
+              contained={false}
+              variant="hero"
+              className="mb-4 pt-0"
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Articles", href: "/articles" },
+                { label: article.title },
+              ]}
+            />
+
             {article.categories?.[0] && (
               <span className="inline-flex rounded-full border border-white/20 bg-white/12 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_28px_rgba(2,6,23,0.20)] backdrop-blur-md">
                 {article.categories[0].name}

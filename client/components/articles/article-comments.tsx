@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import {
   Heart,
   MessageCircle,
@@ -8,6 +8,8 @@ import {
   Reply,
   Trash2,
   Send,
+  Filter,
+  Loader,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -20,10 +22,20 @@ import { getUserAvatarUrl, getUserDisplayName } from "@/lib/user-avatar";
 import { articleCommentClientService } from "@/services/article-comments/article-comment.client";
 import { ArticleComment } from "@/types/article-comment";
 import { formatDateTime } from "@/utils/formate-date";
+import { cn } from "@/lib/utils";
+
+type CommentSort = "recent" | "oldest";
+
+const COMMENTS_PAGE_SIZE = 5;
 
 export function ArticleComments({ articleId }: { articleId: number }) {
   const [comments, setComments] = useState<ArticleComment[]>([]);
   const [content, setContent] = useState("");
+  const [commentSort, setCommentSort] = useState<CommentSort>("recent");
+  const [totalComments, setTotalComments] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [replyDrafts, setReplyDrafts] = useState<Record<number, string>>({});
   const [openReplies, setOpenReplies] = useState<Record<number, boolean>>({});
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -34,10 +46,44 @@ export function ArticleComments({ articleId }: { articleId: number }) {
 
   const isOwner = (comment: ArticleComment) => comment.user.id === user?.id;
 
+  const loadCommentsPage = useCallback(
+    async (page = 1, mode: "replace" | "append" = "replace") => {
+      if (mode === "replace") {
+        setIsInitialLoading(true);
+      } else {
+        setIsLoadingMore(true);
+      }
+
+      const publicResponse = await articleCommentClientService.getByArticle(
+        articleId,
+        {
+          page,
+          limit: COMMENTS_PAGE_SIZE,
+          sort: commentSort,
+        },
+      );
+
+      setComments((current) =>
+        mode === "append"
+          ? mergeComments(current, publicResponse.data.data)
+          : publicResponse.data.data,
+      );
+      setTotalComments(publicResponse.data.meta.totalItems);
+      setCurrentPage(publicResponse.data.meta.currentPage);
+      setIsInitialLoading(false);
+      setIsLoadingMore(false);
+    },
+    [articleId, commentSort],
+  );
+
   const loadComments = async () => {
     try {
       const [publicResponse, mineResponse] = await Promise.all([
-        articleCommentClientService.getByArticle(articleId),
+        articleCommentClientService.getByArticle(articleId, {
+          page: 1,
+          limit: COMMENTS_PAGE_SIZE,
+          sort: commentSort,
+        }),
         user
           ? articleCommentClientService
               .getMineByArticle(articleId)
@@ -45,7 +91,11 @@ export function ArticleComments({ articleId }: { articleId: number }) {
           : Promise.resolve(null),
       ]);
 
-      setComments(mergeComments(publicResponse.data, mineResponse?.data || []));
+      setComments(
+        mergeComments(publicResponse.data.data, mineResponse?.data || []),
+      );
+      setTotalComments(publicResponse.data.meta.totalItems);
+      setCurrentPage(1);
     } catch (error) {
       toast.error(getErrorMessage(error));
     }
@@ -53,9 +103,14 @@ export function ArticleComments({ articleId }: { articleId: number }) {
 
   useEffect(() => {
     let isMounted = true;
+    setIsInitialLoading(true);
 
     Promise.all([
-      articleCommentClientService.getByArticle(articleId),
+      articleCommentClientService.getByArticle(articleId, {
+        page: 1,
+        limit: COMMENTS_PAGE_SIZE,
+        sort: commentSort,
+      }),
       user
         ? articleCommentClientService
             .getMineByArticle(articleId)
@@ -66,17 +121,23 @@ export function ArticleComments({ articleId }: { articleId: number }) {
         if (!isMounted) return;
 
         setComments(
-          mergeComments(publicResponse.data, mineResponse?.data || []),
+          mergeComments(publicResponse.data.data, mineResponse?.data || []),
         );
+        setTotalComments(publicResponse.data.meta.totalItems);
+        setCurrentPage(1);
+        setIsInitialLoading(false);
       })
       .catch((error) => {
-        if (isMounted) toast.error(getErrorMessage(error));
+        if (isMounted) {
+          toast.error(getErrorMessage(error));
+          setIsInitialLoading(false);
+        }
       });
 
     return () => {
       isMounted = false;
     };
-  }, [articleId, user]);
+  }, [articleId, commentSort, user]);
 
   const submitComment = () => {
     if (!content.trim()) {
@@ -171,6 +232,19 @@ export function ArticleComments({ articleId }: { articleId: number }) {
     });
   };
 
+  const hasMoreComments = comments.length < totalComments;
+  const setSort = (value: CommentSort) => {
+    setCommentSort(value);
+  };
+  const loadMoreComments = async () => {
+    try {
+      await loadCommentsPage(currentPage + 1, "append");
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+      setIsLoadingMore(false);
+    }
+  };
+
   return (
     <section className="academy-card mt-8 p-5 md:p-6">
       <div className="mb-6 flex items-start gap-3 border-b border-border pb-5">
@@ -209,7 +283,39 @@ export function ArticleComments({ articleId }: { articleId: number }) {
       </div>
 
       <div className="mt-6 space-y-4">
-        {comments.length ? (
+        <div className="flex flex-col gap-3 rounded-3xl border border-border bg-muted/40 p-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <Filter className="h-4 w-4" />
+            </span>
+            Sort comments
+          </div>
+
+          <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1 sm:pb-0">
+            {[
+              { value: "recent" as const, label: "Recent" },
+              { value: "oldest" as const, label: "Oldest" },
+            ].map((filter) => (
+              <button
+                key={filter.value}
+                type="button"
+                onClick={() => setSort(filter.value)}
+                className={cn(
+                  "cursor-pointer rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
+                  commentSort === filter.value
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-background text-muted-foreground hover:border-primary/30 hover:bg-primary/10 hover:text-primary",
+                )}
+              >
+                {filter.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {isInitialLoading ? (
+          <CommentSkeletonList />
+        ) : comments.length ? (
           comments.map((comment) => (
             <article
               key={comment.id}
@@ -272,8 +378,56 @@ export function ArticleComments({ articleId }: { articleId: number }) {
             </p>
           </div>
         )}
+
+        {hasMoreComments ? (
+          <div className="pt-2 text-center">
+            <Button
+              type="button"
+              variant="outline"
+              disabled={isLoadingMore}
+              onClick={loadMoreComments}
+              className="rounded-full border-border bg-background px-6 font-semibold text-foreground hover:border-primary/30 hover:bg-primary/10 hover:text-primary"
+            >
+              {isLoadingMore ? (
+                <>
+                  <Loader className="h-4 w-4 animate-spin" />
+                  Loading comments
+                </>
+              ) : (
+                "Show next comments"
+              )}
+            </Button>
+          </div>
+        ) : null}
       </div>
     </section>
+  );
+}
+
+function CommentSkeletonList() {
+  return (
+    <div className="space-y-4">
+      {Array.from({ length: COMMENTS_PAGE_SIZE }).map((_, index) => (
+        <div
+          key={index}
+          className="rounded-3xl border border-border bg-card p-4"
+        >
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 animate-pulse rounded-full bg-muted" />
+
+            <div className="flex-1 space-y-2">
+              <div className="h-4 w-40 animate-pulse rounded-full bg-muted" />
+              <div className="h-3 w-28 animate-pulse rounded-full bg-muted" />
+            </div>
+          </div>
+
+          <div className="mt-4 space-y-2">
+            <div className="h-3 w-full animate-pulse rounded-full bg-muted" />
+            <div className="h-3 w-5/6 animate-pulse rounded-full bg-muted" />
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 

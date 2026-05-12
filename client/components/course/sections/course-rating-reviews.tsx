@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
-import { MessageSquare, Star, Trash2 } from "lucide-react";
+import { useCallback, useEffect, useState, useTransition } from "react";
+import { Filter, Loader, MessageSquare, Star, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -27,21 +27,73 @@ const emptySummary: CourseReviewSummary = {
   breakdown: [5, 4, 3, 2, 1].map((rating) => ({ rating, count: 0 })),
 };
 
+type ReviewFilter = "recent" | "oldest" | "positive" | "average" | "negative";
+
+const reviewFilters: { value: ReviewFilter; label: string }[] = [
+  { value: "recent", label: "Recent" },
+  { value: "oldest", label: "Oldest" },
+  { value: "positive", label: "Positive" },
+  { value: "average", label: "Average" },
+  { value: "negative", label: "Negative" },
+];
+
+const REVIEWS_PAGE_SIZE = 5;
+
 export function CourseRatingReviews({ course }: { course: Course }) {
   const [reviews, setReviews] = useState<CourseReview[]>([]);
   const [summary, setSummary] = useState<CourseReviewSummary>(emptySummary);
   const [myReview, setMyReview] = useState<CourseReview | null>(null);
+  const [totalReviews, setTotalReviews] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
+  const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("recent");
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const { user } = useSession();
+
+  const loadReviewsPage = useCallback(
+    async (page = 1, mode: "replace" | "append" = "replace") => {
+      if (mode === "replace") {
+        setIsInitialLoading(true);
+      } else {
+        setIsLoadingMore(true);
+      }
+
+      const reviewsResponse = await courseReviewClientService.getByCourse(
+        course.id,
+        {
+          page,
+          limit: REVIEWS_PAGE_SIZE,
+          filter: reviewFilter,
+        },
+      );
+
+      const nextReviews = reviewsResponse.data.data;
+      setReviews((current) =>
+        mode === "append"
+          ? mergeReviewPages(current, nextReviews)
+          : nextReviews,
+      );
+      setTotalReviews(reviewsResponse.data.meta.totalItems);
+      setCurrentPage(reviewsResponse.data.meta.currentPage);
+      setIsInitialLoading(false);
+      setIsLoadingMore(false);
+    },
+    [course.id, reviewFilter],
+  );
 
   const loadReviews = async () => {
     try {
       const [reviewsResponse, summaryResponse, mineResponse] =
         await Promise.all([
-          courseReviewClientService.getByCourse(course.id),
+          courseReviewClientService.getByCourse(course.id, {
+            page: 1,
+            limit: REVIEWS_PAGE_SIZE,
+            filter: reviewFilter,
+          }),
           courseReviewClientService.getSummary(course.id),
           user
             ? courseReviewClientService.getMine(course.id).catch(() => null)
@@ -51,7 +103,9 @@ export function CourseRatingReviews({ course }: { course: Course }) {
       const ownReview = mineResponse?.data || null;
 
       setMyReview(ownReview);
-      setReviews(mergeReviews(reviewsResponse.data, ownReview));
+      setReviews(mergeReviews(reviewsResponse.data.data, ownReview));
+      setTotalReviews(reviewsResponse.data.meta.totalItems);
+      setCurrentPage(1);
       setSummary(summaryResponse.data || emptySummary);
 
       if (ownReview) {
@@ -65,9 +119,14 @@ export function CourseRatingReviews({ course }: { course: Course }) {
 
   useEffect(() => {
     let isMounted = true;
+    setIsInitialLoading(true);
 
     Promise.all([
-      courseReviewClientService.getByCourse(course.id),
+      courseReviewClientService.getByCourse(course.id, {
+        page: 1,
+        limit: REVIEWS_PAGE_SIZE,
+        filter: reviewFilter,
+      }),
       courseReviewClientService.getSummary(course.id),
       user
         ? courseReviewClientService.getMine(course.id).catch(() => null)
@@ -79,8 +138,11 @@ export function CourseRatingReviews({ course }: { course: Course }) {
         const ownReview = mineResponse?.data || null;
 
         setMyReview(ownReview);
-        setReviews(mergeReviews(reviewsResponse.data, ownReview));
+        setReviews(mergeReviews(reviewsResponse.data.data, ownReview));
+        setTotalReviews(reviewsResponse.data.meta.totalItems);
+        setCurrentPage(1);
         setSummary(summaryResponse.data || emptySummary);
+        setIsInitialLoading(false);
 
         if (ownReview) {
           setRating(ownReview.rating);
@@ -90,13 +152,14 @@ export function CourseRatingReviews({ course }: { course: Course }) {
       .catch((error) => {
         if (isMounted) {
           toast.error(getErrorMessage(error));
+          setIsInitialLoading(false);
         }
       });
 
     return () => {
       isMounted = false;
     };
-  }, [course.id, user]);
+  }, [course.id, reviewFilter, user]);
 
   const submitReview = () => {
     startTransition(async () => {
@@ -136,6 +199,20 @@ export function CourseRatingReviews({ course }: { course: Course }) {
         toast.error(getErrorMessage(error));
       }
     });
+  };
+
+  const hasMoreReviews = reviews.length < totalReviews;
+  const setFilter = (value: ReviewFilter) => {
+    setReviewFilter(value);
+  };
+
+  const loadMoreReviews = async () => {
+    try {
+      await loadReviewsPage(currentPage + 1, "append");
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+      setIsLoadingMore(false);
+    }
   };
 
   return (
@@ -296,7 +373,35 @@ export function CourseRatingReviews({ course }: { course: Course }) {
           )}
 
           <div className="mt-6 space-y-4">
-            {reviews.length ? (
+            <div className="flex flex-col gap-3 rounded-3xl border border-border bg-muted/40 p-3 sm:flex-row sm:items-center ">
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <Filter className="h-4 w-4" />
+                </span>
+              </div>
+
+              <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1 sm:pb-0">
+                {reviewFilters.map((filter) => (
+                  <button
+                    key={filter.value}
+                    type="button"
+                    onClick={() => setFilter(filter.value)}
+                    className={cn(
+                      "shrink-0 cursor-pointer rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
+                      reviewFilter === filter.value
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-background text-muted-foreground hover:border-primary/30 hover:bg-primary/10 hover:text-primary",
+                    )}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {isInitialLoading ? (
+              <ReviewSkeletonList />
+            ) : reviews.length ? (
               reviews.map((review) => {
                 const reviewerName = getReviewUserName(review);
                 const avatarUrl = getUserAvatarUrl(review.user);
@@ -374,9 +479,70 @@ export function CourseRatingReviews({ course }: { course: Course }) {
                 </p>
               </div>
             )}
+
+            {hasMoreReviews ? (
+              <div className="pt-2 text-center">
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={isLoadingMore}
+                  onClick={loadMoreReviews}
+                  className="rounded-full border-border bg-background px-6 font-semibold text-foreground hover:border-primary/30 hover:bg-primary/10 hover:text-primary"
+                >
+                  {isLoadingMore ? (
+                    <>
+                      <Loader className="h-4 w-4 animate-spin" />
+                      Loading reviews
+                    </>
+                  ) : (
+                    "Show next reviews"
+                  )}
+                </Button>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
     </section>
   );
+}
+
+function ReviewSkeletonList() {
+  return (
+    <div className="space-y-4">
+      {Array.from({ length: REVIEWS_PAGE_SIZE }).map((_, index) => (
+        <div
+          key={index}
+          className="rounded-3xl border border-border bg-card p-5"
+        >
+          <div className="flex items-center gap-3">
+            <div className="h-11 w-11 animate-pulse rounded-full bg-muted" />
+
+            <div className="flex-1 space-y-2">
+              <div className="h-4 w-36 animate-pulse rounded-full bg-muted" />
+              <div className="h-3 w-28 animate-pulse rounded-full bg-muted" />
+            </div>
+          </div>
+
+          <div className="mt-4 space-y-2">
+            <div className="h-3 w-full animate-pulse rounded-full bg-muted" />
+            <div className="h-3 w-4/5 animate-pulse rounded-full bg-muted" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function mergeReviewPages(
+  current: CourseReview[],
+  nextReviews: CourseReview[],
+) {
+  const map = new Map<number, CourseReview>();
+
+  [...current, ...nextReviews].forEach((review) => {
+    map.set(review.id, review);
+  });
+
+  return [...map.values()];
 }

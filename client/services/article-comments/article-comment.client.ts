@@ -1,15 +1,25 @@
 import { apiClient, withAuthRetry } from "@/lib/api/client";
-import { ApiResponse } from "@/types/api";
+import { ApiResponse, Paginated } from "@/types/api";
 import {
   ArticleComment,
   CreateArticleCommentPayload,
 } from "@/types/article-comment";
 
 export const articleCommentClientService = {
-  getByArticle: (articleId: number) =>
-    apiClient.get<ApiResponse<ArticleComment[]>>(
-      `/api/article-comments/article/${articleId}`,
-    ),
+  getByArticle: (
+    articleId: number,
+    params?: { page?: number; limit?: number; sort?: "recent" | "oldest" },
+  ) => {
+    const searchParams = new URLSearchParams();
+    if (params?.page) searchParams.set("page", String(params.page));
+    if (params?.limit) searchParams.set("limit", String(params.limit));
+    if (params?.sort) searchParams.set("sort", params.sort);
+    const query = searchParams.toString();
+
+    return apiClient.get<ApiResponse<Paginated<ArticleComment>>>(
+      `/api/article-comments/article/${articleId}${query ? `?${query}` : ""}`,
+    );
+  },
 
   getAll: () =>
     withAuthRetry(() =>

@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import {
   Eye,
   EyeOff,
-  Loader2,
+  Loader,
   LockKeyhole,
   Save,
   ShieldCheck,
@@ -129,7 +129,7 @@ export default function SettingsView({ user }: SettingsViewProps) {
               >
                 {isSaving ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader className="h-4 w-4 animate-spin" />
                     Saving...
                   </>
                 ) : (

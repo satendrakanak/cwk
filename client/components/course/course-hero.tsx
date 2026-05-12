@@ -5,12 +5,65 @@ import CourseAuthor from "./course-author";
 import CourseUpdateDetails from "../courses/course-update-details";
 import guestAuthor from "@/public/assets/guest-user.webp";
 import { formatDate } from "@/utils/formate-date";
+import { getCourseDeliveryLabel } from "@/lib/course-delivery";
+import { getFacultyHref } from "@/lib/faculty-slug";
+import { WebsiteBreadcrumbs } from "@/components/layout/website-breadcrumbs";
+import type { CourseReviewSummary } from "@/types/course-review";
+import type { User } from "@/types/user";
 
 interface CourseHeroProps {
   course: Course;
+  reviewSummary: CourseReviewSummary;
 }
 
-export const CourseHero = ({ course }: CourseHeroProps) => {
+function getUniqueHeroChips(course: Course) {
+  const items = [
+    {
+      key: `mode-${course.mode || "self_learning"}`,
+      label: getCourseDeliveryLabel(course.mode).shortLabel,
+      tone: "solid",
+    },
+    ...(course.categories || []).map((category) => ({
+      key: `category-${category.slug}`,
+      label: category.name,
+      tone: "neutral",
+    })),
+    ...(course.tags || []).map((tag) => ({
+      key: `tag-${tag.slug}`,
+      label: tag.name,
+      tone: "primary",
+    })),
+  ];
+  const seen = new Set<string>();
+
+  return items.filter((item) => {
+    const normalized = item.label.toLowerCase().trim();
+    if (seen.has(normalized)) return false;
+    seen.add(normalized);
+    return true;
+  });
+}
+
+function getCourseAuthor(course: Course): User | undefined {
+  return course.faculties?.[0] || course.updatedBy || course.createdBy;
+}
+
+export const CourseHero = ({ course, reviewSummary }: CourseHeroProps) => {
+  const heroChips = getUniqueHeroChips(course).slice(0, 6);
+  const author = getCourseAuthor(course);
+  const courseFacultyAuthor = course.faculties?.[0];
+  const authorName =
+    [author?.firstName, author?.lastName].filter(Boolean).join(" ") ||
+    "CodeWithKasa Instructor";
+  const authorHref = courseFacultyAuthor
+    ? getFacultyHref(courseFacultyAuthor)
+    : author?.username
+      ? `/${author.username}`
+      : "/";
+  const authorPhoto = author?.avatar?.path || author?.avatarUrl || guestAuthor;
+  const rating = reviewSummary.total ? reviewSummary.average : 0;
+  const learners = course.enrollmentCount || reviewSummary.total || 0;
+
   return (
     <section className="relative overflow-hidden py-16 text-white lg:py-20">
       <div className="pointer-events-none absolute inset-0">
@@ -31,7 +84,18 @@ export const CourseHero = ({ course }: CourseHeroProps) => {
       <Container className="relative z-10">
         <div className="grid grid-cols-12 items-start gap-8">
           <div className="col-span-12 lg:col-span-7">
-            <div className="mb-5 inline-flex rounded-full border border-white/20 bg-white/12 px-4 py-1.5 text-xs font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_28px_rgba(2,6,23,0.20)] backdrop-blur-md">
+            <WebsiteBreadcrumbs
+              contained={false}
+              variant="hero"
+              className="mb-5 flex justify-center pt-0 lg:justify-start"
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Courses", href: "/courses" },
+                { label: course.title },
+              ]}
+            />
+
+            <div className="mx-auto mb-5 flex w-fit max-w-full rounded-full border border-white/20 bg-white/12 px-4 py-1.5 text-center text-xs font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_28px_rgba(2,6,23,0.20)] backdrop-blur-md lg:mx-0">
               Certified Course
             </div>
 
@@ -45,18 +109,36 @@ export const CourseHero = ({ course }: CourseHeroProps) => {
               </p>
             )}
 
+            <div className="mx-auto mb-5 flex max-w-2xl flex-wrap justify-center gap-2 lg:mx-0 lg:justify-start">
+              {heroChips.map((chip) => (
+                <span
+                  key={chip.key}
+                  className={
+                    chip.tone === "solid"
+                      ? "rounded-full border border-white/20 bg-white/18 px-3 py-1 text-xs font-semibold text-white shadow-sm backdrop-blur-md"
+                      : chip.tone === "primary"
+                        ? "rounded-full border border-primary/35 bg-primary/20 px-3 py-1 text-xs font-semibold text-white shadow-sm backdrop-blur-md"
+                        : "rounded-full border border-white/15 bg-black/18 px-3 py-1 text-xs font-semibold text-white/85 backdrop-blur-md"
+                  }
+                >
+                  {chip.label}
+                </span>
+              ))}
+            </div>
+
             <div className="mb-5">
               <CourseRatingDetails
-                rating={4.8}
-                reviews={1560}
-                enrolledStudentCount={2365}
+                rating={rating || 4.8}
+                reviews={reviewSummary.total}
+                enrolledStudentCount={learners}
               />
             </div>
 
             <div className="flex flex-col items-center gap-4 lg:items-start">
               <CourseAuthor
-                authorName={`${course.updatedBy.firstName} ${course.updatedBy.lastName}`}
-                authorPhoto={guestAuthor}
+                authorName={authorName}
+                authorPhoto={authorPhoto}
+                href={authorHref}
               />
 
               <div className="inline-flex rounded-2xl border border-white/15 bg-white/10 px-4 py-3 shadow-[0_18px_55px_rgba(2,6,23,0.22)] backdrop-blur-xl">

@@ -17,6 +17,13 @@ export type FacultyReviewSummary = {
   breakdown: { rating: number; count: number }[];
 };
 
+export type FacultyReviewFilter =
+  | "recent"
+  | "oldest"
+  | "positive"
+  | "average"
+  | "negative";
+
 export type CreateFacultyReviewPayload = {
   rating: number;
   comment?: string;

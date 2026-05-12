@@ -3,8 +3,18 @@
 import { BookOpen, Headphones, Target } from "lucide-react";
 
 import Container from "../container";
+import {
+  BreadcrumbItemData,
+  WebsiteBreadcrumbs,
+} from "@/components/layout/website-breadcrumbs";
 
-export function CoursesBanner({ totalCourses }: { totalCourses: number }) {
+export function CoursesBanner({
+  totalCourses,
+  breadcrumbs,
+}: {
+  totalCourses: number;
+  breadcrumbs?: BreadcrumbItemData[];
+}) {
   const stats = [
     {
       icon: BookOpen,
@@ -41,12 +51,17 @@ export function CoursesBanner({ totalCourses }: { totalCourses: number }) {
       </div>
 
       <Container className="relative z-10">
-        <p className="mb-4 text-xs font-medium text-white/65">
-          Home • All Courses
-        </p>
-
         <div className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
           <div className="max-w-3xl">
+            {breadcrumbs ? (
+              <WebsiteBreadcrumbs
+                contained={false}
+                variant="hero"
+                className="mb-4 pt-0"
+                items={breadcrumbs}
+              />
+            ) : null}
+
             <div className="mb-4 inline-flex rounded-full border border-white/20 bg-white/12 px-4 py-1.5 text-xs font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_28px_rgba(2,6,23,0.20)] backdrop-blur-md">
               {totalCourses}+ curated programs
             </div>
