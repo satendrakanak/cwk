@@ -11,7 +11,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { formatDate } from "@/utils/formate-date";
@@ -108,7 +107,6 @@ export const courseColumns: ColumnDef<Course>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const router = useRouter();
       const course = row.original;
 
       return (
@@ -120,10 +118,8 @@ export const courseColumns: ColumnDef<Course>[] = [
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => router.push(`/admin/courses/${course.id}`)}
-            >
-              Edit
+            <DropdownMenuItem asChild>
+              <Link href={`/admin/courses/${course.id}`}>Edit</Link>
             </DropdownMenuItem>
             <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
           </DropdownMenuContent>
