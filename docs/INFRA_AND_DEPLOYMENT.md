@@ -80,7 +80,7 @@ kasa install prod
 2. Push the branch to GitHub.
 3. Open a PR into `master`.
 4. Merge the PR into `master` after checks pass.
-5. `.github/workflows/deploy.yml` builds client/server images, pushes them to GHCR, SSHs into the server, resets the server checkout to `origin/master`, and restarts `docker-compose.prod.yml`.
+5. `.github/workflows/deploy.yml` runs client/server checks, SSHs into the server, resets the server checkout to `origin/master`, and rebuilds/restarts `docker-compose.prod.yml` on the server.
 
 Required GitHub secrets:
 
@@ -89,8 +89,16 @@ Required GitHub secrets:
 - `DEPLOY_SSH_KEY`
 - `DEPLOY_PORT` optional, defaults to `22`
 - `DEPLOY_PATH`, for example `/opt/codewithkasa`
-- `NEXT_PUBLIC_APP_URL`, production frontend URL
-- `GHCR_PAT` optional if the server needs a PAT to pull private GHCR images
+
+Optional GitHub variables:
+
+- `NEXT_PUBLIC_APP_URL`, defaults to `https://cwk.getkasa.in`
+
+Production routing on the AWS server is handled by Nginx and Certbot:
+
+- `https://cwk.getkasa.in` proxies to the CodeWithKasa client on port `3000`.
+- `/api/*` on `cwk.getkasa.in` proxies to the CodeWithKasa server on port `8000`.
+- `https://license.getkasa.in` proxies to the licence portal on port `5000`.
 
 ## Files Kept On Purpose
 
