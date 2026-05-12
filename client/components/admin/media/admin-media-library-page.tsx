@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import NextImage from "next/image";
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -26,8 +25,13 @@ import { ConfirmDeleteDialog } from "@/components/modals/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { uploadClientService } from "@/services/uploads/upload.client";
-import type { ApiResponse } from "@/types/api";
-import type { FileType, InitUploadResponse, UploadingFile } from "@/types/file";
+import {
+  confirmDirectUpload,
+  getDirectUploadErrorMessage,
+  initDirectUpload,
+  uploadToSignedUrl,
+} from "@/lib/uploads/direct-upload";
+import type { FileType, UploadingFile } from "@/types/file";
 import { formatDateTime } from "@/utils/formate-date";
 
 type MediaKind = "all" | "image" | "video" | "file";
@@ -55,14 +59,6 @@ const acceptedMediaTypes = [
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   "text/csv",
 ].join(",");
-
-function getUploadErrorMessage(error: unknown) {
-  if (axios.isAxiosError(error) && !error.response) {
-    return "Upload blocked by browser/S3 CORS. Add cwk.getkasa.in to the S3 bucket CORS allowed origins, then retry.";
-  }
-
-  return error instanceof Error ? error.message : "Upload failed";
-}
 
 export function AdminMediaLibraryPage() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -188,52 +184,19 @@ export function AdminMediaLibraryPage() {
       );
 
       const file = uploadingFile.file;
-      const initRes = await fetch("/api/uploads/init", {
-        method: "POST",
-        credentials: "include",
-        body: JSON.stringify({
-          fileName: file.name,
-          mimeType: file.type,
-          size: file.size,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const { uploadId, url } = await initDirectUpload(file);
+
+      await uploadToSignedUrl(url, file, (progressEvent) => {
+        const percent = Math.round(
+          (progressEvent.loaded * 100) / (progressEvent.total || 1),
+        );
+
+        setUploadingFile((current) =>
+          current ? { ...current, progress: percent } : current,
+        );
       });
 
-      if (!initRes.ok) {
-        throw new Error("Upload could not be initialized");
-      }
-
-      const json: ApiResponse<InitUploadResponse> = await initRes.json();
-      const { uploadId, url } = json.data;
-
-      await axios.put(url, file, {
-        headers: {
-          "Content-Type": file.type,
-        },
-        onUploadProgress: (progressEvent) => {
-          const percent = Math.round(
-            (progressEvent.loaded * 100) / (progressEvent.total || 1),
-          );
-
-          setUploadingFile((current) =>
-            current ? { ...current, progress: percent } : current,
-          );
-        },
-      });
-
-      const confirmRes = await fetch(`/api/uploads/confirm/${uploadId}`, {
-        method: "POST",
-        credentials: "include",
-      });
-
-      if (!confirmRes.ok) {
-        throw new Error("Upload confirmation failed");
-      }
-
-      const confirmJson: ApiResponse<FileType> = await confirmRes.json();
-      const newMedia = confirmJson.data;
+      const newMedia = await confirmDirectUpload(uploadId);
 
       setMedia((current) => [newMedia, ...current]);
       setSelected(newMedia);
@@ -241,7 +204,7 @@ export function AdminMediaLibraryPage() {
       toast.success("Media uploaded successfully");
     } catch (error) {
       console.error(error);
-      toast.error(getUploadErrorMessage(error));
+      toast.error(getDirectUploadErrorMessage(error));
       setUploadingFile((current) =>
         current ? { ...current, uploading: false } : current,
       );
