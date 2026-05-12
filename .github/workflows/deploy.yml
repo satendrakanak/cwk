@@ -48,5 +48,7 @@ jobs:
             git reset --hard origin/master
             export DOCKER_BUILDKIT=1
             export COMPOSE_DOCKER_CLI_BUILD=1
-            docker compose --env-file .env -f docker-compose.prod.yml up -d --build --remove-orphans
+            docker compose --env-file .env -f docker-compose.prod.yml build
+            docker compose --env-file .env -f docker-compose.prod.yml run --rm server node dist/database/migrate-production.js
+            docker compose --env-file .env -f docker-compose.prod.yml up -d --remove-orphans
             docker image prune -f

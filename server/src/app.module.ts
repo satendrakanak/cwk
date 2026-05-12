@@ -54,6 +54,7 @@ import { FacultyWorkspaceModule } from './faculty-workspace/faculty-workspace.mo
 import { NotificationsModule } from './notifications/notifications.module';
 import { EngagementModule } from './engagement/engagement.module';
 import { InstallerModule } from './installer/installer.module';
+import { AssignmentsModule } from './assignments/assignments.module';
 
 const ENV = process.env.NODE_ENV;
 const envFilePath =
@@ -142,6 +143,7 @@ const envFilePath =
     InstallerModule,
     CourseExamsModule,
     RefundsModule,
+    AssignmentsModule,
   ],
   controllers: [AppController],
   providers: [

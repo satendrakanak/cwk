@@ -19,6 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "seed": "ts-node -r tsconfig-paths/register src/database/seed.ts",
+    "migrate:production": "node dist/database/migrate-production.js",
     "seed:production": "node dist/database/seed-production.js",
     "seed:production-demo": "node dist/database/seed-production-demo-content.js",
     "seed:marketplace-demo:reset": "MARKETPLACE_DEMO_RESET_CONFIRM=RESET_DEMO_DATABASE ts-node -r tsconfig-paths/register src/database/seed-marketplace-demo-reset.ts",

@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import { User } from '../user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Upload } from 'src/uploads/upload.entity';
+import { ensureStudentRole } from '../utils/ensure-student-role';
 import { RolesPermissionsService } from 'src/roles-permissions/providers/roles-permissions.service';
 
 @Injectable()
@@ -82,16 +83,14 @@ export class UpdateUserProvider {
           throw new BadRequestException('User must have at least one role');
         }
 
-        const roles = await this.rolesPermissionsService.findByIds(
+        const requestedRoles = await this.rolesPermissionsService.findByIds(
           patchUserDto.roleIds,
         );
-        const hasStudent = roles.some((r) => r.name === 'student');
+        const studentRole =
+          await this.rolesPermissionsService.findRoleByName('student');
+        const roles = ensureStudentRole(requestedRoles, studentRole);
 
-        if (!hasStudent) {
-          throw new BadRequestException('User must always have student role');
-        }
-
-        if (roles.length !== patchUserDto.roleIds.length) {
+        if (requestedRoles.length !== patchUserDto.roleIds.length) {
           throw new BadRequestException('Invalid role(s) provided');
         }
 

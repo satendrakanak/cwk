@@ -20,6 +20,7 @@ import { SubmitButton } from "../submit-button";
 import { loginFormSchema } from "@/schemas";
 import { authService } from "@/services/auth.service";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { startRouteProgress } from "@/components/ui/route-progress-bar";
 
 export function LoginForm() {
   const [error, setError] = useState<string>("");
@@ -44,7 +45,7 @@ export function LoginForm() {
     try {
       setError("");
 
-      await authService.login(data);
+      const response = await authService.login(data);
 
       const rawCallbackUrl = searchParams.get("callbackUrl");
       const callbackUrl =
@@ -52,11 +53,11 @@ export function LoginForm() {
         rawCallbackUrl.startsWith("/") &&
         !rawCallbackUrl.startsWith("//")
           ? rawCallbackUrl
-          : DEFAULT_LOGIN_REDIRECT;
+          : response.data.defaultRedirect || DEFAULT_LOGIN_REDIRECT;
 
+      startRouteProgress(callbackUrl);
       startTransition(() => {
-        router.refresh();
-        router.push(callbackUrl);
+        router.replace(callbackUrl);
       });
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");

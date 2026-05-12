@@ -19,6 +19,7 @@ import { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
 import { CreateUserOptions } from '../interfaces/create-user-options.interface';
 import { GenerateVerificationTokenProvider } from 'src/auth/providers/generate-verification-token.provider';
 import { TokenType } from 'src/auth/enums/token-type.enum';
+import { ensureStudentRole } from '../utils/ensure-student-role';
 
 @Injectable()
 export class CreateUserProvider {
@@ -86,14 +87,12 @@ export class CreateUserProvider {
         }
       }
 
-      const roles = createUserDto.roleIds?.length
+      const studentRole =
+        await this.rolesPermissionsService.findRoleByName('student');
+      const requestedRoles = createUserDto.roleIds?.length
         ? await this.rolesPermissionsService.findByIds(createUserDto.roleIds)
-        : [await this.rolesPermissionsService.findRoleByName('student')];
-
-      const hasStudent = roles.some((role) => role.name === 'student');
-      if (!hasStudent) {
-        throw new ConflictException('User must always have student role');
-      }
+        : [];
+      const roles = ensureStudentRole(requestedRoles, studentRole);
 
       console.log('Current User', currentUser);
 

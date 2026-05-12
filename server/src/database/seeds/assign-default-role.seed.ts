@@ -12,16 +12,18 @@ export async function assignDefaultRole(dataSource: DataSource) {
 
   if (!studentRole) throw new Error('Student role not found');
 
-  const users = await userRepo.find(); // ❗ no relations
+  const users = await userRepo.find(); // relation API is used below for safe updates
 
   for (const user of users) {
-    const hasRole = await dataSource
+    const roles = await dataSource
       .createQueryBuilder()
       .relation(User, 'roles')
       .of(user.id)
       .loadMany();
 
-    if (!hasRole.length) {
+    const hasStudentRole = roles.some((role) => role.name === 'student');
+
+    if (!hasStudentRole) {
       await dataSource
         .createQueryBuilder()
         .relation(User, 'roles')

@@ -39,6 +39,7 @@ import { FacultyProfile } from 'src/profiles/faculty-profile.entity';
 import { UserProfile } from 'src/profiles/user-profile.entity';
 import { Role } from 'src/roles-permissions/role.entity';
 import { AppSetting } from 'src/settings/app-setting.entity';
+import { seedAssignmentDemo } from './assignment-demo.seed';
 import { Tag } from 'src/tags/tag.entity';
 import { Testimonial } from 'src/testimonials/testimonial.entity';
 import { TestimonialStatus } from 'src/testimonials/enums/testimonial-status.enum';
@@ -1095,6 +1096,7 @@ async function getDemoUser(
   },
 ) {
   const userRepository = dataSource.getRepository(User);
+  const studentRole = await getRole(dataSource, 'student');
   const existingUser = await userRepository.findOne({
     where: { email: payload.email },
     relations: { roles: true },
@@ -1116,6 +1118,11 @@ async function getDemoUser(
         )
     : null;
 
+  const roles =
+    payload.role.name === 'student'
+      ? [studentRole]
+      : [studentRole, payload.role];
+
   if (existingUser) {
     existingUser.firstName = payload.firstName;
     existingUser.lastName = payload.lastName;
@@ -1124,7 +1131,7 @@ async function getDemoUser(
     existingUser.password = password;
     existingUser.avatarUrl = payload.avatarUrl || null;
     existingUser.emailVerified = existingUser.emailVerified || new Date();
-    existingUser.roles = [payload.role];
+    existingUser.roles = roles;
     return userRepository.save(existingUser);
   }
 
@@ -1138,7 +1145,7 @@ async function getDemoUser(
       password,
       avatarUrl: payload.avatarUrl || null,
       emailVerified: new Date(),
-      roles: [payload.role],
+      roles,
     }),
   );
 }
@@ -2218,6 +2225,7 @@ export async function seedProductionDemoContent(dataSource: DataSource) {
   await seedDemoTestimonials(dataSource);
   await seedDemoEngagement(dataSource, systemUser);
   await seedDemoLiveOperations(dataSource);
+  await seedAssignmentDemo(dataSource);
   await seedDemoSettings(dataSource);
 
   console.log(

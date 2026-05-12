@@ -15,6 +15,37 @@ const matchRoute = (routes: string[], pathname: string) => {
   );
 };
 
+const decodeRolesFromAccessToken = (token?: string) => {
+  if (!token) return [];
+
+  try {
+    const payload = token.split(".")[1];
+    if (!payload) return [];
+
+    const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized.padEnd(
+      normalized.length + ((4 - (normalized.length % 4)) % 4),
+      "=",
+    );
+    const decoded = JSON.parse(atob(padded)) as { roles?: unknown };
+
+    return Array.isArray(decoded.roles)
+      ? decoded.roles.filter((role): role is string => typeof role === "string")
+      : [];
+  } catch {
+    return [];
+  }
+};
+
+const getDefaultLoginRedirect = (roles: string[]) => {
+  const normalizedRoles = roles.map((role) => role.toLowerCase());
+
+  if (normalizedRoles.includes("admin")) return "/admin/dashboard";
+  if (normalizedRoles.includes("faculty")) return "/faculty/dashboard";
+
+  return DEFAULT_LOGIN_REDIRECT;
+};
+
 export function proxy(request: NextRequest) {
   const { nextUrl } = request;
   const pathname = nextUrl.pathname;
@@ -50,7 +81,7 @@ export function proxy(request: NextRequest) {
         callbackUrl.startsWith("/") &&
         !callbackUrl.startsWith("//")
           ? callbackUrl
-          : DEFAULT_LOGIN_REDIRECT;
+          : getDefaultLoginRedirect(decodeRolesFromAccessToken(accessToken));
 
       return NextResponse.redirect(
         new URL(safeRedirect, request.url),

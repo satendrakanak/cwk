@@ -10,6 +10,46 @@ import { HashingProvider } from './hashing.provider';
 import { SignInDto } from '../dtos/sign-in.dto';
 import { UsersService } from 'src/users/providers/users.service';
 import { GenerateTokensProvider } from './generate-tokens.provider';
+import { User } from 'src/users/user.entity';
+
+export type SignInUserSummary = {
+  id: number;
+  email: string;
+  firstName: string;
+  lastName?: string;
+  roles: Array<{
+    id: number;
+    name: string;
+  }>;
+};
+
+export type SignInResult = {
+  accessToken: string;
+  refreshToken: string;
+  user: SignInUserSummary;
+  defaultRedirect: string;
+};
+
+const getDefaultRedirectForUser = (user: User) => {
+  const roles = user.roles?.map((role) => role.name.toLowerCase()) ?? [];
+
+  if (roles.includes('admin')) return '/admin/dashboard';
+  if (roles.includes('faculty')) return '/faculty/dashboard';
+
+  return '/dashboard';
+};
+
+const toSignInUserSummary = (user: User): SignInUserSummary => ({
+  id: user.id,
+  email: user.email,
+  firstName: user.firstName,
+  lastName: user.lastName,
+  roles:
+    user.roles?.map((role) => ({
+      id: role.id,
+      name: role.name,
+    })) ?? [],
+});
 
 @Injectable()
 export class SignInProvider {
@@ -33,7 +73,7 @@ export class SignInProvider {
     private readonly generateTokensProvider: GenerateTokensProvider,
   ) {}
 
-  public async signIn(signInDto: SignInDto) {
+  public async signIn(signInDto: SignInDto): Promise<SignInResult> {
     //Find user by email
 
     let user = await this.usersService.findOneByEmail(signInDto.email);
@@ -68,6 +108,12 @@ export class SignInProvider {
       });
     }
 
-    return this.generateTokensProvider.generateTokens(user);
+    const tokens = await this.generateTokensProvider.generateTokens(user);
+
+    return {
+      ...tokens,
+      user: toSignInUserSummary(user),
+      defaultRedirect: getDefaultRedirectForUser(user),
+    };
   }
 }

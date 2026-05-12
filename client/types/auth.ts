@@ -1,3 +1,6 @@
+import type { ApiResponse } from "./api";
+import type { Role } from "./user";
+
 export type RegisterPayload = {
   firstName: string;
   lastName: string;
@@ -27,10 +30,20 @@ export type ResetPasswordPayload = {
   confirmPassword: string;
 };
 
-export type AuthResponse = {
-  accessToken: string;
-  refreshToken: string;
+export type AuthUserSummary = {
+  id: number;
+  email: string;
+  firstName: string;
+  lastName?: string;
+  roles: Pick<Role, "id" | "name">[];
 };
+
+export type LoginResponse = {
+  user: AuthUserSummary;
+  defaultRedirect: string;
+};
+
+export type AuthResponse = ApiResponse<LoginResponse>;
 
 export type CheckoutVerificationStartPayload = {
   firstName: string;

@@ -18,6 +18,7 @@ import {
   BellRing,
   Award,
   Images,
+  ListChecks,
   type LucideIcon,
 } from "lucide-react";
 
@@ -81,6 +82,13 @@ export const sidebarData = {
           requiredPermissions: ["view_course", "create_course", "update_course"],
         },
       ],
+    },
+
+    {
+      title: "Assignments",
+      url: "/admin/assignments",
+      icon: ListChecks,
+      requiredPermissions: ["view_course", "create_course", "update_course"],
     },
 
     {

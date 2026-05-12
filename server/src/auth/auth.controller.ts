@@ -32,6 +32,7 @@ import { StartSignupVerificationProvider } from './providers/start-signup-verifi
 import { VerifySignupOtpProvider } from './providers/verify-signup-otp.provider';
 import { SocialAuthService } from './providers/social-auth.service';
 import { CompleteSocialAuthDto } from './dtos/complete-social-auth.dto';
+import { SignInUserSummary } from './providers/sign-in.provider';
 
 @Controller('auth')
 export class AuthController {
@@ -61,8 +62,10 @@ export class AuthController {
   public async signIn(
     @Body() signInDto: SignInDto,
     @Res({ passthrough: true }) res: ExpressResponse,
-  ): Promise<ApiResponse<null>> {
-    const { accessToken, refreshToken } =
+  ): Promise<
+    ApiResponse<{ user: SignInUserSummary; defaultRedirect: string }>
+  > {
+    const { accessToken, refreshToken, user, defaultRedirect } =
       await this.authService.signIn(signInDto);
     res.cookie('accessToken', accessToken, httpOnlyCookieOptions);
     res.cookie('refreshToken', refreshToken, httpOnlyCookieOptions);
@@ -70,7 +73,10 @@ export class AuthController {
     return {
       success: true,
       message: 'User logged in successfully',
-      data: null,
+      data: {
+        user,
+        defaultRedirect,
+      },
     };
   }
 

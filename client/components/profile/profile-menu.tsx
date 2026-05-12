@@ -17,6 +17,7 @@ export function ProfileMenu({ isOwner }: ProfileMenuProps) {
     { label: "My Courses", key: "my-courses" },
     { label: "Live Classes", key: "classes" },
     { label: "Exams", key: "exams" },
+    { label: "Assignments", key: "assignments" },
     { label: "Orders", key: "orders" },
     { label: "Certificates", key: "certificates" },
     { label: "Notifications", key: "notifications" },
