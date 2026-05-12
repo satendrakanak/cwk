@@ -16,7 +16,7 @@ import {
 import { useCartStore } from "@/store/cart-store";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getCourseMeta } from "@/helpers/course-meta";
 import { CourseProgressBar } from "./course-progress-bar";
 import { CouponApplyResponse } from "@/types/coupon";
@@ -56,6 +56,8 @@ const getInstructorLabel = (course: Course) => {
 
 export function CourseCard({ course, coupon }: CourseCardProps) {
   const addToCart = useCartStore((s) => s.addToCart);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [isPreviewActive, setIsPreviewActive] = useState(false);
   const [meta, setMeta] = useState<{
     totalLectures: number;
     totalDuration: string;
@@ -105,6 +107,27 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
   const visibleTags = course.tags?.slice(0, 2) || [];
   const averageRating = course.averageRating || 0;
   const totalReviews = course.totalReviews || 0;
+  const previewVideoUrl =
+    course.video?.type === "video" || course.video?.mime?.startsWith("video/")
+      ? course.video.path
+      : null;
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (!video || !previewVideoUrl) return;
+
+    if (isPreviewActive) {
+      video.currentTime = 0;
+      void video.play().catch(() => {
+        setIsPreviewActive(false);
+      });
+      return;
+    }
+
+    video.pause();
+    video.currentTime = 0;
+  }, [isPreviewActive, previewVideoUrl]);
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -132,19 +155,58 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
     });
   };
 
+  const startPreview = () => {
+    if (previewVideoUrl) {
+      setIsPreviewActive(true);
+    }
+  };
+
+  const stopPreview = () => {
+    setIsPreviewActive(false);
+  };
+
   return (
     <div className="academy-card group flex h-full flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_80px_color-mix(in_oklab,var(--primary)_18%,transparent)]">
       {/* IMAGE */}
-      <div className="relative h-48 overflow-hidden">
+      <div
+        className="relative h-48 overflow-hidden"
+        onMouseEnter={startPreview}
+        onMouseLeave={stopPreview}
+        onFocus={startPreview}
+        onBlur={stopPreview}
+      >
         <Link href={`/course/${course.slug}`}>
           <Image
             src={course.image?.path || "/assets/default.png"}
             alt={course.imageAlt || course.title}
             fill
             sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-            className="object-cover transition duration-500 group-hover:scale-105"
+            className={
+              previewVideoUrl
+                ? "object-cover transition duration-500 group-hover:scale-105 motion-safe:group-hover:opacity-0"
+                : "object-cover transition duration-500 group-hover:scale-105"
+            }
           />
+          {previewVideoUrl ? (
+            <video
+              ref={videoRef}
+              src={previewVideoUrl}
+              className="absolute inset-0 h-full w-full object-cover opacity-0 transition duration-300 group-hover:opacity-100"
+              muted
+              playsInline
+              loop
+              preload="metadata"
+              aria-label={`${course.title} preview video`}
+            />
+          ) : null}
         </Link>
+
+        {previewVideoUrl ? (
+          <span className="pointer-events-none absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/55 px-2.5 py-1 text-[11px] font-semibold text-white opacity-0 shadow-sm backdrop-blur-md transition group-hover:opacity-100">
+            <MonitorPlay className="h-3.5 w-3.5" />
+            Preview
+          </span>
+        ) : null}
 
         <span
           className={
