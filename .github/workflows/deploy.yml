@@ -58,20 +58,35 @@ jobs:
     needs:
       - client-check
       - server-check
+    env:
+      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST || vars.DEPLOY_HOST || '13.206.210.16' }}
+      DEPLOY_USER: ${{ secrets.DEPLOY_USER || vars.DEPLOY_USER || 'ubuntu' }}
+      DEPLOY_PORT: ${{ secrets.DEPLOY_PORT || vars.DEPLOY_PORT || '22' }}
+      DEPLOY_PATH: ${{ secrets.DEPLOY_PATH || vars.DEPLOY_PATH || '/opt/codewithkasa' }}
+      DEPLOY_SSH_KEY_PRESENT: ${{ secrets.DEPLOY_SSH_KEY != '' }}
     permissions:
       contents: read
     steps:
+      - name: Validate deploy inputs
+        run: |
+          test -n "$DEPLOY_HOST" || { echo "DEPLOY_HOST is empty"; exit 1; }
+          test -n "$DEPLOY_USER" || { echo "DEPLOY_USER is empty"; exit 1; }
+          test -n "$DEPLOY_PORT" || { echo "DEPLOY_PORT is empty"; exit 1; }
+          test -n "$DEPLOY_PATH" || { echo "DEPLOY_PATH is empty"; exit 1; }
+          test "$DEPLOY_SSH_KEY_PRESENT" = "true" || { echo "DEPLOY_SSH_KEY secret is empty"; exit 1; }
+
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
+          host: ${{ env.DEPLOY_HOST }}
+          username: ${{ env.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          port: ${{ secrets.DEPLOY_PORT || 22 }}
+          port: ${{ env.DEPLOY_PORT }}
           command_timeout: 30m
+          envs: DEPLOY_PATH
           script: |
             set -e
-            cd "${{ secrets.DEPLOY_PATH }}"
+            cd "$DEPLOY_PATH"
             git fetch origin master
             git reset --hard origin/master
             docker compose --env-file .env -f docker-compose.prod.yml up -d --build --remove-orphans
