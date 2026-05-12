@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 import { UserRound } from "lucide-react";
 import { toast } from "sonner";
 
@@ -9,13 +10,9 @@ import { DashboardStats, User } from "@/types/user";
 import { ProfileAvatar } from "./profile-avatar";
 import { ProfileInfo } from "./profile-info";
 import { userClientService } from "@/services/users/user.client";
-import { UploadingFile } from "@/types/file";
+import { FileType, UploadingFile } from "@/types/file";
+import { ApiResponse } from "@/types/api";
 import { getErrorMessage } from "@/lib/error-handler";
-import {
-  confirmDirectUpload,
-  initDirectUpload,
-  uploadToSignedUrl,
-} from "@/lib/uploads/direct-upload";
 
 interface ProfileHeaderProps {
   user: User;
@@ -41,19 +38,44 @@ export function ProfileHeader({ user, stats, isOwner }: ProfileHeaderProps) {
         progress: 0,
       });
 
-      const { uploadId, url } = await initDirectUpload(file);
-
-      await uploadToSignedUrl(url, file, (progressEvent) => {
-        const percent = Math.round(
-          (progressEvent.loaded * 100) / (progressEvent.total || 1),
-        );
-
-        setUploadingFile((prev) =>
-          prev ? { ...prev, progress: percent } : prev,
-        );
+      const initRes = await fetch("/api/uploads/init", {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          fileName: file.name,
+          mimeType: file.type,
+          size: file.size,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
-      const newMedia = await confirmDirectUpload(uploadId);
+      const json = await initRes.json();
+      const { uploadId, url } = json.data;
+
+      await axios.put(url, file, {
+        headers: {
+          "Content-Type": file.type,
+        },
+        onUploadProgress: (progressEvent) => {
+          const percent = Math.round(
+            (progressEvent.loaded * 100) / (progressEvent.total || 1),
+          );
+
+          setUploadingFile((prev) =>
+            prev ? { ...prev, progress: percent } : prev,
+          );
+        },
+      });
+
+      const confirmRes = await fetch(`/api/uploads/confirm/${uploadId}`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      const confirmJson: ApiResponse<FileType> = await confirmRes.json();
+      const newMedia = confirmJson.data;
 
       await userClientService.updateUser({
         avatarId: newMedia.id,

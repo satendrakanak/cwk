@@ -2,15 +2,11 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
+import axios from "axios";
 import { Camera, Loader } from "lucide-react";
 import { toast } from "sonner";
 
 import { getErrorMessage } from "@/lib/error-handler";
-import {
-  confirmDirectUpload,
-  initDirectUpload,
-  uploadToSignedUrl,
-} from "@/lib/uploads/direct-upload";
 import { userClientService } from "@/services/users/user.client";
 
 interface ProfileCoverProps {
@@ -30,9 +26,31 @@ export function ProfileCover({ coverImage, isOwner }: ProfileCoverProps) {
       setIsUploading(true);
       setPreview(previewUrl);
 
-      const { uploadId, url } = await initDirectUpload(file);
-      await uploadToSignedUrl(url, file);
-      const newFile = await confirmDirectUpload(uploadId);
+      const initRes = await fetch("/api/uploads/init", {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          fileName: file.name,
+          mimeType: file.type,
+          size: file.size,
+        }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const json = await initRes.json();
+      const { uploadId, url } = json.data;
+
+      await axios.put(url, file, {
+        headers: { "Content-Type": file.type },
+      });
+
+      const confirmRes = await fetch(`/api/uploads/confirm/${uploadId}`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      const confirmJson = await confirmRes.json();
+      const newFile = confirmJson.data;
 
       await userClientService.updateUser({
         coverImageId: newFile.id,

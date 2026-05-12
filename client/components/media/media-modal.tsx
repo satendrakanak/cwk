@@ -12,13 +12,9 @@ import { useEffect, useState } from "react";
 import { UploadBox } from "./upload-box";
 import { MediaGrid } from "./media-grid";
 import { MediaDetailsPanel } from "./media-details-panel";
+import axios from "axios";
+import { ApiResponse } from "@/types/api";
 import { toast } from "sonner";
-import {
-  confirmDirectUpload,
-  getDirectUploadErrorMessage,
-  initDirectUpload,
-  uploadToSignedUrl,
-} from "@/lib/uploads/direct-upload";
 
 interface MediaModalProps {
   open: boolean;
@@ -81,21 +77,57 @@ export const MediaModal = ({
 
       const file = uploadingFile.file;
 
-      const { uploadId, url } = await initDirectUpload(file);
+      // 🔥 STEP 1: init upload
+      const initRes = await fetch("/api/uploads/init", {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          fileName: file.name,
+          mimeType: file.type,
+          size: file.size,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!initRes.ok) {
+        throw new Error("Upload could not be initialized");
+      }
+
+      const json: ApiResponse<InitUploadResponse> = await initRes.json();
+
+      const { uploadId, url } = json.data;
 
       // 🔥 STEP 2: upload to S3 (REAL progress)
-      await uploadToSignedUrl(url, file, (progressEvent) => {
-        const percent = Math.round(
-          (progressEvent.loaded * 100) / (progressEvent.total || 1),
-        );
+      await axios.put(url, file, {
+        headers: {
+          "Content-Type": file.type,
+        },
+        onUploadProgress: (progressEvent) => {
+          const percent = Math.round(
+            (progressEvent.loaded * 100) / (progressEvent.total || 1),
+          );
 
-        setUploadingFile((prev) =>
-          prev ? { ...prev, progress: percent } : prev,
-        );
+          setUploadingFile((prev) =>
+            prev ? { ...prev, progress: percent } : prev,
+          );
+        },
       });
 
       // 🔥 STEP 3: confirm upload
-      const newMedia = await confirmDirectUpload(uploadId);
+      const confirmRes = await fetch(`/api/uploads/confirm/${uploadId}`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (!confirmRes.ok) {
+        throw new Error("Upload confirmation failed");
+      }
+
+      const confirmJson: ApiResponse<FileType> = await confirmRes.json();
+
+      const newMedia = confirmJson.data;
 
       // 🔥 UI update
       setMedia((prev) => [newMedia, ...prev]);
@@ -104,7 +136,7 @@ export const MediaModal = ({
       toast.success("Media uploaded successfully");
     } catch (err) {
       console.error("Upload failed", err);
-      toast.error(getDirectUploadErrorMessage(err));
+      toast.error(getUploadErrorMessage(err));
       setUploadingFile((prev) => (prev ? { ...prev, uploading: false } : prev));
     }
   };
@@ -161,3 +193,11 @@ export const MediaModal = ({
     </Dialog>
   );
 };
+
+function getUploadErrorMessage(error: unknown) {
+  if (axios.isAxiosError(error) && !error.response) {
+    return "Upload blocked by browser/S3 CORS. Add cwk.getkasa.in to the S3 bucket CORS allowed origins, then retry.";
+  }
+
+  return error instanceof Error ? error.message : "Upload failed";
+}
