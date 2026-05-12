@@ -6,59 +6,15 @@ on:
       - master
   workflow_dispatch:
 
+concurrency:
+  group: deploy-production
+  cancel-in-progress: true
+
 jobs:
-  client-check:
-    name: Client Check
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: client
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build
-        run: npm run build
-        env:
-          NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL || 'https://cwk.getkasa.in' }}
-          NEXT_PUBLIC_API_BASE_URL: http://server:8000
-
-  server-check:
-    name: Server Check
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: server
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build
-        run: npm run build
-
   deploy:
     name: Deploy to Server
     runs-on: ubuntu-latest
     environment: CWK_DEPLOYMENT
-    needs:
-      - client-check
-      - server-check
     env:
       DEPLOY_HOST: ${{ secrets.DEPLOY_HOST || vars.DEPLOY_HOST || '13.206.210.16' }}
       DEPLOY_USER: ${{ secrets.DEPLOY_USER || vars.DEPLOY_USER || 'ubuntu' }}

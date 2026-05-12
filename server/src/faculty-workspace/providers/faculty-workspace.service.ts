@@ -294,6 +294,35 @@ export class FacultyWorkspaceService {
     );
   }
 
+  async getLearnerUpcomingSessions(user: ActiveUserData, limit = 6) {
+    const sessions = await this.classSessionRepository
+      .createQueryBuilder('session')
+      .leftJoinAndSelect('session.batch', 'batch')
+      .leftJoinAndSelect('session.course', 'course')
+      .leftJoinAndSelect('session.faculty', 'faculty')
+      .leftJoinAndSelect(
+        'session.attendances',
+        'attendance',
+        'attendance.userId = :userId AND attendance.role = :learnerRole',
+        { userId: user.sub, learnerRole: 'learner' },
+      )
+      .leftJoin('batch.students', 'batchStudent')
+      .leftJoin('batchStudent.student', 'student')
+      .where('student.id = :userId', { userId: user.sub })
+      .andWhere('batchStudent.status = :studentStatus', {
+        studentStatus: BatchStudentStatus.Active,
+      })
+      .andWhere('session.status != :cancelled', {
+        cancelled: ClassSessionStatus.Cancelled,
+      })
+      .andWhere('session.endsAt >= :now', { now: new Date() })
+      .orderBy('session.startsAt', 'ASC')
+      .take(limit)
+      .getMany();
+
+    return sessions.map((session) => this.mapClassSession(session));
+  }
+
   async getLearnerRecordings(user: ActiveUserData) {
     const recordings = await this.classRecordingRepository
       .createQueryBuilder('recording')
@@ -725,7 +754,11 @@ export class FacultyWorkspaceService {
     const endsAt = dto.endsAt ? new Date(dto.endsAt) : session.endsAt;
     this.assertValidSessionWindow(startsAt, endsAt);
     if (dto.startsAt !== undefined || dto.batchId !== undefined) {
-      await this.assertCourseMonthlyClassLimit(session.course, startsAt, session.id);
+      await this.assertCourseMonthlyClassLimit(
+        session.course,
+        startsAt,
+        session.id,
+      );
     }
 
     if (dto.title !== undefined) session.title = dto.title;
@@ -1102,7 +1135,8 @@ export class FacultyWorkspaceService {
 
     if (
       session.status === ClassSessionStatus.Completed &&
-      Date.now() > session.endsAt.getTime() + CLASS_JOIN_GRACE_MINUTES * 60 * 1000
+      Date.now() >
+        session.endsAt.getTime() + CLASS_JOIN_GRACE_MINUTES * 60 * 1000
     ) {
       throw new BadRequestException('Only scheduled classes can be started');
     }
@@ -1150,7 +1184,9 @@ export class FacultyWorkspaceService {
     }
 
     if (now > latestJoin) {
-      throw new BadRequestException('This class is no longer available to join');
+      throw new BadRequestException(
+        'This class is no longer available to join',
+      );
     }
 
     const meetingInfo = await this.bigBlueButtonProvider.getMeetingInfo(
@@ -1471,7 +1507,9 @@ export class FacultyWorkspaceService {
       learnerAccessAllowed
         ? null
         : 'Learner recording access is turned off for this class.',
-      isReadyForLearners ? null : 'Recording is not available for learners yet.',
+      isReadyForLearners
+        ? null
+        : 'Recording is not available for learners yet.',
       learnerAttendances.length
         ? null
         : 'No learner attendance has been recorded for this class yet.',
@@ -1589,11 +1627,7 @@ export class FacultyWorkspaceService {
       return;
     }
 
-    const monthStart = new Date(
-      startsAt.getFullYear(),
-      startsAt.getMonth(),
-      1,
-    );
+    const monthStart = new Date(startsAt.getFullYear(), startsAt.getMonth(), 1);
     const nextMonthStart = new Date(
       startsAt.getFullYear(),
       startsAt.getMonth() + 1,

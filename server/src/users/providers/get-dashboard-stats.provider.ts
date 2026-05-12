@@ -31,17 +31,17 @@ export class GetDashboardStatsProvider {
     @InjectRepository(UserProgres)
     private readonly userProgressRepository: Repository<UserProgres>,
 
-  @InjectRepository(CourseExamAttempt)
-  private readonly courseExamAttemptRepository: Repository<CourseExamAttempt>,
+    @InjectRepository(CourseExamAttempt)
+    private readonly courseExamAttemptRepository: Repository<CourseExamAttempt>,
 
     @InjectRepository(ExamAttempt)
     private readonly examAttemptRepository: Repository<ExamAttempt>,
 
-  @InjectRepository(Certificate)
-  private readonly certificateRepository: Repository<Certificate>,
+    @InjectRepository(Certificate)
+    private readonly certificateRepository: Repository<Certificate>,
 
-  @InjectRepository(Course)
-  private readonly courseRepository: Repository<Course>,
+    @InjectRepository(Course)
+    private readonly courseRepository: Repository<Course>,
 
     @InjectRepository(ClassSession)
     private readonly classSessionRepository: Repository<ClassSession>,
@@ -51,17 +51,13 @@ export class GetDashboardStatsProvider {
   ) {}
 
   async getDashboardStats(userId: number) {
-    const [
-      learningSummary,
-      examsTaken,
-      examsPassed,
-      certificatesEarned,
-    ] = await Promise.all([
-      this.getLearningSummary(userId),
-      this.getExamAttemptsCount(userId),
-      this.getPassedExamAttemptsCount(userId),
-      this.certificateRepository.count({ where: { user: { id: userId } } }),
-    ]);
+    const [learningSummary, examsTaken, examsPassed, certificatesEarned] =
+      await Promise.all([
+        this.getLearningSummary(userId),
+        this.getExamAttemptsCount(userId),
+        this.getPassedExamAttemptsCount(userId),
+        this.certificateRepository.count({ where: { user: { id: userId } } }),
+      ]);
 
     return {
       courses: learningSummary.totalCourses,
@@ -192,56 +188,60 @@ export class GetDashboardStatsProvider {
       .addGroupBy('course.mode')
       .getRawMany();
 
-    const courseSummaries = await Promise.all(
-      courses.map(async (course) => {
-        const courseId = Number(course.courseId);
-        const totalLectures = Number(course.totalLectures) || 0;
-        const completedLectures = Number(course.completedLectures) || 0;
-        const recordedEnabled = hasRecordedLearning(course.mode);
-        const liveEnabled = hasLiveClasses(course.mode);
-        const recordedProgress =
-          recordedEnabled && totalLectures
-            ? Math.round((completedLectures / totalLectures) * 100)
-            : recordedEnabled
-              ? 0
-              : null;
-        const liveStats = liveEnabled
-          ? await this.getLiveAttendanceStats(courseId, userId)
-          : null;
-        const progressParts = [
-          recordedProgress,
-          liveStats?.progress ?? null,
-        ].filter((value): value is number => value !== null);
-        const overallProgress = progressParts.length
-          ? Math.round(
-              progressParts.reduce((sum, value) => sum + value, 0) /
-                progressParts.length,
-            )
-          : 0;
-
-        return {
-          courseId,
-          title: course.title,
-          slug: course.slug,
-          mode: course.mode || 'self_learning',
-          overallProgress,
-          recorded: {
-            enabled: recordedEnabled,
-            totalLectures,
-            completedLectures,
-            progress: recordedProgress ?? 0,
-          },
-          live: {
-            enabled: liveEnabled,
-            completedClasses: liveStats?.completedClasses ?? 0,
-            attendedClasses: liveStats?.attendedClasses ?? 0,
-            missedClasses: liveStats?.missedClasses ?? 0,
-            upcomingClasses: liveStats?.upcomingClasses ?? 0,
-            progress: liveStats?.progress ?? 0,
-          },
-        };
-      }),
+    const liveCourseIds = courses
+      .filter((course) => hasLiveClasses(course.mode))
+      .map((course) => Number(course.courseId));
+    const liveStatsMap = await this.getLiveAttendanceStatsMap(
+      liveCourseIds,
+      userId,
     );
+
+    const courseSummaries = courses.map((course) => {
+      const courseId = Number(course.courseId);
+      const totalLectures = Number(course.totalLectures) || 0;
+      const completedLectures = Number(course.completedLectures) || 0;
+      const recordedEnabled = hasRecordedLearning(course.mode);
+      const liveEnabled = hasLiveClasses(course.mode);
+      const recordedProgress =
+        recordedEnabled && totalLectures
+          ? Math.round((completedLectures / totalLectures) * 100)
+          : recordedEnabled
+            ? 0
+            : null;
+      const liveStats = liveEnabled ? liveStatsMap.get(courseId) : null;
+      const progressParts = [
+        recordedProgress,
+        liveStats?.progress ?? null,
+      ].filter((value): value is number => value !== null);
+      const overallProgress = progressParts.length
+        ? Math.round(
+            progressParts.reduce((sum, value) => sum + value, 0) /
+              progressParts.length,
+          )
+        : 0;
+
+      return {
+        courseId,
+        title: course.title,
+        slug: course.slug,
+        mode: course.mode || 'self_learning',
+        overallProgress,
+        recorded: {
+          enabled: recordedEnabled,
+          totalLectures,
+          completedLectures,
+          progress: recordedProgress ?? 0,
+        },
+        live: {
+          enabled: liveEnabled,
+          completedClasses: liveStats?.completedClasses ?? 0,
+          attendedClasses: liveStats?.attendedClasses ?? 0,
+          missedClasses: liveStats?.missedClasses ?? 0,
+          upcomingClasses: liveStats?.upcomingClasses ?? 0,
+          progress: liveStats?.progress ?? 0,
+        },
+      };
+    });
 
     const totalCourses = courseSummaries.length;
     const completedCourses = courseSummaries.filter(
@@ -260,9 +260,11 @@ export class GetDashboardStatsProvider {
       totalCourses,
       completedCourses,
       averageProgress,
-      recordedCourses: courseSummaries.filter((course) => course.recorded.enabled)
+      recordedCourses: courseSummaries.filter(
+        (course) => course.recorded.enabled,
+      ).length,
+      liveCourses: courseSummaries.filter((course) => course.live.enabled)
         .length,
-      liveCourses: courseSummaries.filter((course) => course.live.enabled).length,
       upcomingLiveClasses: courseSummaries.reduce(
         (sum, course) => sum + course.live.upcomingClasses,
         0,
@@ -283,61 +285,102 @@ export class GetDashboardStatsProvider {
     };
   }
 
-  private async getLiveAttendanceStats(courseId: number, userId: number) {
-    const baseQuery = this.classSessionRepository
-      .createQueryBuilder('session')
-      .innerJoin('session.batch', 'batch')
-      .innerJoin('batch.students', 'batchStudent')
-      .innerJoin('batchStudent.student', 'student')
-      .where('session.courseId = :courseId', { courseId })
-      .andWhere('student.id = :userId', { userId })
-      .andWhere('batchStudent.status = :studentStatus', {
-        studentStatus: 'active',
-      })
-      .andWhere('session.status != :cancelled', {
-        cancelled: ClassSessionStatus.Cancelled,
-      });
+  private async getLiveAttendanceStatsMap(courseIds: number[], userId: number) {
+    if (!courseIds.length) {
+      return new Map<
+        number,
+        {
+          completedClasses: number;
+          upcomingClasses: number;
+          attendedClasses: number;
+          missedClasses: number;
+          progress: number;
+        }
+      >();
+    }
 
     const now = new Date();
-    const [completedClasses, upcomingClasses, attendedClasses] =
-      await Promise.all([
-        baseQuery
-          .clone()
-          .andWhere('session.endsAt <= :now', { now })
-          .getCount(),
-        baseQuery
-          .clone()
-          .andWhere('session.endsAt > :now', { now })
-          .getCount(),
-        this.classAttendanceRepository
-          .createQueryBuilder('attendance')
-          .innerJoin('attendance.session', 'session')
-          .innerJoin('session.batch', 'batch')
-          .innerJoin('batch.students', 'batchStudent')
-          .innerJoin('batchStudent.student', 'student')
-          .where('session.courseId = :courseId', { courseId })
-          .andWhere('student.id = :userId', { userId })
-          .andWhere('attendance.userId = :userId', { userId })
-          .andWhere('attendance.role = :role', { role: 'learner' })
-          .andWhere('batchStudent.status = :studentStatus', {
-            studentStatus: 'active',
-          })
-          .andWhere('session.status != :cancelled', {
-            cancelled: ClassSessionStatus.Cancelled,
-          })
-          .andWhere('session.endsAt <= :now', { now })
-          .getCount(),
-      ]);
-    const missedClasses = Math.max(completedClasses - attendedClasses, 0);
+    const [sessionRows, attendanceRows] = await Promise.all([
+      this.classSessionRepository
+        .createQueryBuilder('session')
+        .innerJoin('session.batch', 'batch')
+        .innerJoin('batch.students', 'batchStudent')
+        .innerJoin('batchStudent.student', 'student')
+        .select('session.courseId', 'courseId')
+        .addSelect(
+          'COUNT(DISTINCT CASE WHEN session.endsAt <= :now THEN session.id END)',
+          'completedClasses',
+        )
+        .addSelect(
+          'COUNT(DISTINCT CASE WHEN session.endsAt > :now THEN session.id END)',
+          'upcomingClasses',
+        )
+        .where('session.courseId IN (:...courseIds)', { courseIds })
+        .andWhere('student.id = :userId', { userId })
+        .andWhere('batchStudent.status = :studentStatus', {
+          studentStatus: 'active',
+        })
+        .andWhere('session.status != :cancelled', {
+          cancelled: ClassSessionStatus.Cancelled,
+        })
+        .setParameter('now', now)
+        .groupBy('session.courseId')
+        .getRawMany<{
+          courseId: string;
+          completedClasses: string;
+          upcomingClasses: string;
+        }>(),
+      this.classAttendanceRepository
+        .createQueryBuilder('attendance')
+        .innerJoin('attendance.session', 'session')
+        .innerJoin('session.batch', 'batch')
+        .innerJoin('batch.students', 'batchStudent')
+        .innerJoin('batchStudent.student', 'student')
+        .select('session.courseId', 'courseId')
+        .addSelect('COUNT(DISTINCT attendance.id)', 'attendedClasses')
+        .where('session.courseId IN (:...courseIds)', { courseIds })
+        .andWhere('student.id = :userId', { userId })
+        .andWhere('attendance.userId = :userId', { userId })
+        .andWhere('attendance.role = :role', { role: 'learner' })
+        .andWhere('batchStudent.status = :studentStatus', {
+          studentStatus: 'active',
+        })
+        .andWhere('session.status != :cancelled', {
+          cancelled: ClassSessionStatus.Cancelled,
+        })
+        .andWhere('session.endsAt <= :now', { now })
+        .groupBy('session.courseId')
+        .getRawMany<{ courseId: string; attendedClasses: string }>(),
+    ]);
 
-    return {
-      completedClasses,
-      upcomingClasses,
-      attendedClasses,
-      missedClasses,
-      progress: completedClasses
-        ? Math.round((attendedClasses / completedClasses) * 100)
-        : 0,
-    };
+    const attendanceMap = new Map(
+      attendanceRows.map((row) => [
+        Number(row.courseId),
+        Number(row.attendedClasses) || 0,
+      ]),
+    );
+
+    return new Map(
+      sessionRows.map((row) => {
+        const courseId = Number(row.courseId);
+        const completedClasses = Number(row.completedClasses) || 0;
+        const upcomingClasses = Number(row.upcomingClasses) || 0;
+        const attendedClasses = attendanceMap.get(courseId) ?? 0;
+        const missedClasses = Math.max(completedClasses - attendedClasses, 0);
+
+        return [
+          courseId,
+          {
+            completedClasses,
+            upcomingClasses,
+            attendedClasses,
+            missedClasses,
+            progress: completedClasses
+              ? Math.round((attendedClasses / completedClasses) * 100)
+              : 0,
+          },
+        ] as const;
+      }),
+    );
   }
 }

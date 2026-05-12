@@ -14,6 +14,11 @@ export class ClassSessionsController {
     return this.facultyWorkspaceService.getLearnerSessions(user);
   }
 
+  @Get('my/upcoming')
+  getMyUpcomingSessions(@ActiveUser() user: ActiveUserData) {
+    return this.facultyWorkspaceService.getLearnerUpcomingSessions(user);
+  }
+
   @Get('my/recordings')
   getMyRecordings(@ActiveUser() user: ActiveUserData) {
     return this.facultyWorkspaceService.getLearnerRecordings(user);
