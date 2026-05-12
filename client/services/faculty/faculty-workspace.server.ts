@@ -11,14 +11,18 @@ import type {
 export const facultyWorkspaceServer = {
   async getWorkspace() {
     const response =
-      await apiServer.get<ApiResponse<FacultyWorkspaceData>>("/faculty/workspace");
+      await apiServer.get<ApiResponse<FacultyWorkspaceData>>(
+        "/faculty/workspace",
+      );
 
     return response.data;
   },
 
   async getBatches() {
     const response =
-      await apiServer.get<ApiResponse<FacultyCourseBatch[]>>("/faculty/batches");
+      await apiServer.get<ApiResponse<FacultyCourseBatch[]>>(
+        "/faculty/batches",
+      );
 
     return response.data;
   },
@@ -34,25 +38,25 @@ export const facultyWorkspaceServer = {
 
   async getSessions() {
     const response =
-      await apiServer.get<ApiResponse<FacultyClassSession[]>>("/faculty/sessions");
+      await apiServer.get<ApiResponse<FacultyClassSession[]>>(
+        "/faculty/sessions",
+      );
 
     return response.data;
   },
 
   async getRecordings() {
-    const response =
-      await apiServer.get<ApiResponse<FacultyClassRecording[]>>(
-        "/faculty/recordings",
-      );
+    const response = await apiServer.get<ApiResponse<FacultyClassRecording[]>>(
+      "/faculty/recordings",
+    );
 
     return response.data;
   },
 
   async getExamAttempts() {
-    const response =
-      await apiServer.get<ApiResponse<FacultyExamAttempt[]>>(
-        "/faculty/exam-attempts",
-      );
+    const response = await apiServer.get<ApiResponse<FacultyExamAttempt[]>>(
+      "/faculty/exam-attempts",
+    );
 
     return response.data;
   },
@@ -66,11 +70,18 @@ export const facultyWorkspaceServer = {
     return response.data;
   },
 
+  async getMyUpcomingSessions() {
+    const response = await apiServer.get<ApiResponse<FacultyClassSession[]>>(
+      "/class-sessions/my/upcoming",
+    );
+
+    return response.data;
+  },
+
   async getMyRecordings() {
-    const response =
-      await apiServer.get<ApiResponse<FacultyClassRecording[]>>(
-        "/class-sessions/my/recordings",
-      );
+    const response = await apiServer.get<ApiResponse<FacultyClassRecording[]>>(
+      "/class-sessions/my/recordings",
+    );
 
     return response.data;
   },

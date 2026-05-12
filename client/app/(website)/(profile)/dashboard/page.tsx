@@ -10,7 +10,6 @@ import { courseExamsServerService } from "@/services/course-exams/course-exams.s
 import { ExamHistoryRecord } from "@/types/exam";
 import { facultyWorkspaceServer } from "@/services/faculty/faculty-workspace.server";
 import type { FacultyClassSession } from "@/types/faculty-workspace";
-import { getLearnerUpcomingSessions } from "@/lib/learner-class-sessions";
 
 export default async function DashboardPage() {
   const session = await getSession();
@@ -38,25 +37,21 @@ export default async function DashboardPage() {
       ordersRes,
       examHistoryRes,
       upcomingClassesRes,
-    ] =
-      await Promise.all([
-        userServerService.getDashboardStats(session.id),
-        userServerService.getEnrolledCourses(session.id),
-        userServerService.getWeeklyProgress(session.id),
-        orderServerService.getMine(),
-        courseExamsServerService.getMyHistory(),
-        facultyWorkspaceServer.getMySessions(),
-      ]);
+    ] = await Promise.all([
+      userServerService.getDashboardStats(session.id),
+      userServerService.getEnrolledCourses(session.id),
+      userServerService.getWeeklyProgress(session.id),
+      orderServerService.getMine(),
+      courseExamsServerService.getMyHistory(),
+      facultyWorkspaceServer.getMyUpcomingSessions(),
+    ]);
 
     stats = statsRes.data;
     courses = coursesRes.data;
     weeklyProgress = weeklyProgressRes.data;
     orders = ordersRes.data;
     examHistory = examHistoryRes.data;
-    upcomingClasses = getLearnerUpcomingSessions(
-      upcomingClassesRes,
-      new Date().toISOString(),
-    );
+    upcomingClasses = upcomingClassesRes;
   } catch (error: unknown) {
     const message = getErrorMessage(error);
     throw new Error(message);

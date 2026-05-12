@@ -9,7 +9,6 @@ import { Course } from "@/types/course";
 import { facultyWorkspaceServer } from "@/services/faculty/faculty-workspace.server";
 import type { FacultyClassSession } from "@/types/faculty-workspace";
 import { UpcomingClasses } from "@/components/profile/upcoming-classes";
-import { getLearnerUpcomingSessions } from "@/lib/learner-class-sessions";
 import {
   hasLiveClasses,
   hasRecordedLearning,
@@ -28,13 +27,10 @@ export default async function MyCoursesPage() {
   try {
     const [coursesResponse, classesResponse] = await Promise.all([
       userServerService.getEnrolledCourses(session.id),
-      facultyWorkspaceServer.getMySessions(),
+      facultyWorkspaceServer.getMyUpcomingSessions(),
     ]);
     enrolledCourses = coursesResponse.data;
-    upcomingClasses = getLearnerUpcomingSessions(
-      classesResponse,
-      new Date().toISOString(),
-    );
+    upcomingClasses = classesResponse;
   } catch (error: unknown) {
     throw new Error(getErrorMessage(error));
   }
