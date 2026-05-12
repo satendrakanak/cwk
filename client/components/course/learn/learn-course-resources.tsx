@@ -41,6 +41,7 @@ export const LearnCourseResources = ({
                 key={file.id}
                 href={file.file.path}
                 download
+                data-no-route-progress="true"
                 className="flex items-start gap-2 px-3 py-2.5 text-xs text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
               >
                 <Icon className="mt-0.5 h-4 w-4 shrink-0 text-primary" />

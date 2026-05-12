@@ -229,12 +229,12 @@ export function CourseRatingReviews({ course }: { course: Course }) {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
-        <div className="rounded-3xl border border-border bg-muted/50 p-5">
+        <div className="rounded-3xl border border-border bg-muted/50 p-5 text-center lg:text-left">
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">
             Course Rating
           </p>
 
-          <div className="mt-5 flex items-end gap-2">
+          <div className="mt-5 flex items-end justify-center gap-2 lg:justify-start">
             <span className="text-5xl font-bold tracking-tight text-card-foreground">
               {summary.average ? summary.average.toFixed(1) : "0.0"}
             </span>
@@ -242,7 +242,7 @@ export function CourseRatingReviews({ course }: { course: Course }) {
             <span className="pb-2 text-sm text-muted-foreground">/ 5</span>
           </div>
 
-          <div className="mt-3">
+          <div className="mt-3 flex justify-center lg:justify-start">
             <RatingStars rating={summary.average} />
           </div>
 
@@ -278,8 +278,8 @@ export function CourseRatingReviews({ course }: { course: Course }) {
           </div>
         </div>
 
-        <div>
-          <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-start justify-between gap-4 text-center sm:text-left">
             <div>
               <h3 className="text-2xl font-semibold text-card-foreground">
                 Learner Reviews
@@ -297,7 +297,7 @@ export function CourseRatingReviews({ course }: { course: Course }) {
                 Share your experience
               </p>
 
-              <div className="mb-4 flex gap-1">
+              <div className="mb-4 flex justify-center gap-1 sm:justify-start">
                 {[1, 2, 3, 4, 5].map((value) => (
                   <button
                     key={value}
@@ -330,7 +330,7 @@ export function CourseRatingReviews({ course }: { course: Course }) {
                   Reviews may be checked before appearing publicly.
                 </p>
 
-                <div className="flex items-center gap-2">
+                <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:items-center">
                   {myReview ? (
                     <Button
                       type="button"
@@ -373,14 +373,14 @@ export function CourseRatingReviews({ course }: { course: Course }) {
           )}
 
           <div className="mt-6 space-y-4">
-            <div className="flex flex-col gap-3 rounded-3xl border border-border bg-muted/40 p-3 sm:flex-row sm:items-center ">
+            <div className="flex flex-col items-center gap-3 rounded-3xl border border-border bg-muted/40 p-3 sm:flex-row sm:items-center">
               <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <Filter className="h-4 w-4" />
                 </span>
               </div>
 
-              <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1 sm:pb-0">
+              <div className="no-scrollbar flex w-full gap-2 overflow-x-auto pb-1 sm:pb-0">
                 {reviewFilters.map((filter) => (
                   <button
                     key={filter.value}
@@ -410,9 +410,9 @@ export function CourseRatingReviews({ course }: { course: Course }) {
                 return (
                   <article
                     key={review.id}
-                    className="rounded-3xl border border-border bg-card p-5 shadow-sm transition-colors hover:border-primary/25 hover:bg-primary/5"
+                    className="rounded-3xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-primary/25 hover:bg-primary/5 sm:p-5"
                   >
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                       <div className="flex min-w-0 items-center gap-3">
                         <Avatar className="h-11 w-11 border border-border">
                           <AvatarImage src={avatarUrl} alt={reviewerName} />
@@ -435,7 +435,7 @@ export function CourseRatingReviews({ course }: { course: Course }) {
                             ) : null}
                           </div>
 
-                          <div className="mt-1 flex items-center gap-2">
+                          <div className="mt-1 flex flex-wrap items-center gap-2">
                             <RatingStars rating={review.rating} />
 
                             <span className="text-xs text-muted-foreground">
@@ -450,7 +450,7 @@ export function CourseRatingReviews({ course }: { course: Course }) {
                           type="button"
                           disabled={isPending}
                           onClick={() => deleteReview(review.id)}
-                          className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:border-destructive hover:bg-destructive hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+                        className="inline-flex h-9 w-9 cursor-pointer items-center justify-center self-end rounded-full border border-border bg-background text-muted-foreground transition-colors hover:border-destructive hover:bg-destructive hover:text-white disabled:cursor-not-allowed disabled:opacity-60 sm:self-auto"
                           aria-label="Delete review"
                         >
                           <Trash2 className="h-4 w-4" />

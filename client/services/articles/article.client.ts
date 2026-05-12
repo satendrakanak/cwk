@@ -11,13 +11,14 @@ export const articleClientService = {
   getAll: () =>
     apiClient.get<ApiResponse<{ data: Article[] }>>("/api/articles"),
   getPublicArticles: (
-    query: { page?: number; limit?: number; category?: string } = {},
+    query: { page?: number; limit?: number; category?: string; tag?: string } = {},
   ) => {
     const params = new URLSearchParams({ isPublished: "true" });
 
     if (query.page) params.set("page", String(query.page));
     if (query.limit) params.set("limit", String(query.limit));
     if (query.category) params.set("category", query.category);
+    if (query.tag) params.set("tag", query.tag);
 
     return apiClient.get<ApiResponse<Paginated<Article>>>(
       `/api/articles?${params.toString()}`,

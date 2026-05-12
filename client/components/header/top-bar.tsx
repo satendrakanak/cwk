@@ -56,7 +56,7 @@ const Topbar = ({ hidden }: TopbarProps) => {
       )}
     >
       <Container>
-        <div className="flex min-h-8 flex-col items-center justify-center gap-1 py-1 sm:flex-row sm:justify-between sm:gap-4 sm:py-0 md:min-h-9">
+        <div className="flex h-8 items-center justify-center gap-2 overflow-hidden sm:justify-between sm:gap-4 md:h-9">
           {/* Social Icons */}
           <div className="flex items-center gap-1.5">
             {socialLinks.map((link) => (
@@ -74,7 +74,7 @@ const Topbar = ({ hidden }: TopbarProps) => {
           </div>
 
           {/* Contact */}
-          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[10px] leading-none text-white/85 md:gap-x-4 md:text-xs">
+          <div className="hidden flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[10px] leading-none text-white/85 sm:flex md:gap-x-4 md:text-xs">
             {site.supportPhone && (
               <a
                 href={`tel:${site.supportPhone}`}

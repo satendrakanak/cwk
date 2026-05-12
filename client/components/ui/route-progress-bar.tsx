@@ -61,6 +61,8 @@ export function RouteProgressBar() {
       const href = anchor.getAttribute("href");
 
       if (
+        anchor.hasAttribute("download") ||
+        anchor.dataset.noRouteProgress === "true" ||
         !href ||
         href.startsWith("#") ||
         href.startsWith("mailto:") ||

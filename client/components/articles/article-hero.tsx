@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 import Container from "@/components/container";
 import { WebsiteBreadcrumbs } from "@/components/layout/website-breadcrumbs";
@@ -39,9 +40,12 @@ export function ArticleHero({ article }: { article: Article }) {
             />
 
             {article.categories?.[0] && (
-              <span className="inline-flex rounded-full border border-white/20 bg-white/12 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_28px_rgba(2,6,23,0.20)] backdrop-blur-md">
+              <Link
+                href={`/articles?category=${article.categories[0].slug}`}
+                className="inline-flex rounded-full border border-white/20 bg-white/12 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_28px_rgba(2,6,23,0.20)] backdrop-blur-md transition hover:bg-white hover:text-primary"
+              >
                 {article.categories[0].name}
-              </span>
+              </Link>
             )}
 
             <h1 className="mt-5 max-w-4xl text-3xl font-semibold leading-tight tracking-tight text-white md:text-5xl lg:text-[46px]">

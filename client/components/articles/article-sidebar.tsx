@@ -90,12 +90,13 @@ export function ArticleSidebar({
         {article.tags?.length ? (
           <div className="flex flex-wrap gap-2">
             {article.tags.map((tag) => (
-              <span
+              <Link
                 key={tag.id}
+                href={`/articles?tag=${tag.slug}`}
                 className="rounded-full border border-border bg-muted px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:border-primary/25 hover:bg-primary/10 hover:text-primary"
               >
                 #{tag.name}
-              </span>
+              </Link>
             ))}
           </div>
         ) : (

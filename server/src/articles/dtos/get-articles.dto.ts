@@ -18,6 +18,10 @@ class GetArticlesBaseDto {
   @IsOptional()
   @IsString()
   category?: string;
+
+  @IsOptional()
+  @IsString()
+  tag?: string;
 }
 
 export class GetArticlesDto extends IntersectionType(

@@ -35,7 +35,7 @@ export const Header = ({ isHomePage }: HeaderProps) => {
     <header
       className={cn(
         "fixed left-0 z-50 w-full transition-all duration-300",
-        scrolled ? "top-0" : "top-14 md:top-9",
+        scrolled ? "top-0" : "top-8 md:top-9",
         headerClass,
       )}
     >
