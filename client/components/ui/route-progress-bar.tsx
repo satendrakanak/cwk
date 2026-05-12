@@ -6,6 +6,22 @@ import { Loader } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
+const ROUTE_PROGRESS_START_EVENT = "cwk:route-progress-start";
+
+type RouteProgressStartDetail = {
+  href: string;
+};
+
+export function startRouteProgress(href: string) {
+  if (typeof window === "undefined") return;
+
+  window.dispatchEvent(
+    new CustomEvent<RouteProgressStartDetail>(ROUTE_PROGRESS_START_EVENT, {
+      detail: { href },
+    }),
+  );
+}
+
 export function RouteProgressBar() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -41,6 +57,25 @@ export function RouteProgressBar() {
       }, 2500);
     };
 
+    const getNavigableUrl = (href: string) => {
+      try {
+        const nextUrl = new URL(href, window.location.origin);
+        const currentUrl = new URL(window.location.href);
+
+        if (nextUrl.origin !== currentUrl.origin) return null;
+        if (
+          nextUrl.pathname === currentUrl.pathname &&
+          nextUrl.search === currentUrl.search
+        ) {
+          return null;
+        }
+
+        return nextUrl;
+      } catch {
+        return null;
+      }
+    };
+
     const clickHandler = (event: MouseEvent) => {
       if (
         event.defaultPrevented ||
@@ -71,28 +106,33 @@ export function RouteProgressBar() {
         return;
       }
 
-      try {
-        const nextUrl = new URL(href, window.location.origin);
-        const currentUrl = new URL(window.location.href);
+      const nextUrl = getNavigableUrl(href);
 
-        if (nextUrl.origin !== currentUrl.origin) return;
-        if (anchor.target && anchor.target !== "_self") return;
-        if (
-          nextUrl.pathname === currentUrl.pathname &&
-          nextUrl.search === currentUrl.search
-        ) {
-          return;
-        }
+      if (!nextUrl) return;
+      if (anchor.target && anchor.target !== "_self") return;
 
-        start(nextUrl);
-      } catch {
-        return;
-      }
+      start(nextUrl);
+    };
+
+    const routeProgressHandler = (event: Event) => {
+      const { href } =
+        (event as CustomEvent<RouteProgressStartDetail>).detail ?? {};
+      if (!href) return;
+
+      const nextUrl = getNavigableUrl(href);
+      if (!nextUrl) return;
+
+      start(nextUrl);
     };
 
     document.addEventListener("click", clickHandler);
+    window.addEventListener(ROUTE_PROGRESS_START_EVENT, routeProgressHandler);
     return () => {
       document.removeEventListener("click", clickHandler);
+      window.removeEventListener(
+        ROUTE_PROGRESS_START_EVENT,
+        routeProgressHandler,
+      );
       clearTimers();
     };
   }, []);
