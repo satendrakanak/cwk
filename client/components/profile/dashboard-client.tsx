@@ -9,6 +9,7 @@ import {
   BookOpenCheck,
   CalendarDays,
   ClipboardCheck,
+  ClipboardList,
   GraduationCap,
   RadioTower,
 } from "lucide-react";
@@ -22,8 +23,11 @@ import { DashboardStats, User, WeeklyProgress } from "@/types/user";
 import { Order } from "@/types/order";
 import { ExamHistoryRecord } from "@/types/exam";
 import type { FacultyClassSession } from "@/types/faculty-workspace";
+import type { Assignment } from "@/types/assignment";
 import { UpcomingClasses } from "./upcoming-classes";
 import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { formatDateTime } from "@/utils/formate-date";
 
 const ProgressChart = dynamic(
   () => import("@/components/profile/progress-chart"),
@@ -38,6 +42,7 @@ interface DashboardClientProps {
   examHistory: ExamHistoryRecord[];
   user: User;
   upcomingClasses: FacultyClassSession[];
+  assignments: Assignment[];
 }
 
 export default function DashboardClient({
@@ -48,8 +53,12 @@ export default function DashboardClient({
   examHistory,
   user,
   upcomingClasses,
+  assignments,
 }: DashboardClientProps) {
   const learningSummary = stats.learningSummary;
+  const pendingAssignments = assignments.filter(
+    (assignment) => assignment.submissions?.[0]?.status !== "graded",
+  );
   const learningCards = [
     {
       title: "Recorded learning",
@@ -78,6 +87,13 @@ export default function DashboardClient({
       description: "Passed attempts out of total submissions",
       href: "/exams",
       icon: ClipboardCheck,
+    },
+    {
+      title: "Assignments",
+      value: pendingAssignments.length,
+      description: "Pending coursework from enrolled courses",
+      href: "/assignments",
+      icon: ClipboardList,
     },
     {
       title: "Certificates",
@@ -153,7 +169,7 @@ export default function DashboardClient({
           </p>
         </div>
 
-        <div className="grid gap-3 md:grid-cols-4">
+        <div className="grid gap-3 md:grid-cols-5">
           {learningCards.map((card) => (
             <Link
               key={card.title}
@@ -227,6 +243,63 @@ export default function DashboardClient({
 
       <section className="academy-card p-5 md:p-6">
         <UpcomingClasses sessions={upcomingClasses} limit={3} />
+      </section>
+
+      <section className="academy-card p-5 md:p-6">
+        <div className="mb-5 flex flex-col gap-2 border-b border-border pb-5 text-center md:flex-row md:items-end md:justify-between md:text-left">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">
+              Coursework
+            </p>
+            <h3 className="mt-2 text-2xl font-semibold text-card-foreground">
+              Pending assignments
+            </h3>
+          </div>
+          <Link
+            href="/assignments"
+            className="mx-auto inline-flex items-center gap-2 text-sm font-semibold text-primary md:mx-0"
+          >
+            View all
+            <ArrowRight className="size-4" />
+          </Link>
+        </div>
+
+        {pendingAssignments.length ? (
+          <div className="grid gap-3 lg:grid-cols-2">
+            {pendingAssignments.slice(0, 4).map((assignment) => {
+              const submission = assignment.submissions?.[0];
+
+              return (
+                <Link
+                  key={assignment.id}
+                  href="/assignments"
+                  className="rounded-2xl border border-border bg-background p-4 text-center transition hover:border-primary/40 hover:bg-primary/5 md:text-left"
+                >
+                  <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                    <div className="min-w-0">
+                      <p className="font-semibold text-card-foreground">
+                        {assignment.title}
+                      </p>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {assignment.course.title}
+                        {assignment.dueAt
+                          ? ` - Due ${formatDateTime(assignment.dueAt)}`
+                          : ""}
+                      </p>
+                    </div>
+                    <Badge variant={submission ? "default" : "outline"}>
+                      {submission ? submission.status.replace("_", " ") : "Pending"}
+                    </Badge>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="rounded-3xl border border-dashed border-border bg-muted/50 p-8 text-center text-sm text-muted-foreground">
+            No pending assignments right now.
+          </div>
+        )}
       </section>
 
       <section className="academy-card p-5 md:p-6">

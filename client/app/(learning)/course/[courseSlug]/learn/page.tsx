@@ -8,6 +8,8 @@ import { EnrollmentGate } from "@/components/layout/enrollment-gate";
 import { facultyWorkspaceServer } from "@/services/faculty/faculty-workspace.server";
 import type { FacultyClassSession } from "@/types/faculty-workspace";
 import { getLearnerUpcomingSessions } from "@/lib/learner-class-sessions";
+import { assignmentServerService } from "@/services/assignments/assignment.server";
+import type { Assignment } from "@/types/assignment";
 
 export default async function LearnPage({
   params,
@@ -23,6 +25,7 @@ export default async function LearnPage({
 
   let course: Course | null = null;
   let liveSessions: FacultyClassSession[] = [];
+  let assignments: Assignment[] = [];
   let hasAccess = true;
 
   try {
@@ -30,11 +33,17 @@ export default async function LearnPage({
       await courseServerService.getLearningCourseBySlug(courseSlug);
 
     course = response.data;
+    const [sessions, assignmentsResponse] = await Promise.all([
+      facultyWorkspaceServer.getMySessions(),
+      assignmentServerService.getMyAssignments(),
+    ]);
+
     liveSessions = getLearnerUpcomingSessions(
-      (await facultyWorkspaceServer.getMySessions()).filter(
-        (session) => session.course.slug === courseSlug,
-      ),
+      sessions.filter((session) => session.course.slug === courseSlug),
       new Date().toISOString(),
+    );
+    assignments = assignmentsResponse.data.filter(
+      (assignment) => assignment.course.id === course?.id,
     );
   } catch (error: unknown) {
     const message = getErrorMessage(error);
@@ -49,7 +58,13 @@ export default async function LearnPage({
 
   return (
     <EnrollmentGate hasAccess={hasAccess} courseSlug={courseSlug}>
-      {course && <LearnClient course={course} liveSessions={liveSessions} />}
+      {course && (
+        <LearnClient
+          course={course}
+          liveSessions={liveSessions}
+          assignments={assignments}
+        />
+      )}
     </EnrollmentGate>
   );
 }

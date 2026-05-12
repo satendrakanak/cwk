@@ -9,6 +9,8 @@ import { Course } from "@/types/course";
 import { facultyWorkspaceServer } from "@/services/faculty/faculty-workspace.server";
 import type { FacultyClassSession } from "@/types/faculty-workspace";
 import { UpcomingClasses } from "@/components/profile/upcoming-classes";
+import { assignmentServerService } from "@/services/assignments/assignment.server";
+import type { Assignment } from "@/types/assignment";
 import {
   hasLiveClasses,
   hasRecordedLearning,
@@ -23,14 +25,17 @@ export default async function MyCoursesPage() {
 
   let enrolledCourses: Course[] = [];
   let upcomingClasses: FacultyClassSession[] = [];
+  let assignments: Assignment[] = [];
 
   try {
-    const [coursesResponse, classesResponse] = await Promise.all([
+    const [coursesResponse, classesResponse, assignmentsResponse] = await Promise.all([
       userServerService.getEnrolledCourses(session.id),
       facultyWorkspaceServer.getMyUpcomingSessions(),
+      assignmentServerService.getMyAssignments(),
     ]);
     enrolledCourses = coursesResponse.data;
     upcomingClasses = classesResponse;
+    assignments = assignmentsResponse.data;
   } catch (error: unknown) {
     throw new Error(getErrorMessage(error));
   }
@@ -97,6 +102,50 @@ export default async function MyCoursesPage() {
       {upcomingClasses.length > 0 ? (
         <div className="academy-card p-5 md:p-6">
           <UpcomingClasses sessions={upcomingClasses} />
+        </div>
+      ) : null}
+
+      {assignments.length > 0 ? (
+        <div className="academy-card p-5 md:p-6">
+          <div className="flex flex-col gap-2 text-center md:flex-row md:items-end md:justify-between md:text-left">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">
+                Assignments
+              </p>
+              <h3 className="mt-2 text-xl font-semibold text-card-foreground">
+                Coursework for your enrolled courses
+              </h3>
+            </div>
+            <Link
+              href="/assignments"
+              className="mx-auto inline-flex items-center gap-2 text-sm font-semibold text-primary md:mx-0"
+            >
+              Open assignments
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          <div className="mt-5 grid gap-3 md:grid-cols-2">
+            {assignments.slice(0, 4).map((assignment) => (
+              <Link
+                key={assignment.id}
+                href="/assignments"
+                className="rounded-2xl border bg-background p-4 text-center transition hover:border-primary/40 hover:bg-primary/5 md:text-left"
+              >
+                <p className="font-semibold text-card-foreground">
+                  {assignment.title}
+                </p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {assignment.course.title}
+                </p>
+                <p className="mt-3 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+                  {assignment.submissions?.[0]
+                    ? assignment.submissions[0].status.replace("_", " ")
+                    : "Pending"}
+                </p>
+              </Link>
+            ))}
+          </div>
         </div>
       ) : null}
 

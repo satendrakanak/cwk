@@ -14,15 +14,18 @@ import { cn } from "@/lib/utils";
 import { certificateClientService } from "@/services/certificates/certificate.client";
 import { Certificate } from "@/types/certificate";
 import { Course } from "@/types/course";
+import type { Assignment } from "@/types/assignment";
 import { slugify } from "@/utils/slugify";
+import { CourseAssignmentsPanel } from "./course-assignments-panel";
 
 interface CourseTabsProps {
   course: Course;
+  assignments?: Assignment[];
 }
 
-type TabId = "overview" | "exam" | "qa" | "reviews";
+type TabId = "overview" | "assignments" | "exam" | "qa" | "reviews";
 
-export const CourseTabs = ({ course }: CourseTabsProps) => {
+export const CourseTabs = ({ course, assignments = [] }: CourseTabsProps) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabId>("overview");
 
@@ -42,6 +45,7 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
     { id: "overview", label: "Overview" },
     { id: "qa", label: "Q&A" },
     { id: "reviews", label: "Reviews" },
+    { id: "assignments", label: "Assignments" },
     { id: "exam", label: "Final Exams" },
   ];
 
@@ -167,6 +171,13 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
       ) : activeTab === "reviews" ? (
         <div className="px-6 py-6">
           <CourseRatingReviews course={{ ...course, isEnrolled: true }} />
+        </div>
+      ) : activeTab === "assignments" ? (
+        <div className="px-4 py-6 md:px-6">
+          <CourseAssignmentsPanel
+            assignments={assignments}
+            currentTime={new Date().getTime()}
+          />
         </div>
       ) : (
         <div className="space-y-4 px-6 py-6 text-sm text-muted-foreground">

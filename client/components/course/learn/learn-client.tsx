@@ -21,6 +21,7 @@ import {
 import { userProgressClientService } from "@/services/user-progress/user-progress.client";
 import { Course } from "@/types/course";
 import type { FacultyClassSession } from "@/types/faculty-workspace";
+import type { Assignment } from "@/types/assignment";
 import { Lecture } from "@/types/lecture";
 import {
   hasLiveClasses,
@@ -37,9 +38,14 @@ import { VideoPlayer } from "./video-player";
 interface LearnClientProps {
   course: Course;
   liveSessions?: FacultyClassSession[];
+  assignments?: Assignment[];
 }
 
-export const LearnClient = ({ course, liveSessions = [] }: LearnClientProps) => {
+export const LearnClient = ({
+  course,
+  liveSessions = [],
+  assignments = [],
+}: LearnClientProps) => {
   const [courseData, setCourseData] = useState(course);
   const [currentLecture, setCurrentLecture] = useState<Lecture | null>(null);
   const [isContentSheetOpen, setIsContentSheetOpen] = useState(false);
@@ -119,7 +125,13 @@ export const LearnClient = ({ course, liveSessions = [] }: LearnClientProps) => 
   };
 
   if (isFacultyLedCourse(course)) {
-    return <FacultyLedLearningClient course={course} sessions={liveSessions} />;
+    return (
+      <FacultyLedLearningClient
+        course={course}
+        sessions={liveSessions}
+        assignments={assignments}
+      />
+    );
   }
 
   if (!currentLecture) {
@@ -175,7 +187,7 @@ export const LearnClient = ({ course, liveSessions = [] }: LearnClientProps) => 
                 </button>
               </div>
 
-              <CourseTabs course={courseData} />
+              <CourseTabs course={courseData} assignments={assignments} />
               {showLiveSessions ? (
                 <section className="mx-auto max-w-6xl px-4 pb-8 md:px-6">
                   <div className="rounded-2xl border bg-card p-5 shadow-sm">

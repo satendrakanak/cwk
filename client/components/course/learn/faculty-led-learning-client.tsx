@@ -18,16 +18,20 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Course } from "@/types/course";
 import type { FacultyClassSession } from "@/types/faculty-workspace";
+import type { Assignment } from "@/types/assignment";
 import { formatDateTime } from "@/utils/formate-date";
+import { CourseAssignmentsPanel } from "./course-assignments-panel";
 
 type FacultyLedLearningClientProps = {
   course: Course;
   sessions: FacultyClassSession[];
+  assignments?: Assignment[];
 };
 
 export function FacultyLedLearningClient({
   course,
   sessions,
+  assignments = [],
 }: FacultyLedLearningClientProps) {
   const nextSession = sessions[0] ?? null;
   const publishedChapters = course.chapters.filter(
@@ -190,6 +194,14 @@ export function FacultyLedLearningClient({
               </p>
             </div>
           )}
+        </section>
+
+        <section className="rounded-3xl border bg-card p-5 shadow-sm lg:col-span-2">
+          <CourseAssignmentsPanel
+            assignments={assignments}
+            currentTime={new Date().getTime()}
+            compact
+          />
         </section>
 
         <section className="rounded-3xl border bg-card p-5 shadow-sm lg:col-span-2">
