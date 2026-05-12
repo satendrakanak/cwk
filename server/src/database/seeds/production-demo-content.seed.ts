@@ -39,6 +39,7 @@ import { FacultyProfile } from 'src/profiles/faculty-profile.entity';
 import { UserProfile } from 'src/profiles/user-profile.entity';
 import { Role } from 'src/roles-permissions/role.entity';
 import { AppSetting } from 'src/settings/app-setting.entity';
+import { seedAssignmentDemo } from './assignment-demo.seed';
 import { Tag } from 'src/tags/tag.entity';
 import { Testimonial } from 'src/testimonials/testimonial.entity';
 import { TestimonialStatus } from 'src/testimonials/enums/testimonial-status.enum';
@@ -2218,6 +2219,7 @@ export async function seedProductionDemoContent(dataSource: DataSource) {
   await seedDemoTestimonials(dataSource);
   await seedDemoEngagement(dataSource, systemUser);
   await seedDemoLiveOperations(dataSource);
+  await seedAssignmentDemo(dataSource);
   await seedDemoSettings(dataSource);
 
   console.log(
