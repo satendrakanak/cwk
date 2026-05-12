@@ -2,7 +2,10 @@ import { ArticleContent } from "@/components/articles/article-content";
 import { ArticleComments } from "@/components/articles/article-comments";
 import { ArticleHero } from "@/components/articles/article-hero";
 import { ArticleMeta } from "@/components/articles/article-meta";
-import { ArticleSidebar } from "@/components/articles/article-sidebar";
+import {
+  ArticleMobileTaxonomySheet,
+  ArticleSidebar,
+} from "@/components/articles/article-sidebar";
 import { RelatedArticles } from "@/components/articles/related-articles";
 import Container from "@/components/container";
 import { getErrorMessage } from "@/lib/error-handler";
@@ -114,11 +117,17 @@ export default async function ArticleSlugPage({ params }: ArticlePageProps) {
               <div className="space-y-8">
                 <ArticleContent article={article} />
                 <ArticleMeta article={article} />
+                <div className="lg:hidden">
+                  <ArticleMobileTaxonomySheet
+                    article={article}
+                    categories={categories}
+                  />
+                </div>
                 <ArticleComments articleId={article.id} />
               </div>
             </div>
 
-            <aside className="w-full self-start lg:sticky lg:top-24 lg:w-80">
+            <aside className="hidden w-full self-start lg:sticky lg:top-24 lg:block lg:w-80">
               <ArticleSidebar article={article} categories={categories} />
             </aside>
           </div>

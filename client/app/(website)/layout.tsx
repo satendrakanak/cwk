@@ -11,7 +11,7 @@ export default function WebsiteLayout({ children }: { children: ReactNode }) {
       <Header />
       <MobileMenu />
 
-      <main className="h-full flex-1 pb-14 pt-25 md:pb-0 md:pt-25 lg:pt-25">
+      <main className="h-full flex-1 pb-14 pt-28 sm:pt-25 md:pb-0 md:pt-25 lg:pt-25">
         {children}
       </main>
 

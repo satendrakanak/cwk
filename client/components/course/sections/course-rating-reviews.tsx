@@ -292,7 +292,21 @@ export function CourseRatingReviews({ course }: { course: Course }) {
           </div>
 
           {course.isEnrolled ? (
-            <div className="mt-5 rounded-3xl border border-border bg-muted/50 p-4">
+            <div className="relative mt-5 rounded-3xl border border-border bg-muted/50 p-4">
+              {myReview ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon-sm"
+                  disabled={isPending}
+                  onClick={() => deleteReview(myReview.id)}
+                  className="absolute right-4 top-4 rounded-full border-border bg-background text-destructive hover:border-destructive hover:bg-destructive hover:text-white **:text-inherit"
+                  aria-label="Delete review"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              ) : null}
+
               <p className="mb-3 text-sm font-semibold text-card-foreground">
                 Share your experience
               </p>
@@ -331,19 +345,6 @@ export function CourseRatingReviews({ course }: { course: Course }) {
                 </p>
 
                 <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:items-center">
-                  {myReview ? (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      disabled={isPending}
-                      onClick={() => deleteReview(myReview.id)}
-                      className="rounded-full border-border bg-background text-destructive hover:border-destructive hover:bg-destructive hover:text-white **:text-inherit"
-                    >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      Delete
-                    </Button>
-                  ) : null}
-
                   <Button
                     type="button"
                     disabled={isPending}

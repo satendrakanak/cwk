@@ -71,7 +71,7 @@ export default function Hero({ courses }: HeroProps) {
           <div className="mt-8 flex w-full flex-col items-center gap-3 sm:flex-row lg:w-auto lg:items-start">
             <Link
               href="/courses"
-              className="inline-flex h-12 w-full max-w-64 items-center justify-center rounded-full bg-white px-7 text-sm font-semibold text-slate-950 shadow-[0_15px_45px_rgba(2,6,23,0.22)] transition hover:-translate-y-0.5 hover:bg-white/90 dark:bg-primary dark:text-primary-foreground dark:shadow-[0_15px_45px_color-mix(in_oklab,var(--primary)_30%,transparent)] dark:hover:bg-primary/90 sm:w-auto lg:max-w-none"
+              className="inline-flex h-12 w-full max-w-64 items-center justify-center rounded-full bg-white px-7 text-sm font-semibold text-slate-950 shadow-[0_15px_45px_rgba(2,6,23,0.22)] transition hover:-translate-y-0.5 hover:bg-white/90 dark:!bg-primary dark:!text-primary-foreground dark:shadow-[0_15px_45px_color-mix(in_oklab,var(--primary)_30%,transparent)] dark:hover:!bg-primary/90 sm:w-auto lg:max-w-none"
             >
               View Courses →
             </Link>

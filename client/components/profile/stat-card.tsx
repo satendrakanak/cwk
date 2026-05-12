@@ -24,8 +24,8 @@ export function StatCard({
         highlight && "border-primary/20 bg-primary/5",
       )}
     >
-      <CardContent className="p-4 md:p-5">
-        <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/15">
+      <CardContent className="p-4 text-center md:p-5 md:text-left">
+        <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/15 md:mx-0">
           <Icon className="h-5 w-5" />
         </div>
 

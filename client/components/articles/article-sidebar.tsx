@@ -1,10 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { Hash, Layers } from "lucide-react";
+import { Hash, Layers, SlidersHorizontal } from "lucide-react";
 
 import { Article } from "@/types/article";
 import { cn } from "@/lib/utils";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 type SidebarCategory = {
   id: number;
@@ -106,5 +113,37 @@ export function ArticleSidebar({
         )}
       </div>
     </aside>
+  );
+}
+
+export function ArticleMobileTaxonomySheet({
+  article,
+  categories,
+}: {
+  article: Article;
+  categories: SidebarCategory[];
+}) {
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <button
+          type="button"
+          className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-full border border-border bg-card px-4 text-sm font-semibold text-foreground shadow-sm transition hover:border-primary hover:bg-primary hover:text-primary-foreground lg:hidden"
+        >
+          <SlidersHorizontal className="h-4 w-4" />
+          Browse article topics
+        </button>
+      </SheetTrigger>
+
+      <SheetContent side="right" className="w-[88vw] gap-0 p-0 sm:max-w-sm">
+        <SheetHeader className="border-b border-border pr-14">
+          <SheetTitle>Article topics</SheetTitle>
+        </SheetHeader>
+
+        <div className="min-h-0 flex-1 overflow-y-auto p-4">
+          <ArticleSidebar article={article} categories={categories} />
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 }

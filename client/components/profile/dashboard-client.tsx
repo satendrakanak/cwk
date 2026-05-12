@@ -138,7 +138,7 @@ export default function DashboardClient({
       <ProgressChart weeklyProgress={weeklyProgress} />
 
       <section className="academy-card p-5 md:p-6">
-        <div className="mb-5 flex flex-col gap-2 border-b border-border pb-5 md:flex-row md:items-end md:justify-between">
+        <div className="mb-5 flex flex-col gap-2 border-b border-border pb-5 text-center md:flex-row md:items-end md:justify-between md:text-left">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">
               Learning Progress
@@ -147,7 +147,7 @@ export default function DashboardClient({
               Your course journey
             </h3>
           </div>
-          <p className="max-w-xl text-sm leading-6 text-muted-foreground">
+          <p className="mx-auto max-w-xl text-sm leading-6 text-muted-foreground md:mx-0">
             A compact view across self-learning, live classes, exams, and
             certificates. Open each page for full details.
           </p>
@@ -158,13 +158,13 @@ export default function DashboardClient({
             <Link
               key={card.title}
               href={card.href}
-              className="group rounded-2xl border border-border bg-background p-4 transition hover:border-primary/40 hover:bg-primary/5"
+              className="group rounded-2xl border border-border bg-background p-4 text-center transition hover:border-primary/40 hover:bg-primary/5 md:text-left"
             >
-              <div className="mb-4 flex items-center justify-between gap-3">
+              <div className="mb-4 flex items-center justify-center gap-3 md:justify-between">
                 <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <card.icon className="size-5" />
                 </span>
-                <ArrowRight className="size-4 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-primary" />
+                <ArrowRight className="hidden size-4 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-primary md:block" />
               </div>
               <p className="text-xl font-semibold text-card-foreground">
                 {card.value}
@@ -185,9 +185,9 @@ export default function DashboardClient({
               <Link
                 key={course.courseId}
                 href={`/course/${course.slug}/learn`}
-                className="rounded-2xl border border-border bg-muted/30 p-4 transition hover:border-primary/40"
+                className="rounded-2xl border border-border bg-muted/30 p-4 text-center transition hover:border-primary/40 md:text-left"
               >
-                <div className="flex items-start justify-between gap-3">
+                <div className="flex flex-col items-center justify-between gap-3 md:flex-row md:items-start">
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold text-card-foreground">
                       {course.title}
@@ -201,7 +201,7 @@ export default function DashboardClient({
                   </span>
                 </div>
                 <Progress value={course.overallProgress} className="mt-4 h-2" />
-                <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+                <div className="mt-3 grid grid-cols-2 gap-2 text-center text-xs text-muted-foreground md:text-left">
                   {course.recorded.enabled ? (
                     <span>
                       {course.recorded.completedLectures}/
@@ -230,7 +230,7 @@ export default function DashboardClient({
       </section>
 
       <section className="academy-card p-5 md:p-6">
-        <div className="mb-5 flex flex-col gap-2 border-b border-border pb-5 md:flex-row md:items-end md:justify-between">
+        <div className="mb-5 flex flex-col gap-2 border-b border-border pb-5 text-center md:flex-row md:items-end md:justify-between md:text-left">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">
               Continue Learning
@@ -241,7 +241,7 @@ export default function DashboardClient({
             </h3>
           </div>
 
-          <p className="max-w-xl text-sm leading-6 text-muted-foreground">
+          <p className="mx-auto max-w-xl text-sm leading-6 text-muted-foreground md:mx-0">
             Resume your latest courses, keep the streak alive, and move one step
             closer to completion.
           </p>

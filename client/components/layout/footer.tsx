@@ -141,7 +141,7 @@ export default function Footer() {
               </Link>
             </div>
 
-            <div className="grid gap-8 text-center md:grid-cols-3 md:text-left">
+            <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-3 md:text-left">
               <div>
                 <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.24em] text-foreground">
                   Explore
@@ -180,7 +180,7 @@ export default function Footer() {
                 </ul>
               </div>
 
-              <div>
+              <div className="col-span-2 md:col-span-1">
                 <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.24em] text-foreground">
                   Contact
                 </h3>

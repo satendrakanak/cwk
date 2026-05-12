@@ -152,11 +152,11 @@ export default async function FacultyDetailPage({ params }: PageProps) {
 
           <Container className="relative z-10">
             <div className="grid gap-8 lg:grid-cols-[1.18fr_0.82fr] lg:items-center">
-              <div>
+              <div className="text-center lg:text-left">
                 <WebsiteBreadcrumbs
                   contained={false}
                   variant="hero"
-                  className="mb-4 pt-0"
+                  className="mb-4 flex justify-center pt-0 lg:block"
                   items={[
                     { label: "Home", href: "/" },
                     { label: "Instructors", href: "/instructors" },
@@ -171,7 +171,7 @@ export default async function FacultyDetailPage({ params }: PageProps) {
                   Instructor profile
                 </Link>
 
-                <h1 className="mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-white md:text-5xl lg:text-[46px]">
+                <h1 className="mx-auto mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-white md:text-5xl lg:mx-0 lg:text-[46px]">
                   {fullName || "Instructor"}
                 </h1>
 
@@ -179,13 +179,13 @@ export default async function FacultyDetailPage({ params }: PageProps) {
                   {faculty.facultyProfile?.designation || "Instructor"}
                 </p>
 
-                <p className="mt-4 max-w-2xl text-sm leading-7 text-white/75 md:text-base">
+                <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-white/75 md:text-base lg:mx-0">
                   {faculty.profile?.bio ||
                     faculty.facultyProfile?.expertise ||
                     "Experienced instructor helping learners build practical confidence."}
                 </p>
 
-                <div className="mt-6 flex flex-wrap gap-3">
+                <div className="mt-6 flex flex-wrap justify-center gap-3 lg:justify-start">
                   <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white/90 backdrop-blur-md">
                     <BookOpen className="h-4 w-4 text-primary" />
                     {courseCount} course{courseCount === 1 ? "" : "s"}
@@ -224,7 +224,7 @@ export default async function FacultyDetailPage({ params }: PageProps) {
                 </div>
 
                 {socialLinks.length ? (
-                  <div className="mt-5 flex flex-wrap gap-2">
+                  <div className="mt-5 flex flex-wrap justify-center gap-2 lg:justify-start">
                     {socialLinks.map((social) => {
                       const Icon = social.icon;
 
@@ -269,7 +269,7 @@ export default async function FacultyDetailPage({ params }: PageProps) {
           <div className="space-y-12 py-14">
             {taughtCourses.length ? (
               <section className="space-y-6">
-                <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                <div className="flex flex-col gap-3 text-center md:flex-row md:items-end md:justify-between md:text-left">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
                       Courses by instructor
@@ -280,7 +280,7 @@ export default async function FacultyDetailPage({ params }: PageProps) {
                     </h2>
                   </div>
 
-                  <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
+                  <p className="mx-auto max-w-2xl text-sm leading-6 text-muted-foreground md:mx-0">
                     Explore the programs this instructor currently teaches inside
                     the academy.
                   </p>

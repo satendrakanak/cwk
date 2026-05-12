@@ -11,7 +11,7 @@ export function ArticleMeta({ article }: { article: Article }) {
     : null;
 
   return (
-    <div className="academy-card my-6 flex flex-wrap items-center gap-2 p-3 text-sm">
+    <div className="academy-card my-6 flex flex-col items-stretch gap-2 p-3 text-sm sm:flex-row sm:flex-wrap sm:items-center">
       <span className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/10 px-3 py-2 font-semibold text-primary">
         <UserRound className="h-4 w-4" />
         By {article.author?.firstName || "Admin"}

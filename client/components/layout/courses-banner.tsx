@@ -57,7 +57,7 @@ export function CoursesBanner({
               <WebsiteBreadcrumbs
                 contained={false}
                 variant="hero"
-                className="mb-4 pt-0"
+                className="mb-4 flex justify-center pt-0 lg:block"
                 items={breadcrumbs}
               />
             ) : null}

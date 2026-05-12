@@ -54,12 +54,12 @@ export function ArticleHeader({
 
       <Container className="relative z-10">
         <div className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
-          <div className="max-w-3xl">
+          <div className="mx-auto max-w-3xl text-center lg:mx-0 lg:text-left">
           {breadcrumbs ? (
             <WebsiteBreadcrumbs
               contained={false}
               variant="hero"
-              className="mb-4 pt-0"
+              className="mb-4 flex justify-center pt-0 lg:block"
               items={breadcrumbs}
             />
           ) : null}
@@ -68,17 +68,17 @@ export function ArticleHeader({
             Articles
           </span>
 
-          <h1 className="max-w-3xl text-3xl font-semibold leading-tight tracking-tight text-white md:text-5xl lg:text-[46px]">
+          <h1 className="mx-auto max-w-3xl text-3xl font-semibold leading-tight tracking-tight text-white md:text-5xl lg:mx-0 lg:text-[46px]">
             Read ideas that make the learning journey more practical.
           </h1>
 
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-white/75 md:text-base">
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-white/75 md:text-base lg:mx-0">
             Explore wellness, learning, nutrition, and career-oriented insights
             written for thoughtful readers.
           </p>
           </div>
 
-          <div className="rounded-3xl border border-white/15 bg-white/10 p-4 shadow-[0_20px_60px_rgba(2,6,23,0.22)] backdrop-blur-xl md:p-5">
+          <div className="rounded-3xl border border-white/15 bg-white/10 p-4 text-center shadow-[0_20px_60px_rgba(2,6,23,0.22)] backdrop-blur-xl md:p-5 lg:text-left">
             <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-white/75">
               Snapshot
             </p>
@@ -92,7 +92,7 @@ export function ArticleHeader({
                     key={item.label}
                     className="rounded-2xl border border-white/10 bg-white/10 p-3 backdrop-blur-md"
                   >
-                    <Icon className="mb-2 h-4 w-4 text-white/80" />
+                    <Icon className="mx-auto mb-2 h-4 w-4 text-white/80 lg:mx-0" />
 
                     <p className="text-2xl font-bold text-white">
                       {item.value}

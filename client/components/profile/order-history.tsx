@@ -68,7 +68,7 @@ export function OrderHistory({
 
   return (
     <section>
-      <div className="mb-5 flex flex-col gap-3 border-b border-border pb-5 md:flex-row md:items-end md:justify-between">
+      <div className="mb-5 flex flex-col gap-3 border-b border-border pb-5 text-center md:flex-row md:items-end md:justify-between md:text-left">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">
             Purchase History
@@ -150,7 +150,7 @@ export function OrderHistory({
             return (
               <article key={order.id} className="academy-card overflow-hidden">
                 <div className="space-y-5 p-5 md:p-6">
-                  <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                  <div className="flex flex-col items-center gap-4 text-center md:flex-row md:items-start md:justify-between md:text-left">
                     <div>
                       <div className="flex flex-wrap items-center gap-3">
                         <h4 className="text-lg font-semibold text-card-foreground">
@@ -165,7 +165,7 @@ export function OrderHistory({
                       </p>
                     </div>
 
-                    <div className="rounded-2xl border border-border bg-muted/50 px-4 py-3 text-left md:text-right">
+                    <div className="w-full rounded-2xl border border-border bg-muted/50 px-4 py-3 text-center md:w-auto md:text-right">
                       <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
                         Total Paid
                       </p>
@@ -177,9 +177,9 @@ export function OrderHistory({
                   </div>
 
                   <div className="grid gap-4 lg:grid-cols-[1.25fr_0.75fr]">
-                    <div className="rounded-3xl border border-border bg-muted/50 p-4">
+                    <div className="rounded-3xl bg-transparent p-0 md:border md:border-border md:bg-muted/50 md:p-4">
                       {course ? (
-                        <div className="flex flex-col gap-4 sm:flex-row">
+                        <div className="flex flex-col gap-4 text-center sm:flex-row sm:text-left">
                           <Link
                             href={`/course/${course.slug}`}
                             className="relative h-44 w-full shrink-0 overflow-hidden rounded-2xl border border-border bg-card sm:h-28 sm:w-32"
@@ -214,7 +214,7 @@ export function OrderHistory({
                               </p>
                             </div>
 
-                            <div className="mt-3 flex flex-wrap gap-2">
+                            <div className="mt-3 flex flex-wrap justify-center gap-2 sm:justify-start">
                               {course.experienceLevel ? (
                                 <Tag>{course.experienceLevel}</Tag>
                               ) : null}
@@ -283,7 +283,7 @@ export function OrderHistory({
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-3 border-t border-border pt-5">
+                  <div className="flex flex-wrap justify-center gap-3 border-t border-border pt-5 md:justify-start">
                     {course?.isEnrolled ? (
                       <Link
                         href={`/course/${course.slug}/learn`}
