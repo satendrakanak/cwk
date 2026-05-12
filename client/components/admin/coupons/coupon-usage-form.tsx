@@ -11,7 +11,13 @@ import { couponUsageSchema } from "@/schemas/coupon";
 import { couponClientService } from "@/services/coupons/coupon.client";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/error-handler";
-import { Field, FieldError, FieldGroup } from "@/components/ui/field";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { SubmitButton } from "@/components/submit-button";
 
 interface CouponUsageFormProps {
@@ -35,7 +41,10 @@ export const CouponUsageForm = ({ coupon }: CouponUsageFormProps) => {
 
   const onSubmit = async (data: z.infer<typeof couponUsageSchema>) => {
     try {
-      await couponClientService.update(coupon.id, data);
+      await couponClientService.update(coupon.id, {
+        usageLimit: data.usageLimit ?? null,
+        perUserLimit: data.perUserLimit ?? 1,
+      });
       router.refresh();
       toast.success("Coupon usage updated successfully");
     } catch (error: unknown) {
@@ -62,15 +71,21 @@ export const CouponUsageForm = ({ coupon }: CouponUsageFormProps) => {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Total redemption limit</FieldLabel>
                   <Input
-                    type="number"
+                    type="text"
+                    inputMode="numeric"
                     value={field.value ?? ""}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      field.onChange(val === "" ? undefined : Number(val));
+                    onChange={(event) => {
+                      const value = event.target.value.replace(/\D/g, "");
+                      field.onChange(value === "" ? undefined : Number(value));
                     }}
-                    placeholder="Usage Limit"
+                    placeholder="Unlimited"
                   />
+                  <FieldDescription>
+                    Maximum number of times this coupon can be used across all
+                    learners. Leave blank for unlimited.
+                  </FieldDescription>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -84,15 +99,21 @@ export const CouponUsageForm = ({ coupon }: CouponUsageFormProps) => {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Limit per learner</FieldLabel>
                   <Input
-                    type="number"
+                    type="text"
+                    inputMode="numeric"
                     value={field.value ?? ""}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      field.onChange(val === "" ? undefined : Number(val));
+                    onChange={(event) => {
+                      const value = event.target.value.replace(/\D/g, "");
+                      field.onChange(value === "" ? undefined : Number(value));
                     }}
-                    placeholder="Usage per user"
+                    placeholder="1"
                   />
+                  <FieldDescription>
+                    How many successful orders one learner can use this coupon
+                    on. Keep it 1 for first-use-only coupons.
+                  </FieldDescription>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}

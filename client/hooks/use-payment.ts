@@ -14,6 +14,7 @@ import {
   RazorpaySuccessResponse,
 } from "@/types/order";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 declare global {
   interface Window {
@@ -65,6 +66,9 @@ function loadRazorpayScript() {
 
 export const usePayment = () => {
   const router = useRouter();
+  const [paymentStage, setPaymentStage] = useState<
+    "idle" | "preparing" | "awaiting_payment" | "verifying" | "redirecting"
+  >("idle");
 
   const clearCart = useCartStore((s) => s.clearCart);
 
@@ -101,19 +105,18 @@ export const usePayment = () => {
 
       handler: async (response: RazorpaySuccessResponse) => {
         try {
-          await orderClientService.verifyPayment(response);
+          setPaymentStage("verifying");
+          const verifiedOrder =
+            await orderClientService.verifyPayment(response);
 
           toast.success("✅ Payment successful");
 
           clearCart();
-
-          if (courses.length === 1) {
-            router.push(`/course/${courses[0].slug}/learn`);
-          } else {
-            router.push("/my-courses");
-          }
+          setPaymentStage("redirecting");
+          router.push(`/checkout/success?orderId=${verifiedOrder.data.id}`);
         } catch {
           toast("Payment received. Verifying...");
+          setPaymentStage("redirecting");
           router.push("/my-courses");
         }
       },
@@ -125,6 +128,7 @@ export const usePayment = () => {
           } catch (error) {
             console.error("Cancel payment reporting failed", error);
           }
+          setPaymentStage("idle");
           toast.error("⚠️ Payment cancelled");
         },
       },
@@ -141,6 +145,7 @@ export const usePayment = () => {
     });
 
     rzp.open();
+    setPaymentStage("awaiting_payment");
 
     rzp.on("payment.failed", function (response: unknown) {
       console.error("❌ Payment Failed:", response);
@@ -168,6 +173,7 @@ export const usePayment = () => {
         failureResponse?.error?.description ||
           "Payment failed. Please try again.",
       );
+      setPaymentStage("idle");
     });
   };
 
@@ -179,6 +185,7 @@ export const usePayment = () => {
     provider: string,
   ) => {
     try {
+      setPaymentStage("preparing");
       const {
         cartItems,
         finalAmount,
@@ -190,6 +197,7 @@ export const usePayment = () => {
 
       if (!cartItems.length) {
         toast.error("Cart is empty");
+        setPaymentStage("idle");
         return;
       }
 
@@ -251,6 +259,7 @@ export const usePayment = () => {
         courses,
       });
     } catch (error: unknown) {
+      setPaymentStage("idle");
       toast.error(getErrorMessage(error));
     }
   };
@@ -263,6 +272,7 @@ export const usePayment = () => {
     data: z.infer<typeof checkoutSchema>,
   ) => {
     try {
+      setPaymentStage("preparing");
       const res = await orderClientService.retry(orderId);
 
       const { razorpayOrderId, amount, currency, courses } = res.data;
@@ -280,6 +290,7 @@ export const usePayment = () => {
         courses,
       });
     } catch (error: unknown) {
+      setPaymentStage("idle");
       toast.error(getErrorMessage(error));
     }
   };
@@ -287,5 +298,10 @@ export const usePayment = () => {
   return {
     initiatePayment,
     retryPayment,
+    paymentStage,
+    isPaymentProcessing:
+      paymentStage === "preparing" ||
+      paymentStage === "verifying" ||
+      paymentStage === "redirecting",
   };
 };

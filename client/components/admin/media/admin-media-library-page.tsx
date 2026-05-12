@@ -56,11 +56,21 @@ const acceptedMediaTypes = [
   "text/csv",
 ].join(",");
 
+function getUploadErrorMessage(error: unknown) {
+  if (axios.isAxiosError(error) && !error.response) {
+    return "Upload blocked by browser/S3 CORS. Add cwk.getkasa.in to the S3 bucket CORS allowed origins, then retry.";
+  }
+
+  return error instanceof Error ? error.message : "Upload failed";
+}
+
 export function AdminMediaLibraryPage() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [media, setMedia] = useState<FileType[]>([]);
   const [selected, setSelected] = useState<FileType | null>(null);
-  const [uploadingFile, setUploadingFile] = useState<UploadingFile | null>(null);
+  const [uploadingFile, setUploadingFile] = useState<UploadingFile | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [activeType, setActiveType] = useState<MediaKind>("all");
@@ -231,7 +241,7 @@ export function AdminMediaLibraryPage() {
       toast.success("Media uploaded successfully");
     } catch (error) {
       console.error(error);
-      toast.error(error instanceof Error ? error.message : "Upload failed");
+      toast.error(getUploadErrorMessage(error));
       setUploadingFile((current) =>
         current ? { ...current, uploading: false } : current,
       );
@@ -258,7 +268,9 @@ export function AdminMediaLibraryPage() {
       toast.success("Media deleted successfully");
     } catch (error) {
       console.error(error);
-      toast.error(error instanceof Error ? error.message : "Failed to delete media");
+      toast.error(
+        error instanceof Error ? error.message : "Failed to delete media",
+      );
     } finally {
       setDeleting(false);
     }
@@ -564,7 +576,11 @@ function MediaDetailsCard({
               className="object-cover"
             />
           ) : media.type === "video" ? (
-            <video src={media.path} controls className="size-full object-cover" />
+            <video
+              src={media.path}
+              controls
+              className="size-full object-cover"
+            />
           ) : (
             <div className="flex size-full flex-col items-center justify-center gap-3">
               <File className="size-10 text-muted-foreground" />
@@ -604,7 +620,11 @@ function MediaDetailsCard({
               onClick={onCopy}
               aria-label="Copy media URL"
             >
-              {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
+              {copied ? (
+                <Check className="size-4" />
+              ) : (
+                <Copy className="size-4" />
+              )}
             </Button>
           </div>
         </div>

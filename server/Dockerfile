@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1.7
+
 FROM node:20-alpine AS base
 
 WORKDIR /app
@@ -18,7 +20,7 @@ FROM base AS dependencies
 
 COPY package*.json ./
 
-RUN PUPPETEER_SKIP_DOWNLOAD=true npm install
+RUN --mount=type=cache,target=/root/.npm PUPPETEER_SKIP_DOWNLOAD=true npm install
 
 # =========================
 
@@ -38,7 +40,6 @@ CMD ["npm", "run", "start:dev"]
 FROM base AS builder
 
 ENV NODE_ENV=production
-ENV NODE_OPTIONS=--max-old-space-size=2048
 
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .

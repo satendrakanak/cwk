@@ -12,7 +12,13 @@ import { couponDiscountSchema } from "@/schemas/coupon";
 import { couponClientService } from "@/services/coupons/coupon.client";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/error-handler";
-import { Field, FieldError, FieldGroup } from "@/components/ui/field";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { SubmitButton } from "@/components/submit-button";
 
 interface CouponDiscountFormProps {
@@ -53,32 +59,36 @@ export const CouponDiscountForm = ({ coupon }: CouponDiscountFormProps) => {
     <Card className="dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       <CardContent className="p-6 space-y-5">
         <div>
-          <h3 className="text-lg font-semibold text-slate-950 dark:text-white">Discount Settings</h3>
+          <h3 className="text-lg font-semibold text-slate-950 dark:text-white">
+            Discount Settings
+          </h3>
           <p className="text-sm text-muted-foreground">
             Configure discount value and limits
           </p>
         </div>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           <FieldGroup>
-            {/* Value */}
             <Controller
               name="value"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Discount value</FieldLabel>
                   <Input
-                    type="number"
+                    type="text"
+                    inputMode="decimal"
                     value={field.value ?? ""}
-                    onChange={(e) =>
-                      field.onChange(
-                        e.target.value === ""
-                          ? undefined
-                          : Number(e.target.value),
-                      )
-                    }
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^\d.]/g, "");
+                      field.onChange(value === "" ? undefined : Number(value));
+                    }}
                     placeholder="Enter a coupon value"
                     className="h-10 mb-0"
                   />
+                  <FieldDescription>
+                    For fixed coupons this is rupees off. For percentage coupons
+                    this is the percent off.
+                  </FieldDescription>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -86,25 +96,27 @@ export const CouponDiscountForm = ({ coupon }: CouponDiscountFormProps) => {
               )}
             />
 
-            {/* Max Discount */}
             <Controller
               name="maxDiscount"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Maximum discount</FieldLabel>
                   <Input
-                    type="number"
+                    type="text"
+                    inputMode="decimal"
                     value={field.value ?? ""}
-                    onChange={(e) =>
-                      field.onChange(
-                        e.target.value === ""
-                          ? undefined
-                          : Number(e.target.value),
-                      )
-                    }
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^\d.]/g, "");
+                      field.onChange(value === "" ? undefined : Number(value));
+                    }}
                     placeholder="Enter a max discount"
                     className="h-10 mb-0"
                   />
+                  <FieldDescription>
+                    Optional cap for percentage coupons. Leave blank when no cap
+                    is needed.
+                  </FieldDescription>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -112,25 +124,27 @@ export const CouponDiscountForm = ({ coupon }: CouponDiscountFormProps) => {
               )}
             />
 
-            {/* Min Order Value */}
             <Controller
               name="minOrderValue"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Minimum order value</FieldLabel>
                   <Input
-                    type="number"
+                    type="text"
+                    inputMode="decimal"
                     value={field.value ?? ""}
-                    onChange={(e) =>
-                      field.onChange(
-                        e.target.value === ""
-                          ? undefined
-                          : Number(e.target.value),
-                      )
-                    }
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^\d.]/g, "");
+                      field.onChange(value === "" ? undefined : Number(value));
+                    }}
                     placeholder="Enter a min order value"
                     className="h-10 mb-0"
                   />
+                  <FieldDescription>
+                    Coupon applies only when cart total reaches this amount.
+                    Leave blank for no minimum.
+                  </FieldDescription>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}

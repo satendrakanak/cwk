@@ -3,6 +3,9 @@ import { CreateCouponDto } from '../dtos/create-coupon.dto';
 import { Repository } from 'typeorm';
 import { Coupon } from '../coupon.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CouponScope } from '../enums/couponScope.enum';
+import { CouponStatus } from '../enums/couponStatus.enum';
+import { CouponType } from '../enums/couponType.enum';
 @Injectable()
 export class CreateCouponProvider {
   constructor(
@@ -26,6 +29,12 @@ export class CreateCouponProvider {
     }
 
     const coupon = this.couponRepository.create({
+      type: CouponType.FIXED,
+      scope: CouponScope.GLOBAL,
+      status: CouponStatus.ACTIVE,
+      perUserLimit: 1,
+      isAutoApply: false,
+      ...createCouponDto,
       code,
     });
 

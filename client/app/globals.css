@@ -648,6 +648,20 @@
   opacity: 0.35;
 }
 
+@keyframes checkout-progress {
+  0% {
+    transform: translateX(-120%);
+  }
+
+  50% {
+    transform: translateX(60%);
+  }
+
+  100% {
+    transform: translateX(220%);
+  }
+}
+
 @media (max-width: 639px) {
   .related-courses-slider .swiper-button-prev,
   .related-courses-slider .swiper-button-next,

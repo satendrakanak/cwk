@@ -902,9 +902,10 @@ export function SiteSettingsDashboard({
                 <Field label="SMTP password">
                   <Input
                     type="password"
-                    disabled={!emailForm.hasPassword}
                     placeholder={
-                      emailForm.hasPassword ? "********" : "Enter SMTP password"
+                      emailForm.hasPassword
+                        ? "Leave blank to keep existing password"
+                        : "Enter SMTP password"
                     }
                     value={emailForm.smtpPassword || ""}
                     onChange={(event) =>
@@ -1049,9 +1050,9 @@ export function SiteSettingsDashboard({
               </div>
 
               <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600 dark:border-white/10 dark:bg-white/6 dark:text-slate-300">
-                Run <code>bbb-conf --secret</code> on your BBB server to get
-                the API URL and shared secret. The secret is encrypted before it
-                is stored.
+                Run <code>bbb-conf --secret</code> on your BBB server to get the
+                API URL and shared secret. The secret is encrypted before it is
+                stored.
               </div>
 
               <div className="flex justify-end">
@@ -1067,10 +1068,7 @@ export function SiteSettingsDashboard({
             title="Push notification configuration"
             description="Enable browser push for class reminders, exam updates, and important learner alerts. VAPID private key is stored encrypted."
           >
-            <form
-              onSubmit={savePushNotificationSettings}
-              className="space-y-4"
-            >
+            <form onSubmit={savePushNotificationSettings} className="space-y-4">
               <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-white/6">
                 <div>
                   <p className="font-semibold text-slate-900 dark:text-white">
@@ -1558,8 +1556,12 @@ function SettingsCard({
       <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)] dark:text-[var(--brand-300)]">
         {eyebrow}
       </p>
-      <h2 className="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">{title}</h2>
-      <p className="mt-1 text-sm text-slate-500 dark:text-slate-300">{description}</p>
+      <h2 className="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
+        {title}
+      </h2>
+      <p className="mt-1 text-sm text-slate-500 dark:text-slate-300">
+        {description}
+      </p>
       <div className="mt-6">{children}</div>
     </section>
   );
@@ -1598,9 +1600,9 @@ function MediaField({
       <Label>{label}</Label>
       <div
         className={cn(
-            "rounded-2xl border border-slate-200 bg-white p-3 dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)]",
-            compact ? "min-h-[188px]" : "min-h-[214px]",
-          )}
+          "rounded-2xl border border-slate-200 bg-white p-3 dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)]",
+          compact ? "min-h-[188px]" : "min-h-[214px]",
+        )}
       >
         <div className="flex h-full flex-col">
           <div
@@ -1621,7 +1623,9 @@ function MediaField({
             )}
           </div>
           <div className="min-w-0 flex-1 pt-3">
-            <p className="text-sm font-medium text-slate-900 dark:text-white">{label}</p>
+            <p className="text-sm font-medium text-slate-900 dark:text-white">
+              {label}
+            </p>
             <p className="mt-1 line-clamp-2 break-all text-xs text-slate-500 dark:text-slate-300">
               {value || "Choose from media library"}
             </p>

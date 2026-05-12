@@ -32,7 +32,7 @@ export type Coupon = {
 
   isAutoApply: boolean;
 
-  usageLimit?: number;
+  usageLimit?: number | null;
 
   usedCount: number;
 
@@ -65,7 +65,7 @@ export type CreateCouponPayload = {
 
   isAutoApply?: boolean;
 
-  usageLimit?: number;
+  usageLimit?: number | null;
   perUserLimit?: number;
 
   validFrom?: Date | null;

@@ -4,7 +4,14 @@ import * as z from "zod";
 import { useEffect, useState } from "react";
 import { FormProvider } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ShoppingCart, ArrowRight, Loader, ShieldCheck } from "lucide-react";
+import {
+  ShoppingCart,
+  ArrowRight,
+  Loader,
+  ShieldCheck,
+  CreditCard,
+  CheckCircle2,
+} from "lucide-react";
 import Link from "next/link";
 
 import { useCartStore } from "@/store/cart-store";
@@ -46,7 +53,8 @@ const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
   const retryOrderId = Number(searchParams.get("retryOrderId") || 0);
   const isRetryFlow = Number.isFinite(retryOrderId) && retryOrderId > 0;
 
-  const { initiatePayment, retryPayment } = usePayment();
+  const { initiatePayment, retryPayment, paymentStage, isPaymentProcessing } =
+    usePayment();
   const { cartItems } = useCartStore();
 
   const { user, isLoading } = useSession();
@@ -192,6 +200,9 @@ const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
   if (isLoading) {
     return (
       <div className="relative min-h-screen bg-background">
+        {isPaymentProcessing ? (
+          <CheckoutProcessingOverlay stage={paymentStage} />
+        ) : null}
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute inset-0 bg-(--surface-shell)" />
         </div>
@@ -350,3 +361,56 @@ const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
 };
 
 export default CheckoutClient;
+
+function CheckoutProcessingOverlay({
+  stage,
+}: {
+  stage:
+    | "idle"
+    | "preparing"
+    | "awaiting_payment"
+    | "verifying"
+    | "redirecting";
+}) {
+  const copy =
+    stage === "verifying"
+      ? {
+          title: "Confirming your payment",
+          description:
+            "Razorpay has accepted the payment. We are enrolling your courses and preparing your next steps.",
+          icon: CheckCircle2,
+        }
+      : stage === "redirecting"
+        ? {
+            title: "Purchase complete",
+            description:
+              "Taking you to the purchase summary where you can start learning or view live class details.",
+            icon: CheckCircle2,
+          }
+        : {
+            title: "Preparing secure payment",
+            description:
+              "Please stay on this page while we create your order and open Razorpay.",
+            icon: CreditCard,
+          };
+  const Icon = copy.icon;
+
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center bg-background/80 px-4 backdrop-blur-sm">
+      <div className="academy-card w-full max-w-md p-6 text-center shadow-2xl">
+        <div className="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-full bg-primary/10 text-primary ring-1 ring-primary/20">
+          <Icon className="h-7 w-7" />
+        </div>
+        <h2 className="text-xl font-semibold text-card-foreground">
+          {copy.title}
+        </h2>
+        <p className="mt-3 text-sm leading-6 text-muted-foreground">
+          {copy.description}
+        </p>
+        <div className="mt-6 h-2 overflow-hidden rounded-full bg-muted">
+          <div className="h-full w-1/2 animate-[checkout-progress_1.2s_ease-in-out_infinite] rounded-full bg-primary" />
+        </div>
+      </div>
+    </div>
+  );
+}
