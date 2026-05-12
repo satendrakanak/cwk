@@ -20,9 +20,9 @@ export function DataTable<T extends { id: number | string }>({
   isClient?: boolean;
   action?: React.ReactNode;
 }) {
-  const { table } = isClient
-    ? usePaginationDataTable({ data, columns })
-    : useDataTable({ data, columns });
+  const clientTable = usePaginationDataTable({ data, columns });
+  const serverTable = useDataTable({ data, columns });
+  const { table } = isClient ? clientTable : serverTable;
 
   return (
     <div className="w-full flex flex-col gap-4">
