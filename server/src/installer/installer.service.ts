@@ -21,6 +21,7 @@ import { Role } from 'src/roles-permissions/role.entity';
 import { AppSetting } from 'src/settings/app-setting.entity';
 import { SettingsService } from 'src/settings/providers/settings.service';
 import { User } from 'src/users/user.entity';
+import { ensureStudentRole } from 'src/users/utils/ensure-student-role';
 import { DataSource, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { CompleteInstallationDto } from './dtos/complete-installation.dto';
@@ -599,9 +600,14 @@ export class InstallerService implements OnModuleInit {
       relations: { permissions: true },
     });
 
-    if (!adminRole) {
+    const studentRole = await this.roleRepository.findOne({
+      where: { name: 'student' },
+    });
+
+    if (!adminRole || !studentRole) {
       throw new ServiceUnavailableException('Admin role could not be prepared');
     }
+    const adminRoles = ensureStudentRole([adminRole], studentRole);
 
     const existingUser = await this.userRepository.findOne({
       where: { email: payload.adminEmail.toLowerCase() },
@@ -619,7 +625,7 @@ export class InstallerService implements OnModuleInit {
       existingUser.username = existingUser.username || usernameBase;
       existingUser.password = password;
       existingUser.emailVerified = existingUser.emailVerified || new Date();
-      existingUser.roles = [adminRole];
+      existingUser.roles = adminRoles;
       await this.userRepository.save(existingUser);
       return;
     }
@@ -632,7 +638,7 @@ export class InstallerService implements OnModuleInit {
         email: payload.adminEmail.toLowerCase(),
         password,
         emailVerified: new Date(),
-        roles: [adminRole],
+        roles: adminRoles,
       }),
     );
   }

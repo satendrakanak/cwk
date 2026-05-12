@@ -9,6 +9,7 @@ import { User } from '../user.entity';
 import { DataSource, QueryFailedError } from 'typeorm';
 import { HashingProvider } from 'src/auth/providers/hashing.provider';
 import { CreateBulkUsersDto } from '../dtos/create-bulk-users.dto';
+import { ensureStudentRole } from '../utils/ensure-student-role';
 import { RolesPermissionsService } from 'src/roles-permissions/providers/roles-permissions.service';
 import { GenerateUsernameProvider } from './generate-username.provider';
 import { UserProfile } from 'src/profiles/user-profile.entity';
@@ -62,14 +63,12 @@ export class CreateBulkUsersProvider {
     try {
       const newUsers = await Promise.all(
         createBulkUsersDto.users.map(async (user) => {
-          const roles = user.roleIds?.length
+          const studentRole =
+            await this.rolesPermissionsService.findRoleByName('student');
+          const requestedRoles = user.roleIds?.length
             ? await this.rolesPermissionsService.findByIds(user.roleIds)
-            : [await this.rolesPermissionsService.findRoleByName('student')];
-
-          const hasStudent = roles.some((role) => role.name === 'student');
-          if (!hasStudent) {
-            throw new ConflictException('Every imported user must include student role');
-          }
+            : [];
+          const roles = ensureStudentRole(requestedRoles, studentRole);
           const username = await this.generateUsernameProvider.generateUsername(
             user.email,
           );

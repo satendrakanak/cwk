@@ -1096,6 +1096,7 @@ async function getDemoUser(
   },
 ) {
   const userRepository = dataSource.getRepository(User);
+  const studentRole = await getRole(dataSource, 'student');
   const existingUser = await userRepository.findOne({
     where: { email: payload.email },
     relations: { roles: true },
@@ -1117,6 +1118,11 @@ async function getDemoUser(
         )
     : null;
 
+  const roles =
+    payload.role.name === 'student'
+      ? [studentRole]
+      : [studentRole, payload.role];
+
   if (existingUser) {
     existingUser.firstName = payload.firstName;
     existingUser.lastName = payload.lastName;
@@ -1125,7 +1131,7 @@ async function getDemoUser(
     existingUser.password = password;
     existingUser.avatarUrl = payload.avatarUrl || null;
     existingUser.emailVerified = existingUser.emailVerified || new Date();
-    existingUser.roles = [payload.role];
+    existingUser.roles = roles;
     return userRepository.save(existingUser);
   }
 
@@ -1139,7 +1145,7 @@ async function getDemoUser(
       password,
       avatarUrl: payload.avatarUrl || null,
       emailVerified: new Date(),
-      roles: [payload.role],
+      roles,
     }),
   );
 }
