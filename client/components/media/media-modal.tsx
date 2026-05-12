@@ -14,6 +14,7 @@ import { MediaGrid } from "./media-grid";
 import { MediaDetailsPanel } from "./media-details-panel";
 import axios from "axios";
 import { ApiResponse } from "@/types/api";
+import { toast } from "sonner";
 
 interface MediaModalProps {
   open: boolean;
@@ -43,6 +44,7 @@ export const MediaModal = ({
       setMedia(data);
     } catch (err) {
       console.error(err);
+      toast.error("Failed to load media library");
     } finally {
       setLoading(false);
     }
@@ -63,6 +65,7 @@ export const MediaModal = ({
       setSelected((prev) => (prev?.id === id ? null : prev));
     } catch (err) {
       console.error("Delete failed", err);
+      toast.error("Failed to delete media");
     }
   };
 
@@ -87,6 +90,10 @@ export const MediaModal = ({
           "Content-Type": "application/json",
         },
       });
+
+      if (!initRes.ok) {
+        throw new Error("Upload could not be initialized");
+      }
 
       const json: ApiResponse<InitUploadResponse> = await initRes.json();
 
@@ -114,6 +121,10 @@ export const MediaModal = ({
         credentials: "include",
       });
 
+      if (!confirmRes.ok) {
+        throw new Error("Upload confirmation failed");
+      }
+
       const confirmJson: ApiResponse<FileType> = await confirmRes.json();
 
       const newMedia = confirmJson.data;
@@ -122,9 +133,11 @@ export const MediaModal = ({
       setMedia((prev) => [newMedia, ...prev]);
       setSelected(newMedia);
       setUploadingFile(null);
+      toast.success("Media uploaded successfully");
     } catch (err) {
       console.error("Upload failed", err);
-      setUploadingFile(null);
+      toast.error(getUploadErrorMessage(err));
+      setUploadingFile((prev) => (prev ? { ...prev, uploading: false } : prev));
     }
   };
 
@@ -180,3 +193,11 @@ export const MediaModal = ({
     </Dialog>
   );
 };
+
+function getUploadErrorMessage(error: unknown) {
+  if (axios.isAxiosError(error) && !error.response) {
+    return "Upload blocked by browser/S3 CORS. Add cwk.getkasa.in to the S3 bucket CORS allowed origins, then retry.";
+  }
+
+  return error instanceof Error ? error.message : "Upload failed";
+}

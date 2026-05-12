@@ -1,10 +1,12 @@
+# syntax=docker/dockerfile:1.7
+
 FROM node:20-alpine AS base
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 
 FROM base AS dependencies
 COPY package*.json ./
-RUN npm install
+RUN --mount=type=cache,target=/root/.npm npm install
 
 FROM base AS development
 ENV NODE_ENV=development
@@ -16,7 +18,6 @@ CMD ["npm", "run", "dev", "--", "--hostname", "0.0.0.0"]
 
 FROM base AS builder
 ENV NODE_ENV=production
-ENV NODE_OPTIONS=--max-old-space-size=2048
 ARG NEXT_PUBLIC_APP_URL
 ARG NEXT_PUBLIC_API_BASE_URL
 ENV NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
