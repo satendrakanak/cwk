@@ -27,6 +27,7 @@ export const protectedRoutes = [
   "/profile",
   "/my-courses",
   "/certificates",
+  "/assignments",
   "/settings",
   "/learn",
 ];

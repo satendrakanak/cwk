@@ -5,6 +5,7 @@ import {
   ClipboardCheck,
   LayoutDashboard,
   Layers,
+  ListChecks,
   ListVideo,
   Video,
   Users,
@@ -41,6 +42,11 @@ export const facultySidebarData: { navMain: SidebarNavItem[] } = {
           url: "/faculty/exams/categories",
         },
       ],
+    },
+    {
+      title: "Assignments",
+      url: "/faculty/assignments",
+      icon: ListChecks,
     },
     {
       title: "Batches",
