@@ -72,7 +72,11 @@ export default async function CourseSlugPage({ params }: CoursePageProps) {
   };
 
   try {
-    const [relatedCoursesResponse, testimonialsResponse, reviewSummaryResponse] = await Promise.all([
+    const [
+      relatedCoursesResponse,
+      testimonialsResponse,
+      reviewSummaryResponse,
+    ] = await Promise.all([
       courseServerService.getRealtedCourses(course.id),
       testimonialServerService.getPublic({
         courseId: course.id,
@@ -100,14 +104,14 @@ export default async function CourseSlugPage({ params }: CoursePageProps) {
         <CourseHero course={course} reviewSummary={reviewSummary} />
 
         <Container>
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_25rem] lg:items-start lg:gap-10">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-start lg:gap-9">
             {/* LEFT */}
-            <div className="order-2 min-w-0 lg:order-1 lg:mt-10">
+            <div className="order-2 min-w-0 lg:order-1 lg:mt-8">
               <CourseTabs course={course} testimonials={testimonials} />
             </div>
 
             {/* RIGHT */}
-            <div className="order-1 w-full min-w-0 lg:sticky lg:top-30 lg:z-40 lg:order-2 lg:-mt-120">
+            <div className="order-1 w-full min-w-0 lg:sticky lg:top-28 lg:z-40 lg:order-2 lg:-mt-96">
               <CourseSidebarCard course={course} />
             </div>
           </div>
