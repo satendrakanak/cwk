@@ -96,14 +96,14 @@ export function ClassesView({ nowIso, recordings, sessions }: ClassesViewProps) 
     <div className="space-y-6">
       <section className="academy-card overflow-hidden">
         <div className="grid gap-0 lg:grid-cols-[minmax(0,1fr)_360px]">
-          <div className="p-6 md:p-8">
+          <div className="p-6 text-center md:p-8 lg:text-left">
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">
               Live class calendar
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-card-foreground">
               Your live class timeline
             </h1>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
+            <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-muted-foreground lg:mx-0">
               Track faculty-led sessions, join BBB classes from one place, and
               keep your course schedule clear.
             </p>
@@ -168,7 +168,7 @@ export function ClassesView({ nowIso, recordings, sessions }: ClassesViewProps) 
       </section>
 
       <section className="academy-card p-5 md:p-6">
-        <div className="flex flex-col gap-3 border-b border-border pb-5 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col gap-3 border-b border-border pb-5 text-center lg:flex-row lg:items-center lg:justify-between lg:text-left">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">
               Schedule

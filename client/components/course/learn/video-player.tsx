@@ -144,12 +144,12 @@ export const VideoPlayer = ({ lecture, onNext, onProgressUpdate }: Props) => {
           controlsList="nodownload noplaybackrate"
           disablePictureInPicture
           onContextMenu={(e) => e.preventDefault()}
-          className="h-125 w-full object-cover"
+          className="aspect-video max-h-[72vh] min-h-52 w-full bg-black object-contain lg:h-125 lg:object-cover"
         />
       ) : (
         <iframe
           src={`${firstAttachment?.file?.path}#toolbar=0&navpanes=0&scrollbar=0`}
-          className="h-125 w-full bg-background"
+          className="h-[70vh] min-h-90 w-full bg-background lg:h-125"
         />
       )}
     </div>

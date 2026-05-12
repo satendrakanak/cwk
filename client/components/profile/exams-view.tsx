@@ -45,8 +45,8 @@ export function ExamsView({ courses, examHistory }: ExamsViewProps) {
           <div className="absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-primary/10 blur-[90px]" />
         </div>
 
-        <div className="relative z-10 flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
-          <div className="max-w-3xl">
+        <div className="relative z-10 flex flex-col gap-6 text-center xl:flex-row xl:items-end xl:justify-between xl:text-left">
+          <div className="mx-auto max-w-3xl xl:mx-0">
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">
               Exam Centre
             </p>
@@ -70,7 +70,7 @@ export function ExamsView({ courses, examHistory }: ExamsViewProps) {
       </section>
 
       <section className="academy-card p-5 md:p-6">
-        <div className="mb-6 flex flex-col gap-3 border-b border-border pb-5 md:flex-row md:items-end md:justify-between">
+        <div className="mb-6 flex flex-col gap-3 border-b border-border pb-5 text-center md:flex-row md:items-end md:justify-between md:text-left">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">
               Upcoming Exams
@@ -81,7 +81,7 @@ export function ExamsView({ courses, examHistory }: ExamsViewProps) {
             </h3>
           </div>
 
-          <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
+          <p className="mx-auto max-w-2xl text-sm leading-6 text-muted-foreground md:mx-0">
             A final exam unlocks only after course completion. Open the course
             and continue learning to make an exam available.
           </p>
@@ -112,7 +112,7 @@ export function ExamsView({ courses, examHistory }: ExamsViewProps) {
                   key={course.id}
                   className="rounded-3xl border border-border bg-card p-5 shadow-(--shadow-card) transition-all duration-300 hover:border-primary/25 hover:shadow-[0_26px_80px_color-mix(in_oklab,var(--primary)_12%,transparent)]"
                 >
-                  <div className="flex items-start justify-between gap-4">
+                  <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:items-start sm:text-left">
                     <div className="min-w-0">
                       <p className="text-xs font-bold uppercase tracking-[0.22em] text-primary">
                         Final assessment
@@ -161,7 +161,7 @@ export function ExamsView({ courses, examHistory }: ExamsViewProps) {
                       : `${progress}% course progress completed. Finish all lessons to unlock the exam.`}
                   </p>
 
-                  <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                  <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground sm:justify-start">
                     <span className="inline-flex h-9 items-center gap-2 rounded-full border border-border bg-muted px-3 font-semibold">
                       <Clock3 className="h-3.5 w-3.5 text-primary" />
                       {course.exam?.timeLimitMinutes
@@ -180,7 +180,7 @@ export function ExamsView({ courses, examHistory }: ExamsViewProps) {
                     ) : null}
                   </div>
 
-                  <div className="mt-5">
+                  <div className="mt-5 text-center sm:text-left">
                     <Link
                       href={`/course/${course.slug}/learn`}
                       className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-border bg-background px-4 text-sm font-semibold text-foreground transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
@@ -211,7 +211,7 @@ function HeroMetric({
   value: string | number;
 }) {
   return (
-    <div className="flex min-w-37.5 items-center gap-3 rounded-2xl border border-border bg-muted/50 px-4 py-3 shadow-sm">
+    <div className="flex min-w-37.5 flex-col items-center gap-2 rounded-2xl border border-border bg-muted/50 px-4 py-3 text-center shadow-sm sm:flex-row sm:gap-3 sm:text-left">
       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/15">
         <ClipboardCheck className="h-4.5 w-4.5" />
       </div>

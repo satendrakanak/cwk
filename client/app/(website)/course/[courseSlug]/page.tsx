@@ -111,7 +111,7 @@ export default async function CourseSlugPage({ params }: CoursePageProps) {
             </div>
 
             {/* RIGHT */}
-            <div className="order-1 w-full min-w-0 lg:sticky lg:top-28 lg:z-40 lg:order-2 lg:-mt-96">
+            <div className="order-1 mt-6 w-full min-w-0 lg:sticky lg:top-28 lg:z-40 lg:order-2 lg:-mt-96 lg:mt-0">
               <CourseSidebarCard course={course} />
             </div>
           </div>

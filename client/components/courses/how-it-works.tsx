@@ -22,16 +22,16 @@ export default function HowItWorks() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <div className="grid gap-10 xl:grid-cols-[1fr_1.15fr] xl:items-center">
-          <div>
+          <div className="text-center xl:text-left">
             <p className="text-sm font-semibold uppercase tracking-[0.26em] text-white/75">
               How It Works
             </p>
 
-            <h2 className="mt-4 max-w-xl text-4xl font-semibold tracking-tight text-white md:text-5xl">
+            <h2 className="mx-auto mt-4 max-w-xl text-4xl font-semibold tracking-tight text-white md:text-5xl xl:mx-0">
               A guided path from curiosity to certification.
             </h2>
 
-            <p className="mt-5 max-w-xl text-base leading-8 text-white/75">
+            <p className="mx-auto mt-5 max-w-xl text-base leading-8 text-white/75 xl:mx-0">
               We keep the process simple, structured, and professional — from
               choosing a course to earning your certificate.
             </p>
@@ -73,13 +73,13 @@ export default function HowItWorks() {
                 return (
                   <div
                     key={step.title}
-                    className="group relative rounded-3xl border border-white/15 bg-white/10 p-5 shadow-[0_18px_55px_rgba(2,6,23,0.22)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-white/25 hover:bg-white/15 hover:shadow-[0_28px_80px_rgba(2,6,23,0.3)] md:pl-24"
+                    className="group relative rounded-3xl border border-white/15 bg-white/10 p-5 text-center shadow-[0_18px_55px_rgba(2,6,23,0.22)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-white/25 hover:bg-white/15 hover:shadow-[0_28px_80px_rgba(2,6,23,0.3)] md:pl-24 md:text-left"
                   >
-                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/15 bg-white/15 text-white/85 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-md transition-colors group-hover:bg-white group-hover:text-primary md:absolute md:left-5 md:top-1/2 md:mb-0 md:-translate-y-1/2">
+                    <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/15 bg-white/15 text-white/85 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-md transition-colors group-hover:bg-white group-hover:text-primary md:absolute md:left-5 md:top-1/2 md:mx-0 md:mb-0 md:-translate-y-1/2">
                       <Icon className="h-6 w-6 stroke-[1.8]" />
                     </div>
 
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="flex flex-col items-center justify-between gap-4 md:flex-row md:items-start">
                       <div>
                         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/70">
                           {step.eyebrow}

@@ -49,20 +49,20 @@ export default function FooterCta() {
 
       <Container className="relative z-10">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-          <div>
+          <div className="text-center lg:text-left">
             <span className="mb-4 inline-flex rounded-full border border-white/20 bg-white/12 px-5 py-2 text-xs font-bold uppercase tracking-[0.28em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_12px_35px_rgba(2,6,23,0.22)] backdrop-blur-md">
               {site.footerCtaEyebrow}
             </span>
 
-            <h2 className="max-w-3xl text-3xl font-semibold leading-tight tracking-tight text-white md:text-5xl">
+            <h2 className="mx-auto max-w-3xl text-3xl font-semibold leading-tight tracking-tight text-white md:text-5xl lg:mx-0">
               {site.footerCtaHeading}
             </h2>
 
-            <p className="mt-5 max-w-2xl text-base leading-7 text-white/75 md:text-lg">
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-white/75 md:text-lg lg:mx-0">
               {site.footerCtaDescription}
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-4">
+            <div className="mt-8 flex flex-wrap justify-center gap-4 lg:justify-start">
               <Link
                 href={site.footerPrimaryCtaHref || "/courses"}
                 className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground shadow-[0_15px_45px_rgba(0,0,0,0.22)] transition hover:-translate-y-0.5 hover:bg-primary/90"
@@ -88,9 +88,9 @@ export default function FooterCta() {
               return (
                 <div
                   key={item.label}
-                  className="group rounded-3xl border border-white/15 bg-white/10 p-5 shadow-[0_20px_60px_rgba(2,6,23,0.22)] backdrop-blur-xl transition hover:-translate-y-1 hover:bg-white/15"
+                  className="group rounded-3xl border border-white/15 bg-white/10 p-5 text-center shadow-[0_20px_60px_rgba(2,6,23,0.22)] backdrop-blur-xl transition hover:-translate-y-1 hover:bg-white/15 sm:text-left"
                 >
-                  <div className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/15 bg-white/12 text-white">
+                  <div className="mx-auto mb-5 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/15 bg-white/12 text-white sm:mx-0">
                     <Icon className="h-5 w-5" />
                   </div>
 

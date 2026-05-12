@@ -127,8 +127,8 @@ export function CoursesFilterBar({
 }: CoursesFilterBarProps) {
   return (
     <>
-      <div className="academy-card flex flex-col gap-5 p-5 md:flex-row md:items-center md:justify-between">
-        <div className="flex items-start gap-3">
+      <div className="academy-card flex flex-col items-center gap-5 p-5 text-center md:flex-row md:items-center md:justify-between md:text-left">
+        <div className="flex flex-col items-center gap-3 md:flex-row md:items-start">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/15">
             <BookOpen className="h-5 w-5" />
           </span>

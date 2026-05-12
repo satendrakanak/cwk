@@ -10,13 +10,14 @@ export const articleServerService = {
       next: { revalidate: PUBLIC_REVALIDATE_SECONDS },
     }),
   getPublicArticles: (
-    query: { page?: number; limit?: number; category?: string } = {},
+    query: { page?: number; limit?: number; category?: string; tag?: string } = {},
   ) => {
     const params = new URLSearchParams();
 
     if (query.page) params.set("page", String(query.page));
     if (query.limit) params.set("limit", String(query.limit));
     if (query.category) params.set("category", query.category);
+    if (query.tag) params.set("tag", query.tag);
 
     const search = params.toString();
 

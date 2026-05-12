@@ -56,7 +56,7 @@ const Topbar = ({ hidden }: TopbarProps) => {
       )}
     >
       <Container>
-        <div className="flex min-h-8 flex-col items-center justify-center gap-1 py-1 sm:flex-row sm:justify-between sm:gap-4 sm:py-0 md:min-h-9">
+        <div className="flex h-14 flex-col items-center justify-center gap-1 overflow-hidden py-1 sm:h-8 sm:flex-row sm:justify-between sm:gap-4 sm:py-0 md:h-9">
           {/* Social Icons */}
           <div className="flex items-center gap-1.5">
             {socialLinks.map((link) => (

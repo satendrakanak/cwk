@@ -663,7 +663,9 @@ export class UsersService {
       },
     });
 
-    const mapped = this.mediaFileMappingService.mapUsers(faculties);
+    const mapped = this.mediaFileMappingService.mapUsers(
+      await this.attachFacultyStats(faculties),
+    );
 
     return mapped;
   }

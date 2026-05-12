@@ -56,7 +56,7 @@ export function CertificatesView({ certificates }: CertificatesViewProps) {
   return (
     <section className="space-y-6">
       <div className="academy-card p-5 md:p-6">
-        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col items-center gap-3 text-center md:flex-row md:items-end md:justify-between md:text-left">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary">
               Achievement Vault
@@ -91,8 +91,8 @@ export function CertificatesView({ certificates }: CertificatesViewProps) {
 
               <div className="academy-grid-mask absolute inset-0 opacity-15" />
 
-              <div className="relative z-10">
-                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-primary-foreground/20 bg-primary-foreground/15 backdrop-blur-md">
+              <div className="relative z-10 text-center md:text-left">
+                <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-primary-foreground/20 bg-primary-foreground/15 backdrop-blur-md md:mx-0">
                   <Award className="h-6 w-6" />
                 </div>
 
@@ -106,7 +106,7 @@ export function CertificatesView({ certificates }: CertificatesViewProps) {
               </div>
             </div>
 
-            <div className="space-y-5 p-5 md:p-6">
+            <div className="space-y-5 p-5 text-center md:p-6 md:text-left">
               <div className="grid gap-3 sm:grid-cols-2">
                 <InfoBox
                   label="Certificate ID"
@@ -124,7 +124,7 @@ export function CertificatesView({ certificates }: CertificatesViewProps) {
                 from this page.
               </div>
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap justify-center gap-3 md:justify-start">
                 {certificate.file?.path ? (
                   <Button
                     type="button"
@@ -158,7 +158,7 @@ export function CertificatesView({ certificates }: CertificatesViewProps) {
 
 function InfoBox({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-border bg-muted/50 px-4 py-3">
+    <div className="rounded-2xl border border-border bg-muted/50 px-4 py-3 text-center md:text-left">
       <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
         {label}
       </p>

@@ -213,12 +213,12 @@ export function FacultyReviewsSection({ faculty }: { faculty: User }) {
   return (
     <section className="academy-card p-5 md:p-8">
       <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
-        <div className="rounded-3xl border border-border bg-muted/50 p-5">
+        <div className="rounded-3xl border border-border bg-muted/50 p-5 text-center lg:text-left">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-primary">
             Instructor rating
           </p>
 
-          <div className="mt-5 flex items-end gap-2">
+          <div className="mt-5 flex items-end justify-center gap-2 lg:justify-start">
             <span className="text-5xl font-bold tracking-tight text-card-foreground">
               {summary.average ? summary.average.toFixed(1) : "0.0"}
             </span>
@@ -229,7 +229,7 @@ export function FacultyReviewsSection({ faculty }: { faculty: User }) {
             </span>
           </div>
 
-          <div className="mt-3">
+          <div className="mt-3 flex justify-center lg:justify-start">
             <RatingStars rating={summary.average} />
           </div>
 
@@ -261,8 +261,8 @@ export function FacultyReviewsSection({ faculty }: { faculty: User }) {
           </div>
         </div>
 
-        <div>
-          <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-start justify-between gap-4 text-center sm:text-left">
             <div>
               <h2 className="text-2xl font-semibold text-card-foreground">
                 Learner feedback
@@ -275,12 +275,26 @@ export function FacultyReviewsSection({ faculty }: { faculty: User }) {
           </div>
 
           {user ? (
-            <div className="mt-5 rounded-3xl border border-border bg-muted/50 p-4">
+            <div className="relative mt-5 rounded-3xl border border-border bg-muted/50 p-4">
+              {myReview ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon-sm"
+                  disabled={isPending}
+                  onClick={() => deleteReview(myReview.id)}
+                  className="absolute right-4 top-4 rounded-full border-border bg-background text-destructive hover:border-destructive hover:bg-destructive hover:text-white"
+                  aria-label="Delete review"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              ) : null}
+
               <p className="mb-3 text-sm font-semibold text-card-foreground">
                 Share your rating
               </p>
 
-              <div className="mb-4 flex gap-1">
+              <div className="mb-4 flex justify-center gap-1 sm:justify-start">
                 {[1, 2, 3, 4, 5].map((value) => (
                   <button
                     key={value}
@@ -308,7 +322,7 @@ export function FacultyReviewsSection({ faculty }: { faculty: User }) {
                 className="min-h-28 resize-none rounded-2xl border-border bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-primary"
               />
 
-              <div className="mt-4 flex flex-wrap gap-3">
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row">
                 <Button
                   type="button"
                   disabled={isPending}
@@ -322,18 +336,6 @@ export function FacultyReviewsSection({ faculty }: { faculty: User }) {
                       : "Submit review"}
                 </Button>
 
-                {myReview ? (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    disabled={isPending}
-                    onClick={() => deleteReview(myReview.id)}
-                    className="rounded-full border-border text-destructive hover:border-destructive hover:bg-destructive hover:text-white"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                    Delete
-                  </Button>
-                ) : null}
               </div>
             </div>
           ) : (
@@ -349,7 +351,7 @@ export function FacultyReviewsSection({ faculty }: { faculty: User }) {
           )}
 
           <div className="mt-6 space-y-4">
-            <div className="flex flex-col gap-3 rounded-3xl border border-border bg-muted/40 p-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col items-center gap-3 rounded-3xl border border-border bg-muted/40 p-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <Filter className="h-4 w-4" />
@@ -357,7 +359,7 @@ export function FacultyReviewsSection({ faculty }: { faculty: User }) {
                 Filter reviews
               </div>
 
-              <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1 sm:pb-0">
+              <div className="no-scrollbar flex w-full gap-2 overflow-x-auto pb-1 sm:pb-0">
                 {reviewFilters.map((filter) => (
                   <button
                     key={filter.value}
@@ -384,7 +386,7 @@ export function FacultyReviewsSection({ faculty }: { faculty: User }) {
                   key={review.id}
                   className="rounded-3xl border border-border bg-card p-4 transition-colors hover:border-primary/25 hover:bg-primary/5"
                 >
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex min-w-0 items-center gap-3">
                       <Avatar className="h-11 w-11 border border-border">
                         <AvatarImage
@@ -408,7 +410,9 @@ export function FacultyReviewsSection({ faculty }: { faculty: User }) {
                       </div>
                     </div>
 
-                    <RatingStars rating={review.rating} compact />
+                    <div className="self-start sm:self-auto">
+                      <RatingStars rating={review.rating} compact />
+                    </div>
                   </div>
 
                   {review.comment ? (

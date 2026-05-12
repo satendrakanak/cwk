@@ -56,8 +56,10 @@ const getInstructorLabel = (course: Course) => {
 
 export function CourseCard({ course, coupon }: CourseCardProps) {
   const addToCart = useCartStore((s) => s.addToCart);
+  const cardRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isPreviewActive, setIsPreviewActive] = useState(false);
+  const [isMobilePreviewActive, setIsMobilePreviewActive] = useState(false);
   const [meta, setMeta] = useState<{
     totalLectures: number;
     totalDuration: string;
@@ -111,23 +113,45 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
     course.video?.type === "video" || course.video?.mime?.startsWith("video/")
       ? course.video.path
       : null;
+  const shouldShowPreview = isPreviewActive || isMobilePreviewActive;
+
+  useEffect(() => {
+    if (!previewVideoUrl || typeof window === "undefined") return;
+
+    const prefersTouch = window.matchMedia("(hover: none)").matches;
+    const card = cardRef.current;
+
+    if (!prefersTouch || !card) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsMobilePreviewActive(entry.isIntersecting && entry.intersectionRatio > 0.65);
+      },
+      { threshold: [0, 0.65, 1] },
+    );
+
+    observer.observe(card);
+
+    return () => observer.disconnect();
+  }, [previewVideoUrl]);
 
   useEffect(() => {
     const video = videoRef.current;
 
     if (!video || !previewVideoUrl) return;
 
-    if (isPreviewActive) {
+    if (shouldShowPreview) {
       video.currentTime = 0;
       void video.play().catch(() => {
         setIsPreviewActive(false);
+        setIsMobilePreviewActive(false);
       });
       return;
     }
 
     video.pause();
     video.currentTime = 0;
-  }, [isPreviewActive, previewVideoUrl]);
+  }, [shouldShowPreview, previewVideoUrl]);
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -166,7 +190,10 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
   };
 
   return (
-    <div className="academy-card group flex h-full flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_80px_color-mix(in_oklab,var(--primary)_18%,transparent)]">
+    <div
+      ref={cardRef}
+      className="academy-card group flex h-full flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_80px_color-mix(in_oklab,var(--primary)_18%,transparent)]"
+    >
       {/* IMAGE */}
       <div
         className="relative h-48 overflow-hidden"
@@ -183,7 +210,7 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
             sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
             className={
               previewVideoUrl
-                ? "object-cover transition duration-500 group-hover:scale-105 motion-safe:group-hover:opacity-0"
+                ? `object-cover transition duration-500 group-hover:scale-105 ${shouldShowPreview ? "opacity-0" : "opacity-100"}`
                 : "object-cover transition duration-500 group-hover:scale-105"
             }
           />
@@ -191,7 +218,7 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
             <video
               ref={videoRef}
               src={previewVideoUrl}
-              className="absolute inset-0 h-full w-full object-cover opacity-0 transition duration-300 group-hover:opacity-100"
+              className={`absolute inset-0 h-full w-full object-cover transition duration-300 ${shouldShowPreview ? "opacity-100" : "opacity-0"}`}
               muted
               playsInline
               loop
@@ -219,10 +246,13 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
         </span>
 
         {primaryCategory ? (
-          <span className="absolute bottom-3 left-3 inline-flex max-w-[calc(100%-1.5rem)] items-center gap-1.5 rounded-full border border-white/15 bg-background/90 px-3 py-1 text-xs font-semibold text-foreground shadow-sm backdrop-blur-md">
+          <Link
+            href={`/courses?category=${primaryCategory.slug}`}
+            className="absolute bottom-3 left-3 inline-flex max-w-[calc(100%-1.5rem)] items-center gap-1.5 rounded-full border border-white/15 bg-background/90 px-3 py-1 text-xs font-semibold text-foreground shadow-sm backdrop-blur-md transition hover:bg-primary hover:text-primary-foreground"
+          >
             <BookOpen className="h-3.5 w-3.5 text-primary" />
             <span className="truncate">{primaryCategory.name}</span>
-          </span>
+          </Link>
         ) : null}
       </div>
 
@@ -238,20 +268,21 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
           {course.shortDescription}
         </p>
 
-        <div className="mb-3 flex flex-wrap items-center gap-2">
+        <div className="mb-3 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
             <ModeIcon className="h-3.5 w-3.5" />
             {delivery.shortLabel}
           </span>
 
           {visibleTags.map((tag) => (
-            <span
+            <Link
               key={tag.id}
+              href={`/courses?tag=${tag.slug}`}
               className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground"
             >
               <Tags className="h-3 w-3 text-primary" />
               {tag.name}
-            </span>
+            </Link>
           ))}
         </div>
 
@@ -283,8 +314,8 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
             mode={course.mode}
           />
         ) : (
-          <div className="mt-auto flex items-center justify-between gap-4">
-            <div className="flex flex-col">
+          <div className="mt-auto flex flex-col items-stretch justify-between gap-3 sm:flex-row sm:items-center sm:gap-4">
+            <div className="flex flex-col text-center sm:text-left">
               {discount > 0 ? (
                 <>
                   <div className="flex items-center gap-2">
@@ -312,8 +343,8 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
               onClick={handleAdd}
               className={
                 alreadyAdded
-                  ? "flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-emerald-600 bg-emerald-600 text-white transition hover:opacity-90"
-                  : "flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-foreground transition hover:border-primary hover:bg-primary hover:text-primary-foreground"
+                  ? "flex h-10 w-full cursor-pointer items-center justify-center rounded-full border border-emerald-600 bg-emerald-600 text-white transition hover:opacity-90 sm:h-9 sm:w-9"
+                  : "flex h-10 w-full cursor-pointer items-center justify-center rounded-full border border-border bg-background text-foreground transition hover:border-primary hover:bg-primary hover:text-primary-foreground sm:h-9 sm:w-9"
               }
               title={alreadyAdded ? "View cart" : "Add to cart"}
             >

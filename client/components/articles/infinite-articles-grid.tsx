@@ -12,12 +12,14 @@ type InfiniteArticlesGridProps = {
   initialPage: Paginated<Article>;
   pageSize: number;
   category?: string;
+  tag?: string;
 };
 
 export function InfiniteArticlesGrid({
   initialPage,
   pageSize,
   category,
+  tag,
 }: InfiniteArticlesGridProps) {
   const [articles, setArticles] = useState(initialPage.data);
   const [meta, setMeta] = useState(initialPage.meta);
@@ -35,6 +37,7 @@ export function InfiniteArticlesGrid({
         page: meta.currentPage + 1,
         limit: pageSize,
         category,
+        tag,
       });
 
       setArticles((current) => [...current, ...response.data.data]);
@@ -42,7 +45,7 @@ export function InfiniteArticlesGrid({
     } finally {
       setIsLoading(false);
     }
-  }, [category, hasMore, isLoading, meta.currentPage, pageSize]);
+  }, [category, hasMore, isLoading, meta.currentPage, pageSize, tag]);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;

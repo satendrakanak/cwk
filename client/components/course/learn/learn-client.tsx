@@ -1,11 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, ListVideo } from "lucide-react";
 
 import { OpenClassroomButton } from "@/components/classroom/open-classroom-button";
 import { LearnFooter } from "@/components/layout/learn-footer";
 import { Badge } from "@/components/ui/badge";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import {
   getNextLecture,
   getResumeLecture,
@@ -35,6 +42,7 @@ interface LearnClientProps {
 export const LearnClient = ({ course, liveSessions = [] }: LearnClientProps) => {
   const [courseData, setCourseData] = useState(course);
   const [currentLecture, setCurrentLecture] = useState<Lecture | null>(null);
+  const [isContentSheetOpen, setIsContentSheetOpen] = useState(false);
   const showLiveSessions = hasLiveClasses(course) && liveSessions.length > 0;
 
   useEffect(() => {
@@ -52,6 +60,11 @@ export const LearnClient = ({ course, liveSessions = [] }: LearnClientProps) => 
 
     load();
   }, [course]);
+
+  const selectLecture = (lecture: Lecture) => {
+    setCurrentLecture(lecture);
+    setIsContentSheetOpen(false);
+  };
 
   const handleNextLecture = () => {
     if (!currentLecture) return;
@@ -124,23 +137,44 @@ export const LearnClient = ({ course, liveSessions = [] }: LearnClientProps) => 
   }
 
   return (
-    <div className="flex h-screen flex-col bg-background">
+    <div className="flex h-[100dvh] flex-col bg-background">
       <PlayerHeader course={courseData} />
 
-      <div className="flex flex-1 overflow-hidden">
-        <main className="flex-1 overflow-y-auto bg-foreground">
+      <div className="flex min-h-0 flex-1 overflow-hidden">
+        <main className="min-w-0 flex-1 overflow-y-auto bg-foreground">
           <VideoPlayer
             lecture={currentLecture}
             onNext={handleNextLecture}
             onProgressUpdate={handleProgressUpdate}
           />
 
-          <div className="bg-background">
+          <div className="relative bg-background">
             <div className="pointer-events-none absolute inset-0">
               <div className="absolute inset-0 bg-(--surface-shell)" />
             </div>
 
             <div className="relative z-10">
+              <div className="sticky top-0 z-20 border-b border-border bg-background/95 p-3 backdrop-blur-xl lg:hidden">
+                <button
+                  type="button"
+                  onClick={() => setIsContentSheetOpen(true)}
+                  className="flex w-full items-center justify-between gap-3 rounded-2xl border border-border bg-card px-4 py-3 text-left shadow-sm"
+                >
+                  <span className="min-w-0">
+                    <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
+                      Course content
+                    </span>
+                    <span className="mt-1 line-clamp-1 text-sm font-semibold text-card-foreground">
+                      {currentLecture.title}
+                    </span>
+                  </span>
+
+                  <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <ListVideo className="h-5 w-5" />
+                  </span>
+                </button>
+              </div>
+
               <CourseTabs course={courseData} />
               {showLiveSessions ? (
                 <section className="mx-auto max-w-6xl px-4 pb-8 md:px-6">
@@ -196,7 +230,7 @@ export const LearnClient = ({ course, liveSessions = [] }: LearnClientProps) => 
           </div>
         </main>
 
-        <aside className="flex w-90 flex-col border-l border-border bg-card">
+        <aside className="hidden w-90 flex-col border-l border-border bg-card lg:flex">
           <div className="sticky top-0 z-10 border-b border-border bg-card/95 p-4 backdrop-blur-xl">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
               Course content
@@ -211,10 +245,32 @@ export const LearnClient = ({ course, liveSessions = [] }: LearnClientProps) => 
             <LearnCourseSidebar
               course={courseData}
               currentLecture={currentLecture}
-              onSelectLecture={setCurrentLecture}
+              onSelectLecture={selectLecture}
             />
           </div>
         </aside>
+
+        <Sheet open={isContentSheetOpen} onOpenChange={setIsContentSheetOpen}>
+          <SheetContent
+            side="right"
+            className="w-[90vw] max-w-sm gap-0 p-0 sm:max-w-md"
+          >
+            <SheetHeader className="border-b border-border pr-14">
+              <SheetTitle>Course content</SheetTitle>
+              <SheetDescription>
+                Pick a lesson and continue learning.
+              </SheetDescription>
+            </SheetHeader>
+
+            <div className="min-h-0 flex-1 overflow-y-auto">
+              <LearnCourseSidebar
+                course={courseData}
+                currentLecture={currentLecture}
+                onSelectLecture={selectLecture}
+              />
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
     </div>
   );

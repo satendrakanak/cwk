@@ -102,25 +102,25 @@ export default function Footer() {
 
         <Container className="relative z-10">
           <div className="grid gap-10 py-14 lg:grid-cols-[1.05fr_1.55fr]">
-            <div>
-              <div className="mb-5">
+            <div className="text-center lg:text-left">
+              <div className="mb-5 flex justify-center lg:justify-start">
                 <Logo footer />
               </div>
 
-              <p className="mb-6 max-w-sm text-sm leading-7 text-muted-foreground">
+              <p className="mx-auto mb-6 max-w-sm text-sm leading-7 text-muted-foreground lg:mx-0">
                 {site.footerAbout || site.siteDescription}
               </p>
 
-              <div className="grid max-w-xl grid-cols-2 gap-3">
+              <div className="mx-auto grid max-w-xl grid-cols-2 gap-3 lg:mx-0">
                 {footerStats.map((item) => {
                   const Icon = item.icon;
 
                   return (
                     <div
                       key={item.label}
-                      className="rounded-2xl border border-border bg-card p-4 shadow-sm"
+                      className="rounded-2xl border border-border bg-card p-4 text-center shadow-sm"
                     >
-                      <Icon className="mb-4 h-4 w-4 text-primary" />
+                      <Icon className="mx-auto mb-4 h-4 w-4 text-primary" />
                       <p className="text-2xl font-semibold text-foreground">
                         {item.value}
                       </p>
@@ -141,7 +141,7 @@ export default function Footer() {
               </Link>
             </div>
 
-            <div className="grid gap-8 md:grid-cols-3">
+            <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-3 md:text-left">
               <div>
                 <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.24em] text-foreground">
                   Explore
@@ -180,14 +180,14 @@ export default function Footer() {
                 </ul>
               </div>
 
-              <div>
+              <div className="col-span-2 md:col-span-1">
                 <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.24em] text-foreground">
                   Contact
                 </h3>
 
               <ul className="mb-6 space-y-4 text-sm text-muted-foreground">
                 {site.supportPhone && (
-                  <li className="flex gap-3">
+                  <li className="flex justify-center gap-3 md:justify-start">
                     <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary shadow-sm">
                       <Phone className="h-4 w-4" />
                     </span>
@@ -196,7 +196,7 @@ export default function Footer() {
                 )}
 
                 {site.supportEmail && (
-                  <li className="flex gap-3">
+                  <li className="flex justify-center gap-3 md:justify-start">
                     <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary shadow-sm">
                       <Mail className="h-4 w-4" />
                     </span>
@@ -205,7 +205,7 @@ export default function Footer() {
                 )}
 
                 {site.supportAddress && (
-                  <li className="flex gap-3">
+                  <li className="flex justify-center gap-3 md:justify-start">
                     <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary shadow-sm">
                       <MapPin className="h-4 w-4" />
                     </span>
@@ -215,7 +215,7 @@ export default function Footer() {
               </ul>
 
               {socialLinks.length > 0 && (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap justify-center gap-2 md:justify-start">
                   {socialLinks.map((item) => (
                     <a
                       key={item.href}
@@ -241,9 +241,9 @@ export default function Footer() {
               return (
                 <div
                   key={item.title}
-                  className="rounded-2xl border border-border bg-card p-5 shadow-sm"
+                  className="rounded-2xl border border-border bg-card p-5 text-center shadow-sm md:text-left"
                 >
-                  <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <div className="mx-auto mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary md:mx-0">
                     <Icon className="h-5 w-5" />
                   </div>
                   <h3 className="font-semibold text-foreground">{item.title}</h3>
