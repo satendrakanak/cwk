@@ -54,7 +54,11 @@ const initialForm: CompleteInstallationPayload = {
   siteTagline: "Practical courses, live classes, and certificates in one platform.",
   supportEmail: "support@codewithkasa.com",
   supportPhone: "",
+  activationMode: "kasa",
   licenseKey: "",
+  envatoPurchaseCode: "",
+  envatoBuyerName: "",
+  envatoBuyerEmail: "",
   adminFirstName: "",
   adminLastName: "",
   adminEmail: "",
@@ -189,9 +193,18 @@ export function InstallationWizard() {
   const validateLicense = async () => {
     setValidating(true);
     try {
-      const result = await installerClientService.validateLicense(
-        form.licenseKey,
-      );
+      const result =
+        form.activationMode === "envato"
+          ? await installerClientService.validateLicense({
+              activationMode: "envato",
+              envatoPurchaseCode: form.envatoPurchaseCode || "",
+              envatoBuyerName: form.envatoBuyerName,
+              envatoBuyerEmail: form.envatoBuyerEmail || "",
+            })
+          : await installerClientService.validateLicense({
+              activationMode: "kasa",
+              licenseKey: form.licenseKey || "",
+            });
       setLicenseFingerprint(result.fingerprint);
       setLicenseSummary({
         plan: result.plan,
@@ -204,7 +217,7 @@ export function InstallationWizard() {
     } catch (error) {
       setLicenseFingerprint(null);
       setLicenseSummary(null);
-      toast.error(error instanceof Error ? error.message : "Invalid license key");
+      toast.error(error instanceof Error ? error.message : "Activation failed");
     } finally {
       setValidating(false);
     }
@@ -877,17 +890,84 @@ export function InstallationWizard() {
                 description="Activation is checked before admin setup and demo import. This keeps installation gated without interrupting the first screen."
               />
               <div className="mt-6 grid gap-4">
-                <Field label="License key">
-                  <Input
-                    value={form.licenseKey}
-                    onChange={(event) => {
-                      updateForm("licenseKey", event.target.value);
-                      setLicenseFingerprint(null);
-                      setLicenseSummary(null);
-                    }}
-                    placeholder="Enter the license key from CodeWithKasa License Portal"
-                  />
-                </Field>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {(["kasa", "envato"] as const).map((mode) => (
+                    <button
+                      key={mode}
+                      type="button"
+                      onClick={() => {
+                        updateForm("activationMode", mode);
+                        setLicenseFingerprint(null);
+                        setLicenseSummary(null);
+                      }}
+                      className={`rounded-2xl border p-4 text-left transition ${
+                        form.activationMode === mode
+                          ? "border-primary bg-primary/10"
+                          : "hover:bg-muted"
+                      }`}
+                    >
+                      <span className="block text-sm font-semibold">
+                        {mode === "kasa" ? "KASA license key" : "Envato purchase code"}
+                      </span>
+                      <span className="mt-1 block text-xs text-muted-foreground">
+                        {mode === "kasa"
+                          ? "Use a key generated from the KASA licence portal."
+                          : "Use the purchase code from the Envato downloads page."}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+
+                {form.activationMode === "envato" ? (
+                  <div className="grid gap-4">
+                    <Field label="Envato purchase code">
+                      <Input
+                        value={form.envatoPurchaseCode}
+                        onChange={(event) => {
+                          updateForm("envatoPurchaseCode", event.target.value);
+                          setLicenseFingerprint(null);
+                          setLicenseSummary(null);
+                        }}
+                        placeholder="Enter your Envato purchase code"
+                      />
+                    </Field>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <Field label="Buyer email">
+                        <Input
+                          type="email"
+                          value={form.envatoBuyerEmail}
+                          onChange={(event) => {
+                            updateForm("envatoBuyerEmail", event.target.value);
+                            setLicenseFingerprint(null);
+                            setLicenseSummary(null);
+                          }}
+                          placeholder="buyer@email.com"
+                        />
+                      </Field>
+                      <Field label="Buyer name">
+                        <Input
+                          value={form.envatoBuyerName}
+                          onChange={(event) =>
+                            updateForm("envatoBuyerName", event.target.value)
+                          }
+                          placeholder="Name used for support records"
+                        />
+                      </Field>
+                    </div>
+                  </div>
+                ) : (
+                  <Field label="License key">
+                    <Input
+                      value={form.licenseKey}
+                      onChange={(event) => {
+                        updateForm("licenseKey", event.target.value);
+                        setLicenseFingerprint(null);
+                        setLicenseSummary(null);
+                      }}
+                      placeholder="Enter the license key from CodeWithKasa License Portal"
+                    />
+                  </Field>
+                )}
                 {licenseFingerprint ? (
                   <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm text-emerald-600">
                     <div className="flex items-center gap-3">
@@ -922,7 +1002,13 @@ export function InstallationWizard() {
                 </Button>
                 <Button
                   onClick={validateLicense}
-                  disabled={validating || form.licenseKey.trim().length < 8}
+                  disabled={
+                    validating ||
+                    (form.activationMode === "envato"
+                      ? (form.envatoPurchaseCode || "").trim().length < 8 ||
+                        !(form.envatoBuyerEmail || "").includes("@")
+                      : (form.licenseKey || "").trim().length < 8)
+                  }
                 >
                   {validating ? (
                     <Loader className="size-4 animate-spin" />

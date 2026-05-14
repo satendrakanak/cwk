@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { randomUUID } from 'crypto';
+import { createHash, randomUUID } from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
 import { runtimeDatabaseConfigPath } from 'src/config/runtime-database.config';
@@ -26,6 +26,7 @@ import { DataSource, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { CompleteInstallationDto } from './dtos/complete-installation.dto';
 import { DatabaseSetupDto } from './dtos/database-setup.dto';
+import { ValidateLicenseDto } from './dtos/validate-license.dto';
 import { LicensesService } from 'src/licenses/providers/licenses.service';
 
 const INSTALLATION_STATUS_KEY = 'installation_status';
@@ -62,12 +63,27 @@ type LicensePortalActivationResponse =
         status: string;
       };
       signature: string;
+      marketplace?: {
+        name?: string;
+        reused?: boolean;
+        itemId?: string;
+        purchaseId?: string;
+      };
     }
   | {
       ok: false;
       code?: string;
       message?: string;
     };
+
+type InstallerActivationPayload = {
+  activationMode?: 'kasa' | 'envato';
+  licenseKey?: string;
+  envatoPurchaseCode?: string;
+  envatoBuyerName?: string;
+  envatoBuyerEmail?: string;
+  siteName?: string;
+};
 
 @Injectable()
 export class InstallerService implements OnModuleInit {
@@ -233,8 +249,8 @@ export class InstallerService implements OnModuleInit {
     };
   }
 
-  async validateLicense(licenseKey: string) {
-    const activation = await this.activateLicense(licenseKey, {
+  async validateLicense(payload: ValidateLicenseDto) {
+    const activation = await this.activateLicenseFromPayload(payload, {
       instanceLabel: 'CodeWithKasa installer',
     });
 
@@ -245,6 +261,8 @@ export class InstallerService implements OnModuleInit {
       expiresAt: activation.license.expiresAt,
       activeActivations: activation.license.activeActivations,
       maxActivations: activation.license.maxActivations,
+      source: payload.activationMode === 'envato' ? 'envato' : 'kasa',
+      marketplace: activation.marketplace ?? null,
     };
   }
 
@@ -255,7 +273,7 @@ export class InstallerService implements OnModuleInit {
       throw new ConflictException('Installation is already completed');
     }
 
-    await this.activateLicense(payload.licenseKey, {
+    await this.activateLicenseFromPayload(payload, {
       instanceLabel: `${payload.siteName} installation`,
     });
 
@@ -274,7 +292,7 @@ export class InstallerService implements OnModuleInit {
       throw new ConflictException('Installation is already completed');
     }
 
-    await this.activateLicense(payload.licenseKey, {
+    await this.activateLicenseFromPayload(payload, {
       instanceLabel: `${payload.siteName} installation`,
     });
 
@@ -380,11 +398,13 @@ export class InstallerService implements OnModuleInit {
     }
 
     onProgress?.(88, 'Activating license...');
-    const activation = await this.activateLicense(payload.licenseKey, {
+    const activation = await this.activateLicenseFromPayload(payload, {
       instanceLabel: `${payload.siteName} production installation`,
     });
+    const localLicenseKey = this.getLocalLicenseIdentity(payload, activation);
     await this.saveSetting(LICENSE_SETTINGS_KEY, {
       activatedAt: new Date().toISOString(),
+      activationMode: payload.activationMode === 'envato' ? 'envato' : 'kasa',
       fingerprint: this.getLicenseFingerprint(activation.signature),
       productSlug: activation.license.product,
       plan: activation.license.plan,
@@ -394,10 +414,11 @@ export class InstallerService implements OnModuleInit {
       activationId: activation.activation.id,
       activationStatus: activation.activation.status,
       signature: activation.signature,
+      marketplace: activation.marketplace ?? null,
       portalUrl: this.getLicensePortalUrl(),
     });
     await this.licensesService.savePortalActivation(
-      payload.licenseKey,
+      localLicenseKey,
       activation,
     );
     onProgress?.(95, 'Finalizing installation...');
@@ -719,6 +740,103 @@ export class InstallerService implements OnModuleInit {
     }
 
     throw new BadRequestException(lastMessage);
+  }
+
+  private async activateLicenseFromPayload(
+    payload: InstallerActivationPayload,
+    options?: { instanceLabel?: string },
+  ) {
+    if (payload.activationMode === 'envato') {
+      return this.activateEnvatoPurchase(payload, options);
+    }
+
+    if (!payload.licenseKey?.trim()) {
+      throw new BadRequestException('License key is required');
+    }
+
+    return this.activateLicense(payload.licenseKey, options);
+  }
+
+  private async activateEnvatoPurchase(
+    payload: InstallerActivationPayload,
+    options?: { instanceLabel?: string },
+  ) {
+    const purchaseCode = payload.envatoPurchaseCode?.trim();
+    const buyerEmail = payload.envatoBuyerEmail?.trim().toLowerCase();
+
+    if (!purchaseCode) {
+      throw new BadRequestException('Envato purchase code is required');
+    }
+
+    if (!buyerEmail) {
+      throw new BadRequestException('Buyer email is required for Envato activation');
+    }
+
+    const portalUrl = this.getLicensePortalUrl();
+    const instanceId = await this.getOrCreateLicenseInstanceId();
+
+    let response: Response;
+    try {
+      response = await fetch(`${portalUrl}/api/v1/envato/activate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          purchaseCode,
+          buyerName: payload.envatoBuyerName || payload.siteName,
+          buyerEmail,
+          instanceId,
+          instanceLabel: options?.instanceLabel || 'CodeWithKasa installation',
+          productVersion:
+            this.configService.get<string>('appConfig.apiVersion') || '0.1.1',
+          metadata: {
+            appUrl: this.configService.get<string>('appConfig.appUrl'),
+            frontEndUrl: this.configService.get<string>('appConfig.fronEndUrl'),
+            environment: this.configService.get<string>('appConfig.environment'),
+          },
+        }),
+        signal: AbortSignal.timeout(15000),
+      });
+    } catch (error) {
+      throw new ServiceUnavailableException(
+        error instanceof Error
+          ? `License portal is unreachable: ${error.message}`
+          : 'License portal is unreachable',
+      );
+    }
+
+    const result = (await response.json().catch(() => null)) as
+      | LicensePortalActivationResponse
+      | null;
+
+    if (result?.ok) {
+      return result;
+    }
+
+    throw new BadRequestException(
+      result?.message ||
+        'Envato purchase code could not be activated. Please check the code and try again.',
+    );
+  }
+
+  private getLocalLicenseIdentity(
+    payload: InstallerActivationPayload,
+    activation: Extract<LicensePortalActivationResponse, { ok: true }>,
+  ) {
+    if (payload.activationMode === 'envato') {
+      const source =
+        payload.envatoPurchaseCode?.trim() ||
+        activation.marketplace?.purchaseId ||
+        activation.signature;
+      return `envato-${createHash('sha256').update(source).digest('hex')}`;
+    }
+
+    if (!payload.licenseKey?.trim()) {
+      throw new BadRequestException('License key is required');
+    }
+
+    return payload.licenseKey;
   }
 
   private getLicenseProductSlugs() {

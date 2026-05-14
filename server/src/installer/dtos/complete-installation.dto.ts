@@ -69,9 +69,28 @@ export class CompleteInstallationDto {
   @IsString()
   supportPhone?: string;
 
+  @IsOptional()
+  @IsIn(['kasa', 'envato'])
+  activationMode?: 'kasa' | 'envato';
+
+  @IsOptional()
   @IsString()
   @MinLength(8)
-  licenseKey!: string;
+  licenseKey?: string;
+
+  @IsOptional()
+  @IsString()
+  @MinLength(8)
+  envatoPurchaseCode?: string;
+
+  @IsOptional()
+  @IsString()
+  @MinLength(2)
+  envatoBuyerName?: string;
+
+  @IsOptional()
+  @IsEmail()
+  envatoBuyerEmail?: string;
 
   @IsString()
   @MinLength(2)
