@@ -32,6 +32,7 @@ import { LicensesService } from 'src/licenses/providers/licenses.service';
 import {
   LICENSE_PLANS,
   CertificateRule,
+  LicenseBehaviorRules,
   LicenseFeatureKey,
   LicenseLimitKey,
   normalizeLicensePlan,
@@ -67,7 +68,7 @@ type LicensePortalActivationResponse =
         activeActivations: number;
         limits?: Partial<Record<LicenseLimitKey, number | null>>;
         features?: Partial<Record<LicenseFeatureKey, boolean>>;
-        rules?: Partial<{ certificateRule: CertificateRule }>;
+        rules?: Partial<LicenseBehaviorRules>;
       };
       activation: {
         id: string;

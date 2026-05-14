@@ -1,6 +1,7 @@
 import { LicensePlan } from './enums/license-plan.enum';
 
 export type LicenseLimitKey = 'users' | 'courses' | 'faculty';
+export type CourseDeliveryMode = 'self_learning' | 'faculty_led' | 'hybrid';
 export type LicenseFeatureKey =
   | 'courses'
   | 'faculty'
@@ -20,6 +21,7 @@ export type CertificateRule = 'lecture_completion' | 'exam_pass';
 
 export type LicenseBehaviorRules = {
   certificateRule: CertificateRule;
+  allowedCourseModes: CourseDeliveryMode[];
 };
 
 export type LicensePlanDefinition = {
@@ -32,7 +34,7 @@ export type LicensePlanDefinition = {
 
 const baseFeatures: Record<LicenseFeatureKey, boolean> = {
   courses: true,
-  faculty: true,
+  faculty: false,
   liveClasses: false,
   exams: false,
   assignments: false,
@@ -63,6 +65,7 @@ export const LICENSE_PLANS: Record<LicensePlan, LicensePlanDefinition> = {
     },
     rules: {
       certificateRule: 'lecture_completion',
+      allowedCourseModes: ['self_learning'],
     },
   },
   [LicensePlan.PLUS]: {
@@ -75,6 +78,7 @@ export const LICENSE_PLANS: Record<LicensePlan, LicensePlanDefinition> = {
     },
     features: {
       ...baseFeatures,
+      faculty: true,
       liveClasses: true,
       exams: true,
       assignments: true,
@@ -87,6 +91,7 @@ export const LICENSE_PLANS: Record<LicensePlan, LicensePlanDefinition> = {
     },
     rules: {
       certificateRule: 'exam_pass',
+      allowedCourseModes: ['self_learning', 'faculty_led'],
     },
   },
   [LicensePlan.ENTERPRISE]: {
@@ -106,6 +111,7 @@ export const LICENSE_PLANS: Record<LicensePlan, LicensePlanDefinition> = {
     ),
     rules: {
       certificateRule: 'exam_pass',
+      allowedCourseModes: ['self_learning', 'faculty_led', 'hybrid'],
     },
   },
 };

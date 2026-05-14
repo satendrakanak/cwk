@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpException,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -53,7 +54,7 @@ export class CreateCourseProvider {
     user: ActiveUserData,
   ): Promise<Course> {
     try {
-      await this.licensesService.assertCanCreateCourse();
+      await this.licensesService.assertCanCreateCourse(createCouseDto.mode);
 
       const baseSlug = generateSlug(
         createCouseDto.slug ?? createCouseDto.title,
@@ -97,6 +98,10 @@ export class CreateCourseProvider {
 
       return savedCourse;
     } catch (error: unknown) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
       if (typeof error === 'object' && error && 'code' in error) {
         if ((error as { code?: string }).code === '23505') {
           throw new BadRequestException('Slug already exists');

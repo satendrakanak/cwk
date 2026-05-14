@@ -27,6 +27,7 @@ import {
   LicenseLimitKey,
   LicensePlanDefinition,
   normalizeLicensePlan,
+  CourseDeliveryMode,
 } from '../license-plans';
 
 const LEGACY_LICENSE_SETTINGS_KEY = 'license_settings';
@@ -43,7 +44,7 @@ export type LicensePortalActivation = {
     activeActivations?: number | null;
     limits?: Partial<Record<LicenseLimitKey, number | null>>;
     features?: Partial<Record<LicenseFeatureKey, boolean>>;
-    rules?: Partial<{ certificateRule: CertificateRule }>;
+    rules?: Partial<LicenseBehaviorRules>;
   };
   activation?: {
     id?: string | null;
@@ -184,9 +185,22 @@ export class LicensesService {
     await this.assertWithinLimit('users');
   }
 
-  async assertCanCreateCourse() {
+  async assertCanCreateCourse(mode?: string | null) {
     await this.assertFeature('courses');
+    await this.assertCourseDeliveryMode(mode);
     await this.assertWithinLimit('courses');
+  }
+
+  async assertCourseDeliveryMode(mode?: string | null) {
+    const plan = await this.getEffectivePlan();
+    const deliveryMode = this.normalizeCourseDeliveryMode(mode);
+
+    if (!plan.rules.allowedCourseModes.includes(deliveryMode)) {
+      throw new HttpException(
+        `${plan.label} does not allow ${this.getCourseModeLabel(deliveryMode)} courses. Please upgrade to use this course type.`,
+        HttpStatus.PAYMENT_REQUIRED,
+      );
+    }
   }
 
   async assertCanCreateFaculty() {
@@ -447,15 +461,44 @@ export class LicensesService {
       return {};
     }
 
-    const certificateRule = (rules as Record<string, unknown>).certificateRule;
+    const source = rules as Record<string, unknown>;
+    const nextRules: Partial<LicenseBehaviorRules> = {};
+    const certificateRule = source.certificateRule;
     if (
       certificateRule === 'lecture_completion' ||
       certificateRule === 'exam_pass'
     ) {
-      return { certificateRule };
+      nextRules.certificateRule = certificateRule;
     }
 
-    return {};
+    if (Array.isArray(source.allowedCourseModes)) {
+      const allowedCourseModes = source.allowedCourseModes.filter(
+        (mode): mode is CourseDeliveryMode =>
+          mode === 'self_learning' ||
+          mode === 'faculty_led' ||
+          mode === 'hybrid',
+      );
+
+      if (allowedCourseModes.length) {
+        nextRules.allowedCourseModes = allowedCourseModes;
+      }
+    }
+
+    return nextRules;
+  }
+
+  private normalizeCourseDeliveryMode(mode?: string | null): CourseDeliveryMode {
+    if (mode === 'faculty_led' || mode === 'hybrid') {
+      return mode;
+    }
+
+    return 'self_learning';
+  }
+
+  private getCourseModeLabel(mode: CourseDeliveryMode) {
+    if (mode === 'faculty_led') return 'faculty-led';
+    if (mode === 'hybrid') return 'hybrid/live';
+    return 'self-learning';
   }
 
   private async activateAgainstPortal(

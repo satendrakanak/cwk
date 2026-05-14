@@ -19,6 +19,7 @@ import { CategoriesService } from 'src/categories/providers/categories.service';
 import { TagsService } from 'src/tags/providers/tags.service';
 import { getCoursePublishErrors } from '../utils/course-publish.validator';
 import { UsersService } from 'src/users/providers/users.service';
+import { LicensesService } from 'src/licenses/providers/licenses.service';
 
 @Injectable()
 export class UpdateCourseProvider {
@@ -55,6 +56,7 @@ export class UpdateCourseProvider {
      */
 
     private readonly usersService: UsersService,
+    private readonly licensesService: LicensesService,
   ) {}
   public async update(
     id: number,
@@ -79,6 +81,9 @@ export class UpdateCourseProvider {
     }
 
     this.assertCanUpdateCourse(course, patchCourseDto, user);
+    if (patchCourseDto.mode !== undefined) {
+      await this.licensesService.assertCourseDeliveryMode(patchCourseDto.mode);
+    }
 
     try {
       let finalSlug = course.slug;

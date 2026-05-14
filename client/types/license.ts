@@ -19,9 +19,11 @@ export type LicenseFeatureKey =
   | "prioritySupport";
 
 export type CertificateRule = "lecture_completion" | "exam_pass";
+export type CourseDeliveryMode = "self_learning" | "faculty_led" | "hybrid";
 
 export type LicenseBehaviorRules = {
   certificateRule: CertificateRule;
+  allowedCourseModes: CourseDeliveryMode[];
 };
 
 export type LicenseRecord = {
