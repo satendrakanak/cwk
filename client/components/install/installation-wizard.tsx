@@ -92,6 +92,41 @@ function databaseHostsMatch(
   return localHosts.has(formHost) && runtimeHost === "host.docker.internal";
 }
 
+function buildInstallationPayload(
+  form: CompleteInstallationPayload,
+): CompleteInstallationPayload {
+  const basePayload: CompleteInstallationPayload = {
+    ...form,
+    siteName: form.siteName.trim(),
+    siteTagline: form.siteTagline?.trim(),
+    supportEmail: form.supportEmail?.trim(),
+    supportPhone: form.supportPhone?.trim(),
+    adminFirstName: form.adminFirstName.trim(),
+    adminLastName: form.adminLastName.trim(),
+    adminEmail: form.adminEmail.trim(),
+  };
+
+  if (form.activationMode === "envato") {
+    return {
+      ...basePayload,
+      activationMode: "envato",
+      licenseKey: undefined,
+      envatoPurchaseCode: form.envatoPurchaseCode?.trim(),
+      envatoBuyerName: form.envatoBuyerName?.trim(),
+      envatoBuyerEmail: form.envatoBuyerEmail?.trim(),
+    };
+  }
+
+  return {
+    ...basePayload,
+    activationMode: "kasa",
+    licenseKey: form.licenseKey?.trim(),
+    envatoPurchaseCode: undefined,
+    envatoBuyerName: undefined,
+    envatoBuyerEmail: undefined,
+  };
+}
+
 export function InstallationWizard() {
   const router = useRouter();
   const [status, setStatus] = useState<InstallerStatus | null>(null);
@@ -228,7 +263,9 @@ export function InstallationWizard() {
   const completeInstallation = async () => {
     setSubmitting(true);
     try {
-      const result = await installerClientService.start(form);
+      const result = await installerClientService.start(
+        buildInstallationPayload(form),
+      );
       setInstallationJobId(result.jobId);
       setInstallationProgress({
         id: result.jobId,
