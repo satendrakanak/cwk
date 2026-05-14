@@ -374,8 +374,8 @@ export class LicensesService {
       } catch (error) {
         throw new ServiceUnavailableException(
           error instanceof Error
-            ? `License portal is unreachable: ${error.message}`
-            : 'License portal is unreachable',
+            ? `Activation service is unreachable: ${error.message}`
+            : 'Activation service is unreachable',
         );
       }
 
@@ -426,7 +426,7 @@ export class LicensesService {
 
     if (!url) {
       throw new ServiceUnavailableException(
-        'License portal is not configured. Set LICENSE_PORTAL_URL before activation.',
+        'Activation service is not configured. Set LICENSE_PORTAL_URL before activation.',
       );
     }
 

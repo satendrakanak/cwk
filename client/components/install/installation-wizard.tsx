@@ -497,14 +497,14 @@ export function InstallationWizard() {
         <aside className="rounded-[2rem] border bg-card p-6 shadow-sm">
           <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-primary">
             <ShieldCheck className="size-4" />
-            Secure installer
+            Secure setup
           </div>
           <h1 className="mt-5 text-4xl font-semibold tracking-tight">
             Set up your academy workspace.
           </h1>
           <p className="mt-4 text-muted-foreground">
-            Connect the running database, activate the license, create the first
-            admin, and optionally import marketplace-ready demo data.
+            Connect the database, verify your purchase, create the first admin,
+            and optionally import starter content.
           </p>
 
           <div className="mt-8 space-y-3">
@@ -886,8 +886,8 @@ export function InstallationWizard() {
             <section>
               <SectionTitle
                 icon={KeyRound}
-                title="Activate license"
-                description="Activation is checked before admin setup and demo import. This keeps installation gated without interrupting the first screen."
+                title="Verify your purchase"
+                description="Choose the purchase method you used, then verify access to continue setup."
               />
               <div className="mt-6 grid gap-4">
                 <div className="grid gap-3 sm:grid-cols-2">
@@ -907,11 +907,11 @@ export function InstallationWizard() {
                       }`}
                     >
                       <span className="block text-sm font-semibold">
-                        {mode === "kasa" ? "KASA license key" : "Envato purchase code"}
+                        {mode === "kasa" ? "License key" : "Envato purchase code"}
                       </span>
                       <span className="mt-1 block text-xs text-muted-foreground">
                         {mode === "kasa"
-                          ? "Use a key generated from the KASA licence portal."
+                          ? "Use the license key provided with your purchase."
                           : "Use the purchase code from the Envato downloads page."}
                       </span>
                     </button>
@@ -964,7 +964,7 @@ export function InstallationWizard() {
                         setLicenseFingerprint(null);
                         setLicenseSummary(null);
                       }}
-                      placeholder="Enter the license key from CodeWithKasa License Portal"
+                      placeholder="Enter your license key"
                     />
                   </Field>
                 )}
@@ -1015,7 +1015,7 @@ export function InstallationWizard() {
                   ) : (
                     <ShieldCheck className="size-4" />
                   )}
-                  Validate license
+                  Verify purchase
                 </Button>
               </div>
             </section>
@@ -1121,7 +1121,7 @@ function InstallShell({ children }: { children: React.ReactNode }) {
             CodeWithKasa Installer
           </p>
           <p className="mt-1 text-sm text-muted-foreground">
-            Product setup and activation
+            Product setup
           </p>
         </div>
         <div className="rounded-full border bg-card px-4 py-2 text-sm font-medium">
