@@ -44,6 +44,7 @@ export function hasAnyPermission(
 
 export function canAccessAdmin(user: User | null | undefined): boolean {
   return (
+    hasRole(user, "super_admin") ||
     hasRole(user, "admin") ||
     hasPermission(user, "view_dashboard") ||
     hasPermission(user, "manage_users") ||
@@ -64,7 +65,7 @@ export function canAssignExamFaculty(user: User | null | undefined): boolean {
 }
 
 export function isSystemRole(roleName: string) {
-  return ["student", "faculty", "admin"].includes(roleName);
+  return ["student", "faculty", "admin", "super_admin"].includes(roleName);
 }
 
 export function formatPermissionName(name: string) {

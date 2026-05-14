@@ -11,7 +11,11 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { licenseClientService } from "@/services/licenses/license.client";
-import { LicenseFeatureKey, LicenseLimitKey, LicenseSummary } from "@/types/license";
+import {
+  LicenseFeatureKey,
+  LicenseLimitKey,
+  LicenseSummary,
+} from "@/types/license";
 
 const limitLabels: Record<LicenseLimitKey, string> = {
   users: "Users",
@@ -45,9 +49,13 @@ export function LicenseAdminClient({
   const [isPending, startTransition] = useTransition();
 
   const limitRows = useMemo(
-    () =>
-      (Object.keys(summary.plan.limits) as LicenseLimitKey[]).map((name) => {
-        const limit = summary.plan.limits[name];
+    () => {
+      const plan = summary.plan;
+
+      if (!plan) return [];
+
+      return (Object.keys(plan.limits) as LicenseLimitKey[]).map((name) => {
+        const limit = plan.limits[name];
         const used = summary.usage[name];
         const value = limit ? Math.min(Math.round((used / limit) * 100), 100) : 0;
 
@@ -59,7 +67,8 @@ export function LicenseAdminClient({
           value,
           locked: summary.locked[name],
         };
-      }),
+      });
+    },
     [summary],
   );
 
@@ -90,7 +99,7 @@ export function LicenseAdminClient({
         </div>
         <Badge className="w-fit gap-1.5" variant="secondary">
           <Sparkles className="size-3.5" />
-          {summary.plan.label}
+          {summary.plan?.label ?? "Not activated"}
         </Badge>
       </div>
 
@@ -153,34 +162,41 @@ export function LicenseAdminClient({
         <CardHeader>
           <CardTitle className="text-base">Feature Unlocks</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-            {(Object.keys(summary.plan.features) as LicenseFeatureKey[]).map(
-              (feature) => {
-                const enabled = summary.plan.features[feature];
+          <CardContent>
+          {summary.plan ? (
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {(Object.keys(summary.plan.features) as LicenseFeatureKey[]).map(
+                (feature) => {
+                  const enabled = summary.plan?.features[feature];
 
-                return (
-                  <div
-                    className="flex items-center justify-between gap-3 rounded-md border px-3 py-2"
-                    key={feature}
-                  >
-                    <span className="text-sm font-medium">
-                      {featureLabels[feature]}
-                    </span>
-                    {enabled ? (
-                      <Check className="size-4 text-emerald-600" />
-                    ) : (
-                      <Lock className="size-4 text-muted-foreground" />
-                    )}
-                  </div>
-                );
-              },
-            )}
-          </div>
+                  return (
+                    <div
+                      className="flex items-center justify-between gap-3 rounded-md border px-3 py-2"
+                      key={feature}
+                    >
+                      <span className="text-sm font-medium">
+                        {featureLabels[feature]}
+                      </span>
+                      {enabled ? (
+                        <Check className="size-4 text-emerald-600" />
+                      ) : (
+                        <Lock className="size-4 text-muted-foreground" />
+                      )}
+                    </div>
+                  );
+                },
+              )}
+            </div>
+          ) : (
+            <div className="rounded-md border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
+              KASA is not activated. Activate a valid license to unlock the
+              admin workspace.
+            </div>
+          )}
           <Separator className="my-4" />
           <p className="text-sm text-muted-foreground">
-            Starter is used as the fallback when no active key exists. Plus and
-            Enterprise keys unlock higher limits instantly.
+            Active licenses unlock the matching plan instantly. KASA blocks
+            login and protected workspaces when no valid license is present.
           </p>
         </CardContent>
       </Card>

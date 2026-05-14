@@ -18,10 +18,15 @@ export type LicenseFeatureKey =
 
 export type LicenseRecord = {
   id: number;
-  key: string;
+  keyHash: string;
+  keyFingerprint: string;
+  keyLast4?: string | null;
   plan: LicensePlan;
   status: "active" | "expired" | "revoked";
   purchaserEmail?: string | null;
+  productSlug?: string | null;
+  activationId?: string | null;
+  activationStatus?: string | null;
   expiresAt?: string | null;
   activatedAt?: string | null;
 };
@@ -37,7 +42,7 @@ export type LicenseUsage = Record<LicenseLimitKey, number>;
 
 export type LicenseSummary = {
   license: LicenseRecord | null;
-  plan: LicensePlanDefinition;
+  plan: LicensePlanDefinition | null;
   usage: LicenseUsage;
   locked: Record<LicenseLimitKey, boolean>;
 };

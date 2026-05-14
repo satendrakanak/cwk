@@ -15,7 +15,12 @@ import { UpdatePermissionDto } from '../dtos/update-permission.dto';
 
 @Injectable()
 export class RolesPermissionsService {
-  private readonly protectedRoleNames = new Set(['student', 'faculty', 'admin']);
+  private readonly protectedRoleNames = new Set([
+    'student',
+    'faculty',
+    'admin',
+    'super_admin',
+  ]);
 
   constructor(
     /**

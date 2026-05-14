@@ -26,6 +26,7 @@ import { DataSource, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { CompleteInstallationDto } from './dtos/complete-installation.dto';
 import { DatabaseSetupDto } from './dtos/database-setup.dto';
+import { LicensesService } from 'src/licenses/providers/licenses.service';
 
 const INSTALLATION_STATUS_KEY = 'installation_status';
 const LICENSE_SETTINGS_KEY = 'license_settings';
@@ -85,6 +86,8 @@ export class InstallerService implements OnModuleInit {
 
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
+    private readonly licensesService: LicensesService,
   ) {}
 
   async onModuleInit() {
@@ -393,6 +396,10 @@ export class InstallerService implements OnModuleInit {
       signature: activation.signature,
       portalUrl: this.getLicensePortalUrl(),
     });
+    await this.licensesService.savePortalActivation(
+      payload.licenseKey,
+      activation,
+    );
     onProgress?.(95, 'Finalizing installation...');
     await this.saveSetting(INSTALLATION_STATUS_KEY, {
       isInstalled: true,
@@ -595,8 +602,8 @@ export class InstallerService implements OnModuleInit {
   }
 
   private async createAdminUser(payload: CompleteInstallationDto) {
-    const adminRole = await this.roleRepository.findOne({
-      where: { name: 'admin' },
+    const ownerRole = await this.roleRepository.findOne({
+      where: { name: 'super_admin' },
       relations: { permissions: true },
     });
 
@@ -604,10 +611,10 @@ export class InstallerService implements OnModuleInit {
       where: { name: 'student' },
     });
 
-    if (!adminRole || !studentRole) {
+    if (!ownerRole || !studentRole) {
       throw new ServiceUnavailableException('Admin role could not be prepared');
     }
-    const adminRoles = ensureStudentRole([adminRole], studentRole);
+    const adminRoles = ensureStudentRole([ownerRole], studentRole);
 
     const existingUser = await this.userRepository.findOne({
       where: { email: payload.adminEmail.toLowerCase() },

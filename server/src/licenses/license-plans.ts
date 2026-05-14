@@ -100,3 +100,17 @@ export const getPlanFromLicenseKey = (key: string): LicensePlan | null => {
 
   return null;
 };
+
+export const normalizeLicensePlan = (plan: string): LicensePlan | null => {
+  const normalized = plan.trim().toLowerCase();
+
+  if (normalized.includes('starter')) return LicensePlan.STARTER;
+  if (normalized.includes('plus')) return LicensePlan.PLUS;
+  if (normalized.includes('enterprise')) return LicensePlan.ENTERPRISE;
+
+  if (normalized === LicensePlan.STARTER) return LicensePlan.STARTER;
+  if (normalized === LicensePlan.PLUS) return LicensePlan.PLUS;
+  if (normalized === LicensePlan.ENTERPRISE) return LicensePlan.ENTERPRISE;
+
+  return null;
+};

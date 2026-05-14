@@ -10,6 +10,7 @@ import type { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { ActiveUserData } from '../interfaces/active-user-data.interface';
 import { UsersService } from 'src/users/providers/users.service';
+import { LicensesService } from 'src/licenses/providers/licenses.service';
 
 @Injectable()
 export class RefreshTokensProvider {
@@ -36,6 +37,8 @@ export class RefreshTokensProvider {
 
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
+
+    private readonly licensesService: LicensesService,
   ) {}
 
   public async refreshTokens(refreshToken: string) {
@@ -49,6 +52,8 @@ export class RefreshTokensProvider {
       });
 
       const user = await this.usersService.findOneById(sub);
+
+      await this.licensesService.assertActiveLicense();
 
       return this.generateTokensProvider.generateTokens(user);
     } catch (error) {

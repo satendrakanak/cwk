@@ -213,7 +213,12 @@ export const sidebarData = {
       title: "Settings",
       url: "/admin/settings/site",
       icon: Settings,
-      requiredPermissions: ["view_settings", "view_permission", "view_role"],
+      requiredPermissions: [
+        "view_settings",
+        "view_permission",
+        "view_role",
+        "view_license",
+      ],
       items: [
         {
           title: "Site Settings",
@@ -228,7 +233,7 @@ export const sidebarData = {
         {
           title: "License",
           url: "/admin/settings/license",
-          requiredPermissions: ["view_settings"],
+          requiredPermissions: ["view_license", "activate_license"],
         },
       ],
     },

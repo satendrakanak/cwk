@@ -14,7 +14,13 @@ export class License {
   id!: number;
 
   @Column({ type: 'varchar', length: 128, unique: true })
-  key!: string;
+  keyHash!: string;
+
+  @Column({ type: 'varchar', length: 32 })
+  keyFingerprint!: string;
+
+  @Column({ type: 'varchar', length: 12, nullable: true })
+  keyLast4?: string | null;
 
   @Column({ type: 'varchar', length: 32 })
   plan!: LicensePlan;
@@ -24,6 +30,15 @@ export class License {
 
   @Column({ type: 'varchar', length: 128, nullable: true })
   purchaserEmail?: string | null;
+
+  @Column({ type: 'varchar', length: 128, nullable: true })
+  productSlug?: string | null;
+
+  @Column({ type: 'varchar', length: 128, nullable: true })
+  activationId?: string | null;
+
+  @Column({ type: 'varchar', length: 64, nullable: true })
+  activationStatus?: string | null;
 
   @Column({ type: 'timestamptz', nullable: true })
   expiresAt?: Date | null;

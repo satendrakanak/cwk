@@ -11,6 +11,7 @@ import { SignInDto } from '../dtos/sign-in.dto';
 import { UsersService } from 'src/users/providers/users.service';
 import { GenerateTokensProvider } from './generate-tokens.provider';
 import { User } from 'src/users/user.entity';
+import { LicensesService } from 'src/licenses/providers/licenses.service';
 
 export type SignInUserSummary = {
   id: number;
@@ -33,7 +34,9 @@ export type SignInResult = {
 const getDefaultRedirectForUser = (user: User) => {
   const roles = user.roles?.map((role) => role.name.toLowerCase()) ?? [];
 
-  if (roles.includes('admin')) return '/admin/dashboard';
+  if (roles.includes('super_admin') || roles.includes('admin')) {
+    return '/admin/dashboard';
+  }
   if (roles.includes('faculty')) return '/faculty/dashboard';
 
   return '/dashboard';
@@ -71,6 +74,7 @@ export class SignInProvider {
      */
 
     private readonly generateTokensProvider: GenerateTokensProvider,
+    private readonly licensesService: LicensesService,
   ) {}
 
   public async signIn(signInDto: SignInDto): Promise<SignInResult> {
@@ -107,6 +111,8 @@ export class SignInProvider {
         description: 'Password is incorrect',
       });
     }
+
+    await this.licensesService.assertActiveLicense();
 
     const tokens = await this.generateTokensProvider.generateTokens(user);
 
