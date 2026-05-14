@@ -15,6 +15,7 @@ import { RouteProgressBar } from "@/components/ui/route-progress-bar";
 import { PwaRegister } from "@/components/pwa/pwa-register";
 import { PwaInstallNudge } from "@/components/pwa/pwa-install-nudge";
 import { InstallationRedirect } from "@/components/install/installation-redirect";
+import { LicenseSessionMonitor } from "@/components/licenses/license-session-monitor";
 
 const inter = localFont({
   src: "./fonts/InterVariable.woff2",
@@ -103,6 +104,7 @@ export default async function RootLayout({
             <SessionProvider session={session} hasSession={hasSession}>
               <RouteProgressBar />
               <InstallationRedirect />
+              <LicenseSessionMonitor />
               <Toaster richColors />
               <PwaRegister />
               <PwaInstallNudge />

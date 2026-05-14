@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CryptoModule } from 'src/common/crypto/crypto.module';
 import { Course } from 'src/courses/course.entity';
 import { AppSetting } from 'src/settings/app-setting.entity';
 import { User } from 'src/users/user.entity';
@@ -8,7 +9,10 @@ import { LicensesController } from './licenses.controller';
 import { LicensesService } from './providers/licenses.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([License, User, Course, AppSetting])],
+  imports: [
+    CryptoModule,
+    TypeOrmModule.forFeature([License, User, Course, AppSetting]),
+  ],
   controllers: [LicensesController],
   providers: [LicensesService],
   exports: [LicensesService],

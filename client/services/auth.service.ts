@@ -37,6 +37,8 @@ export const authService = {
   refreshToken: () =>
     apiClient.post<{ success: boolean }>("/api/auth/refresh-tokens"),
 
+  logout: () => apiClient.post<{ success: boolean }>("/api/auth/sign-out"),
+
   startCheckoutVerification: (data: CheckoutVerificationStartPayload) =>
     apiClient.post<ApiResponse<CheckoutVerificationStartResponse>>(
       "/api/auth/checkout/start-verification",

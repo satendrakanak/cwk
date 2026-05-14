@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { Check, KeyRound, Lock, Sparkles } from "lucide-react";
+import { AlertTriangle, KeyRound, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,10 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
 import { licenseClientService } from "@/services/licenses/license.client";
 import {
-  LicenseFeatureKey,
   LicenseLimitKey,
   LicenseSummary,
 } from "@/types/license";
@@ -23,25 +21,14 @@ const limitLabels: Record<LicenseLimitKey, string> = {
   faculty: "Faculty",
 };
 
-const featureLabels: Record<LicenseFeatureKey, string> = {
-  courses: "Course management",
-  faculty: "Faculty workspace",
-  liveClasses: "Live classes",
-  exams: "Exams",
-  assignments: "Assignments",
-  certificates: "Certificates",
-  coupons: "Coupons",
-  emailTemplates: "Email templates",
-  engagement: "Engagement automation",
-  advancedSettings: "Advanced settings",
-  branding: "Branding controls",
-  prioritySupport: "Priority support",
-};
+function formatDate(value?: string | null) {
+  if (!value) return "Lifetime";
 
-const certificateRuleLabels = {
-  lecture_completion: "Generate after lecture completion",
-  exam_pass: "Generate after final exam pass",
-} as const;
+  return new Intl.DateTimeFormat("en-IN", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(value));
+}
 
 export function LicenseAdminClient({
   initialSummary,
@@ -99,7 +86,7 @@ export function LicenseAdminClient({
         <div>
           <h1 className="text-2xl font-semibold tracking-normal">License</h1>
           <p className="text-sm text-muted-foreground">
-            Control KASA plan unlocks, limits, and upgrade readiness.
+            Manage the active key, plan usage, and upgrade readiness.
           </p>
         </div>
         <Badge className="w-fit gap-1.5" variant="secondary">
@@ -114,23 +101,32 @@ export function LicenseAdminClient({
             <CardTitle className="text-base">Plan Usage</CardTitle>
           </CardHeader>
           <CardContent className="space-y-5">
-            {limitRows.map((row) => (
-              <div className="space-y-2" key={row.name}>
-                <div className="flex items-center justify-between gap-3 text-sm">
-                  <span className="font-medium">{row.label}</span>
-                  <span className={row.locked ? "text-destructive" : "text-muted-foreground"}>
-                    {row.used} / {row.limit ?? "Unlimited"}
-                  </span>
+            {summary.plan ? (
+              limitRows.map((row) => (
+                <div className="space-y-2" key={row.name}>
+                  <div className="flex items-center justify-between gap-3 text-sm">
+                    <span className="font-medium">{row.label}</span>
+                    <span className={row.locked ? "text-destructive" : "text-muted-foreground"}>
+                      {row.used} / {row.limit ?? "Unlimited"}
+                    </span>
+                  </div>
+                  <Progress value={row.limit ? row.value : 100} />
                 </div>
-                <Progress value={row.limit ? row.value : 100} />
+              ))
+            ) : (
+              <div className="flex items-start gap-3 rounded-md border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
+                <AlertTriangle className="mt-0.5 size-4 shrink-0" />
+                <span>
+                  KASA is not activated. Activate a valid key to use protected workspaces.
+                </span>
               </div>
-            ))}
+            )}
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Activate Key</CardTitle>
+            <CardTitle className="text-base">Activate / Upgrade Key</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -165,72 +161,45 @@ export function LicenseAdminClient({
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Feature Unlocks</CardTitle>
+          <CardTitle className="text-base">Current Key</CardTitle>
         </CardHeader>
-          <CardContent>
-          {summary.plan ? (
-            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-              {(Object.keys(summary.plan.features) as LicenseFeatureKey[]).map(
-                (feature) => {
-                  const enabled = summary.plan?.features[feature];
-
-                  return (
-                    <div
-                      className="flex items-center justify-between gap-3 rounded-md border px-3 py-2"
-                      key={feature}
-                    >
-                      <span className="text-sm font-medium">
-                        {featureLabels[feature]}
-                      </span>
-                      {enabled ? (
-                        <Check className="size-4 text-emerald-600" />
-                      ) : (
-                        <Lock className="size-4 text-muted-foreground" />
-                      )}
-                    </div>
-                  );
-                },
-              )}
+        <CardContent>
+          {summary.license && summary.plan ? (
+            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+              <div className="rounded-md border px-3 py-2">
+                <p className="text-xs font-medium text-muted-foreground">Plan</p>
+                <p className="mt-1 text-sm font-semibold">{summary.plan.label}</p>
+              </div>
+              <div className="rounded-md border px-3 py-2">
+                <p className="text-xs font-medium text-muted-foreground">Status</p>
+                <p className="mt-1 text-sm font-semibold capitalize">
+                  {summary.license.status}
+                </p>
+              </div>
+              <div className="rounded-md border px-3 py-2">
+                <p className="text-xs font-medium text-muted-foreground">Key</p>
+                <p className="mt-1 font-mono text-sm font-semibold">
+                  {summary.license.keyFingerprint}
+                  {summary.license.keyLast4 ? `...${summary.license.keyLast4}` : ""}
+                </p>
+              </div>
+              <div className="rounded-md border px-3 py-2">
+                <p className="text-xs font-medium text-muted-foreground">Expiry</p>
+                <p className="mt-1 text-sm font-semibold">
+                  {formatDate(summary.license.expiresAt)}
+                </p>
+              </div>
             </div>
           ) : (
             <div className="rounded-md border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
-              KASA is not activated. Activate a valid license to unlock the
-              admin workspace.
+              No active license key is available on this installation.
             </div>
           )}
-          <Separator className="my-4" />
-          <p className="text-sm text-muted-foreground">
-            Active licenses unlock the matching plan instantly. KASA blocks
-            login and protected workspaces when no valid license is present.
+          <p className="mt-4 text-sm text-muted-foreground">
+            Use a new key for upgrade. Downgrade checks will need to compare the new limits with current usage before switching plans.
           </p>
         </CardContent>
       </Card>
-
-      {summary.plan ? (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Plan Behaviour</CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-3 md:grid-cols-2">
-            <div className="rounded-md border px-3 py-2">
-              <p className="text-xs font-medium text-muted-foreground">
-                Certificate rule
-              </p>
-              <p className="mt-1 text-sm font-semibold">
-                {certificateRuleLabels[summary.plan.rules.certificateRule]}
-              </p>
-            </div>
-            <div className="rounded-md border px-3 py-2">
-              <p className="text-xs font-medium text-muted-foreground">
-                Rule source
-              </p>
-              <p className="mt-1 text-sm font-semibold">
-                Software entitlement registry
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      ) : null}
     </div>
   );
 }

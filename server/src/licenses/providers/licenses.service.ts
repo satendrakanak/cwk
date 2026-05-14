@@ -9,6 +9,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { createHash, randomUUID } from 'crypto';
+import { CryptoService } from 'src/common/crypto/providers/crypto.service';
 import { Course } from 'src/courses/course.entity';
 import { AppSetting } from 'src/settings/app-setting.entity';
 import { User } from 'src/users/user.entity';
@@ -28,6 +29,8 @@ import {
 
 const LEGACY_LICENSE_SETTINGS_KEY = 'license_settings';
 const LICENSE_INSTANCE_KEY = 'license_instance_settings';
+const DEFAULT_PORTAL_CHECK_INTERVAL_MS = 10_000;
+const DEFAULT_PORTAL_GRACE_DAYS = 7;
 
 export type LicensePortalActivation = {
   license: {
@@ -61,6 +64,7 @@ export class LicensesService {
     private readonly appSettingRepository: Repository<AppSetting>,
 
     private readonly configService: ConfigService,
+    private readonly cryptoService: CryptoService,
   ) {}
 
   async activate(dto: ActivateLicenseDto) {
@@ -103,7 +107,10 @@ export class LicensesService {
   }
 
   async getCurrent() {
-    const license = await this.getActiveLicense();
+    const currentLicense = await this.getActiveLicense();
+    const license = currentLicense
+      ? await this.revalidateActiveLicense(currentLicense)
+      : null;
     const plan = license ? this.getPlanDefinition(license) : null;
     const usage = await this.getUsage();
 
@@ -130,7 +137,15 @@ export class LicensesService {
       );
     }
 
-    return license;
+    const revalidatedLicense = await this.revalidateActiveLicense(license);
+
+    if (!revalidatedLicense) {
+      throw new UnauthorizedException(
+        'KASA license is no longer active. Please activate a valid license.',
+      );
+    }
+
+    return revalidatedLicense;
   }
 
   async getEffectivePlan() {
@@ -254,6 +269,10 @@ export class LicensesService {
     license.metadata = {
       ...(license.metadata ?? {}),
       ...(payload.metadata ?? {}),
+      licenseKeyEnc: this.cryptoService.encrypt(normalizedKey),
+      portalLastCheckedAt: new Date().toISOString(),
+      portalLastVerifiedAt: new Date().toISOString(),
+      portalLastCheckError: null,
     };
 
     return this.licenseRepository.save(license);
@@ -372,7 +391,14 @@ export class LicensesService {
     );
   }
 
-  private async activateAgainstPortal(licenseKey: string) {
+  private async activateAgainstPortal(
+    licenseKey: string,
+    options: {
+      allowLocalFallback?: boolean;
+      instanceLabel?: string;
+      source?: string;
+    } = {},
+  ) {
     const normalizedKey = licenseKey.trim();
 
     if (!normalizedKey) {
@@ -398,11 +424,12 @@ export class LicensesService {
             licenseKey: normalizedKey,
             productSlug,
             instanceId,
-            instanceLabel: 'KASA admin license upgrade',
+            instanceLabel:
+              options.instanceLabel || 'KASA admin license upgrade',
             productVersion:
               this.configService.get<string>('appConfig.apiVersion') || '0.1.1',
             metadata: {
-              source: 'admin-license-page',
+              source: options.source || 'admin-license-page',
               appUrl: this.configService.get<string>('appConfig.appUrl'),
               frontEndUrl: this.configService.get<string>('appConfig.fronEndUrl'),
               environment: this.configService.get<string>('appConfig.environment'),
@@ -440,7 +467,11 @@ export class LicensesService {
     }
 
     const localPlan = getPlanFromLicenseKey(normalizedKey);
-    if (localPlan && this.isLocalLicenseFallbackAllowed()) {
+    if (
+      localPlan &&
+      options.allowLocalFallback !== false &&
+      this.isLocalLicenseFallbackAllowed()
+    ) {
       return {
         license: {
           product: this.getLicenseProductSlugs()[0],
@@ -458,6 +489,156 @@ export class LicensesService {
     }
 
     throw new BadRequestException(lastMessage);
+  }
+
+  private async revalidateActiveLicense(license: License) {
+    if (!this.shouldCheckPortal(license)) {
+      return license;
+    }
+
+    const encryptedKey = license.metadata?.licenseKeyEnc;
+    if (typeof encryptedKey !== 'string' || encryptedKey.length === 0) {
+      return license;
+    }
+
+    let licenseKey: string;
+
+    try {
+      licenseKey = this.cryptoService.decrypt(encryptedKey);
+    } catch {
+      license.metadata = {
+        ...(license.metadata ?? {}),
+        portalLastCheckError: 'Stored license key could not be decrypted.',
+        portalLastCheckedAt: new Date().toISOString(),
+      };
+      await this.licenseRepository.save(license);
+      return license;
+    }
+
+    try {
+      const activation = await this.activateAgainstPortal(licenseKey, {
+        allowLocalFallback: false,
+        instanceLabel: 'KASA license health check',
+        source: 'license-health-check',
+      });
+      const plan = normalizeLicensePlan(activation.license.plan);
+
+      license.status = LicenseStatus.ACTIVE;
+      license.activationId = activation.activation?.id ?? license.activationId;
+      license.activationStatus =
+        activation.activation?.status ?? license.activationStatus;
+      license.expiresAt = activation.license.expiresAt
+        ? new Date(activation.license.expiresAt)
+        : null;
+      license.metadata = {
+        ...(license.metadata ?? {}),
+        maxActivations: activation.license.maxActivations,
+        activeActivations: activation.license.activeActivations,
+        limits:
+          'limits' in activation.license
+            ? (activation.license.limits ?? {})
+            : {},
+        signature: activation.signature,
+        portalLastCheckedAt: new Date().toISOString(),
+        portalLastVerifiedAt: new Date().toISOString(),
+        portalLastCheckError: null,
+      };
+
+      if (plan) {
+        license.plan = plan;
+      }
+
+      return this.licenseRepository.save(license);
+    } catch (error) {
+      if (error instanceof ServiceUnavailableException) {
+        const graceExpired = this.hasPortalGraceExpired(license);
+        license.metadata = {
+          ...(license.metadata ?? {}),
+          portalLastCheckedAt: new Date().toISOString(),
+          portalLastCheckError:
+            error.message || 'Activation service is temporarily unreachable.',
+        };
+
+        if (graceExpired) {
+          license.activationStatus = 'PENDING_VERIFICATION';
+          await this.licenseRepository.save(license);
+          return null;
+        }
+
+        await this.licenseRepository.save(license);
+        return license;
+      }
+
+      const message =
+        error instanceof Error ? error.message : 'License is no longer valid.';
+      license.status = message.toLowerCase().includes('expired')
+        ? LicenseStatus.EXPIRED
+        : LicenseStatus.REVOKED;
+      license.activationStatus = 'DEACTIVATED';
+      license.metadata = {
+        ...(license.metadata ?? {}),
+        portalLastCheckedAt: new Date().toISOString(),
+        portalLastCheckError: message,
+      };
+      await this.licenseRepository.save(license);
+      return null;
+    }
+  }
+
+  private shouldCheckPortal(license: License) {
+    if (!this.configService.get<string>('LICENSE_PORTAL_URL')?.trim()) {
+      return false;
+    }
+
+    const lastCheckedAt = license.metadata?.portalLastCheckedAt;
+    if (typeof lastCheckedAt !== 'string') {
+      return true;
+    }
+
+    const lastCheckedTime = new Date(lastCheckedAt).getTime();
+    if (!Number.isFinite(lastCheckedTime)) {
+      return true;
+    }
+
+    return Date.now() - lastCheckedTime >= this.getPortalCheckIntervalMs();
+  }
+
+  private getPortalCheckIntervalMs() {
+    const seconds = Number(
+      this.configService.get<string>('LICENSE_PORTAL_CHECK_INTERVAL_SECONDS') ||
+        '',
+    );
+
+    if (!Number.isFinite(seconds) || seconds <= 0) {
+      return DEFAULT_PORTAL_CHECK_INTERVAL_MS;
+    }
+
+    return Math.max(seconds * 1000, 5000);
+  }
+
+  private hasPortalGraceExpired(license: License) {
+    const lastVerifiedAt = license.metadata?.portalLastVerifiedAt;
+
+    if (typeof lastVerifiedAt !== 'string') {
+      return false;
+    }
+
+    const lastVerifiedTime = new Date(lastVerifiedAt).getTime();
+    if (!Number.isFinite(lastVerifiedTime)) {
+      return false;
+    }
+
+    return Date.now() - lastVerifiedTime > this.getPortalGraceMs();
+  }
+
+  private getPortalGraceMs() {
+    const days = Number(
+      this.configService.get<string>('LICENSE_PORTAL_GRACE_DAYS') || '',
+    );
+    const graceDays =
+      Number.isFinite(days) && days > 0 ? days : DEFAULT_PORTAL_GRACE_DAYS;
+
+    return graceDays * 24 * 60 * 60 * 1000;
   }
 
   private getLicensePortalUrl() {
