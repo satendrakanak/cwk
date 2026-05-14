@@ -14,9 +14,11 @@ const licenseRouteRules: LicenseRouteRule[] = [
   { prefix: "/admin/exams", feature: "exams", label: "Exams" },
   { prefix: "/admin/assignments", feature: "assignments", label: "Assignments" },
   { prefix: "/admin/coupons", feature: "coupons", label: "Coupons" },
+  { prefix: "/admin/refunds", feature: "refunds", label: "Refund management" },
   { prefix: "/admin/recordings", feature: "liveClasses", label: "Live class recordings" },
   { prefix: "/admin/certificates", feature: "certificates", label: "Certificates" },
   { prefix: "/admin/engagement", feature: "engagement", label: "Engagement automation" },
+  { prefix: "/admin/articles", feature: "articles", label: "Articles" },
   { prefix: "/admin/email-templates", feature: "emailTemplates", label: "Email templates" },
   { prefix: "/admin/settings/site", feature: "branding", label: "Branding controls" },
   {
@@ -24,6 +26,13 @@ const licenseRouteRules: LicenseRouteRule[] = [
     feature: "advancedSettings",
     label: "Roles and permissions",
   },
+  { prefix: "/faculty/exams", feature: "exams", label: "Faculty exams" },
+  { prefix: "/faculty/assignments", feature: "assignments", label: "Faculty assignments" },
+  { prefix: "/faculty/classes", feature: "liveClasses", label: "Faculty classes" },
+  { prefix: "/faculty/calendar", feature: "liveClasses", label: "Faculty calendar" },
+  { prefix: "/faculty/recordings", feature: "liveClasses", label: "Faculty recordings" },
+  { prefix: "/faculty/reminders", feature: "liveClasses", label: "Faculty reminders" },
+  { prefix: "/faculty", feature: "faculty", label: "Faculty workspace" },
 ];
 
 export function isLicenseRecoveryPath(pathname: string | null | undefined) {

@@ -72,3 +72,7 @@ export function useAdminLicense() {
 
   return context;
 }
+
+export function useOptionalAdminLicense() {
+  return useContext(AdminLicenseContext);
+}

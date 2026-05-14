@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { ActiveUser } from 'src/auth/decorators/active-user.decorator';
 import type { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
+import { LicensesService } from 'src/licenses/providers/licenses.service';
 import { AddBatchStudentDto } from './dtos/add-batch-student.dto';
 import { CreateClassSessionDto } from './dtos/create-class-session.dto';
 import { CreateCourseBatchDto } from './dtos/create-course-batch.dto';
@@ -25,81 +26,91 @@ export class FacultyWorkspaceController {
   constructor(
     private readonly facultyWorkspaceService: FacultyWorkspaceService,
     private readonly facultySessionReminderScheduler: FacultySessionReminderScheduler,
+    private readonly licensesService: LicensesService,
   ) {
     this.facultySessionReminderScheduler.start();
   }
 
   @Get('workspace')
-  getWorkspace(@ActiveUser() user: ActiveUserData) {
+  async getWorkspace(@ActiveUser() user: ActiveUserData) {
+    await this.assertFeature('faculty');
     this.assertPermission(user, 'view_faculty_workspace');
     return this.facultyWorkspaceService.getWorkspace(user);
   }
 
   @Get('batches')
-  getBatches(@ActiveUser() user: ActiveUserData) {
+  async getBatches(@ActiveUser() user: ActiveUserData) {
+    await this.assertFeature('faculty');
     this.assertPermission(user, 'view_faculty_workspace');
     return this.facultyWorkspaceService.getBatches(user);
   }
 
   @Get('courses')
-  getCourses(@ActiveUser() user: ActiveUserData) {
+  async getCourses(@ActiveUser() user: ActiveUserData) {
+    await this.assertFeature('faculty');
     this.assertPermission(user, 'view_faculty_workspace');
     return this.facultyWorkspaceService.getCourses(user);
   }
 
   @Get('courses/:courseId/students')
-  getCourseStudents(
+  async getCourseStudents(
     @Param('courseId', ParseIntPipe) courseId: number,
     @ActiveUser() user: ActiveUserData,
   ) {
+    await this.assertFeature('faculty');
     this.assertPermission(user, 'view_faculty_workspace');
     return this.facultyWorkspaceService.getCourseStudents(courseId, user);
   }
 
   @Post('batches')
-  createBatch(
+  async createBatch(
     @ActiveUser() user: ActiveUserData,
     @Body() dto: CreateCourseBatchDto,
   ) {
+    await this.assertFeature('faculty');
     this.assertPermission(user, 'manage_faculty_batches');
     return this.facultyWorkspaceService.createBatch(user, dto);
   }
 
   @Patch('batches/:id')
-  updateBatch(
+  async updateBatch(
     @Param('id', ParseIntPipe) id: number,
     @ActiveUser() user: ActiveUserData,
     @Body() dto: UpdateCourseBatchDto,
   ) {
+    await this.assertFeature('faculty');
     this.assertPermission(user, 'manage_faculty_batches');
     return this.facultyWorkspaceService.updateBatch(id, user, dto);
   }
 
   @Delete('batches/:id')
-  deleteBatch(
+  async deleteBatch(
     @Param('id', ParseIntPipe) id: number,
     @ActiveUser() user: ActiveUserData,
   ) {
+    await this.assertFeature('faculty');
     this.assertPermission(user, 'manage_faculty_batches');
     return this.facultyWorkspaceService.deleteBatch(id, user);
   }
 
   @Post('batches/:id/students')
-  addBatchStudent(
+  async addBatchStudent(
     @Param('id', ParseIntPipe) id: number,
     @ActiveUser() user: ActiveUserData,
     @Body() dto: AddBatchStudentDto,
   ) {
+    await this.assertFeature('faculty');
     this.assertPermission(user, 'manage_faculty_batches');
     return this.facultyWorkspaceService.addBatchStudent(id, user, dto);
   }
 
   @Delete('batches/:batchId/students/:studentId')
-  removeBatchStudent(
+  async removeBatchStudent(
     @Param('batchId', ParseIntPipe) batchId: number,
     @Param('studentId', ParseIntPipe) studentId: number,
     @ActiveUser() user: ActiveUserData,
   ) {
+    await this.assertFeature('faculty');
     this.assertPermission(user, 'manage_faculty_batches');
     return this.facultyWorkspaceService.removeBatchStudent(
       batchId,
@@ -109,124 +120,153 @@ export class FacultyWorkspaceController {
   }
 
   @Get('sessions')
-  getSessions(@ActiveUser() user: ActiveUserData) {
+  async getSessions(@ActiveUser() user: ActiveUserData) {
+    await this.assertFeature('liveClasses');
     this.assertPermission(user, 'view_faculty_workspace');
     return this.facultyWorkspaceService.getSessions(user);
   }
 
   @Get('recordings')
-  getRecordings(@ActiveUser() user: ActiveUserData) {
+  async getRecordings(@ActiveUser() user: ActiveUserData) {
+    await this.assertFeature('liveClasses');
     this.assertPermission(user, 'view_faculty_workspace');
     return this.facultyWorkspaceService.getRecordings(user);
   }
 
   @Delete('recordings/:id')
-  deleteRecording(
+  async deleteRecording(
     @Param('id', ParseIntPipe) id: number,
     @ActiveUser() user: ActiveUserData,
   ) {
+    await this.assertFeature('liveClasses');
     this.assertPermission(user, 'manage_faculty_calendar');
     return this.facultyWorkspaceService.deleteRecording(id, user);
   }
 
   @Get('exam-attempts')
-  getExamAttempts(@ActiveUser() user: ActiveUserData) {
+  async getExamAttempts(@ActiveUser() user: ActiveUserData) {
+    await this.assertFeature('exams');
     this.assertPermission(user, 'view_faculty_workspace');
     return this.facultyWorkspaceService.getExamAttempts(user);
   }
 
   @Get('exam-attempts/:id')
-  getExamAttempt(
+  async getExamAttempt(
     @Param('id', ParseIntPipe) id: number,
     @ActiveUser() user: ActiveUserData,
   ) {
+    await this.assertFeature('exams');
     this.assertPermission(user, 'view_faculty_workspace');
     return this.facultyWorkspaceService.getExamAttempt(id, user);
   }
 
   @Patch('exam-attempts/:id/grade')
-  gradeExamAttempt(
+  async gradeExamAttempt(
     @Param('id', ParseIntPipe) id: number,
     @ActiveUser() user: ActiveUserData,
     @Body() dto: GradeExamAttemptDto,
   ) {
+    await this.assertFeature('exams');
     this.assertPermission(user, 'grade_exam_attempt');
     return this.facultyWorkspaceService.gradeExamAttempt(id, user, dto);
   }
 
   @Post('sessions')
-  createSession(
+  async createSession(
     @ActiveUser() user: ActiveUserData,
     @Body() dto: CreateClassSessionDto,
   ) {
+    await this.assertFeature('liveClasses');
     this.assertPermission(user, 'manage_faculty_calendar');
     return this.facultyWorkspaceService.createSession(user, dto);
   }
 
   @Patch('sessions/:id')
-  updateSession(
+  async updateSession(
     @Param('id', ParseIntPipe) id: number,
     @ActiveUser() user: ActiveUserData,
     @Body() dto: UpdateClassSessionDto,
   ) {
+    await this.assertFeature('liveClasses');
     this.assertPermission(user, 'manage_faculty_calendar');
     return this.facultyWorkspaceService.updateSession(id, user, dto);
   }
 
   @Delete('sessions/:id')
-  deleteSession(
+  async deleteSession(
     @Param('id', ParseIntPipe) id: number,
     @ActiveUser() user: ActiveUserData,
   ) {
+    await this.assertFeature('liveClasses');
     this.assertPermission(user, 'manage_faculty_calendar');
     return this.facultyWorkspaceService.deleteSession(id, user);
   }
 
   @Post('sessions/:id/bbb/start')
-  startBbbSession(
+  async startBbbSession(
     @Param('id', ParseIntPipe) id: number,
     @ActiveUser() user: ActiveUserData,
   ) {
+    await this.assertFeature('liveClasses');
     this.assertPermission(user, 'manage_faculty_calendar');
     return this.facultyWorkspaceService.startBbbSession(id, user);
   }
 
   @Get('sessions/:id/bbb/status')
-  getBbbSessionStatus(
+  async getBbbSessionStatus(
     @Param('id', ParseIntPipe) id: number,
     @ActiveUser() user: ActiveUserData,
   ) {
+    await this.assertFeature('liveClasses');
     this.assertPermission(user, 'view_faculty_workspace');
     return this.facultyWorkspaceService.getFacultyBbbSessionStatus(id, user);
   }
 
   @Get('sessions/:id/recordings')
-  getSessionRecordings(
+  async getSessionRecordings(
     @Param('id', ParseIntPipe) id: number,
     @ActiveUser() user: ActiveUserData,
   ) {
+    await this.assertFeature('liveClasses');
     this.assertPermission(user, 'view_faculty_workspace');
     return this.facultyWorkspaceService.getSessionRecordings(id, user);
   }
 
   @Post('sessions/:id/recordings/sync')
-  syncSessionRecordings(
+  async syncSessionRecordings(
     @Param('id', ParseIntPipe) id: number,
     @ActiveUser() user: ActiveUserData,
   ) {
+    await this.assertFeature('liveClasses');
     this.assertPermission(user, 'manage_faculty_calendar');
     return this.facultyWorkspaceService.syncSessionRecordings(id, user);
   }
 
   private isAdmin(user?: ActiveUserData) {
-    return Boolean(user?.roles?.includes('admin'));
+    return Boolean(
+      user?.roles?.includes('admin') || user?.roles?.includes('super_admin'),
+    );
+  }
+
+  private isFaculty(user?: ActiveUserData) {
+    return Boolean(user?.roles?.includes('faculty'));
+  }
+
+  private async assertFeature(
+    feature: 'faculty' | 'liveClasses' | 'exams',
+  ) {
+    await this.licensesService.assertFeature(feature);
   }
 
   private assertPermission(
     user: ActiveUserData | undefined,
     permission: string,
   ) {
-    if (this.isAdmin(user) || user?.permissions?.includes(permission)) {
+    if (
+      this.isAdmin(user) ||
+      this.isFaculty(user) ||
+      user?.permissions?.includes(permission)
+    ) {
       return;
     }
 

@@ -23,7 +23,9 @@ import {
   LICENSE_PLANS,
   CertificateRule,
   LicenseFeatureKey,
+  LicenseBehaviorRules,
   LicenseLimitKey,
+  LicensePlanDefinition,
   normalizeLicensePlan,
 } from '../license-plans';
 
@@ -40,6 +42,8 @@ export type LicensePortalActivation = {
     maxActivations?: number | null;
     activeActivations?: number | null;
     limits?: Partial<Record<LicenseLimitKey, number | null>>;
+    features?: Partial<Record<LicenseFeatureKey, boolean>>;
+    rules?: Partial<{ certificateRule: CertificateRule }>;
   };
   activation?: {
     id?: string | null;
@@ -100,6 +104,8 @@ export class LicensesService {
         maxActivations: activation.license.maxActivations,
         activeActivations: activation.license.activeActivations,
         limits: activation.license.limits,
+        features: activation.license.features,
+        rules: activation.license.rules,
         signature: activation.signature,
       },
       activatedAt: new Date(),
@@ -360,7 +366,7 @@ export class LicensesService {
     );
   }
 
-  private getPlanDefinition(license: License) {
+  private getPlanDefinition(license: License): LicensePlanDefinition {
     const base = LICENSE_PLANS[license.plan];
 
     return {
@@ -368,6 +374,14 @@ export class LicensesService {
       limits: {
         ...base.limits,
         ...this.getCustomLimits(license),
+      },
+      features: {
+        ...base.features,
+        ...this.getCustomFeatures(license),
+      },
+      rules: {
+        ...base.rules,
+        ...this.getCustomRules(license),
       },
     };
   }
@@ -389,6 +403,59 @@ export class LicensesService {
       },
       {} as Partial<Record<LicenseLimitKey, number | null>>,
     );
+  }
+
+  private getCustomFeatures(license: License) {
+    const features = license.metadata?.features;
+    if (!features || typeof features !== 'object' || Array.isArray(features)) {
+      return {};
+    }
+
+    return (
+      [
+        'courses',
+        'faculty',
+        'liveClasses',
+        'exams',
+        'assignments',
+        'certificates',
+        'coupons',
+        'refunds',
+        'articles',
+        'emailTemplates',
+        'engagement',
+        'advancedSettings',
+        'branding',
+        'prioritySupport',
+      ] as const
+    ).reduce(
+      (result, key) => {
+        const value = (features as Record<string, unknown>)[key];
+        if (typeof value === 'boolean') {
+          return { ...result, [key]: value };
+        }
+
+        return result;
+      },
+      {} as Partial<Record<LicenseFeatureKey, boolean>>,
+    );
+  }
+
+  private getCustomRules(license: License): Partial<LicenseBehaviorRules> {
+    const rules = license.metadata?.rules;
+    if (!rules || typeof rules !== 'object' || Array.isArray(rules)) {
+      return {};
+    }
+
+    const certificateRule = (rules as Record<string, unknown>).certificateRule;
+    if (
+      certificateRule === 'lecture_completion' ||
+      certificateRule === 'exam_pass'
+    ) {
+      return { certificateRule };
+    }
+
+    return {};
   }
 
   private async activateAgainstPortal(
@@ -547,6 +614,12 @@ export class LicensesService {
           'limits' in activation.license
             ? (activation.license.limits ?? {})
             : {},
+        features:
+          'features' in activation.license
+            ? (activation.license.features ?? {})
+            : {},
+        rules:
+          'rules' in activation.license ? (activation.license.rules ?? {}) : {},
         signature: activation.signature,
         portalLastCheckedAt: new Date().toISOString(),
         portalLastVerifiedAt: new Date().toISOString(),

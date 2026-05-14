@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import type { ComponentType } from "react";
 import { useState } from "react";
 import {
   BookOpen,
@@ -11,6 +12,7 @@ import {
   GraduationCap,
   LayoutDashboard,
   Loader,
+  LockKeyhole,
   LogOut,
   Settings,
   ShieldCheck,
@@ -39,10 +41,20 @@ import { useSession } from "@/context/session-context";
 import { apiClient } from "@/lib/api/client";
 import { canAccessAdmin, canAccessFaculty } from "@/lib/access-control";
 import { getErrorMessage } from "@/lib/error-handler";
+import { getLicenseInvalidReason } from "@/lib/license/module-access";
 import { getUserAvatarUrl, getUserDisplayName } from "@/lib/user-avatar";
+import type { LicenseFeatureKey } from "@/types/license";
+import { useOptionalAdminLicense } from "./admin-license-provider";
 
 type NavUserProps = {
   variant?: "sidebar" | "navbar";
+};
+
+type MenuItem = {
+  href: string;
+  label: string;
+  icon: ComponentType<{ className?: string }>;
+  licenseFeature?: LicenseFeatureKey;
 };
 
 export function NavUser({ variant = "sidebar" }: NavUserProps) {
@@ -50,13 +62,14 @@ export function NavUser({ variant = "sidebar" }: NavUserProps) {
   const router = useRouter();
   const { user } = useSession();
   const { isMobile } = useSidebar();
+  const licenseContext = useOptionalAdminLicense();
 
   if (!user) return null;
 
   const displayName = getUserDisplayName(user);
   const avatarUrl = getUserAvatarUrl(user);
   const initials = `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase();
-  const menuItems = [
+  const menuItems: MenuItem[] = [
     ...(canAccessAdmin(user)
       ? [
           { href: "/admin", label: "Admin dashboard", icon: LayoutDashboard },
@@ -65,8 +78,14 @@ export function NavUser({ variant = "sidebar" }: NavUserProps) {
             href: "/admin/settings/access-control",
             label: "Roles & permissions",
             icon: ShieldCheck,
+            licenseFeature: "advancedSettings" as const,
           },
-          { href: "/admin/settings/site", label: "Site settings", icon: Settings },
+          {
+            href: "/admin/settings/site",
+            label: "Site settings",
+            icon: Settings,
+            licenseFeature: "branding" as const,
+          },
         ]
       : []),
     ...(canAccessFaculty(user)
@@ -75,13 +94,41 @@ export function NavUser({ variant = "sidebar" }: NavUserProps) {
             href: "/faculty/dashboard",
             label: "Faculty dashboard",
             icon: GraduationCap,
+            licenseFeature: "faculty" as const,
           },
-          { href: "/faculty/courses", label: "Faculty courses", icon: BookOpen },
-          { href: "/faculty/exams", label: "Faculty exams", icon: ClipboardCheck },
+          {
+            href: "/faculty/courses",
+            label: "Faculty courses",
+            icon: BookOpen,
+            licenseFeature: "faculty" as const,
+          },
+          {
+            href: "/faculty/exams",
+            label: "Faculty exams",
+            icon: ClipboardCheck,
+            licenseFeature: "exams" as const,
+          },
         ]
       : []),
     { href: "/", label: "View website", icon: ExternalLink },
   ];
+
+  const isItemLocked = (item: MenuItem) => {
+    if (!licenseContext || licenseContext.isLoading || item.href === "/") {
+      return false;
+    }
+
+    const invalidReason = getLicenseInvalidReason(licenseContext.summary);
+    if (invalidReason) {
+      return true;
+    }
+
+    if (!item.licenseFeature) {
+      return false;
+    }
+
+    return !licenseContext.summary?.plan?.features[item.licenseFeature];
+  };
 
   const handleLogout = async () => {
     try {
@@ -148,11 +195,15 @@ export function NavUser({ variant = "sidebar" }: NavUserProps) {
         <DropdownMenuGroup>
           {menuItems.map((item) => {
             const Icon = item.icon;
+            const locked = isItemLocked(item);
             return (
               <DropdownMenuItem key={item.href} asChild>
                 <Link href={item.href} className="cursor-pointer gap-2 rounded-lg">
                   <Icon className="size-4" />
-                  {item.label}
+                  <span className="flex-1">{item.label}</span>
+                  {locked ? (
+                    <LockKeyhole className="ml-auto size-3.5 text-amber-500" />
+                  ) : null}
                 </Link>
               </DropdownMenuItem>
             );

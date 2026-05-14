@@ -9,6 +9,8 @@ export type LicenseFeatureKey =
   | 'assignments'
   | 'certificates'
   | 'coupons'
+  | 'refunds'
+  | 'articles'
   | 'emailTemplates'
   | 'engagement'
   | 'advancedSettings'
@@ -36,6 +38,8 @@ const baseFeatures: Record<LicenseFeatureKey, boolean> = {
   assignments: false,
   certificates: false,
   coupons: false,
+  refunds: false,
+  articles: true,
   emailTemplates: false,
   engagement: false,
   advancedSettings: false,
@@ -76,6 +80,8 @@ export const LICENSE_PLANS: Record<LicensePlan, LicensePlanDefinition> = {
       assignments: true,
       certificates: true,
       coupons: true,
+      refunds: true,
+      articles: true,
       emailTemplates: true,
       branding: true,
     },

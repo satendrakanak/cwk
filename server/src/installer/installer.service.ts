@@ -31,6 +31,8 @@ import { ValidateLicenseDto } from './dtos/validate-license.dto';
 import { LicensesService } from 'src/licenses/providers/licenses.service';
 import {
   LICENSE_PLANS,
+  CertificateRule,
+  LicenseFeatureKey,
   LicenseLimitKey,
   normalizeLicensePlan,
 } from 'src/licenses/license-plans';
@@ -64,6 +66,8 @@ type LicensePortalActivationResponse =
         maxActivations: number;
         activeActivations: number;
         limits?: Partial<Record<LicenseLimitKey, number | null>>;
+        features?: Partial<Record<LicenseFeatureKey, boolean>>;
+        rules?: Partial<{ certificateRule: CertificateRule }>;
       };
       activation: {
         id: string;
@@ -429,6 +433,8 @@ export class InstallerService implements OnModuleInit {
       maxActivations: activation.license.maxActivations,
       activeActivations: activation.license.activeActivations,
       limits: activation.license.limits,
+      features: activation.license.features,
+      rules: activation.license.rules,
       activationId: activation.activation.id,
       activationStatus: activation.activation.status,
       signature: activation.signature,

@@ -32,7 +32,7 @@ export function LicenseLockedNotice({
           </div>
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-700/80 dark:text-amber-200/80">
-              KASA access gate
+              Workspace access
             </p>
             <h2 className="mt-2 text-xl font-semibold">{title}</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 opacity-80">

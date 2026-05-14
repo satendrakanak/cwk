@@ -68,31 +68,6 @@ export const sidebarData: {
         "update_course",
         "edit_assigned_course",
       ],
-      items: [
-        {
-          title: "Courses",
-          url: "/admin/courses",
-          licenseFeature: "courses",
-          requiredPermissions: [
-            "view_course",
-            "create_course",
-            "update_course",
-            "edit_assigned_course",
-          ],
-        },
-        {
-          title: "Categories",
-          url: "/admin/courses/categories",
-          licenseFeature: "courses",
-          requiredPermissions: ["view_category", "create_category", "update_category"],
-        },
-        {
-          title: "Tags",
-          url: "/admin/courses/tags",
-          licenseFeature: "courses",
-          requiredPermissions: ["view_tag", "create_tag", "update_tag"],
-        },
-      ],
     },
 
     {
@@ -150,6 +125,7 @@ export const sidebarData: {
       title: "Refunds",
       url: "/admin/refunds",
       icon: HandCoins,
+      licenseFeature: "refunds",
       requiredPermissions: ["view_order", "update_order"],
     },
 
@@ -193,6 +169,7 @@ export const sidebarData: {
       title: "Articles",
       url: "/admin/articles",
       icon: FileText,
+      licenseFeature: "articles",
       requiredPermissions: ["view_article", "create_article", "update_article"],
     },
 

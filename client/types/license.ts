@@ -10,6 +10,8 @@ export type LicenseFeatureKey =
   | "assignments"
   | "certificates"
   | "coupons"
+  | "refunds"
+  | "articles"
   | "emailTemplates"
   | "engagement"
   | "advancedSettings"
