@@ -4,26 +4,36 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
+import { isLicenseFeatureEnabled } from "@/lib/license/feature-access";
+import type { LicenseSummary, LicenseFeatureKey } from "@/types/license";
 
 interface ProfileMenuProps {
   isOwner?: boolean;
+  licenseSummary?: LicenseSummary | null;
 }
 
-export function ProfileMenu({ isOwner }: ProfileMenuProps) {
+export function ProfileMenu({ isOwner, licenseSummary }: ProfileMenuProps) {
   const pathname = usePathname();
 
-  const menu = [
+  const baseMenu = [
     { label: "Dashboard", key: "dashboard" },
     { label: "My Courses", key: "my-courses" },
-    { label: "Live Classes", key: "classes" },
-    { label: "Exams", key: "exams" },
-    { label: "Assignments", key: "assignments" },
+    { label: "Live Classes", key: "classes", feature: "liveClasses" },
+    { label: "Exams", key: "exams", feature: "exams" },
+    { label: "Assignments", key: "assignments", feature: "assignments" },
     { label: "Orders", key: "orders" },
-    { label: "Certificates", key: "certificates" },
+    { label: "Certificates", key: "certificates", feature: "certificates" },
     { label: "Notifications", key: "notifications" },
     { label: "Profile", key: "profile" },
     ...(isOwner ? [{ label: "Settings", key: "settings" }] : []),
-  ];
+  ] satisfies Array<{
+    label: string;
+    key: string;
+    feature?: LicenseFeatureKey;
+  }>;
+  const menu = baseMenu.filter((item) =>
+    item.feature ? isLicenseFeatureEnabled(licenseSummary, item.feature) : true,
+  );
 
   return (
     <div className="mt-8">

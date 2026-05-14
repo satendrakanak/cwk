@@ -5,8 +5,11 @@ import { CoursesBanner } from "@/components/layout/courses-banner";
 import { COURSE_DELIVERY_MODES } from "@/lib/course-delivery";
 import { getErrorMessage } from "@/lib/error-handler";
 import { buildMetadata } from "@/lib/seo";
+import { getAllowedCourseModes } from "@/lib/license/feature-access";
 import { courseServerService } from "@/services/courses/course.server";
+import { licenseServerService } from "@/services/licenses/license.server";
 import { Course } from "@/types/course";
+import type { CourseDeliveryMode } from "@/types/license";
 
 const PAGE_SIZE = 9;
 
@@ -71,17 +74,23 @@ export default async function CoursesPage({
 }) {
   const { mode, category, tag } = await searchParams;
 
-  const allCoursesResponse = await courseServerService
-    .getPublicCourses({ page: 1, limit: 1000 })
-    .catch((error: unknown) => {
-      const message = getErrorMessage(error);
-      throw new Error(message);
-    });
+  const [allCoursesResponse, licenseResponse] = await Promise.all([
+    courseServerService.getPublicCourses({ page: 1, limit: 1000 }),
+    licenseServerService.getCurrent().catch(() => null),
+  ]).catch((error: unknown) => {
+    const message = getErrorMessage(error);
+    throw new Error(message);
+  });
 
-  const allCourses = allCoursesResponse.data.data;
+  const allowedModes = getAllowedCourseModes(licenseResponse?.data);
+  const allCourses = allCoursesResponse.data.data.filter((course) =>
+    allowedModes.includes((course.mode || "self_learning") as CourseDeliveryMode),
+  );
   const categories = getCourseCategories(allCourses);
   const tags = getCourseTags(allCourses);
-  const selectedMode = COURSE_DELIVERY_MODES.some((item) => item.value === mode)
+  const selectedMode = COURSE_DELIVERY_MODES.some(
+    (item) => item.value === mode && allowedModes.includes(item.value),
+  )
     ? mode
     : undefined;
   const selectedCategory = categories.some((item) => item.slug === category)
@@ -127,7 +136,8 @@ export default async function CoursesPage({
               selectedMode={selectedMode}
               selectedCategory={selectedCategory}
               selectedTag={selectedTag}
-              totalCourses={allCoursesResponse.data.meta.totalItems}
+              totalCourses={allCourses.length}
+              allowedModes={allowedModes}
             />
 
             <InfiniteCoursesGrid
@@ -137,6 +147,7 @@ export default async function CoursesPage({
               mode={selectedMode}
               category={selectedCategory}
               tag={selectedTag}
+              allowedModes={allowedModes}
             />
           </div>
         </Container>

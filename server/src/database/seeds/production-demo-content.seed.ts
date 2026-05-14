@@ -965,6 +965,8 @@ type DemoSeedLimits = {
 
 type DemoSeedOptions = {
   limits?: DemoSeedLimits;
+  features?: Partial<Record<string, boolean>>;
+  allowedCourseModes?: CourseDeliveryMode[];
 };
 
 const applyDemoLimit = <T>(items: T[], limit?: number | null) =>
@@ -1275,10 +1277,13 @@ async function seedDemoUsers(
 
   const seededUsers: User[] = [];
 
-  const facultyDemoUsers = applyDemoLimit(
-    demoUsers.filter((user) => user.role === 'faculty'),
-    options.limits?.faculty,
-  );
+  const facultyEnabled = options.features?.faculty !== false;
+  const facultyDemoUsers = facultyEnabled
+    ? applyDemoLimit(
+        demoUsers.filter((user) => user.role === 'faculty'),
+        options.limits?.faculty,
+      )
+    : [];
   const remainingUserLimit =
     typeof options.limits?.users === 'number'
       ? Math.max(0, options.limits.users - facultyDemoUsers.length)
@@ -1648,7 +1653,14 @@ async function seedDemoEngagement(dataSource: DataSource, systemUser: User) {
   }
 }
 
-async function seedDemoLiveOperations(dataSource: DataSource) {
+async function seedDemoLiveOperations(
+  dataSource: DataSource,
+  options: DemoSeedOptions = {},
+) {
+  if (options.features?.faculty === false || options.features?.liveClasses === false) {
+    return;
+  }
+
   const courseRepository = dataSource.getRepository(Course);
   const userRepository = dataSource.getRepository(User);
   const batchRepository = dataSource.getRepository(CourseBatch);
@@ -2115,9 +2127,21 @@ export async function seedProductionDemoContent(
     ? allFacultyUsers
     : [systemUser];
   const savedCourses: Course[] = [];
+  const allowedCourseModes =
+    options.allowedCourseModes && options.allowedCourseModes.length
+      ? options.allowedCourseModes
+      : [
+          CourseDeliveryMode.SelfLearning,
+          CourseDeliveryMode.FacultyLed,
+          CourseDeliveryMode.Hybrid,
+        ];
 
   const selectedDemoCourses = applyDemoLimit(
-    demoCourses,
+    demoCourses.filter((course) =>
+      allowedCourseModes.includes(
+        (course.mode || CourseDeliveryMode.SelfLearning) as CourseDeliveryMode,
+      ),
+    ),
     options.limits?.courses,
   );
 
@@ -2268,13 +2292,21 @@ export async function seedProductionDemoContent(
     savedCourses,
     allReviewUsers.length ? allReviewUsers : seededDemoUsers.allUsers,
   );
-  await seedDemoCoupons(dataSource);
-  await seedDemoArticles(dataSource, systemUser);
+  if (options.features?.coupons !== false) {
+    await seedDemoCoupons(dataSource);
+  }
+  if (options.features?.articles !== false) {
+    await seedDemoArticles(dataSource, systemUser);
+  }
   await seedDemoArticleComments(dataSource, seededDemoUsers.allUsers);
   await seedDemoTestimonials(dataSource);
-  await seedDemoEngagement(dataSource, systemUser);
-  await seedDemoLiveOperations(dataSource);
-  await seedAssignmentDemo(dataSource);
+  if (options.features?.engagement !== false) {
+    await seedDemoEngagement(dataSource, systemUser);
+  }
+  await seedDemoLiveOperations(dataSource, options);
+  if (options.features?.assignments !== false) {
+    await seedAssignmentDemo(dataSource);
+  }
   await seedDemoSettings(dataSource);
 
   console.log(

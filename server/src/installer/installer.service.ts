@@ -414,6 +414,8 @@ export class InstallerService implements OnModuleInit {
       onProgress?.(70, 'Importing marketplace demo data...');
       await seedProductionDemoContent(this.dataSource, {
         limits: await this.getRemainingDemoSeedLimits(activation),
+        features: activation?.license.features,
+        allowedCourseModes: activation?.license.rules?.allowedCourseModes,
       });
     } else {
       onProgress?.(82, 'Skipping demo data import...');

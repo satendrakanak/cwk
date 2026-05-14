@@ -6,7 +6,9 @@ import { ProfileMenu } from "@/components/profile/profile-menu";
 import { getSession } from "@/lib/auth";
 import { getErrorMessage } from "@/lib/error-handler";
 import { userServerService } from "@/services/users/user.server";
+import { licenseServerService } from "@/services/licenses/license.server";
 import { User } from "@/types/user";
+import type { LicenseSummary } from "@/types/license";
 import { notFound } from "next/navigation";
 
 export default async function ProfileLayout({
@@ -28,6 +30,7 @@ export default async function ProfileLayout({
     examsPassed: 0,
     certificatesEarned: 0,
   };
+  let licenseSummary: LicenseSummary | null = null;
 
   if (username) {
     const response = await userServerService.getPublicProfile(
@@ -49,8 +52,12 @@ export default async function ProfileLayout({
 
   if (!username) {
     try {
-      const res = await userServerService.getDashboardStats(user.id);
+      const [res, licenseResponse] = await Promise.all([
+        userServerService.getDashboardStats(user.id),
+        licenseServerService.getCurrent().catch(() => null),
+      ]);
       stats = res.data;
+      licenseSummary = licenseResponse?.data ?? null;
     } catch (error: unknown) {
       throw new Error(getErrorMessage(error));
     }
@@ -78,7 +85,12 @@ export default async function ProfileLayout({
           <div className="relative z-10 px-2 md:px-6">
             <ProfileHeader user={user} isOwner={isOwner} stats={stats} />
 
-            {!username ? <ProfileMenu isOwner={isOwner} /> : null}
+            {!username ? (
+              <ProfileMenu
+                isOwner={isOwner}
+                licenseSummary={licenseSummary}
+              />
+            ) : null}
 
             <div className="py-8">{children}</div>
           </div>

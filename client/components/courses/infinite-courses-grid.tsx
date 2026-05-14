@@ -7,6 +7,7 @@ import { CouponBulkClient } from "@/components/coupon/coupon-bulk-client";
 import { courseClientService } from "@/services/courses/course.client";
 import { Paginated } from "@/types/api";
 import { Course } from "@/types/course";
+import type { CourseDeliveryMode } from "@/types/license";
 
 type InfiniteCoursesGridProps = {
   initialPage: Paginated<Course>;
@@ -14,6 +15,7 @@ type InfiniteCoursesGridProps = {
   mode?: string;
   category?: string;
   tag?: string;
+  allowedModes?: CourseDeliveryMode[];
 };
 
 export function InfiniteCoursesGrid({
@@ -22,8 +24,20 @@ export function InfiniteCoursesGrid({
   mode,
   category,
   tag,
+  allowedModes = ["self_learning", "faculty_led", "hybrid"],
 }: InfiniteCoursesGridProps) {
-  const [courses, setCourses] = useState(initialPage.data);
+  const filterAllowedCourses = useCallback(
+    (items: Course[]) =>
+      items.filter((course) =>
+        allowedModes.includes(
+          (course.mode || "self_learning") as CourseDeliveryMode,
+        ),
+      ),
+    [allowedModes],
+  );
+  const [courses, setCourses] = useState(() =>
+    filterAllowedCourses(initialPage.data),
+  );
   const [meta, setMeta] = useState(initialPage.meta);
   const [isLoading, setIsLoading] = useState(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -43,12 +57,24 @@ export function InfiniteCoursesGrid({
         tag,
       });
 
-      setCourses((current) => [...current, ...response.data.data]);
+      setCourses((current) => [
+        ...current,
+        ...filterAllowedCourses(response.data.data),
+      ]);
       setMeta(response.data.meta);
     } finally {
       setIsLoading(false);
     }
-  }, [category, hasMore, isLoading, meta.currentPage, mode, pageSize, tag]);
+  }, [
+    category,
+    filterAllowedCourses,
+    hasMore,
+    isLoading,
+    meta.currentPage,
+    mode,
+    pageSize,
+    tag,
+  ]);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;

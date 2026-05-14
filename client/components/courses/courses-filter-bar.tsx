@@ -3,6 +3,7 @@ import { BookOpen, Layers, MonitorPlay, Tags } from "lucide-react";
 
 import { COURSE_DELIVERY_MODES } from "@/lib/course-delivery";
 import { cn } from "@/lib/utils";
+import type { CourseDeliveryMode } from "@/types/license";
 
 type FilterItem = {
   id: number | string;
@@ -18,6 +19,7 @@ type CoursesFilterBarProps = {
   selectedCategory?: string;
   selectedTag?: string;
   totalCourses: number;
+  allowedModes?: CourseDeliveryMode[];
 };
 
 function buildHref({
@@ -124,7 +126,11 @@ export function CoursesFilterBar({
   selectedCategory,
   selectedTag,
   totalCourses,
+  allowedModes = ["self_learning", "faculty_led", "hybrid"],
 }: CoursesFilterBarProps) {
+  const visibleModes = COURSE_DELIVERY_MODES.filter((mode) =>
+    allowedModes.includes(mode.value),
+  );
   return (
     <>
       <div className="academy-card flex flex-col items-center gap-5 p-5 text-center md:flex-row md:items-center md:justify-between md:text-left">
@@ -164,7 +170,7 @@ export function CoursesFilterBar({
             tone="format"
           />
 
-          {COURSE_DELIVERY_MODES.map((mode) => (
+          {visibleModes.map((mode) => (
             <FilterChip
               key={mode.value}
               href={buildHref({

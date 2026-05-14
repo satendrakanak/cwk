@@ -11,9 +11,14 @@ import { UpdateCouponProvider } from './providers/update-coupon.provider';
 import { ApplyCouponProvider } from './providers/apply-coupon.provider';
 import { AutoApplyCouponProvider } from './providers/auto-apply-coupon.provider';
 import { AutoApplyBulkCouponProvider } from './providers/auto-apply-bulk-coupon.provider';
+import { LicensesModule } from 'src/licenses/licenses.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Coupon, CouponUsage]), PaginationModule],
+  imports: [
+    TypeOrmModule.forFeature([Coupon, CouponUsage]),
+    PaginationModule,
+    LicensesModule,
+  ],
   controllers: [CouponsController],
   providers: [
     CouponsService,

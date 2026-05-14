@@ -15,17 +15,24 @@ import { certificateClientService } from "@/services/certificates/certificate.cl
 import { Certificate } from "@/types/certificate";
 import { Course } from "@/types/course";
 import type { Assignment } from "@/types/assignment";
+import type { LicenseSummary } from "@/types/license";
+import { isLicenseFeatureEnabled } from "@/lib/license/feature-access";
 import { slugify } from "@/utils/slugify";
 import { CourseAssignmentsPanel } from "./course-assignments-panel";
 
 interface CourseTabsProps {
   course: Course;
   assignments?: Assignment[];
+  licenseSummary?: LicenseSummary | null;
 }
 
 type TabId = "overview" | "assignments" | "exam" | "qa" | "reviews";
 
-export const CourseTabs = ({ course, assignments = [] }: CourseTabsProps) => {
+export const CourseTabs = ({
+  course,
+  assignments = [],
+  licenseSummary,
+}: CourseTabsProps) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabId>("overview");
 
@@ -45,9 +52,21 @@ export const CourseTabs = ({ course, assignments = [] }: CourseTabsProps) => {
     { id: "overview", label: "Overview" },
     { id: "qa", label: "Q&A" },
     { id: "reviews", label: "Reviews" },
-    { id: "assignments", label: "Assignments" },
-    { id: "exam", label: "Final Exams" },
+    {
+      id: "assignments",
+      label: "Assignments",
+      visible: isLicenseFeatureEnabled(licenseSummary, "assignments"),
+    },
+    {
+      id: "exam",
+      label: "Final Exams",
+      visible: isLicenseFeatureEnabled(licenseSummary, "exams"),
+    },
   ];
+  const certificatesEnabled = isLicenseFeatureEnabled(
+    licenseSummary,
+    "certificates",
+  );
 
   useEffect(() => {
     const loadMeta = async () => {
@@ -62,6 +81,11 @@ export const CourseTabs = ({ course, assignments = [] }: CourseTabsProps) => {
     let mounted = true;
 
     const loadCertificate = async () => {
+      if (!isLicenseFeatureEnabled(licenseSummary, "certificates")) {
+        setCertificate(null);
+        return;
+      }
+
       try {
         const response = await certificateClientService.getForCourse(course.id);
 
@@ -80,7 +104,7 @@ export const CourseTabs = ({ course, assignments = [] }: CourseTabsProps) => {
     return () => {
       mounted = false;
     };
-  }, [course.id]);
+  }, [course.id, licenseSummary]);
 
   const downloadCertificate = async (nextCertificate: Certificate) => {
     const fileUrl = nextCertificate.file?.path;
@@ -200,6 +224,7 @@ export const CourseTabs = ({ course, assignments = [] }: CourseTabsProps) => {
             <CourseStat label="Level" value="All Level" />
           </div>
 
+          {certificatesEnabled ? (
           <div className="border-t border-border pt-6">
             <div className="overflow-hidden rounded-2xl border border-primary/15 bg-primary/5 p-5">
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -258,6 +283,7 @@ export const CourseTabs = ({ course, assignments = [] }: CourseTabsProps) => {
               </div>
             </div>
           </div>
+          ) : null}
 
           {course.description ? (
             <div className="border-t border-border pt-6">
