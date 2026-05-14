@@ -957,6 +957,19 @@ const demoClassSessions = readDemoJson<DemoClassSession[]>(
 );
 const demoAppSettings = readDemoJson<DemoAppSetting[]>('settings.json', []);
 
+type DemoSeedLimits = {
+  users?: number | null;
+  courses?: number | null;
+  faculty?: number | null;
+};
+
+type DemoSeedOptions = {
+  limits?: DemoSeedLimits;
+};
+
+const applyDemoLimit = <T>(items: T[], limit?: number | null) =>
+  typeof limit === 'number' ? items.slice(0, Math.max(0, limit)) : items;
+
 const demoFaqs = (courseTitle: string) => [
   {
     question: `Is ${courseTitle} beginner friendly?`,
@@ -1247,7 +1260,10 @@ async function upsertFacultyProfile(
   await profileRepository.save(profile);
 }
 
-async function seedDemoUsers(dataSource: DataSource) {
+async function seedDemoUsers(
+  dataSource: DataSource,
+  options: DemoSeedOptions = {},
+) {
   const adminRole = await getRole(dataSource, 'admin');
   const facultyRole = await getRole(dataSource, 'faculty');
   const studentRole = await getRole(dataSource, 'student');
@@ -1259,7 +1275,32 @@ async function seedDemoUsers(dataSource: DataSource) {
 
   const seededUsers: User[] = [];
 
-  for (const demoUser of demoUsers) {
+  const facultyDemoUsers = applyDemoLimit(
+    demoUsers.filter((user) => user.role === 'faculty'),
+    options.limits?.faculty,
+  );
+  const remainingUserLimit =
+    typeof options.limits?.users === 'number'
+      ? Math.max(0, options.limits.users - facultyDemoUsers.length)
+      : options.limits?.users;
+  const selectedDemoUsers =
+    typeof options.limits?.users === 'number' ||
+    typeof options.limits?.faculty === 'number'
+      ? [
+          ...facultyDemoUsers,
+          ...applyDemoLimit(
+            demoUsers.filter((user) => user.role !== 'faculty'),
+            remainingUserLimit,
+          ),
+        ].slice(
+          0,
+          typeof options.limits?.users === 'number'
+            ? options.limits.users
+            : undefined,
+        )
+      : demoUsers;
+
+  for (const demoUser of selectedDemoUsers) {
     const userRole = demoUser.role || 'student';
     const user = await getDemoUser(dataSource, {
       ...demoUser,
@@ -2053,13 +2094,16 @@ async function seedDemoArticleComments(dataSource: DataSource, users: User[]) {
   }
 }
 
-export async function seedProductionDemoContent(dataSource: DataSource) {
+export async function seedProductionDemoContent(
+  dataSource: DataSource,
+  options: DemoSeedOptions = {},
+) {
   const courseRepository = dataSource.getRepository(Course);
   const chapterRepository = dataSource.getRepository(Chapter);
   const lectureRepository = dataSource.getRepository(Lecture);
   const attachmentRepository = dataSource.getRepository(Attachment);
   const userRepository = dataSource.getRepository(User);
-  const seededDemoUsers = await seedDemoUsers(dataSource);
+  const seededDemoUsers = await seedDemoUsers(dataSource, options);
   const systemUser = seededDemoUsers.admin;
   const allFacultyUsers = await userRepository
     .createQueryBuilder('user')
@@ -2072,7 +2116,12 @@ export async function seedProductionDemoContent(dataSource: DataSource) {
     : [systemUser];
   const savedCourses: Course[] = [];
 
-  for (const [courseIndex, demoCourse] of demoCourses.entries()) {
+  const selectedDemoCourses = applyDemoLimit(
+    demoCourses,
+    options.limits?.courses,
+  );
+
+  for (const [courseIndex, demoCourse] of selectedDemoCourses.entries()) {
     const image = await getUpload(
       dataSource,
       demoCourse.imagePath,
@@ -2229,6 +2278,6 @@ export async function seedProductionDemoContent(dataSource: DataSource) {
   await seedDemoSettings(dataSource);
 
   console.log(
-    `✅ Production demo content seeded (${demoCourses.length} courses, ${demoCoupons.length} coupons, ${demoArticles.length} articles)`,
+    `✅ Production demo content seeded (${selectedDemoCourses.length} courses, ${demoCoupons.length} coupons, ${demoArticles.length} articles)`,
   );
 }

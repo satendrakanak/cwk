@@ -28,6 +28,11 @@ import { CompleteInstallationDto } from './dtos/complete-installation.dto';
 import { DatabaseSetupDto } from './dtos/database-setup.dto';
 import { ValidateLicenseDto } from './dtos/validate-license.dto';
 import { LicensesService } from 'src/licenses/providers/licenses.service';
+import {
+  LICENSE_PLANS,
+  LicenseLimitKey,
+  normalizeLicensePlan,
+} from 'src/licenses/license-plans';
 
 const INSTALLATION_STATUS_KEY = 'installation_status';
 const LICENSE_SETTINGS_KEY = 'license_settings';
@@ -57,6 +62,7 @@ type LicensePortalActivationResponse =
         expiresAt: string | null;
         maxActivations: number;
         activeActivations: number;
+        limits?: Partial<Record<LicenseLimitKey, number | null>>;
       };
       activation: {
         id: string;
@@ -273,11 +279,11 @@ export class InstallerService implements OnModuleInit {
       throw new ConflictException('Installation is already completed');
     }
 
-    await this.activateLicenseFromPayload(payload, {
+    const activation = await this.activateLicenseFromPayload(payload, {
       instanceLabel: `${payload.siteName} installation`,
     });
 
-    await this.runInstallationSteps(payload);
+    await this.runInstallationSteps(payload, undefined, activation);
 
     return {
       isInstalled: true,
@@ -292,7 +298,7 @@ export class InstallerService implements OnModuleInit {
       throw new ConflictException('Installation is already completed');
     }
 
-    await this.activateLicenseFromPayload(payload, {
+    const activation = await this.activateLicenseFromPayload(payload, {
       instanceLabel: `${payload.siteName} installation`,
     });
 
@@ -306,7 +312,7 @@ export class InstallerService implements OnModuleInit {
       createdAt: new Date().toISOString(),
     });
 
-    void this.runInstallationJob(jobId, payload);
+    void this.runInstallationJob(jobId, payload, activation);
 
     return {
       jobId,
@@ -323,14 +329,21 @@ export class InstallerService implements OnModuleInit {
     return job;
   }
 
-  private async runInstallationJob(jobId: string, payload: CompleteInstallationDto) {
+  private async runInstallationJob(
+    jobId: string,
+    payload: CompleteInstallationDto,
+    activation: Extract<LicensePortalActivationResponse, { ok: true }>,
+  ) {
     try {
-      await this.runInstallationSteps(payload, (progress, label) =>
-        this.updateJob(jobId, {
-          status: 'running',
-          progress,
-          label,
-        }),
+      await this.runInstallationSteps(
+        payload,
+        (progress, label) =>
+          this.updateJob(jobId, {
+            status: 'running',
+            progress,
+            label,
+          }),
+        activation,
       );
       this.updateJob(jobId, {
         status: 'completed',
@@ -354,6 +367,7 @@ export class InstallerService implements OnModuleInit {
   private async runInstallationSteps(
     payload: CompleteInstallationDto,
     onProgress?: (progress: number, label: string) => void,
+    activation?: Extract<LicensePortalActivationResponse, { ok: true }>,
   ) {
     onProgress?.(5, 'Preparing permissions...');
     this.assertDatabaseSelection(payload);
@@ -392,13 +406,15 @@ export class InstallerService implements OnModuleInit {
 
     if (payload.importDemoData) {
       onProgress?.(70, 'Importing marketplace demo data...');
-      await seedProductionDemoContent(this.dataSource);
+      await seedProductionDemoContent(this.dataSource, {
+        limits: this.getDemoSeedLimits(activation),
+      });
     } else {
       onProgress?.(82, 'Skipping demo data import...');
     }
 
     onProgress?.(88, 'Activating license...');
-    const activation = await this.activateLicenseFromPayload(payload, {
+    activation ??= await this.activateLicenseFromPayload(payload, {
       instanceLabel: `${payload.siteName} production installation`,
     });
     const localLicenseKey = this.getLocalLicenseIdentity(payload, activation);
@@ -411,6 +427,7 @@ export class InstallerService implements OnModuleInit {
       expiresAt: activation.license.expiresAt,
       maxActivations: activation.license.maxActivations,
       activeActivations: activation.license.activeActivations,
+      limits: activation.license.limits,
       activationId: activation.activation.id,
       activationStatus: activation.activation.status,
       signature: activation.signature,
@@ -429,6 +446,21 @@ export class InstallerService implements OnModuleInit {
       demoDataImported: Boolean(payload.importDemoData),
     });
     this.startBackgroundLocationImport();
+  }
+
+  private getDemoSeedLimits(
+    activation?: Extract<LicensePortalActivationResponse, { ok: true }>,
+  ) {
+    const plan = activation?.license.plan
+      ? normalizeLicensePlan(activation.license.plan)
+      : null;
+
+    if (!plan) return undefined;
+
+    return {
+      ...LICENSE_PLANS[plan].limits,
+      ...(activation?.license.limits ?? {}),
+    };
   }
 
   private startBackgroundLocationImport(delayMs = 1000) {

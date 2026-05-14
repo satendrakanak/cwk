@@ -105,7 +105,10 @@ export class RolesPermissionsController {
   }
 
   private assertAdmin(user: ActiveUserData) {
-    if (!user?.roles?.includes('admin')) {
+    if (
+      !user?.roles?.includes('admin') &&
+      !user?.roles?.includes('super_admin')
+    ) {
       throw new ForbiddenException('Only admin users can manage access control');
     }
   }

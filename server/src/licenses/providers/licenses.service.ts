@@ -35,6 +35,7 @@ export type LicensePortalActivation = {
     expiresAt?: string | null;
     maxActivations?: number | null;
     activeActivations?: number | null;
+    limits?: Partial<Record<LicenseLimitKey, number | null>>;
   };
   activation?: {
     id?: string | null;
@@ -93,6 +94,7 @@ export class LicensesService {
       metadata: {
         maxActivations: activation.license.maxActivations,
         activeActivations: activation.license.activeActivations,
+        limits: activation.license.limits,
         signature: activation.signature,
       },
       activatedAt: new Date(),
@@ -101,8 +103,7 @@ export class LicensesService {
 
   async getCurrent() {
     const license = await this.getActiveLicense();
-    const effectivePlan = license?.plan ?? null;
-    const plan = effectivePlan ? LICENSE_PLANS[effectivePlan] : null;
+    const plan = license ? this.getPlanDefinition(license) : null;
     const usage = await this.getUsage();
 
     return {
@@ -110,7 +111,7 @@ export class LicensesService {
       plan,
       usage,
       locked: plan
-        ? this.getLockedState(plan.plan, usage)
+        ? this.getLockedState(plan.limits, usage)
         : {
             users: true,
             courses: true,
@@ -133,7 +134,7 @@ export class LicensesService {
 
   async getEffectivePlan() {
     const license = await this.assertActiveLicense();
-    const plan = LICENSE_PLANS[license.plan];
+    const plan = this.getPlanDefinition(license);
 
     return plan;
   }
@@ -319,17 +320,46 @@ export class LicensesService {
   }
 
   private getLockedState(
-    plan: LicensePlan,
+    limits: Record<LicenseLimitKey, number | null>,
     usage: Record<LicenseLimitKey, number>,
   ) {
-    const definition = LICENSE_PLANS[plan];
-
-    return Object.entries(definition.limits).reduce(
+    return Object.entries(limits).reduce(
       (result, [key, limit]) => ({
         ...result,
         [key]: limit !== null && usage[key as LicenseLimitKey] >= limit,
       }),
       {} as Record<LicenseLimitKey, boolean>,
+    );
+  }
+
+  private getPlanDefinition(license: License) {
+    const base = LICENSE_PLANS[license.plan];
+
+    return {
+      ...base,
+      limits: {
+        ...base.limits,
+        ...this.getCustomLimits(license),
+      },
+    };
+  }
+
+  private getCustomLimits(license: License) {
+    const limits = license.metadata?.limits;
+    if (!limits || typeof limits !== 'object' || Array.isArray(limits)) {
+      return {};
+    }
+
+    return (['users', 'courses', 'faculty'] as const).reduce(
+      (result, key) => {
+        const value = (limits as Record<string, unknown>)[key];
+        if (typeof value === 'number' || value === null) {
+          return { ...result, [key]: value };
+        }
+
+        return result;
+      },
+      {} as Partial<Record<LicenseLimitKey, number | null>>,
     );
   }
 
