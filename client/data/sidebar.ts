@@ -21,11 +21,13 @@ import {
   ListChecks,
   type LucideIcon,
 } from "lucide-react";
+import type { LicenseFeatureKey } from "@/types/license";
 
 export type SidebarItem = {
   title: string;
   url: string;
   requiredPermissions?: string[];
+  licenseFeature?: LicenseFeatureKey;
 };
 
 export type SidebarNavItem = SidebarItem & {
@@ -33,7 +35,14 @@ export type SidebarNavItem = SidebarItem & {
   items?: SidebarItem[];
 };
 
-export const sidebarData = {
+export const sidebarData: {
+  user: {
+    name: string;
+    email: string;
+    avatar: string;
+  };
+  navMain: SidebarNavItem[];
+} = {
   user: {
     name: "Satendra",
     email: "satendra@example.com",
@@ -52,11 +61,37 @@ export const sidebarData = {
       title: "Courses",
       url: "/admin/courses",
       icon: BookOpen,
+      licenseFeature: "courses",
       requiredPermissions: [
         "view_course",
         "create_course",
         "update_course",
         "edit_assigned_course",
+      ],
+      items: [
+        {
+          title: "Courses",
+          url: "/admin/courses",
+          licenseFeature: "courses",
+          requiredPermissions: [
+            "view_course",
+            "create_course",
+            "update_course",
+            "edit_assigned_course",
+          ],
+        },
+        {
+          title: "Categories",
+          url: "/admin/courses/categories",
+          licenseFeature: "courses",
+          requiredPermissions: ["view_category", "create_category", "update_category"],
+        },
+        {
+          title: "Tags",
+          url: "/admin/courses/tags",
+          licenseFeature: "courses",
+          requiredPermissions: ["view_tag", "create_tag", "update_tag"],
+        },
       ],
     },
 
@@ -64,21 +99,25 @@ export const sidebarData = {
       title: "Exams",
       url: "/admin/exams",
       icon: ClipboardCheck,
+      licenseFeature: "exams",
       requiredPermissions: ["view_course", "create_course", "update_course"],
       items: [
         {
           title: "Exams",
           url: "/admin/exams",
+          licenseFeature: "exams",
           requiredPermissions: ["view_course", "create_course", "update_course"],
         },
         {
           title: "Questions",
           url: "/admin/exams/questions",
+          licenseFeature: "exams",
           requiredPermissions: ["view_course", "create_course", "update_course"],
         },
         {
           title: "Categories",
           url: "/admin/exams/categories",
+          licenseFeature: "exams",
           requiredPermissions: ["view_course", "create_course", "update_course"],
         },
       ],
@@ -88,6 +127,7 @@ export const sidebarData = {
       title: "Assignments",
       url: "/admin/assignments",
       icon: ListChecks,
+      licenseFeature: "assignments",
       requiredPermissions: ["view_course", "create_course", "update_course"],
     },
 
@@ -95,6 +135,7 @@ export const sidebarData = {
       title: "Coupons",
       url: "/admin/coupons",
       icon: TicketPercent,
+      licenseFeature: "coupons",
       requiredPermissions: ["view_coupon", "create_coupon", "update_coupon"],
     },
 
@@ -116,6 +157,7 @@ export const sidebarData = {
       title: "Recordings",
       url: "/admin/recordings",
       icon: Video,
+      licenseFeature: "liveClasses",
       requiredPermissions: ["view_faculty_workspace"],
     },
 
@@ -130,6 +172,7 @@ export const sidebarData = {
       title: "Certificates",
       url: "/admin/certificates",
       icon: Award,
+      licenseFeature: "certificates",
       requiredPermissions: ["view_certificate"],
     },
 
@@ -137,6 +180,7 @@ export const sidebarData = {
       title: "Engagement",
       url: "/admin/engagement",
       icon: BellRing,
+      licenseFeature: "engagement",
       requiredPermissions: [
         "manage_engagement",
         "manage_schedulers",
@@ -156,6 +200,7 @@ export const sidebarData = {
       title: "Email Templates",
       url: "/admin/email-templates",
       icon: Mail,
+      licenseFeature: "emailTemplates",
       requiredPermissions: [
         "view_email_template",
         "create_email_template",
@@ -223,11 +268,13 @@ export const sidebarData = {
         {
           title: "Site Settings",
           url: "/admin/settings/site",
+          licenseFeature: "branding",
           requiredPermissions: ["view_settings"],
         },
         {
           title: "Roles & Permissions",
           url: "/admin/settings/access-control",
+          licenseFeature: "advancedSettings",
           requiredPermissions: ["view_permission", "view_role"],
         },
         {
