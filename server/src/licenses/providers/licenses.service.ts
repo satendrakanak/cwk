@@ -498,7 +498,16 @@ export class LicensesService {
 
     const encryptedKey = license.metadata?.licenseKeyEnc;
     if (typeof encryptedKey !== 'string' || encryptedKey.length === 0) {
-      return license;
+      license.status = LicenseStatus.REVOKED;
+      license.activationStatus = 'REACTIVATION_REQUIRED';
+      license.metadata = {
+        ...(license.metadata ?? {}),
+        portalLastCheckedAt: new Date().toISOString(),
+        portalLastCheckError:
+          'Stored license key is unavailable. Reactivate this installation with a valid key.',
+      };
+      await this.licenseRepository.save(license);
+      return null;
     }
 
     let licenseKey: string;

@@ -42,6 +42,12 @@ const getDefaultRedirectForUser = (user: User) => {
   return '/dashboard';
 };
 
+const canManageLicense = (user: User) => {
+  const roles = user.roles?.map((role) => role.name.toLowerCase()) ?? [];
+
+  return roles.includes('super_admin') || roles.includes('admin');
+};
+
 const toSignInUserSummary = (user: User): SignInUserSummary => ({
   id: user.id,
   email: user.email,
@@ -112,14 +118,24 @@ export class SignInProvider {
       });
     }
 
-    await this.licensesService.assertActiveLicense();
+    let defaultRedirect = getDefaultRedirectForUser(user);
+
+    try {
+      await this.licensesService.assertActiveLicense();
+    } catch (error) {
+      if (!canManageLicense(user)) {
+        throw error;
+      }
+
+      defaultRedirect = '/admin/settings/license';
+    }
 
     const tokens = await this.generateTokensProvider.generateTokens(user);
 
     return {
       ...tokens,
       user: toSignInUserSummary(user),
-      defaultRedirect: getDefaultRedirectForUser(user),
+      defaultRedirect,
     };
   }
 }

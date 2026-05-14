@@ -8,7 +8,7 @@ import { authService } from "@/services/auth.service";
 import { licenseClientService } from "@/services/licenses/license.client";
 
 const CHECK_INTERVAL_MS = 10_000;
-const PUBLIC_PATHS = ["/auth", "/install"];
+const SKIPPED_PATHS = ["/auth", "/install", "/admin/settings/license"];
 const LICENSE_NOTICE =
   "Your KASA license is no longer active. Please contact support or activate a valid key.";
 
@@ -19,7 +19,7 @@ export function LicenseSessionMonitor() {
   const isHandlingInvalidLicense = useRef(false);
 
   useEffect(() => {
-    if (!user || PUBLIC_PATHS.some((path) => pathname?.startsWith(path))) {
+    if (!user || SKIPPED_PATHS.some((path) => pathname?.startsWith(path))) {
       return;
     }
 

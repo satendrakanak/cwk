@@ -47,6 +47,13 @@ export function LoginForm() {
       setError("");
 
       const response = await authService.login(data);
+      const responseData = response.data;
+
+      if (!responseData?.user) {
+        throw new Error(
+          "Login response was incomplete. Please try again or contact support.",
+        );
+      }
 
       const rawCallbackUrl = searchParams.get("callbackUrl");
       const safeCallbackUrl =
@@ -56,8 +63,8 @@ export function LoginForm() {
           ? rawCallbackUrl
           : null;
       const roleHomePath =
-        response.data.defaultRedirect ||
-        getRoleHomePath(response.data.user.roles) ||
+        responseData.defaultRedirect ||
+        getRoleHomePath(responseData.user.roles) ||
         DEFAULT_LOGIN_REDIRECT;
       const callbackUrl = shouldUseRoleHomePath(safeCallbackUrl)
         ? roleHomePath
