@@ -343,8 +343,8 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
               onClick={handleAdd}
               className={
                 alreadyAdded
-                  ? "flex h-10 w-full cursor-pointer items-center justify-center rounded-full border border-emerald-600 bg-emerald-600 text-white transition hover:opacity-90 sm:h-9 sm:w-9"
-                  : "flex h-10 w-full cursor-pointer items-center justify-center rounded-full border border-border bg-background text-foreground transition hover:border-primary hover:bg-primary hover:text-primary-foreground sm:h-9 sm:w-9"
+                  ? "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-emerald-600 bg-emerald-600 text-white transition hover:opacity-90 sm:h-9 sm:w-9"
+                  : "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-foreground transition hover:border-primary hover:bg-primary hover:text-primary-foreground sm:h-9 sm:w-9"
               }
               title={alreadyAdded ? "View cart" : "Add to cart"}
             >
