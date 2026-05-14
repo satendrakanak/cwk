@@ -21,6 +21,8 @@ import { FileTypes } from 'src/uploads/enums/file-types.enum';
 import { UploadStatus } from 'src/uploads/enums/upload-status.enum';
 import { UserProgres } from 'src/user-progress/user-progres.entity';
 import { CourseExamsService } from 'src/course-exams/providers/course-exams.service';
+import { LicensesService } from 'src/licenses/providers/licenses.service';
+import type { CertificateRule } from 'src/licenses/license-plans';
 import { User } from 'src/users/user.entity';
 import { Certificate } from '../certificate.entity';
 import { CertificateResponse } from '../interfaces/certificate-response.interface';
@@ -61,6 +63,7 @@ export class CertificatesService {
     private readonly emailTemplatesService: EmailTemplatesService,
     private readonly certificateTemplateProvider: CertificateTemplateProvider,
     private readonly courseExamsService: CourseExamsService,
+    private readonly licensesService: LicensesService,
   ) {}
 
   async findMine(userId: number): Promise<CertificateResponse[]> {
@@ -142,7 +145,9 @@ export class CertificatesService {
           ? 'issued'
           : completion.isCompleted
             ? 'ready_to_generate'
-            : completion.examRequired && !completion.examPassed
+            : completion.certificateRule === 'exam_pass' &&
+                completion.examRequired &&
+                !completion.examPassed
               ? 'exam_pending'
               : 'course_incomplete';
 
@@ -165,6 +170,7 @@ export class CertificatesService {
           completedLectures: completion.completedLectures,
           examRequired: completion.examRequired,
           examPassed: completion.examPassed,
+          certificateRule: completion.certificateRule,
           courseCompleted: completion.isCompleted,
           status,
           actionHint: this.getCertificateActionHint(status),
@@ -252,7 +258,9 @@ export class CertificatesService {
     if (!completion.isCompleted) {
       if (options.throwIfIncomplete) {
         throw new BadRequestException(
-          completion.examRequired && !completion.examPassed
+          completion.certificateRule === 'exam_pass' &&
+            completion.examRequired &&
+            !completion.examPassed
             ? 'Pass the final exam to unlock certificate'
             : 'Complete the course to unlock certificate',
         );
@@ -298,6 +306,7 @@ export class CertificatesService {
   }
 
   async getCourseCompletion(userId: number, courseId: number) {
+    const certificateRule = await this.getCertificateRule();
     const totalLectures = await this.lectureRepository.count({
       where: {
         isPublished: true,
@@ -325,6 +334,7 @@ export class CertificatesService {
         progress: 0,
         examRequired,
         examPassed,
+        certificateRule,
         isCompleted: false,
       };
     }
@@ -344,13 +354,19 @@ export class CertificatesService {
       Math.round((completedLectures / totalLectures) * 100),
     );
 
+    const lectureCompleted = completedLectures >= totalLectures;
+    const certificateReady =
+      lectureCompleted &&
+      (certificateRule === 'lecture_completion' || examPassed);
+
     return {
       totalLectures,
       completedLectures,
       progress,
       examRequired,
       examPassed,
-      isCompleted: completedLectures >= totalLectures && examPassed,
+      certificateRule,
+      isCompleted: certificateReady,
     };
   }
 
@@ -362,7 +378,14 @@ export class CertificatesService {
 
     if (!lecture?.chapter?.course?.id) return null;
 
+    const certificateRule = await this.getCertificateRule().catch(() => null);
+    if (certificateRule !== 'lecture_completion') return null;
+
     return this.ensureCertificateForCourse(userId, lecture.chapter.course.id);
+  }
+
+  private async getCertificateRule(): Promise<CertificateRule> {
+    return this.licensesService.getCertificateRule();
   }
 
   private async uploadCertificate(

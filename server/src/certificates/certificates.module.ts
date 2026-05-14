@@ -6,6 +6,7 @@ import { EmailTemplatesModule } from 'src/email-templates/email-templates.module
 import { Enrollment } from 'src/enrollments/enrollment.entity';
 import { Lecture } from 'src/lectures/lecture.entity';
 import { MailModule } from 'src/mail/mail.module';
+import { LicensesModule } from 'src/licenses/licenses.module';
 import { UploadsModule } from 'src/uploads/uploads.module';
 import { Upload } from 'src/uploads/upload.entity';
 import { UserProgres } from 'src/user-progress/user-progres.entity';
@@ -32,6 +33,7 @@ import { CertificatesService } from './providers/certificates.service';
     MailModule,
     EmailTemplatesModule,
     CourseExamsModule,
+    LicensesModule,
   ],
   controllers: [CertificatesController],
   providers: [CertificatesService, CertificateTemplateProvider],

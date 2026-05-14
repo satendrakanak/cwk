@@ -14,12 +14,18 @@ export type LicenseFeatureKey =
   | 'advancedSettings'
   | 'branding'
   | 'prioritySupport';
+export type CertificateRule = 'lecture_completion' | 'exam_pass';
+
+export type LicenseBehaviorRules = {
+  certificateRule: CertificateRule;
+};
 
 export type LicensePlanDefinition = {
   plan: LicensePlan;
   label: string;
   limits: Record<LicenseLimitKey, number | null>;
   features: Record<LicenseFeatureKey, boolean>;
+  rules: LicenseBehaviorRules;
 };
 
 const baseFeatures: Record<LicenseFeatureKey, boolean> = {
@@ -51,6 +57,9 @@ export const LICENSE_PLANS: Record<LicensePlan, LicensePlanDefinition> = {
       certificates: true,
       branding: true,
     },
+    rules: {
+      certificateRule: 'lecture_completion',
+    },
   },
   [LicensePlan.PLUS]: {
     plan: LicensePlan.PLUS,
@@ -70,6 +79,9 @@ export const LICENSE_PLANS: Record<LicensePlan, LicensePlanDefinition> = {
       emailTemplates: true,
       branding: true,
     },
+    rules: {
+      certificateRule: 'exam_pass',
+    },
   },
   [LicensePlan.ENTERPRISE]: {
     plan: LicensePlan.ENTERPRISE,
@@ -86,6 +98,9 @@ export const LICENSE_PLANS: Record<LicensePlan, LicensePlanDefinition> = {
       }),
       {} as Record<LicenseFeatureKey, boolean>,
     ),
+    rules: {
+      certificateRule: 'exam_pass',
+    },
   },
 };
 

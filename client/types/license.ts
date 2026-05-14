@@ -16,6 +16,12 @@ export type LicenseFeatureKey =
   | "branding"
   | "prioritySupport";
 
+export type CertificateRule = "lecture_completion" | "exam_pass";
+
+export type LicenseBehaviorRules = {
+  certificateRule: CertificateRule;
+};
+
 export type LicenseRecord = {
   id: number;
   keyHash: string;
@@ -36,6 +42,7 @@ export type LicensePlanDefinition = {
   label: string;
   limits: Record<LicenseLimitKey, number | null>;
   features: Record<LicenseFeatureKey, boolean>;
+  rules: LicenseBehaviorRules;
 };
 
 export type LicenseUsage = Record<LicenseLimitKey, number>;

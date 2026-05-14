@@ -20,6 +20,7 @@ import { License } from '../license.entity';
 import {
   getPlanFromLicenseKey,
   LICENSE_PLANS,
+  CertificateRule,
   LicenseFeatureKey,
   LicenseLimitKey,
   normalizeLicensePlan,
@@ -148,6 +149,14 @@ export class LicensesService {
         HttpStatus.PAYMENT_REQUIRED,
       );
     }
+  }
+
+  async getCertificateRule(): Promise<CertificateRule> {
+    const plan = await this.getEffectivePlan();
+
+    await this.assertFeature('certificates');
+
+    return plan.rules.certificateRule;
   }
 
   async assertCanCreateUser() {

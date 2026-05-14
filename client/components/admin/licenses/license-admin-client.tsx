@@ -38,6 +38,11 @@ const featureLabels: Record<LicenseFeatureKey, string> = {
   prioritySupport: "Priority support",
 };
 
+const certificateRuleLabels = {
+  lecture_completion: "Generate after lecture completion",
+  exam_pass: "Generate after final exam pass",
+} as const;
+
 export function LicenseAdminClient({
   initialSummary,
 }: {
@@ -200,6 +205,32 @@ export function LicenseAdminClient({
           </p>
         </CardContent>
       </Card>
+
+      {summary.plan ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Plan Behaviour</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-3 md:grid-cols-2">
+            <div className="rounded-md border px-3 py-2">
+              <p className="text-xs font-medium text-muted-foreground">
+                Certificate rule
+              </p>
+              <p className="mt-1 text-sm font-semibold">
+                {certificateRuleLabels[summary.plan.rules.certificateRule]}
+              </p>
+            </div>
+            <div className="rounded-md border px-3 py-2">
+              <p className="text-xs font-medium text-muted-foreground">
+                Rule source
+              </p>
+              <p className="mt-1 text-sm font-semibold">
+                Software entitlement registry
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      ) : null}
     </div>
   );
 }
