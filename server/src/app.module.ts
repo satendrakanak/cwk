@@ -57,6 +57,7 @@ import { InstallerModule } from './installer/installer.module';
 import { AssignmentsModule } from './assignments/assignments.module';
 import { LicensesModule } from './licenses/licenses.module';
 import { DemoToursModule } from './demo-tours/demo-tours.module';
+import { LicenseAccessGuard } from './licenses/guards/license-access.guard';
 
 const ENV = process.env.NODE_ENV;
 const envFilePath =
@@ -155,6 +156,10 @@ const envFilePath =
     {
       provide: APP_GUARD,
       useClass: AuthenticationGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: LicenseAccessGuard,
     },
     {
       provide: APP_INTERCEPTOR,
