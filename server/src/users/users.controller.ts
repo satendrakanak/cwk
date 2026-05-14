@@ -111,8 +111,6 @@ export class UsersController {
     createUserDto: CreateUserDto,
     @ActiveUser() currentUser: ActiveUserData,
   ): Promise<User> {
-    console.log('Current User', currentUser);
-    console.log('Create User', createUserDto);
     const result = await this.usersService.create(createUserDto, currentUser);
     return result;
   }

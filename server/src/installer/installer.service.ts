@@ -12,6 +12,7 @@ import { createHash, randomUUID } from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
 import { runtimeDatabaseConfigPath } from 'src/config/runtime-database.config';
+import { Course } from 'src/courses/course.entity';
 import { seedEmailTemplates } from 'src/database/seeds/email-template.seed';
 import { seedLocation } from 'src/database/seeds/location.seed';
 import { seedPermissions } from 'src/database/seeds/permission.seed';
@@ -407,7 +408,7 @@ export class InstallerService implements OnModuleInit {
     if (payload.importDemoData) {
       onProgress?.(70, 'Importing marketplace demo data...');
       await seedProductionDemoContent(this.dataSource, {
-        limits: this.getDemoSeedLimits(activation),
+        limits: await this.getRemainingDemoSeedLimits(activation),
       });
     } else {
       onProgress?.(82, 'Skipping demo data import...');
@@ -448,7 +449,7 @@ export class InstallerService implements OnModuleInit {
     this.startBackgroundLocationImport();
   }
 
-  private getDemoSeedLimits(
+  private async getRemainingDemoSeedLimits(
     activation?: Extract<LicensePortalActivationResponse, { ok: true }>,
   ) {
     const plan = activation?.license.plan
@@ -457,10 +458,32 @@ export class InstallerService implements OnModuleInit {
 
     if (!plan) return undefined;
 
-    return {
+    const limits = {
       ...LICENSE_PLANS[plan].limits,
       ...(activation?.license.limits ?? {}),
     };
+
+    const [existingUsers, existingFaculty, existingCourses] =
+      await Promise.all([
+        this.userRepository.count(),
+        this.userRepository
+          .createQueryBuilder('user')
+          .innerJoin('user.roles', 'role', 'role.name = :role', {
+            role: 'faculty',
+          })
+          .getCount(),
+        this.dataSource.getRepository(Course).count(),
+      ]);
+
+    return {
+      users: this.getRemainingDemoLimit(limits.users, existingUsers),
+      faculty: this.getRemainingDemoLimit(limits.faculty, existingFaculty),
+      courses: this.getRemainingDemoLimit(limits.courses, existingCourses),
+    };
+  }
+
+  private getRemainingDemoLimit(limit: number | null, used: number) {
+    return typeof limit === 'number' ? Math.max(0, limit - used) : limit;
   }
 
   private startBackgroundLocationImport(delayMs = 1000) {

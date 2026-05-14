@@ -1,6 +1,7 @@
 import {
   ConflictException,
   forwardRef,
+  HttpException,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -103,11 +104,12 @@ export class CreateUserProvider {
         await this.licensesService.assertCanCreateFaculty();
       }
 
-      console.log('Current User', currentUser);
-
       const isAdmin =
         currentUser?.roles?.includes('admin') ||
-        currentUser?.roles?.some((r: any) => r.name === 'admin'); // अगर objects हैं
+        currentUser?.roles?.includes('super_admin') ||
+        currentUser?.roles?.some(
+          (r: any) => r.name === 'admin' || r.name === 'super_admin',
+        ); // अगर objects हैं
       const hashedPassword = await this.hashingProvider.hashPassword(
         createUserDto.password,
       );
@@ -174,7 +176,7 @@ export class CreateUserProvider {
       //await this.mailService.sendWelcomeEmail(user);
       return newUser;
     } catch (error: unknown) {
-      if (error instanceof ConflictException) {
+      if (error instanceof HttpException) {
         throw error;
       }
       console.error('🔥 REAL ERROR:', error);
