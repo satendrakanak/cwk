@@ -3,10 +3,12 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  ServiceUnavailableException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { createHash } from 'crypto';
+import { createHash, randomUUID } from 'crypto';
 import { Course } from 'src/courses/course.entity';
 import { AppSetting } from 'src/settings/app-setting.entity';
 import { User } from 'src/users/user.entity';
@@ -24,6 +26,7 @@ import {
 } from '../license-plans';
 
 const LEGACY_LICENSE_SETTINGS_KEY = 'license_settings';
+const LICENSE_INSTANCE_KEY = 'license_instance_settings';
 
 export type LicensePortalActivation = {
   license: {
@@ -54,24 +57,14 @@ export class LicensesService {
 
     @InjectRepository(AppSetting)
     private readonly appSettingRepository: Repository<AppSetting>,
+
+    private readonly configService: ConfigService,
   ) {}
 
   async activate(dto: ActivateLicenseDto) {
-    const key = dto.key.trim().toUpperCase();
-    const plan = getPlanFromLicenseKey(key);
-
-    if (!plan) {
-      throw new BadRequestException(
-        'Invalid license key. Use a KASA Starter, Plus, or Enterprise key.',
-      );
-    }
-
-    await this.saveActivatedLicense({
-      licenseKey: key,
-      plan,
-      purchaserEmail: dto.purchaserEmail,
-      activatedAt: new Date(),
-    });
+    const key = dto.key.trim();
+    const portalActivation = await this.activateAgainstPortal(key);
+    await this.savePortalActivation(key, portalActivation);
 
     return this.getCurrent();
   }
@@ -337,6 +330,173 @@ export class LicensesService {
         [key]: limit !== null && usage[key as LicenseLimitKey] >= limit,
       }),
       {} as Record<LicenseLimitKey, boolean>,
+    );
+  }
+
+  private async activateAgainstPortal(licenseKey: string) {
+    const normalizedKey = licenseKey.trim();
+
+    if (!normalizedKey) {
+      throw new BadRequestException('License key is required');
+    }
+
+    const portalUrl = this.getLicensePortalUrl();
+    const instanceId = await this.getOrCreateLicenseInstanceId();
+    const productSlugs = this.getLicenseProductSlugs();
+    let lastMessage =
+      'License could not be activated. Please check the key and try again.';
+
+    for (const productSlug of productSlugs) {
+      let response: Response;
+
+      try {
+        response = await fetch(`${portalUrl}/api/v1/licenses/activate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            licenseKey: normalizedKey,
+            productSlug,
+            instanceId,
+            instanceLabel: 'KASA admin license upgrade',
+            productVersion:
+              this.configService.get<string>('appConfig.apiVersion') || '0.1.1',
+            metadata: {
+              source: 'admin-license-page',
+              appUrl: this.configService.get<string>('appConfig.appUrl'),
+              frontEndUrl: this.configService.get<string>('appConfig.fronEndUrl'),
+              environment: this.configService.get<string>('appConfig.environment'),
+            },
+          }),
+          signal: AbortSignal.timeout(15000),
+        });
+      } catch (error) {
+        throw new ServiceUnavailableException(
+          error instanceof Error
+            ? `License portal is unreachable: ${error.message}`
+            : 'License portal is unreachable',
+        );
+      }
+
+      const result = (await response.json().catch(() => null)) as
+        | (LicensePortalActivation & { ok: true })
+        | { ok: false; code?: string; message?: string }
+        | null;
+
+      if (result?.ok) {
+        return result;
+      }
+
+      lastMessage = result?.message || lastMessage;
+
+      if (
+        response.ok ||
+        !result ||
+        result.code !== 'LICENSE_NOT_FOUND' ||
+        productSlug === productSlugs[productSlugs.length - 1]
+      ) {
+        break;
+      }
+    }
+
+    const localPlan = getPlanFromLicenseKey(normalizedKey);
+    if (localPlan && this.isLocalLicenseFallbackAllowed()) {
+      return {
+        license: {
+          product: this.getLicenseProductSlugs()[0],
+          plan: localPlan,
+          expiresAt: null,
+          maxActivations: 1,
+          activeActivations: 1,
+        },
+        activation: {
+          id: `local-${randomUUID()}`,
+          status: 'ACTIVE',
+        },
+        signature: null,
+      };
+    }
+
+    throw new BadRequestException(lastMessage);
+  }
+
+  private getLicensePortalUrl() {
+    const url = this.configService.get<string>('LICENSE_PORTAL_URL')?.trim();
+
+    if (!url) {
+      throw new ServiceUnavailableException(
+        'License portal is not configured. Set LICENSE_PORTAL_URL before activation.',
+      );
+    }
+
+    try {
+      const parsedUrl = new URL(url);
+      const isLocalHost =
+        parsedUrl.hostname === 'localhost' ||
+        parsedUrl.hostname === '127.0.0.1' ||
+        parsedUrl.hostname === '::1';
+
+      if (isLocalHost) {
+        parsedUrl.hostname = 'host.docker.internal';
+      }
+
+      return parsedUrl.toString().replace(/\/+$/, '');
+    } catch {
+      return url.replace(/\/+$/, '');
+    }
+  }
+
+  private getLicenseProductSlugs() {
+    const primary =
+      this.configService.get<string>('LICENSE_PRODUCT_SLUG')?.trim() ||
+      'codewithkasa';
+    const configuredAliases =
+      this.configService
+        .get<string>('LICENSE_PRODUCT_SLUG_ALIASES')
+        ?.split(',')
+        .map((slug) => slug.trim())
+        .filter(Boolean) || [];
+    const legacyAliases =
+      primary === 'codewithkasa'
+        ? ['kasa-enterprise', 'kasa-plus', 'kasa-starter-kit']
+        : [];
+
+    return Array.from(
+      new Set(
+        [primary, ...configuredAliases, ...legacyAliases].filter(
+          (slug) => slug.length > 0,
+        ),
+      ),
+    );
+  }
+
+  private async getOrCreateLicenseInstanceId() {
+    const existing = await this.appSettingRepository.findOne({
+      where: { key: LICENSE_INSTANCE_KEY },
+    });
+    const existingInstanceId = existing?.valueJson?.instanceId;
+
+    if (typeof existingInstanceId === 'string' && existingInstanceId.length >= 12) {
+      return existingInstanceId;
+    }
+
+    const instanceId = `kasa-${randomUUID()}`;
+    await this.appSettingRepository.save({
+      key: LICENSE_INSTANCE_KEY,
+      valueJson: {
+        instanceId,
+        createdAt: new Date().toISOString(),
+      },
+    });
+
+    return instanceId;
+  }
+
+  private isLocalLicenseFallbackAllowed() {
+    return (
+      this.configService.get<string>('NODE_ENV') !== 'production' &&
+      this.configService.get<string>('ALLOW_LOCAL_LICENSE_KEYS') === 'true'
     );
   }
 }

@@ -25,4 +25,6 @@ export default Joi.object({
   APP_ENCRYPTION_KEY: Joi.string().required(),
   LICENSE_PORTAL_URL: Joi.string().uri().optional(),
   LICENSE_PRODUCT_SLUG: Joi.string().default('codewithkasa'),
+  LICENSE_PRODUCT_SLUG_ALIASES: Joi.string().allow('').optional(),
+  ALLOW_LOCAL_LICENSE_KEYS: Joi.string().valid('true', 'false').default('false'),
 });
