@@ -12,10 +12,18 @@ import { facultyWorkspaceServer } from "@/services/faculty/faculty-workspace.ser
 import type { FacultyClassSession } from "@/types/faculty-workspace";
 import { assignmentServerService } from "@/services/assignments/assignment.server";
 import type { Assignment } from "@/types/assignment";
+import { getRoleHomePath } from "@/lib/role-redirect";
+import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
   const session = await getSession();
   if (!session) return null;
+
+  const roleHomePath = getRoleHomePath(session.roles);
+  if (roleHomePath !== "/dashboard") {
+    redirect(roleHomePath);
+  }
+
   let stats: DashboardStats = {
     courses: 0,
     completed: 0,

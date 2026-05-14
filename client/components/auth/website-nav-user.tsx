@@ -32,6 +32,7 @@ import { useSession } from "@/context/session-context";
 import { apiClient } from "@/lib/api/client";
 import { canAccessAdmin, canAccessFaculty } from "@/lib/access-control";
 import { getErrorMessage } from "@/lib/error-handler";
+import { getRoleHomePath } from "@/lib/role-redirect";
 import { getUserAvatarUrl } from "@/lib/user-avatar";
 
 export const WebsiteNavUser = () => {
@@ -60,6 +61,7 @@ export const WebsiteNavUser = () => {
 
   const avatarUrl = getUserAvatarUrl(user);
   const fullName = `${user.firstName || ""} ${user.lastName || ""}`.trim();
+  const dashboardHref = getRoleHomePath(user.roles);
 
   const handleLogout = async () => {
     try {
@@ -134,7 +136,7 @@ export const WebsiteNavUser = () => {
 
         <DropdownMenuGroup className="space-y-1">
           <NavMenuItem
-            href="/dashboard"
+            href={dashboardHref}
             icon={LayoutDashboard}
             label="Dashboard"
           />

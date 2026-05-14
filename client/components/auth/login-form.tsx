@@ -21,6 +21,7 @@ import { loginFormSchema } from "@/schemas";
 import { authService } from "@/services/auth.service";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { startRouteProgress } from "@/components/ui/route-progress-bar";
+import { getRoleHomePath, shouldUseRoleHomePath } from "@/lib/role-redirect";
 
 export function LoginForm() {
   const [error, setError] = useState<string>("");
@@ -48,12 +49,19 @@ export function LoginForm() {
       const response = await authService.login(data);
 
       const rawCallbackUrl = searchParams.get("callbackUrl");
-      const callbackUrl =
+      const safeCallbackUrl =
         rawCallbackUrl &&
         rawCallbackUrl.startsWith("/") &&
         !rawCallbackUrl.startsWith("//")
           ? rawCallbackUrl
-          : response.data.defaultRedirect || DEFAULT_LOGIN_REDIRECT;
+          : null;
+      const roleHomePath =
+        response.data.defaultRedirect ||
+        getRoleHomePath(response.data.user.roles) ||
+        DEFAULT_LOGIN_REDIRECT;
+      const callbackUrl = shouldUseRoleHomePath(safeCallbackUrl)
+        ? roleHomePath
+        : safeCallbackUrl || roleHomePath;
 
       startRouteProgress(callbackUrl);
       startTransition(() => {
