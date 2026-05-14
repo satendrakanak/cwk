@@ -22,6 +22,8 @@ import { authService } from "@/services/auth.service";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { startRouteProgress } from "@/components/ui/route-progress-bar";
 import { getRoleHomePath, shouldUseRoleHomePath } from "@/lib/role-redirect";
+import { useSession } from "@/context/session-context";
+import type { User } from "@/types/user";
 
 export function LoginForm() {
   const [error, setError] = useState<string>("");
@@ -30,6 +32,7 @@ export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryError = searchParams.get("error");
+  const { setUser } = useSession();
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -66,12 +69,16 @@ export function LoginForm() {
         responseData.defaultRedirect ||
         getRoleHomePath(responseData.user.roles) ||
         DEFAULT_LOGIN_REDIRECT;
-      const callbackUrl = shouldUseRoleHomePath(safeCallbackUrl)
+      const callbackUrl = responseData.defaultRedirect === "/admin/settings/license"
+        ? responseData.defaultRedirect
+        : shouldUseRoleHomePath(safeCallbackUrl)
         ? roleHomePath
         : safeCallbackUrl || roleHomePath;
 
+      setUser(responseData.user as unknown as User);
       startRouteProgress(callbackUrl);
       startTransition(() => {
+        router.refresh();
         router.replace(callbackUrl);
       });
     } catch (err: unknown) {
