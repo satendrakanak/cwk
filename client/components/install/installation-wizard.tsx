@@ -9,6 +9,7 @@ import {
   Database,
   KeyRound,
   Loader,
+  Loader2,
   Play,
   ShieldCheck,
   Sparkles,
@@ -52,8 +53,8 @@ const initialForm: CompleteInstallationPayload = {
   },
   siteName: "CodeWithKasa",
   siteTagline: "Practical courses, live classes, and certificates in one platform.",
-  supportEmail: "support@codewithkasa.com",
-  supportPhone: "",
+  supportEmail: "support@getkasa.in",
+  supportPhone: "+91-987-XXX-XXXX",
   activationMode: "kasa",
   licenseKey: "",
   envatoPurchaseCode: "",
@@ -389,7 +390,7 @@ export function InstallationWizard() {
                 {installationProgress.status === "completed" ? (
                   <CheckCircle2 className="size-8" />
                 ) : (
-                  <Loader className="size-8 animate-spin" />
+                  <Loader2 className="size-8 animate-spin" />
                 )}
               </div>
               <h1 className="mt-6 text-3xl font-semibold">
@@ -1097,7 +1098,7 @@ export function InstallationWizard() {
                   }
                 >
                   {submitting ? (
-                    <Loader className="size-4 animate-spin" />
+                    <Loader2 className="size-4 animate-spin" />
                   ) : (
                     <Play className="size-4" />
                   )}
