@@ -63,6 +63,7 @@ import { UserProfile } from 'src/profiles/user-profile.entity';
     AuthService,
     HashingProvider,
     GenerateVerificationTokenProvider,
+    GenerateTokensProvider,
   ],
 })
 export class AuthModule {}

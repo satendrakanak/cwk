@@ -35,6 +35,7 @@ import { UserProgres } from 'src/user-progress/user-progres.entity';
 import { Course } from 'src/courses/course.entity';
 import { FacultyReview } from 'src/faculty-reviews/faculty-review.entity';
 import { CourseReview } from 'src/course-reviews/course-review.entity';
+import { LicensesModule } from 'src/licenses/licenses.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { CourseReview } from 'src/course-reviews/course-review.entity';
     RolesPermissionsModule,
     forwardRef(() => ProfilesModule),
     EnrollmentsModule,
+    LicensesModule,
   ],
   controllers: [UsersController],
   providers: [

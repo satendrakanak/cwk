@@ -20,6 +20,7 @@ import { CreateUserOptions } from '../interfaces/create-user-options.interface';
 import { GenerateVerificationTokenProvider } from 'src/auth/providers/generate-verification-token.provider';
 import { TokenType } from 'src/auth/enums/token-type.enum';
 import { ensureStudentRole } from '../utils/ensure-student-role';
+import { LicensesService } from 'src/licenses/providers/licenses.service';
 
 @Injectable()
 export class CreateUserProvider {
@@ -58,6 +59,7 @@ export class CreateUserProvider {
 
     private readonly generateUsernameProvider: GenerateUsernameProvider,
     private readonly generateVerificationTokenProvider: GenerateVerificationTokenProvider,
+    private readonly licensesService: LicensesService,
   ) {}
 
   public async create(
@@ -93,6 +95,13 @@ export class CreateUserProvider {
         ? await this.rolesPermissionsService.findByIds(createUserDto.roleIds)
         : [];
       const roles = ensureStudentRole(requestedRoles, studentRole);
+      const isCreatingFaculty = roles.some((role) => role.name === 'faculty');
+
+      await this.licensesService.assertCanCreateUser();
+
+      if (isCreatingFaculty) {
+        await this.licensesService.assertCanCreateFaculty();
+      }
 
       console.log('Current User', currentUser);
 

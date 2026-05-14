@@ -55,6 +55,8 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { EngagementModule } from './engagement/engagement.module';
 import { InstallerModule } from './installer/installer.module';
 import { AssignmentsModule } from './assignments/assignments.module';
+import { LicensesModule } from './licenses/licenses.module';
+import { DemoToursModule } from './demo-tours/demo-tours.module';
 
 const ENV = process.env.NODE_ENV;
 const envFilePath =
@@ -144,6 +146,8 @@ const envFilePath =
     CourseExamsModule,
     RefundsModule,
     AssignmentsModule,
+    LicensesModule,
+    DemoToursModule,
   ],
   controllers: [AppController],
   providers: [

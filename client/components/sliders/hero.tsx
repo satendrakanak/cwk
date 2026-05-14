@@ -77,10 +77,10 @@ export default function Hero({ courses }: HeroProps) {
             </Link>
 
             <Link
-              href="/contact"
+              href="/demo-tour"
               className="inline-flex h-12 w-full max-w-64 items-center justify-center rounded-full border border-white/25 bg-white/10 px-7 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_15px_45px_rgba(15,23,42,0.28)] backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white hover:text-slate-950 sm:w-auto lg:max-w-none"
             >
-              Speak to our team
+              Take a Tour
             </Link>
           </div>
         </div>

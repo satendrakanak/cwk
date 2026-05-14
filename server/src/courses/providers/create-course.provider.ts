@@ -16,6 +16,7 @@ import { Category } from 'src/categories/category.entity';
 import { TagsService } from 'src/tags/providers/tags.service';
 import { Tag } from 'src/tags/tag.entity';
 import { EngagementService } from 'src/engagement/providers/engagement.service';
+import { LicensesService } from 'src/licenses/providers/licenses.service';
 
 @Injectable()
 export class CreateCourseProvider {
@@ -44,6 +45,7 @@ export class CreateCourseProvider {
     private readonly tagsService: TagsService,
 
     private readonly engagementService: EngagementService,
+    private readonly licensesService: LicensesService,
   ) {}
 
   public async create(
@@ -51,6 +53,8 @@ export class CreateCourseProvider {
     user: ActiveUserData,
   ): Promise<Course> {
     try {
+      await this.licensesService.assertCanCreateCourse();
+
       const baseSlug = generateSlug(
         createCouseDto.slug ?? createCouseDto.title,
       );

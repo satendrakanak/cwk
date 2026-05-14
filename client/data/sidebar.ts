@@ -225,6 +225,11 @@ export const sidebarData = {
           url: "/admin/settings/access-control",
           requiredPermissions: ["view_permission", "view_role"],
         },
+        {
+          title: "License",
+          url: "/admin/settings/license",
+          requiredPermissions: ["view_settings"],
+        },
       ],
     },
   ],
