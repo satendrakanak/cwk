@@ -85,7 +85,6 @@ export class CompleteInstallationDto {
 
   @IsOptional()
   @IsString()
-  @MinLength(2)
   envatoBuyerName?: string;
 
   @IsOptional()

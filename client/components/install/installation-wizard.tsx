@@ -194,17 +194,18 @@ export function InstallationWizard() {
   const validateLicense = async () => {
     setValidating(true);
     try {
+      const envatoBuyerName = (form.envatoBuyerName || "").trim();
       const result =
         form.activationMode === "envato"
           ? await installerClientService.validateLicense({
               activationMode: "envato",
-              envatoPurchaseCode: form.envatoPurchaseCode || "",
-              envatoBuyerName: form.envatoBuyerName,
-              envatoBuyerEmail: form.envatoBuyerEmail || "",
+              envatoPurchaseCode: (form.envatoPurchaseCode || "").trim(),
+              envatoBuyerName,
+              envatoBuyerEmail: (form.envatoBuyerEmail || "").trim(),
             })
           : await installerClientService.validateLicense({
               activationMode: "kasa",
-              licenseKey: form.licenseKey || "",
+              licenseKey: (form.licenseKey || "").trim(),
             });
       setLicenseFingerprint(result.fingerprint);
       setLicenseSummary({
@@ -948,9 +949,11 @@ export function InstallationWizard() {
                       <Field label="Buyer name">
                         <Input
                           value={form.envatoBuyerName}
-                          onChange={(event) =>
-                            updateForm("envatoBuyerName", event.target.value)
-                          }
+                          onChange={(event) => {
+                            updateForm("envatoBuyerName", event.target.value);
+                            setLicenseFingerprint(null);
+                            setLicenseSummary(null);
+                          }}
                           placeholder="Name used for support records"
                         />
                       </Field>
@@ -1007,6 +1010,7 @@ export function InstallationWizard() {
                     validating ||
                     (form.activationMode === "envato"
                       ? (form.envatoPurchaseCode || "").trim().length < 8 ||
+                        (form.envatoBuyerName || "").trim().length < 2 ||
                         !(form.envatoBuyerEmail || "").includes("@")
                       : (form.licenseKey || "").trim().length < 8)
                   }

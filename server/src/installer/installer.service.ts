@@ -762,10 +762,15 @@ export class InstallerService implements OnModuleInit {
     options?: { instanceLabel?: string },
   ) {
     const purchaseCode = payload.envatoPurchaseCode?.trim();
+    const buyerName = payload.envatoBuyerName?.trim();
     const buyerEmail = payload.envatoBuyerEmail?.trim().toLowerCase();
 
     if (!purchaseCode) {
       throw new BadRequestException('Envato purchase code is required');
+    }
+
+    if (!buyerName || buyerName.length < 2) {
+      throw new BadRequestException('Buyer name is required for Envato activation');
     }
 
     if (!buyerEmail) {
@@ -784,7 +789,7 @@ export class InstallerService implements OnModuleInit {
         },
         body: JSON.stringify({
           purchaseCode,
-          buyerName: payload.envatoBuyerName || payload.siteName,
+          buyerName,
           buyerEmail,
           instanceId,
           instanceLabel: options?.instanceLabel || 'CodeWithKasa installation',

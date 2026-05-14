@@ -17,7 +17,6 @@ export class ValidateLicenseDto {
 
   @IsOptional()
   @IsString()
-  @MinLength(2)
   envatoBuyerName?: string;
 
   @IsOptional()
