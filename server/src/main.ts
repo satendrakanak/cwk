@@ -44,11 +44,24 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
-  const frontendUrl = configService.get<string>('appConfig.fronEndUrl');
+  const allowedOrigins = [
+    configService.get<string>('appConfig.fronEndUrl'),
+    configService.get<string>('KASA_DEMO_ORIGIN'),
+  ]
+    .flatMap((origin) => (origin ?? '').split(','))
+    .map((origin) => origin.trim())
+    .filter(Boolean);
 
   // enable CORS
   app.enableCors({
-    origin: frontendUrl,
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`CORS origin not allowed: ${origin}`));
+    },
     credentials: true,
   });
 
