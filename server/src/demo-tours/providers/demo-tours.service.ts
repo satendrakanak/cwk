@@ -11,12 +11,18 @@ import { GenerateTokensProvider } from 'src/auth/providers/generate-tokens.provi
 import { HashingProvider } from 'src/auth/providers/hashing.provider';
 import { Category } from 'src/categories/category.entity';
 import { Course } from 'src/courses/course.entity';
+import { assignDefaultRole } from 'src/database/seeds/assign-default-role.seed';
+import { seedEmailTemplates } from 'src/database/seeds/email-template.seed';
+import { seedLocation } from 'src/database/seeds/location.seed';
+import { seedPermissions } from 'src/database/seeds/permission.seed';
+import { seedProductionDemoContent } from 'src/database/seeds/production-demo-content.seed';
+import { seedRoles } from 'src/database/seeds/role.seed';
 import { UserProfile } from 'src/profiles/user-profile.entity';
 import { Permission } from 'src/roles-permissions/permission.entity';
 import { Role } from 'src/roles-permissions/role.entity';
 import { Tag } from 'src/tags/tag.entity';
 import { User } from 'src/users/user.entity';
-import { FindOptionsWhere, LessThan, Repository } from 'typeorm';
+import { DataSource, FindOptionsWhere, LessThan, Repository } from 'typeorm';
 import { StartDemoTourDto } from '../dtos/start-demo-tour.dto';
 
 const DEMO_DURATION_MINUTES = 60;
@@ -46,6 +52,8 @@ const DEMO_PERMISSIONS = [
 
 @Injectable()
 export class DemoToursService {
+  private isResettingDemoDatabase = false;
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -68,6 +76,7 @@ export class DemoToursService {
     @InjectRepository(Tag)
     private readonly tagRepository: Repository<Tag>,
 
+    private readonly dataSource: DataSource,
     private readonly configService: ConfigService,
     private readonly hashingProvider: HashingProvider,
     private readonly generateTokensProvider: GenerateTokensProvider,
@@ -164,9 +173,21 @@ export class DemoToursService {
 
     if (!expiredUsers.length) return { cleanedUsers: 0 };
 
+    if (this.shouldResetDemoDatabaseOnExpiry()) {
+      await this.resetDemoDatabase();
+
+      return {
+        cleanedUsers: expiredUsers.length,
+        databaseRestored: true,
+      };
+    }
+
     await this.cleanupDemoUsers(expiredUsers);
 
-    return { cleanedUsers: expiredUsers.length };
+    return {
+      cleanedUsers: expiredUsers.length,
+      databaseRestored: false,
+    };
   }
 
   private async cleanupDemoUsers(users: User[]) {
@@ -290,6 +311,30 @@ export class DemoToursService {
   private assertDemoToursEnabled() {
     if (!this.areDemoToursEnabled()) {
       throw new NotFoundException('Demo tours are not enabled');
+    }
+  }
+
+  private shouldResetDemoDatabaseOnExpiry() {
+    return (
+      this.configService.get<string>('KASA_DEMO_RESET_ON_EXPIRY') === 'true'
+    );
+  }
+
+  private async resetDemoDatabase() {
+    if (this.isResettingDemoDatabase) return;
+
+    this.isResettingDemoDatabase = true;
+
+    try {
+      await this.dataSource.synchronize(true);
+      await seedPermissions(this.dataSource);
+      await seedRoles(this.dataSource);
+      await seedLocation(this.dataSource);
+      await seedEmailTemplates(this.dataSource);
+      await seedProductionDemoContent(this.dataSource);
+      await assignDefaultRole(this.dataSource);
+    } finally {
+      this.isResettingDemoDatabase = false;
     }
   }
 }

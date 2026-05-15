@@ -23,6 +23,8 @@ export function DemoSessionTimer() {
   const { user, setUser } = useSession();
   const pathname = usePathname();
   const [now, setNow] = useState(() => Date.now());
+  const [mounted, setMounted] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
   const handledExpiry = useRef(false);
   const demoEntryUrl =
     process.env.NEXT_PUBLIC_DEMO_ENTRY_URL ||
@@ -39,6 +41,11 @@ export function DemoSessionTimer() {
   const isExpired = Boolean(expiresAt && remaining <= 0);
 
   useEffect(() => {
+    setMounted(true);
+    setNow(Date.now());
+  }, []);
+
+  useEffect(() => {
     if (!expiresAt) return;
 
     const interval = window.setInterval(() => setNow(Date.now()), 1000);
@@ -49,6 +56,7 @@ export function DemoSessionTimer() {
     if (!expiresAt || !isExpired || handledExpiry.current) return;
 
     handledExpiry.current = true;
+    setIsMinimized(false);
     toast.error(EXPIRED_MESSAGE);
 
     const timeout = window.setTimeout(async () => {
@@ -61,35 +69,55 @@ export function DemoSessionTimer() {
     return () => window.clearTimeout(timeout);
   }, [demoEntryUrl, expiresAt, isExpired, setUser]);
 
-  if (!expiresAt || pathname?.startsWith("/auth")) {
+  if (!mounted || !expiresAt || pathname?.startsWith("/auth")) {
     return null;
   }
 
+  if (isMinimized && !isExpired) {
+    return (
+      <button
+        type="button"
+        onClick={() => setIsMinimized(false)}
+        className="fixed bottom-5 right-5 z-[80] inline-flex h-12 cursor-pointer items-center gap-2 rounded-full border border-primary/25 bg-background/95 px-4 text-sm font-semibold text-card-foreground shadow-[0_14px_44px_color-mix(in_oklab,var(--primary)_16%,transparent)] backdrop-blur-md"
+      >
+        <Clock3 className="h-4 w-4 text-primary" />
+        <span className="tabular-nums text-primary">
+          {formatRemaining(remaining)}
+        </span>
+      </button>
+    );
+  }
+
   return (
-    <div className="fixed bottom-5 right-5 z-[80] w-[min(calc(100vw-2rem),22rem)] rounded-2xl border border-primary/20 bg-background/95 p-4 text-card-foreground shadow-[0_22px_70px_color-mix(in_oklab,var(--primary)_18%,transparent)] backdrop-blur-md">
+    <div className="fixed bottom-5 right-5 z-[80] w-[min(calc(100vw-2rem),18rem)] rounded-2xl border border-primary/20 bg-background/95 p-3 text-card-foreground shadow-[0_18px_56px_color-mix(in_oklab,var(--primary)_16%,transparent)] backdrop-blur-md">
       <div className="flex items-start gap-3">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
           {isExpired ? (
-            <TimerReset className="h-5 w-5" />
+            <TimerReset className="h-4 w-4" />
           ) : (
-            <Clock3 className="h-5 w-5" />
+            <Clock3 className="h-4 w-4" />
           )}
         </span>
 
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold">
             {isExpired ? "Demo expired" : "Demo session active"}
           </p>
           <p className="mt-1 text-xs leading-5 text-muted-foreground">
             {isExpired
-              ? "Cleaning this demo workspace now."
-              : "Explore KASA freely. This temporary access will close automatically."}
+              ? "Cleaning and restoring the demo workspace now."
+              : "Temporary access closes automatically."}
           </p>
         </div>
 
-        <div className="ml-auto shrink-0 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-bold tabular-nums text-primary">
+        <button
+          type="button"
+          onClick={() => setIsMinimized(true)}
+          className="shrink-0 cursor-pointer rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-xs font-bold tabular-nums text-primary"
+          disabled={isExpired}
+        >
           {isExpired ? "Expired" : formatRemaining(remaining)}
-        </div>
+        </button>
       </div>
     </div>
   );

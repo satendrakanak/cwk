@@ -10,6 +10,7 @@ import { LicensesService } from '../providers/licenses.service';
 
 const RECOVERY_ROUTE_PREFIXES = [
   '/auth',
+  '/demo-tours',
   '/installer',
   '/licenses',
   '/settings/public',
