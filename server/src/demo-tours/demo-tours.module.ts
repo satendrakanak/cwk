@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Article } from 'src/articles/article.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { Category } from 'src/categories/category.entity';
 import { Course } from 'src/courses/course.entity';
@@ -18,6 +19,7 @@ import { DemoToursService } from './providers/demo-tours.service';
       UserProfile,
       Role,
       Permission,
+      Article,
       Course,
       Category,
       Tag,

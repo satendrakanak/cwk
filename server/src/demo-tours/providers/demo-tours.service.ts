@@ -9,6 +9,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GenerateTokensProvider } from 'src/auth/providers/generate-tokens.provider';
 import { HashingProvider } from 'src/auth/providers/hashing.provider';
+import { Article } from 'src/articles/article.entity';
 import { Category } from 'src/categories/category.entity';
 import { Course } from 'src/courses/course.entity';
 import { assignDefaultRole } from 'src/database/seeds/assign-default-role.seed';
@@ -87,7 +88,7 @@ const DEMO_PERMISSIONS = [
 
 @Injectable()
 export class DemoToursService {
-  private isResettingDemoDatabase = false;
+  private isRestoringDemoBaseline = false;
 
   constructor(
     @InjectRepository(User)
@@ -110,6 +111,9 @@ export class DemoToursService {
 
     @InjectRepository(Tag)
     private readonly tagRepository: Repository<Tag>,
+
+    @InjectRepository(Article)
+    private readonly articleRepository: Repository<Article>,
 
     private readonly dataSource: DataSource,
     private readonly configService: ConfigService,
@@ -208,20 +212,15 @@ export class DemoToursService {
 
     if (!expiredUsers.length) return { cleanedUsers: 0 };
 
-    if (this.shouldResetDemoDatabaseOnExpiry()) {
-      await this.resetDemoDatabase();
-
-      return {
-        cleanedUsers: expiredUsers.length,
-        databaseRestored: true,
-      };
-    }
-
     await this.cleanupDemoUsers(expiredUsers);
+
+    if (this.shouldRestoreDemoBaselineOnExpiry()) {
+      await this.restoreDemoBaseline();
+    }
 
     return {
       cleanedUsers: expiredUsers.length,
-      databaseRestored: false,
+      databaseRestored: this.shouldRestoreDemoBaselineOnExpiry(),
     };
   }
 
@@ -230,35 +229,180 @@ export class DemoToursService {
 
     if (!expiredUserIds.length) return;
 
-    await this.courseRepository
-      .createQueryBuilder()
-      .softDelete()
-      .where('createdById IN (:...expiredUserIds)', { expiredUserIds })
-      .execute();
+    await this.dataSource.transaction(async (manager) => {
+      const orderRows: Array<{ id: number }> = await manager.query(
+        'SELECT id FROM "order" WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      const orderIds = orderRows.map((row) => row.id);
 
-    await this.categoryRepository
-      .createQueryBuilder()
-      .softDelete()
-      .where('createdById IN (:...expiredUserIds)', { expiredUserIds })
-      .execute();
+      if (orderIds.length) {
+        await manager.query(
+          'DELETE FROM coupon_usage WHERE "orderId" = ANY($1::int[])',
+          [orderIds],
+        );
+        await manager.query(
+          'DELETE FROM enrollment WHERE "orderId" = ANY($1::int[])',
+          [orderIds],
+        );
+      }
 
-    await this.tagRepository
-      .createQueryBuilder()
-      .softDelete()
-      .where('createdById IN (:...expiredUserIds)', { expiredUserIds })
-      .execute();
+      await manager.query(
+        'DELETE FROM coupon_usage WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM enrollment WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM refund_request WHERE "requesterId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM "order" WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM cart WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM notification WHERE "recipientId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM push_subscription WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM auth_accounts WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM user_profile WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM faculty_profile WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM user_progres WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM certificate WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM class_attendance WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM batch_student WHERE "studentId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM assignment_submission WHERE "learnerId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'UPDATE assignment_submission SET "reviewedById" = NULL WHERE "reviewedById" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM course_exam_attempt WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM course_exam_access_override WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM exam_attempt WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'UPDATE exam_attempt SET "manualGradedById" = NULL WHERE "manualGradedById" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM course_question WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM course_answer WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM course_review WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM faculty_review WHERE "userId" = ANY($1::int[]) OR "facultyId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'DELETE FROM article_comment WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'UPDATE refund_log SET "actorId" = NULL WHERE "actorId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'UPDATE refund_request SET "reviewedById" = NULL WHERE "reviewedById" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'UPDATE notification SET "actorId" = NULL WHERE "actorId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
+      await manager.query(
+        'UPDATE contact_lead SET "userId" = NULL WHERE "userId" = ANY($1::int[])',
+        [expiredUserIds],
+      );
 
-    for (const user of users) {
-      const suffix = `${user.id}-${Date.now()}`;
+      await manager
+        .getRepository(Course)
+        .createQueryBuilder()
+        .softDelete()
+        .where('createdById IN (:...expiredUserIds)', { expiredUserIds })
+        .execute();
+      await manager
+        .getRepository(Article)
+        .createQueryBuilder()
+        .softDelete()
+        .where('createdById IN (:...expiredUserIds)', { expiredUserIds })
+        .execute();
+      await manager
+        .getRepository(Category)
+        .createQueryBuilder()
+        .softDelete()
+        .where('createdById IN (:...expiredUserIds)', { expiredUserIds })
+        .execute();
+      await manager
+        .getRepository(Tag)
+        .createQueryBuilder()
+        .softDelete()
+        .where('createdById IN (:...expiredUserIds)', { expiredUserIds })
+        .execute();
 
-      await this.userRepository.update(user.id, {
-        email: `expired-demo-${suffix}@codewithkasa.demo`,
-        username: `expired-demo-${suffix}`,
-        phoneNumber: null,
-      });
-    }
+      for (const user of users) {
+        const suffix = `${user.id}-${Date.now()}`;
 
-    await this.userRepository.softDelete(expiredUserIds);
+        await manager.getRepository(User).update(user.id, {
+          email: `expired-demo-${suffix}@codewithkasa.demo`,
+          username: `expired-demo-${suffix}`,
+          phoneNumber: null,
+          password: null,
+          demoExpiresAt: null,
+        });
+      }
+
+      await manager.getRepository(User).softDelete(expiredUserIds);
+    });
   }
 
   private async findExistingDemoIdentities(dto: StartDemoTourDto) {
@@ -349,19 +493,18 @@ export class DemoToursService {
     }
   }
 
-  private shouldResetDemoDatabaseOnExpiry() {
+  private shouldRestoreDemoBaselineOnExpiry() {
     return (
       this.configService.get<string>('KASA_DEMO_RESET_ON_EXPIRY') === 'true'
     );
   }
 
-  private async resetDemoDatabase() {
-    if (this.isResettingDemoDatabase) return;
+  private async restoreDemoBaseline() {
+    if (this.isRestoringDemoBaseline) return;
 
-    this.isResettingDemoDatabase = true;
+    this.isRestoringDemoBaseline = true;
 
     try {
-      await this.dataSource.synchronize(true);
       await seedPermissions(this.dataSource);
       await seedRoles(this.dataSource);
       await seedLocation(this.dataSource);
@@ -369,7 +512,7 @@ export class DemoToursService {
       await seedProductionDemoContent(this.dataSource);
       await assignDefaultRole(this.dataSource);
     } finally {
-      this.isResettingDemoDatabase = false;
+      this.isRestoringDemoBaseline = false;
     }
   }
 }
