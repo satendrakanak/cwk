@@ -10,7 +10,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
-import { demoTourClientService } from "@/services/demo-tours/demo-tour.client";
+import {
+  demoTourClientService,
+  StartDemoTourResponse,
+} from "@/services/demo-tours/demo-tour.client";
 
 const progressSteps = [
   "Creating your demo account",
@@ -18,6 +21,14 @@ const progressSteps = [
   "Adding limited admin access",
   "Opening your 1 hour tour",
 ];
+
+type WrappedDemoTourResponse = StartDemoTourResponse & {
+  data?: StartDemoTourResponse;
+};
+
+function unwrapDemoTourResponse(data: WrappedDemoTourResponse) {
+  return data.defaultRedirect ? data : data.data;
+}
 
 export function DemoTourForm() {
   const router = useRouter();
@@ -57,12 +68,17 @@ export function DemoTourForm() {
           businessName: String(formData.get("businessName") || ""),
           useCase: String(formData.get("useCase") || ""),
         });
+        const demo = unwrapDemoTourResponse(response.data);
+
+        if (!demo?.defaultRedirect) {
+          throw new Error("Demo workspace started, but redirect was missing.");
+        }
 
         setProgress(100);
         setActiveStep(progressSteps.length - 1);
 
         window.setTimeout(() => {
-          router.push(response.data.defaultRedirect);
+          router.push(demo.defaultRedirect);
           router.refresh();
         }, 900);
       } catch (error) {
@@ -112,7 +128,7 @@ export function DemoTourForm() {
                   ) : (
                     <Loader2 className="size-4 animate-spin text-primary" />
                   )}
-                  We are readying KASA for you
+                  We are preparing KASA for you
                 </div>
                 <Progress value={progress} />
               </div>
