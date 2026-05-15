@@ -8,9 +8,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { randomUUID } from 'crypto';
 import { Repository } from 'typeorm';
+import { CourseExamAttempt } from 'src/course-exams/course-exam-attempt.entity';
 import { Course } from 'src/courses/course.entity';
 import { EmailTemplatesService } from 'src/email-templates/providers/email-templates.service';
 import { Enrollment } from 'src/enrollments/enrollment.entity';
+import { ExamAttempt } from 'src/exams/exam-attempt.entity';
+import { Exam } from 'src/exams/exam.entity';
+import { ExamStatus } from 'src/exams/enums/exam-status.enum';
 import { Lecture } from 'src/lectures/lecture.entity';
 import { MailService } from 'src/mail/providers/mail.service';
 import { parseTemplate } from 'src/mail/utils/template-parser';
@@ -56,6 +60,15 @@ export class CertificatesService {
 
     @InjectRepository(Upload)
     private readonly uploadRepository: Repository<Upload>,
+
+    @InjectRepository(CourseExamAttempt)
+    private readonly courseExamAttemptRepository: Repository<CourseExamAttempt>,
+
+    @InjectRepository(ExamAttempt)
+    private readonly examAttemptRepository: Repository<ExamAttempt>,
+
+    @InjectRepository(Exam)
+    private readonly examRepository: Repository<Exam>,
 
     private readonly s3Provider: S3Provider,
     private readonly mediaFileMappingService: MediaFileMappingService,
@@ -114,7 +127,7 @@ export class CertificatesService {
   }
 
   async getAdminDashboard() {
-    const [enrollments, certificates] = await Promise.all([
+    const [enrollments, certificates, certificateRule] = await Promise.all([
       this.enrollmentRepository.find({
         where: { isActive: true },
         relations: ['user', 'course'],
@@ -124,6 +137,34 @@ export class CertificatesService {
         relations: ['user', 'course', 'file'],
         order: { issuedAt: 'DESC' },
       }),
+      this.getCertificateRule(),
+    ]);
+
+    const courseIds = [
+      ...new Set(
+        enrollments
+          .map((enrollment) => enrollment.course?.id)
+          .filter((courseId): courseId is number => Number.isFinite(courseId)),
+      ),
+    ];
+    const userIds = [
+      ...new Set(
+        enrollments
+          .map((enrollment) => enrollment.user?.id)
+          .filter((userId): userId is number => Number.isFinite(userId)),
+      ),
+    ];
+
+    const [
+      lectureCountMap,
+      completedLectureCountMap,
+      advancedExamCourseIds,
+      passedExamKeys,
+    ] = await Promise.all([
+      this.getPublishedLectureCounts(courseIds),
+      this.getCompletedLectureCounts(courseIds, userIds),
+      this.getPublishedAdvancedExamCourseIds(courseIds),
+      this.getPassedExamKeys(courseIds, userIds),
     ]);
 
     const certificateMap = new Map(
@@ -133,21 +174,35 @@ export class CertificatesService {
       ]),
     );
 
-    const rows = await Promise.all(
-      enrollments.map(async (enrollment) => {
+    const rows =
+      enrollments.map((enrollment) => {
         const user = enrollment.user;
         const course = enrollment.course;
         const certificate = certificateMap.get(
           this.getUserCourseKey(user.id, course.id),
         );
-        const completion = await this.getCourseCompletion(user.id, course.id);
+        const totalLectures = lectureCountMap.get(course.id) ?? 0;
+        const completedLectures =
+          completedLectureCountMap.get(this.getUserCourseKey(user.id, course.id)) ??
+          0;
+        const progress = totalLectures
+          ? Math.min(100, Math.round((completedLectures / totalLectures) * 100))
+          : 0;
+        const examRequired =
+          (!!course.exam?.isPublished && !!course.exam?.questions?.length) ||
+          advancedExamCourseIds.has(course.id);
+        const examPassed = examRequired
+          ? passedExamKeys.has(this.getUserCourseKey(user.id, course.id))
+          : true;
+        const courseCompleted =
+          totalLectures > 0 &&
+          completedLectures >= totalLectures &&
+          (certificateRule === 'lecture_completion' || examPassed);
         const status = certificate
           ? 'issued'
-          : completion.isCompleted
+          : courseCompleted
             ? 'ready_to_generate'
-            : completion.certificateRule === 'exam_pass' &&
-                completion.examRequired &&
-                !completion.examPassed
+            : certificateRule === 'exam_pass' && examRequired && !examPassed
               ? 'exam_pending'
               : 'course_incomplete';
 
@@ -165,19 +220,18 @@ export class CertificatesService {
             title: course.title,
             slug: course.slug,
           },
-          progress: completion.progress,
-          totalLectures: completion.totalLectures,
-          completedLectures: completion.completedLectures,
-          examRequired: completion.examRequired,
-          examPassed: completion.examPassed,
-          certificateRule: completion.certificateRule,
-          courseCompleted: completion.isCompleted,
+          progress,
+          totalLectures,
+          completedLectures,
+          examRequired,
+          examPassed,
+          certificateRule,
+          courseCompleted,
           status,
           actionHint: this.getCertificateActionHint(status),
           certificate: certificate ? this.toResponse(certificate) : null,
         };
-      }),
-    );
+      });
 
     return {
       summary: {
@@ -513,6 +567,107 @@ export class CertificatesService {
 
   private getUserCourseKey(userId: number, courseId: number) {
     return `${userId}:${courseId}`;
+  }
+
+  private async getPublishedLectureCounts(courseIds: number[]) {
+    if (!courseIds.length) return new Map<number, number>();
+
+    const rows = await this.lectureRepository
+      .createQueryBuilder('lecture')
+      .innerJoin('lecture.chapter', 'chapter')
+      .select('chapter.courseId', 'courseId')
+      .addSelect('COUNT(lecture.id)', 'totalLectures')
+      .where('lecture.isPublished = true')
+      .andWhere('chapter.courseId IN (:...courseIds)', { courseIds })
+      .groupBy('chapter.courseId')
+      .getRawMany<{ courseId: string; totalLectures: string }>();
+
+    return new Map(
+      rows.map((row) => [Number(row.courseId), Number(row.totalLectures)]),
+    );
+  }
+
+  private async getCompletedLectureCounts(courseIds: number[], userIds: number[]) {
+    if (!courseIds.length || !userIds.length) return new Map<string, number>();
+
+    const rows = await this.userProgressRepository
+      .createQueryBuilder('progress')
+      .innerJoin('progress.lecture', 'lecture')
+      .innerJoin('lecture.chapter', 'chapter')
+      .innerJoin('progress.user', 'user')
+      .select('user.id', 'userId')
+      .addSelect('chapter.courseId', 'courseId')
+      .addSelect('COUNT(DISTINCT lecture.id)', 'completedLectures')
+      .where('progress.isCompleted = true')
+      .andWhere('lecture.isPublished = true')
+      .andWhere('user.id IN (:...userIds)', { userIds })
+      .andWhere('chapter.courseId IN (:...courseIds)', { courseIds })
+      .groupBy('user.id')
+      .addGroupBy('chapter.courseId')
+      .getRawMany<{
+        userId: string;
+        courseId: string;
+        completedLectures: string;
+      }>();
+
+    return new Map(
+      rows.map((row) => [
+        this.getUserCourseKey(Number(row.userId), Number(row.courseId)),
+        Number(row.completedLectures),
+      ]),
+    );
+  }
+
+  private async getPublishedAdvancedExamCourseIds(courseIds: number[]) {
+    if (!courseIds.length) return new Set<number>();
+
+    const rows = await this.examRepository
+      .createQueryBuilder('exam')
+      .innerJoin('exam.courses', 'course')
+      .select('course.id', 'courseId')
+      .where('exam.status = :status', { status: ExamStatus.Published })
+      .andWhere('course.id IN (:...courseIds)', { courseIds })
+      .groupBy('course.id')
+      .getRawMany<{ courseId: string }>();
+
+    return new Set(rows.map((row) => Number(row.courseId)));
+  }
+
+  private async getPassedExamKeys(courseIds: number[], userIds: number[]) {
+    if (!courseIds.length || !userIds.length) return new Set<string>();
+
+    const [legacyRows, advancedRows] = await Promise.all([
+      this.courseExamAttemptRepository
+        .createQueryBuilder('attempt')
+        .innerJoin('attempt.user', 'user')
+        .innerJoin('attempt.course', 'course')
+        .select('user.id', 'userId')
+        .addSelect('course.id', 'courseId')
+        .where('attempt.passed = true')
+        .andWhere('user.id IN (:...userIds)', { userIds })
+        .andWhere('course.id IN (:...courseIds)', { courseIds })
+        .groupBy('user.id')
+        .addGroupBy('course.id')
+        .getRawMany<{ userId: string; courseId: string }>(),
+      this.examAttemptRepository
+        .createQueryBuilder('attempt')
+        .innerJoin('attempt.user', 'user')
+        .innerJoin('attempt.course', 'course')
+        .select('user.id', 'userId')
+        .addSelect('course.id', 'courseId')
+        .where('attempt.passed = true')
+        .andWhere('user.id IN (:...userIds)', { userIds })
+        .andWhere('course.id IN (:...courseIds)', { courseIds })
+        .groupBy('user.id')
+        .addGroupBy('course.id')
+        .getRawMany<{ userId: string; courseId: string }>(),
+    ]);
+
+    return new Set(
+      [...legacyRows, ...advancedRows].map((row) =>
+        this.getUserCourseKey(Number(row.userId), Number(row.courseId)),
+      ),
+    );
   }
 
   private getCertificateActionHint(status: string) {
