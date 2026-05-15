@@ -8,12 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress";
 import { useSession } from "@/context/session-context";
 import {
   DEMO_CONFIGURATION_LOCK_MESSAGE,
   isDemoUser as getIsDemoUser,
 } from "@/lib/demo-access";
+import { cn } from "@/lib/utils";
 import { licenseClientService } from "@/services/licenses/license.client";
 import {
   LicenseLimitKey,
@@ -25,6 +25,33 @@ const limitLabels: Record<LicenseLimitKey, string> = {
   courses: "Courses",
   faculty: "Faculty",
 };
+
+function getUsageTone(value: number, locked: boolean) {
+  if (locked || value >= 80) {
+    return {
+      text: "text-red-600 dark:text-red-300",
+      fill: "bg-red-500",
+      track: "bg-red-500/12",
+      label: "High usage",
+    };
+  }
+
+  if (value >= 60) {
+    return {
+      text: "text-amber-600 dark:text-amber-300",
+      fill: "bg-amber-500",
+      track: "bg-amber-500/15",
+      label: "Watch usage",
+    };
+  }
+
+  return {
+    text: "text-emerald-600 dark:text-emerald-300",
+    fill: "bg-emerald-500",
+    track: "bg-emerald-500/12",
+    label: "Healthy",
+  };
+}
 
 function formatDate(value?: string | null) {
   if (!value) return "Lifetime";
@@ -114,17 +141,56 @@ export function LicenseAdminClient({
           </CardHeader>
           <CardContent className="space-y-5">
             {summary.plan ? (
-              limitRows.map((row) => (
-                <div className="space-y-2" key={row.name}>
-                  <div className="flex items-center justify-between gap-3 text-sm">
-                    <span className="font-medium">{row.label}</span>
-                    <span className={row.locked ? "text-destructive" : "text-muted-foreground"}>
-                      {row.used} / {row.limit ?? "Unlimited"}
-                    </span>
+              limitRows.map((row) => {
+                const isUnlimited = row.limit === null;
+                const tone = getUsageTone(row.value, row.locked);
+
+                return (
+                  <div className="space-y-2.5" key={row.name}>
+                    <div className="flex items-center justify-between gap-3 text-sm">
+                      <span className="font-medium">{row.label}</span>
+                      <span
+                        className={cn(
+                          "font-medium",
+                          isUnlimited ? "text-muted-foreground" : tone.text,
+                        )}
+                      >
+                        {isUnlimited
+                          ? `${row.used} used · Unlimited`
+                          : `${row.used} / ${row.limit} · ${row.value}%`}
+                      </span>
+                    </div>
+
+                    {isUnlimited ? (
+                      <div className="flex h-2 items-center rounded-full bg-slate-100 px-1 dark:bg-white/10">
+                        <div className="h-1 w-full rounded-full border-t border-dashed border-slate-300 dark:border-white/25" />
+                      </div>
+                    ) : (
+                      <div
+                        className={cn(
+                          "h-2 overflow-hidden rounded-full",
+                          tone.track,
+                        )}
+                        aria-label={`${row.label} ${row.value}% used`}
+                      >
+                        <div
+                          className={cn(
+                            "h-full rounded-full transition-all",
+                            tone.fill,
+                          )}
+                          style={{ width: `${row.value}%` }}
+                        />
+                      </div>
+                    )}
+
+                    {!isUnlimited && (
+                      <p className={cn("text-xs font-medium", tone.text)}>
+                        {tone.label}
+                      </p>
+                    )}
                   </div>
-                  <Progress value={row.limit ? row.value : 100} />
-                </div>
-              ))
+                );
+              })
             ) : (
               <div className="flex items-start gap-3 rounded-md border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
                 <AlertTriangle className="mt-0.5 size-4 shrink-0" />
