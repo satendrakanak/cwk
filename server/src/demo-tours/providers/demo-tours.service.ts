@@ -21,6 +21,7 @@ import { seedRoles } from 'src/database/seeds/role.seed';
 import { UserProfile } from 'src/profiles/user-profile.entity';
 import { Permission } from 'src/roles-permissions/permission.entity';
 import { Role } from 'src/roles-permissions/role.entity';
+import { AppSetting } from 'src/settings/app-setting.entity';
 import { Tag } from 'src/tags/tag.entity';
 import { User } from 'src/users/user.entity';
 import { DataSource, FindOptionsWhere, LessThan, Repository } from 'typeorm';
@@ -28,6 +29,8 @@ import { StartDemoTourDto } from '../dtos/start-demo-tour.dto';
 
 const DEMO_DURATION_MINUTES = 60;
 const DEMO_ROLE_NAME = 'demo_admin';
+const DEMO_OPERATIONS_KEY = 'demo_operations';
+const DEMO_SETTINGS_PATH = '/api/v1/demo-settings';
 const DEMO_PERMISSIONS = [
   'view_dashboard',
   'view_course',
@@ -115,6 +118,9 @@ export class DemoToursService {
     @InjectRepository(Article)
     private readonly articleRepository: Repository<Article>,
 
+    @InjectRepository(AppSetting)
+    private readonly appSettingRepository: Repository<AppSetting>,
+
     private readonly dataSource: DataSource,
     private readonly configService: ConfigService,
     private readonly hashingProvider: HashingProvider,
@@ -122,7 +128,7 @@ export class DemoToursService {
   ) {}
 
   async start(dto: StartDemoTourDto) {
-    this.assertDemoToursEnabled();
+    await this.assertDemoToursEnabled();
 
     const existingUsers = await this.findExistingDemoIdentities(dto);
 
@@ -194,14 +200,14 @@ export class DemoToursService {
 
   @Cron(CronExpression.EVERY_DAY_AT_3AM)
   async cleanupExpiredDemos() {
-    if (!this.areDemoToursEnabled()) return;
+    if (!(await this.areDemoToursEnabled())) return;
 
     await this.expireDemoData();
   }
 
   @Cron(CronExpression.EVERY_10_MINUTES)
   async expireDemoData() {
-    if (!this.areDemoToursEnabled()) return { cleanedUsers: 0 };
+    if (!(await this.areDemoToursEnabled())) return { cleanedUsers: 0 };
 
     const expiredUsers = await this.userRepository.find({
       where: {
@@ -214,13 +220,15 @@ export class DemoToursService {
 
     await this.cleanupDemoUsers(expiredUsers);
 
-    if (this.shouldRestoreDemoBaselineOnExpiry()) {
+    const shouldRestoreDemoBaseline = await this.shouldRestoreDemoBaselineOnExpiry();
+
+    if (shouldRestoreDemoBaseline) {
       await this.restoreDemoBaseline();
     }
 
     return {
       cleanedUsers: expiredUsers.length,
-      databaseRestored: this.shouldRestoreDemoBaselineOnExpiry(),
+      databaseRestored: shouldRestoreDemoBaseline,
     };
   }
 
@@ -483,20 +491,78 @@ export class DemoToursService {
     return `demo-${Date.now()}`;
   }
 
-  private areDemoToursEnabled() {
-    return this.configService.get<string>('KASA_DEMO_TOURS_ENABLED') === 'true';
+  private async areDemoToursEnabled() {
+    const settings = await this.getDemoOperationsSettings();
+    return settings.demoToursEnabled;
   }
 
-  private assertDemoToursEnabled() {
-    if (!this.areDemoToursEnabled()) {
+  private async assertDemoToursEnabled() {
+    if (!(await this.areDemoToursEnabled())) {
       throw new NotFoundException('Demo tours are not enabled');
     }
   }
 
-  private shouldRestoreDemoBaselineOnExpiry() {
-    return (
-      this.configService.get<string>('KASA_DEMO_RESET_ON_EXPIRY') === 'true'
-    );
+  private async shouldRestoreDemoBaselineOnExpiry() {
+    const settings = await this.getDemoOperationsSettings();
+    return settings.demoResetOnExpiry;
+  }
+
+  private async getDemoOperationsSettings() {
+    const portalSettings = await this.fetchPortalDemoOperationsSettings();
+    if (portalSettings) return portalSettings;
+
+    const localSetting = await this.appSettingRepository.findOne({
+      where: { key: DEMO_OPERATIONS_KEY },
+    });
+
+    if (localSetting?.valueJson && typeof localSetting.valueJson === 'object') {
+      const data = localSetting.valueJson as Record<string, unknown>;
+      return {
+        demoToursEnabled: Boolean(data.demoToursEnabled),
+        demoResetOnExpiry:
+          typeof data.demoResetOnExpiry === 'boolean'
+            ? data.demoResetOnExpiry
+            : true,
+      };
+    }
+
+    return {
+      demoToursEnabled:
+        this.configService.get<string>('KASA_DEMO_TOURS_ENABLED') === 'true',
+      demoResetOnExpiry:
+        this.configService.get<string>('KASA_DEMO_RESET_ON_EXPIRY') === 'true',
+    };
+  }
+
+  private async fetchPortalDemoOperationsSettings() {
+    const portalUrl =
+      this.configService.get<string>('LICENSE_PORTAL_URL')?.trim() ||
+      this.configService.get<string>('KASA_ADMIN_URL')?.trim();
+
+    if (!portalUrl) return null;
+
+    try {
+      const response = await fetch(new URL(DEMO_SETTINGS_PATH, portalUrl), {
+        cache: 'no-store',
+      });
+
+      if (!response.ok) return null;
+
+      const data = (await response.json()) as {
+        demoToursEnabled?: unknown;
+        demoResetOnExpiry?: unknown;
+      };
+
+      return {
+        demoToursEnabled: Boolean(data.demoToursEnabled),
+        demoResetOnExpiry:
+          typeof data.demoResetOnExpiry === 'boolean'
+            ? data.demoResetOnExpiry
+            : true,
+      };
+    } catch {
+      return null;
+    }
   }
 
   private async restoreDemoBaseline() {
