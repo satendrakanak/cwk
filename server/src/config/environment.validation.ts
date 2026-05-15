@@ -25,4 +25,11 @@ export default Joi.object({
   APP_ENCRYPTION_KEY: Joi.string().required(),
   LICENSE_PORTAL_URL: Joi.string().uri().optional(),
   LICENSE_PRODUCT_SLUG: Joi.string().default('codewithkasa'),
+  LICENSE_PRODUCT_SLUG_ALIASES: Joi.string().allow('').optional(),
+  LICENSE_PORTAL_CHECK_INTERVAL_SECONDS: Joi.number().min(5).default(10),
+  LICENSE_PORTAL_GRACE_DAYS: Joi.number().min(1).default(7),
+  ALLOW_LOCAL_LICENSE_KEYS: Joi.string().valid('true', 'false').default('false'),
+  KASA_DEMO_TOURS_ENABLED: Joi.string().valid('true', 'false').default('false'),
+  KASA_DEMO_RESET_ON_EXPIRY: Joi.string().valid('true', 'false').default('false'),
+  KASA_DEMO_ORIGIN: Joi.string().allow('').optional(),
 });

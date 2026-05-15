@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   adminRoutePrefix,
   authRoutes,
-  DEFAULT_LOGIN_REDIRECT,
   facultyRoutePrefix,
   protectedRoutes,
   publicRoutes,
 } from "./routes";
+import { getRoleHomePath, shouldUseRoleHomePath } from "./lib/role-redirect";
 
 // 🔥 helper → prefix match
 const matchRoute = (routes: string[], pathname: string) => {
@@ -35,15 +35,6 @@ const decodeRolesFromAccessToken = (token?: string) => {
   } catch {
     return [];
   }
-};
-
-const getDefaultLoginRedirect = (roles: string[]) => {
-  const normalizedRoles = roles.map((role) => role.toLowerCase());
-
-  if (normalizedRoles.includes("admin")) return "/admin/dashboard";
-  if (normalizedRoles.includes("faculty")) return "/faculty/dashboard";
-
-  return DEFAULT_LOGIN_REDIRECT;
 };
 
 export function proxy(request: NextRequest) {
@@ -79,9 +70,10 @@ export function proxy(request: NextRequest) {
       const safeRedirect =
         callbackUrl &&
         callbackUrl.startsWith("/") &&
-        !callbackUrl.startsWith("//")
+        !callbackUrl.startsWith("//") &&
+        !shouldUseRoleHomePath(callbackUrl)
           ? callbackUrl
-          : getDefaultLoginRedirect(decodeRolesFromAccessToken(accessToken));
+          : getRoleHomePath(decodeRolesFromAccessToken(accessToken));
 
       return NextResponse.redirect(
         new URL(safeRedirect, request.url),

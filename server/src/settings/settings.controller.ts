@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  ForbiddenException,
+  Get,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { SettingsService } from './providers/settings.service';
 import { UpsertPaymentGatewayDto } from './dtos/upsert-payment-gateway.dto';
 import { PaymentProvider } from './enums/payment-provider.enum';
@@ -10,6 +17,11 @@ import { UpsertSocialAuthSettingsDto } from './dtos/upsert-social-auth-settings.
 import { UpsertAwsStorageSettingsDto } from './dtos/upsert-aws-storage-settings.dto';
 import { UpsertBbbSettingsDto } from './dtos/upsert-bbb-settings.dto';
 import { UpsertPushNotificationSettingsDto } from './dtos/upsert-push-notification-settings.dto';
+import { ActiveUser } from 'src/auth/decorators/active-user.decorator';
+import type { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
+
+const DEMO_CONFIGURATION_LOCK_MESSAGE =
+  'Demo users cannot change these settings. Purchase KASA to unlock configuration changes.';
 
 @Controller('settings')
 export class SettingsController {
@@ -18,7 +30,9 @@ export class SettingsController {
   @Post('gateway')
   async createOrUpdate(
     @Body() upsertPaymentGatewayDto: UpsertPaymentGatewayDto,
+    @ActiveUser() user: ActiveUserData,
   ) {
+    this.assertNotDemoUser(user);
     return this.settingsService.upsertGateway(upsertPaymentGatewayDto);
   }
 
@@ -50,7 +64,11 @@ export class SettingsController {
   }
 
   @Post('site')
-  upsertSiteSettings(@Body() payload: UpsertSiteSettingsDto) {
+  upsertSiteSettings(
+    @Body() payload: UpsertSiteSettingsDto,
+    @ActiveUser() user: ActiveUserData,
+  ) {
+    this.assertNotDemoUser(user);
     return this.settingsService.upsertSiteSettings(payload);
   }
 
@@ -60,7 +78,11 @@ export class SettingsController {
   }
 
   @Post('email')
-  upsertEmailSettings(@Body() payload: UpsertEmailSettingsDto) {
+  upsertEmailSettings(
+    @Body() payload: UpsertEmailSettingsDto,
+    @ActiveUser() user: ActiveUserData,
+  ) {
+    this.assertNotDemoUser(user);
     return this.settingsService.upsertEmailSettings(payload);
   }
 
@@ -70,7 +92,11 @@ export class SettingsController {
   }
 
   @Post('social-auth')
-  upsertSocialAuthSettings(@Body() payload: UpsertSocialAuthSettingsDto) {
+  upsertSocialAuthSettings(
+    @Body() payload: UpsertSocialAuthSettingsDto,
+    @ActiveUser() user: ActiveUserData,
+  ) {
+    this.assertNotDemoUser(user);
     return this.settingsService.upsertSocialAuthSettings(payload);
   }
 
@@ -92,7 +118,11 @@ export class SettingsController {
   }
 
   @Post('aws-storage')
-  upsertAwsStorageSettings(@Body() payload: UpsertAwsStorageSettingsDto) {
+  upsertAwsStorageSettings(
+    @Body() payload: UpsertAwsStorageSettingsDto,
+    @ActiveUser() user: ActiveUserData,
+  ) {
+    this.assertNotDemoUser(user);
     return this.settingsService.upsertAwsStorageSettings(payload);
   }
 
@@ -102,7 +132,11 @@ export class SettingsController {
   }
 
   @Post('bbb')
-  upsertBbbSettings(@Body() payload: UpsertBbbSettingsDto) {
+  upsertBbbSettings(
+    @Body() payload: UpsertBbbSettingsDto,
+    @ActiveUser() user: ActiveUserData,
+  ) {
+    this.assertNotDemoUser(user);
     return this.settingsService.upsertBbbSettings(payload);
   }
 
@@ -114,12 +148,21 @@ export class SettingsController {
   @Post('push-notifications')
   upsertPushNotificationSettings(
     @Body() payload: UpsertPushNotificationSettingsDto,
+    @ActiveUser() user: ActiveUserData,
   ) {
+    this.assertNotDemoUser(user);
     return this.settingsService.upsertPushNotificationSettings(payload);
   }
 
   @Post('push-notifications/generate-keys')
-  generatePushNotificationKeys() {
+  generatePushNotificationKeys(@ActiveUser() user: ActiveUserData) {
+    this.assertNotDemoUser(user);
     return this.settingsService.generatePushNotificationKeys();
+  }
+
+  private assertNotDemoUser(user: ActiveUserData) {
+    if (user?.roles?.includes('demo_admin')) {
+      throw new ForbiddenException(DEMO_CONFIGURATION_LOCK_MESSAGE);
+    }
   }
 }

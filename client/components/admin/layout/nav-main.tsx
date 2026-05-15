@@ -2,10 +2,16 @@
 
 import { useSession } from "@/context/session-context";
 import { hasAnyPermission, hasRole } from "@/lib/access-control";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, LockKeyhole } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { SidebarNavItem } from "@/data/sidebar";
+import {
+  getLicenseInvalidReason,
+  isLicenseRecoveryPath,
+} from "@/lib/license/module-access";
+import { isDemoUser as getIsDemoUser } from "@/lib/demo-access";
+import { useAdminLicense } from "./admin-license-provider";
 
 import {
   Collapsible,
@@ -31,11 +37,35 @@ export function NavMain({
 }) {
   const pathname = usePathname();
   const { user } = useSession();
+  const { summary, isLoading } = useAdminLicense();
+  const licenseInvalid = !isLoading && Boolean(getLicenseInvalidReason(summary));
+  const isSuperAdmin = hasRole(user, "super_admin") || hasRole(user, "admin");
+  const isDemoUser = getIsDemoUser(user);
+
+  const isLocked = (item: SidebarNavItem) => {
+    if (isDemoUser) {
+      return false;
+    }
+
+    if (isLoading || isLicenseRecoveryPath(item.url)) {
+      return false;
+    }
+
+    if (licenseInvalid) {
+      return true;
+    }
+
+    return Boolean(
+      item.licenseFeature &&
+        summary?.plan &&
+        !summary.plan.features[item.licenseFeature],
+    );
+  };
 
   const visibleItems = items
     .map((item) => {
       const visibleChildren = item.items?.filter((subItem) => {
-        if (hasRole(user, "admin")) {
+        if (isSuperAdmin) {
           return true;
         }
 
@@ -43,7 +73,7 @@ export function NavMain({
       });
 
       const canSeeParent =
-        hasRole(user, "admin") ||
+        isSuperAdmin ||
         hasAnyPermission(user, item.requiredPermissions);
 
       if (item.items?.length) {
@@ -89,6 +119,9 @@ export function NavMain({
                   >
                     {item.icon && <item.icon />}
                     <span>{item.title}</span>
+                    {isLocked(item) && (
+                      <LockKeyhole className="ml-auto size-3.5 opacity-70" />
+                    )}
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -118,6 +151,9 @@ export function NavMain({
                   >
                     {item.icon && <item.icon />}
                     <span>{item.title}</span>
+                    {isLocked(item) && (
+                      <LockKeyhole className="ml-auto size-3.5 opacity-70" />
+                    )}
                   </Link>
                 </SidebarMenuButton>
 
@@ -145,8 +181,14 @@ export function NavMain({
                             isActive={isActive}
                             size="md"
                           >
-                            <Link href={subItem.url} className="block w-full">
-                              {subItem.title}
+                            <Link
+                              href={subItem.url}
+                              className="flex w-full items-center gap-2"
+                            >
+                              <span>{subItem.title}</span>
+                              {isLocked(subItem) && (
+                                <LockKeyhole className="ml-auto size-3.5 opacity-70" />
+                              )}
                             </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>

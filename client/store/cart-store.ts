@@ -2,8 +2,19 @@ import { CartItem } from "@/types/cart";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { couponClientService } from "@/services/coupons/coupon.client";
+import { isLicenseFeatureEnabled } from "@/lib/license/feature-access";
+import { licenseClientService } from "@/services/licenses/license.client";
 
 let latestPricingRun = 0;
+
+const canUseCoupons = async () => {
+  try {
+    const response = await licenseClientService.getCurrent();
+    return isLicenseFeatureEnabled(response.data, "coupons");
+  } catch {
+    return false;
+  }
+};
 
 type CartState = {
   cartItems: CartItem[];
@@ -119,6 +130,14 @@ export const useCartStore = create<CartState>()(
         const { cartItems, autoDiscount } = get();
 
         if (!cartItems.length) return;
+        if (!(await canUseCoupons())) {
+          set({
+            manualCoupon: null,
+            manualDiscount: 0,
+          });
+          get().recalculateTotal();
+          throw new Error("Coupons are not available on the active plan.");
+        }
 
         const cartTotal = cartItems.reduce((t, i) => t + i.price, 0);
         const courseIds = cartItems.map((i) => i.id);
@@ -194,6 +213,20 @@ export const useCartStore = create<CartState>()(
 
         const cartTotal = cartItems.reduce((t, i) => t + i.price, 0);
         const courseIds = cartItems.map((i) => i.id);
+        const couponsEnabled = await canUseCoupons();
+
+        if (!couponsEnabled) {
+          if (currentRun === latestPricingRun) {
+            set({
+              autoCoupon: null,
+              manualCoupon: null,
+              autoDiscount: 0,
+              manualDiscount: 0,
+              finalAmount: cartTotal,
+            });
+          }
+          return;
+        }
 
         let autoCoupon: string | null = null;
         let autoDiscount = 0;
@@ -209,8 +242,9 @@ export const useCartStore = create<CartState>()(
             autoCoupon = data.code;
             autoDiscount = data.discount;
           }
-        } catch (e) {
-          console.log("Auto coupon failed", e);
+        } catch {
+          autoCoupon = null;
+          autoDiscount = 0;
         }
 
         let normalizedManualCoupon = manualCoupon?.trim().toUpperCase() || null;
@@ -232,8 +266,7 @@ export const useCartStore = create<CartState>()(
             } else {
               normalizedManualCoupon = null;
             }
-          } catch (e) {
-            console.log("Manual coupon refresh failed", e);
+          } catch {
             normalizedManualCoupon = null;
             manualDiscount = 0;
           }

@@ -8,6 +8,8 @@ import { Navigation } from "swiper/modules";
 import { Course } from "@/types/course";
 import { CouponMap } from "@/types/coupon";
 import { couponClientService } from "@/services/coupons/coupon.client";
+import { useLicenseSummary } from "@/hooks/use-license-summary";
+import { isLicenseFeatureEnabled } from "@/lib/license/feature-access";
 import { CourseCard } from "../courses/course-card";
 
 interface RelatedCoursesProps {
@@ -16,9 +18,15 @@ interface RelatedCoursesProps {
 
 export const RelatedCourses = ({ courses }: RelatedCoursesProps) => {
   const [couponMap, setCouponMap] = useState<CouponMap>({});
+  const { summary, isLoading } = useLicenseSummary();
 
   useEffect(() => {
-    if (!courses?.length) return;
+    if (!courses?.length || isLoading) return;
+
+    if (!isLicenseFeatureEnabled(summary, "coupons")) {
+      setCouponMap({});
+      return;
+    }
 
     const run = async () => {
       try {
@@ -36,7 +44,7 @@ export const RelatedCourses = ({ courses }: RelatedCoursesProps) => {
     };
 
     run();
-  }, [courses]);
+  }, [courses, isLoading, summary]);
 
   if (!courses?.length) return null;
 

@@ -8,10 +8,11 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { randomUUID } from 'crypto';
+import { createHash, randomUUID } from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
 import { runtimeDatabaseConfigPath } from 'src/config/runtime-database.config';
+import { Course } from 'src/courses/course.entity';
 import { seedEmailTemplates } from 'src/database/seeds/email-template.seed';
 import { seedLocation } from 'src/database/seeds/location.seed';
 import { seedPermissions } from 'src/database/seeds/permission.seed';
@@ -26,6 +27,16 @@ import { DataSource, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { CompleteInstallationDto } from './dtos/complete-installation.dto';
 import { DatabaseSetupDto } from './dtos/database-setup.dto';
+import { ValidateLicenseDto } from './dtos/validate-license.dto';
+import { LicensesService } from 'src/licenses/providers/licenses.service';
+import {
+  LICENSE_PLANS,
+  CertificateRule,
+  LicenseBehaviorRules,
+  LicenseFeatureKey,
+  LicenseLimitKey,
+  normalizeLicensePlan,
+} from 'src/licenses/license-plans';
 
 const INSTALLATION_STATUS_KEY = 'installation_status';
 const LICENSE_SETTINGS_KEY = 'license_settings';
@@ -55,18 +66,36 @@ type LicensePortalActivationResponse =
         expiresAt: string | null;
         maxActivations: number;
         activeActivations: number;
+        limits?: Partial<Record<LicenseLimitKey, number | null>>;
+        features?: Partial<Record<LicenseFeatureKey, boolean>>;
+        rules?: Partial<LicenseBehaviorRules>;
       };
       activation: {
         id: string;
         status: string;
       };
       signature: string;
+      marketplace?: {
+        name?: string;
+        reused?: boolean;
+        itemId?: string;
+        purchaseId?: string;
+      };
     }
   | {
       ok: false;
       code?: string;
       message?: string;
     };
+
+type InstallerActivationPayload = {
+  activationMode?: 'kasa' | 'envato';
+  licenseKey?: string;
+  envatoPurchaseCode?: string;
+  envatoBuyerName?: string;
+  envatoBuyerEmail?: string;
+  siteName?: string;
+};
 
 @Injectable()
 export class InstallerService implements OnModuleInit {
@@ -85,6 +114,8 @@ export class InstallerService implements OnModuleInit {
 
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
+    private readonly licensesService: LicensesService,
   ) {}
 
   async onModuleInit() {
@@ -230,8 +261,8 @@ export class InstallerService implements OnModuleInit {
     };
   }
 
-  async validateLicense(licenseKey: string) {
-    const activation = await this.activateLicense(licenseKey, {
+  async validateLicense(payload: ValidateLicenseDto) {
+    const activation = await this.activateLicenseFromPayload(payload, {
       instanceLabel: 'CodeWithKasa installer',
     });
 
@@ -242,6 +273,8 @@ export class InstallerService implements OnModuleInit {
       expiresAt: activation.license.expiresAt,
       activeActivations: activation.license.activeActivations,
       maxActivations: activation.license.maxActivations,
+      source: payload.activationMode === 'envato' ? 'envato' : 'kasa',
+      marketplace: activation.marketplace ?? null,
     };
   }
 
@@ -252,11 +285,11 @@ export class InstallerService implements OnModuleInit {
       throw new ConflictException('Installation is already completed');
     }
 
-    await this.activateLicense(payload.licenseKey, {
+    const activation = await this.activateLicenseFromPayload(payload, {
       instanceLabel: `${payload.siteName} installation`,
     });
 
-    await this.runInstallationSteps(payload);
+    await this.runInstallationSteps(payload, undefined, activation);
 
     return {
       isInstalled: true,
@@ -271,7 +304,7 @@ export class InstallerService implements OnModuleInit {
       throw new ConflictException('Installation is already completed');
     }
 
-    await this.activateLicense(payload.licenseKey, {
+    const activation = await this.activateLicenseFromPayload(payload, {
       instanceLabel: `${payload.siteName} installation`,
     });
 
@@ -285,7 +318,7 @@ export class InstallerService implements OnModuleInit {
       createdAt: new Date().toISOString(),
     });
 
-    void this.runInstallationJob(jobId, payload);
+    void this.runInstallationJob(jobId, payload, activation);
 
     return {
       jobId,
@@ -302,14 +335,21 @@ export class InstallerService implements OnModuleInit {
     return job;
   }
 
-  private async runInstallationJob(jobId: string, payload: CompleteInstallationDto) {
+  private async runInstallationJob(
+    jobId: string,
+    payload: CompleteInstallationDto,
+    activation: Extract<LicensePortalActivationResponse, { ok: true }>,
+  ) {
     try {
-      await this.runInstallationSteps(payload, (progress, label) =>
-        this.updateJob(jobId, {
-          status: 'running',
-          progress,
-          label,
-        }),
+      await this.runInstallationSteps(
+        payload,
+        (progress, label) =>
+          this.updateJob(jobId, {
+            status: 'running',
+            progress,
+            label,
+          }),
+        activation,
       );
       this.updateJob(jobId, {
         status: 'completed',
@@ -333,6 +373,7 @@ export class InstallerService implements OnModuleInit {
   private async runInstallationSteps(
     payload: CompleteInstallationDto,
     onProgress?: (progress: number, label: string) => void,
+    activation?: Extract<LicensePortalActivationResponse, { ok: true }>,
   ) {
     onProgress?.(5, 'Preparing permissions...');
     this.assertDatabaseSelection(payload);
@@ -371,28 +412,42 @@ export class InstallerService implements OnModuleInit {
 
     if (payload.importDemoData) {
       onProgress?.(70, 'Importing marketplace demo data...');
-      await seedProductionDemoContent(this.dataSource);
+      await seedProductionDemoContent(this.dataSource, {
+        limits: await this.getRemainingDemoSeedLimits(activation),
+        features: activation?.license.features,
+        allowedCourseModes: activation?.license.rules?.allowedCourseModes,
+      });
     } else {
       onProgress?.(82, 'Skipping demo data import...');
     }
 
     onProgress?.(88, 'Activating license...');
-    const activation = await this.activateLicense(payload.licenseKey, {
+    activation ??= await this.activateLicenseFromPayload(payload, {
       instanceLabel: `${payload.siteName} production installation`,
     });
+    const localLicenseKey = this.getLocalLicenseIdentity(payload, activation);
     await this.saveSetting(LICENSE_SETTINGS_KEY, {
       activatedAt: new Date().toISOString(),
+      activationMode: payload.activationMode === 'envato' ? 'envato' : 'kasa',
       fingerprint: this.getLicenseFingerprint(activation.signature),
       productSlug: activation.license.product,
       plan: activation.license.plan,
       expiresAt: activation.license.expiresAt,
       maxActivations: activation.license.maxActivations,
       activeActivations: activation.license.activeActivations,
+      limits: activation.license.limits,
+      features: activation.license.features,
+      rules: activation.license.rules,
       activationId: activation.activation.id,
       activationStatus: activation.activation.status,
       signature: activation.signature,
+      marketplace: activation.marketplace ?? null,
       portalUrl: this.getLicensePortalUrl(),
     });
+    await this.licensesService.savePortalActivation(
+      localLicenseKey,
+      activation,
+    );
     onProgress?.(95, 'Finalizing installation...');
     await this.saveSetting(INSTALLATION_STATUS_KEY, {
       isInstalled: true,
@@ -401,6 +456,43 @@ export class InstallerService implements OnModuleInit {
       demoDataImported: Boolean(payload.importDemoData),
     });
     this.startBackgroundLocationImport();
+  }
+
+  private async getRemainingDemoSeedLimits(
+    activation?: Extract<LicensePortalActivationResponse, { ok: true }>,
+  ) {
+    const plan = activation?.license.plan
+      ? normalizeLicensePlan(activation.license.plan)
+      : null;
+
+    if (!plan) return undefined;
+
+    const limits = {
+      ...LICENSE_PLANS[plan].limits,
+      ...(activation?.license.limits ?? {}),
+    };
+
+    const [existingUsers, existingFaculty, existingCourses] =
+      await Promise.all([
+        this.userRepository.count(),
+        this.userRepository
+          .createQueryBuilder('user')
+          .innerJoin('user.roles', 'role', 'role.name = :role', {
+            role: 'faculty',
+          })
+          .getCount(),
+        this.dataSource.getRepository(Course).count(),
+      ]);
+
+    return {
+      users: this.getRemainingDemoLimit(limits.users, existingUsers),
+      faculty: this.getRemainingDemoLimit(limits.faculty, existingFaculty),
+      courses: this.getRemainingDemoLimit(limits.courses, existingCourses),
+    };
+  }
+
+  private getRemainingDemoLimit(limit: number | null, used: number) {
+    return typeof limit === 'number' ? Math.max(0, limit - used) : limit;
   }
 
   private startBackgroundLocationImport(delayMs = 1000) {
@@ -595,8 +687,8 @@ export class InstallerService implements OnModuleInit {
   }
 
   private async createAdminUser(payload: CompleteInstallationDto) {
-    const adminRole = await this.roleRepository.findOne({
-      where: { name: 'admin' },
+    const ownerRole = await this.roleRepository.findOne({
+      where: { name: 'super_admin' },
       relations: { permissions: true },
     });
 
@@ -604,10 +696,10 @@ export class InstallerService implements OnModuleInit {
       where: { name: 'student' },
     });
 
-    if (!adminRole || !studentRole) {
+    if (!ownerRole || !studentRole) {
       throw new ServiceUnavailableException('Admin role could not be prepared');
     }
-    const adminRoles = ensureStudentRole([adminRole], studentRole);
+    const adminRoles = ensureStudentRole([ownerRole], studentRole);
 
     const existingUser = await this.userRepository.findOne({
       where: { email: payload.adminEmail.toLowerCase() },
@@ -686,8 +778,8 @@ export class InstallerService implements OnModuleInit {
       } catch (error) {
         throw new ServiceUnavailableException(
           error instanceof Error
-            ? `License portal is unreachable: ${error.message}`
-            : 'License portal is unreachable',
+            ? `Activation service is unreachable: ${error.message}`
+            : 'Activation service is unreachable',
         );
       }
 
@@ -712,6 +804,108 @@ export class InstallerService implements OnModuleInit {
     }
 
     throw new BadRequestException(lastMessage);
+  }
+
+  private async activateLicenseFromPayload(
+    payload: InstallerActivationPayload,
+    options?: { instanceLabel?: string },
+  ) {
+    if (payload.activationMode === 'envato') {
+      return this.activateEnvatoPurchase(payload, options);
+    }
+
+    if (!payload.licenseKey?.trim()) {
+      throw new BadRequestException('License key is required');
+    }
+
+    return this.activateLicense(payload.licenseKey, options);
+  }
+
+  private async activateEnvatoPurchase(
+    payload: InstallerActivationPayload,
+    options?: { instanceLabel?: string },
+  ) {
+    const purchaseCode = payload.envatoPurchaseCode?.trim();
+    const buyerName = payload.envatoBuyerName?.trim();
+    const buyerEmail = payload.envatoBuyerEmail?.trim().toLowerCase();
+
+    if (!purchaseCode) {
+      throw new BadRequestException('Envato purchase code is required');
+    }
+
+    if (!buyerName || buyerName.length < 2) {
+      throw new BadRequestException('Buyer name is required for Envato activation');
+    }
+
+    if (!buyerEmail) {
+      throw new BadRequestException('Buyer email is required for Envato activation');
+    }
+
+    const portalUrl = this.getLicensePortalUrl();
+    const instanceId = await this.getOrCreateLicenseInstanceId();
+
+    let response: Response;
+    try {
+      response = await fetch(`${portalUrl}/api/v1/envato/activate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          purchaseCode,
+          buyerName,
+          buyerEmail,
+          instanceId,
+          instanceLabel: options?.instanceLabel || 'CodeWithKasa installation',
+          productVersion:
+            this.configService.get<string>('appConfig.apiVersion') || '0.1.1',
+          metadata: {
+            appUrl: this.configService.get<string>('appConfig.appUrl'),
+            frontEndUrl: this.configService.get<string>('appConfig.fronEndUrl'),
+            environment: this.configService.get<string>('appConfig.environment'),
+          },
+        }),
+        signal: AbortSignal.timeout(15000),
+      });
+    } catch (error) {
+      throw new ServiceUnavailableException(
+        error instanceof Error
+          ? `Activation service is unreachable: ${error.message}`
+          : 'Activation service is unreachable',
+      );
+    }
+
+    const result = (await response.json().catch(() => null)) as
+      | LicensePortalActivationResponse
+      | null;
+
+    if (result?.ok) {
+      return result;
+    }
+
+    throw new BadRequestException(
+      result?.message ||
+        'Envato purchase code could not be activated. Please check the code and try again.',
+    );
+  }
+
+  private getLocalLicenseIdentity(
+    payload: InstallerActivationPayload,
+    activation: Extract<LicensePortalActivationResponse, { ok: true }>,
+  ) {
+    if (payload.activationMode === 'envato') {
+      const source =
+        payload.envatoPurchaseCode?.trim() ||
+        activation.marketplace?.purchaseId ||
+        activation.signature;
+      return `envato-${createHash('sha256').update(source).digest('hex')}`;
+    }
+
+    if (!payload.licenseKey?.trim()) {
+      throw new BadRequestException('License key is required');
+    }
+
+    return payload.licenseKey;
   }
 
   private getLicenseProductSlugs() {
@@ -741,7 +935,7 @@ export class InstallerService implements OnModuleInit {
 
     if (!url) {
       throw new ServiceUnavailableException(
-        'License portal is not configured. Set LICENSE_PORTAL_URL before installation.',
+        'Activation service is not configured. Set LICENSE_PORTAL_URL before installation.',
       );
     }
 

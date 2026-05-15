@@ -43,6 +43,10 @@ export async function seedRoles(dataSource: DataSource) {
       name: 'admin',
       permissions: allPermissions.map((permission) => permission.name),
     },
+    {
+      name: 'super_admin',
+      permissions: allPermissions.map((permission) => permission.name),
+    },
   ];
 
   for (const roleData of rolesData) {

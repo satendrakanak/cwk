@@ -92,6 +92,12 @@ export class User {
   @Column({ type: 'boolean', default: false })
   canRequestRefund!: boolean;
 
+  @Column({ type: 'boolean', default: false })
+  isDemo!: boolean;
+
+  @Column({ nullable: true, type: 'timestamptz' })
+  demoExpiresAt?: Date | null;
+
   @OneToMany(() => Category, (category) => category.createdBy)
   categories!: Category[];
 

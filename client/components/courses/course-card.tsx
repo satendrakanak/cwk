@@ -314,11 +314,11 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
             mode={course.mode}
           />
         ) : (
-          <div className="mt-auto flex flex-col items-stretch justify-between gap-3 sm:flex-row sm:items-center sm:gap-4">
-            <div className="flex flex-col text-center sm:text-left">
+          <div className="mt-auto flex items-center justify-between gap-4">
+            <div className="flex min-w-0 flex-col text-left">
               {discount > 0 ? (
                 <>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
                     <span className="text-base font-semibold text-primary">
                       ₹{new Intl.NumberFormat("en-IN").format(finalPrice)}
                     </span>
@@ -343,8 +343,8 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
               onClick={handleAdd}
               className={
                 alreadyAdded
-                  ? "flex h-10 w-full cursor-pointer items-center justify-center rounded-full border border-emerald-600 bg-emerald-600 text-white transition hover:opacity-90 sm:h-9 sm:w-9"
-                  : "flex h-10 w-full cursor-pointer items-center justify-center rounded-full border border-border bg-background text-foreground transition hover:border-primary hover:bg-primary hover:text-primary-foreground sm:h-9 sm:w-9"
+                  ? "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-emerald-600 bg-emerald-600 text-white transition hover:opacity-90 sm:h-9 sm:w-9"
+                  : "flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-foreground transition hover:border-primary hover:bg-primary hover:text-primary-foreground sm:h-9 sm:w-9"
               }
               title={alreadyAdded ? "View cart" : "Add to cart"}
             >

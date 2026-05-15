@@ -1,4 +1,6 @@
 import { FacultyAccessGate } from "@/components/faculty/layout/faculty-access-gate";
+import { AdminLicenseGate } from "@/components/admin/layout/admin-license-gate";
+import { AdminLicenseProvider } from "@/components/admin/layout/admin-license-provider";
 import { FacultyNavbar } from "@/components/faculty/layout/faculty-navbar";
 import { FacultySidebar } from "@/components/faculty/layout/faculty-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
@@ -21,15 +23,17 @@ export default async function FacultyLayout({
   return (
     <div className="font-sans">
       <FacultyAccessGate>
-        <SidebarProvider>
-          <FacultySidebar variant="inset" />
-          <SidebarInset className="bg-transparent">
-            <FacultyNavbar />
-            <main className="flex flex-1 flex-col gap-4 bg-transparent p-3 sm:p-4 lg:p-5">
-              {children}
-            </main>
-          </SidebarInset>
-        </SidebarProvider>
+        <AdminLicenseProvider>
+          <SidebarProvider>
+            <FacultySidebar variant="inset" />
+            <SidebarInset className="bg-transparent">
+              <FacultyNavbar />
+              <main className="flex flex-1 flex-col gap-4 bg-transparent p-3 sm:p-4 lg:p-5">
+                <AdminLicenseGate>{children}</AdminLicenseGate>
+              </main>
+            </SidebarInset>
+          </SidebarProvider>
+        </AdminLicenseProvider>
       </FacultyAccessGate>
     </div>
   );

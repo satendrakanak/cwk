@@ -284,7 +284,9 @@ export function CertificatesDashboard({ data }: CertificatesDashboardProps) {
         accessorKey: "examPassed",
         header: "Exam",
         cell: ({ row }) =>
-          row.original.examRequired ? (
+          row.original.certificateRule === "lecture_completion" ? (
+            <Badge variant="outline">Not needed for plan</Badge>
+          ) : row.original.examRequired ? (
             <Badge variant={row.original.examPassed ? "default" : "outline"}>
               {row.original.examPassed ? "Passed" : "Pending"}
             </Badge>
@@ -417,6 +419,10 @@ export function CertificatesDashboard({ data }: CertificatesDashboardProps) {
           TotalLectures: row.totalLectures,
           ExamRequired: row.examRequired ? "Yes" : "No",
           ExamPassed: row.examPassed ? "Yes" : "No",
+          CertificateRule:
+            row.certificateRule === "lecture_completion"
+              ? "Lecture completion"
+              : "Exam pass",
           Status: statusConfig[row.status].label,
           CertificateNumber: row.certificate?.certificateNumber ?? "",
           IssuedAt: row.certificate?.issuedAt ?? "",

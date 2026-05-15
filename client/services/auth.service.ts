@@ -2,6 +2,7 @@ import { apiClient } from "@/lib/api/client";
 import { ApiResponse } from "@/types/api";
 import {
   AuthResponse,
+  LoginResponse,
   CompleteSocialAuthPayload,
   CheckoutVerificationOtpPayload,
   CheckoutVerificationStartPayload,
@@ -20,8 +21,23 @@ export const authService = {
       data,
     ),
 
-  login: (data: LoginPayload) =>
-    apiClient.post<AuthResponse>("/api/auth/sign-in", data),
+  login: async (data: LoginPayload): Promise<AuthResponse> => {
+    const response = await apiClient.post<
+      AuthResponse | ApiResponse<{ success: boolean; data: LoginResponse }>
+    >("/api/auth/sign-in", data);
+    const maybeNested = response.data as
+      | LoginResponse
+      | { success: boolean; data?: LoginResponse };
+
+    if ("data" in maybeNested && maybeNested.data) {
+      return {
+        ...response,
+        data: maybeNested.data,
+      };
+    }
+
+    return response as AuthResponse;
+  },
 
   verifyEmail: (token: string) =>
     apiClient.get<AuthResponse>(
@@ -36,6 +52,8 @@ export const authService = {
 
   refreshToken: () =>
     apiClient.post<{ success: boolean }>("/api/auth/refresh-tokens"),
+
+  logout: () => apiClient.post<{ success: boolean }>("/api/auth/sign-out"),
 
   startCheckoutVerification: (data: CheckoutVerificationStartPayload) =>
     apiClient.post<ApiResponse<CheckoutVerificationStartResponse>>(

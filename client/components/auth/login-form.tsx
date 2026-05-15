@@ -21,6 +21,9 @@ import { loginFormSchema } from "@/schemas";
 import { authService } from "@/services/auth.service";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { startRouteProgress } from "@/components/ui/route-progress-bar";
+import { getRoleHomePath, shouldUseRoleHomePath } from "@/lib/role-redirect";
+import { useSession } from "@/context/session-context";
+import type { User } from "@/types/user";
 
 export function LoginForm() {
   const [error, setError] = useState<string>("");
@@ -29,6 +32,7 @@ export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryError = searchParams.get("error");
+  const { setUser } = useSession();
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -46,17 +50,35 @@ export function LoginForm() {
       setError("");
 
       const response = await authService.login(data);
+      const responseData = response.data;
+
+      if (!responseData?.user) {
+        throw new Error(
+          "Login response was incomplete. Please try again or contact support.",
+        );
+      }
 
       const rawCallbackUrl = searchParams.get("callbackUrl");
-      const callbackUrl =
+      const safeCallbackUrl =
         rawCallbackUrl &&
         rawCallbackUrl.startsWith("/") &&
         !rawCallbackUrl.startsWith("//")
           ? rawCallbackUrl
-          : response.data.defaultRedirect || DEFAULT_LOGIN_REDIRECT;
+          : null;
+      const roleHomePath =
+        responseData.defaultRedirect ||
+        getRoleHomePath(responseData.user.roles) ||
+        DEFAULT_LOGIN_REDIRECT;
+      const callbackUrl = responseData.defaultRedirect === "/admin/settings/license"
+        ? responseData.defaultRedirect
+        : shouldUseRoleHomePath(safeCallbackUrl)
+        ? roleHomePath
+        : safeCallbackUrl || roleHomePath;
 
+      setUser(responseData.user as unknown as User);
       startRouteProgress(callbackUrl);
       startTransition(() => {
+        router.refresh();
         router.replace(callbackUrl);
       });
     } catch (err: unknown) {

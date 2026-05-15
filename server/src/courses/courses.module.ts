@@ -23,6 +23,7 @@ import { CourseDisplayFlagsSchemaProvider } from './providers/course-display-fla
 import { Chapter } from 'src/chapters/chapter.entity';
 import { FacultyReview } from 'src/faculty-reviews/faculty-review.entity';
 import { CourseReview } from 'src/course-reviews/course-review.entity';
+import { LicensesModule } from 'src/licenses/licenses.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { CourseReview } from 'src/course-reviews/course-review.entity';
     UserProgressModule,
     UsersModule,
     EngagementModule,
+    LicensesModule,
     forwardRef(() => OrdersModule),
   ],
   controllers: [CoursesController],

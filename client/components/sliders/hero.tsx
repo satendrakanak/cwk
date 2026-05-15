@@ -7,6 +7,8 @@ import { Autoplay, EffectCards, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { couponClientService } from "@/services/coupons/coupon.client";
+import { useLicenseSummary } from "@/hooks/use-license-summary";
+import { isLicenseFeatureEnabled } from "@/lib/license/feature-access";
 import { CouponMap } from "@/types/coupon";
 import { Course } from "@/types/course";
 import CourseHeroCard from "./course-hero-card";
@@ -18,9 +20,16 @@ interface HeroProps {
 export default function Hero({ courses }: HeroProps) {
   const visibleCourses = useMemo(() => courses.slice(0, 3), [courses]);
   const [couponMap, setCouponMap] = useState<CouponMap>({});
+  const { summary, isLoading } = useLicenseSummary();
+  const demoEntryUrl = process.env.NEXT_PUBLIC_DEMO_ENTRY_URL || "/contact";
 
   useEffect(() => {
-    if (!visibleCourses?.length) return;
+    if (!visibleCourses?.length || isLoading) return;
+
+    if (!isLicenseFeatureEnabled(summary, "coupons")) {
+      setCouponMap({});
+      return;
+    }
 
     const fetchCoupons = async () => {
       try {
@@ -38,7 +47,7 @@ export default function Hero({ courses }: HeroProps) {
     };
 
     fetchCoupons();
-  }, [visibleCourses]);
+  }, [visibleCourses, isLoading, summary]);
 
   return (
     <section className="academy-hero relative overflow-hidden text-white">
@@ -77,10 +86,10 @@ export default function Hero({ courses }: HeroProps) {
             </Link>
 
             <Link
-              href="/contact"
+              href={demoEntryUrl}
               className="inline-flex h-12 w-full max-w-64 items-center justify-center rounded-full border border-white/25 bg-white/10 px-7 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_15px_45px_rgba(15,23,42,0.28)] backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white hover:text-slate-950 sm:w-auto lg:max-w-none"
             >
-              Speak to our team
+              Take a Tour
             </Link>
           </div>
         </div>

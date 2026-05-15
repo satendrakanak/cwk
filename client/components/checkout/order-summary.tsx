@@ -9,6 +9,10 @@ import { useCartStore } from "@/store/cart-store";
 import { Gateway } from "@/types/settings";
 import { SummaryRow } from "./summary-row";
 import { Order } from "@/types/order";
+import {
+  REFUND_GUARANTEE_NOTE,
+  REFUND_GUARANTEE_TITLE,
+} from "@/lib/refund-policy";
 
 interface OrderSummaryProps {
   isSubmitting: boolean;
@@ -261,12 +265,11 @@ export const OrderSummary = ({
           </div>
 
           <p className="text-sm font-semibold text-card-foreground">
-            Refunds Reviewed By Team
+            {REFUND_GUARANTEE_TITLE}
           </p>
 
           <p className="mt-1 text-xs leading-5 text-muted-foreground">
-            Eligible refund requests are enabled by support and reviewed as per
-            policy.
+            {REFUND_GUARANTEE_NOTE}
           </p>
         </div>
       )}

@@ -23,6 +23,7 @@ import { AutoApplyCouponDto } from './dtos/auto-apply-coupon.dto';
 import { AutoApplyBulkCouponDto } from './dtos/auto-apply-bulk.dto';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { AuthType } from 'src/auth/enums/auth-type.enum';
+import { LicensesService } from 'src/licenses/providers/licenses.service';
 
 @Controller('coupons')
 export class CouponsController {
@@ -31,6 +32,7 @@ export class CouponsController {
      * Inject couponsService
      */
     private readonly couponsService: CouponsService,
+    private readonly licensesService: LicensesService,
   ) {}
 
   @Get()
@@ -45,6 +47,7 @@ export class CouponsController {
 
   @Post()
   async create(@Body() createCouponDto: CreateCouponDto): Promise<Coupon> {
+    await this.licensesService.assertFeature('coupons');
     return await this.couponsService.create(createCouponDto);
   }
 
@@ -53,11 +56,13 @@ export class CouponsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() patchCouponDto: PatchCouponDto,
   ): Promise<Coupon> {
+    await this.licensesService.assertFeature('coupons');
     return await this.couponsService.update(id, patchCouponDto);
   }
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number): Promise<DeleteRecord> {
+    await this.licensesService.assertFeature('coupons');
     return await this.couponsService.delete(id);
   }
 
@@ -67,6 +72,7 @@ export class CouponsController {
     @Body() applyCouponDto: ApplyCouponDto,
     @ActiveUser() user: ActiveUserData,
   ) {
+    await this.licensesService.assertFeature('coupons');
     const userId = user?.sub;
 
     return this.couponsService.applyCoupon(
@@ -83,6 +89,7 @@ export class CouponsController {
     @Body() autoApplyCouponDto: AutoApplyCouponDto,
     @ActiveUser() user: ActiveUserData,
   ) {
+    await this.licensesService.assertFeature('coupons');
     const userId = user?.sub;
 
     return this.couponsService.autoApplyCoupon(
@@ -97,6 +104,7 @@ export class CouponsController {
     @Body() autoApplyBulkCouponDto: AutoApplyBulkCouponDto,
     @ActiveUser() user: ActiveUserData,
   ) {
+    await this.licensesService.assertFeature('coupons');
     const userId = user?.sub;
 
     const data = await this.couponsService.autoApplyBulk(

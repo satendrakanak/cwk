@@ -10,7 +10,10 @@ import {
   MinLength,
   ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
+
+const emptyStringToUndefined = ({ value }: { value: unknown }) =>
+  typeof value === 'string' && value.trim() === '' ? undefined : value;
 
 class InstallationDatabaseDto {
   @IsOptional()
@@ -59,19 +62,44 @@ export class CompleteInstallationDto {
 
   @IsOptional()
   @IsString()
+  @Transform(emptyStringToUndefined)
   siteTagline?: string;
 
   @IsOptional()
   @IsString()
+  @Transform(emptyStringToUndefined)
   supportEmail?: string;
 
   @IsOptional()
   @IsString()
+  @Transform(emptyStringToUndefined)
   supportPhone?: string;
 
+  @IsOptional()
+  @IsIn(['kasa', 'envato'])
+  activationMode?: 'kasa' | 'envato';
+
+  @IsOptional()
   @IsString()
   @MinLength(8)
-  licenseKey!: string;
+  @Transform(emptyStringToUndefined)
+  licenseKey?: string;
+
+  @IsOptional()
+  @IsString()
+  @MinLength(8)
+  @Transform(emptyStringToUndefined)
+  envatoPurchaseCode?: string;
+
+  @IsOptional()
+  @IsString()
+  @Transform(emptyStringToUndefined)
+  envatoBuyerName?: string;
+
+  @IsOptional()
+  @IsEmail()
+  @Transform(emptyStringToUndefined)
+  envatoBuyerEmail?: string;
 
   @IsString()
   @MinLength(2)

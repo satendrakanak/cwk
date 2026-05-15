@@ -6,8 +6,15 @@ import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart-store";
 import { CouponApplyBox } from "../coupon/coupon-apply-box";
 import { SummaryRow } from "./summary-row";
+import { useLicenseSummary } from "@/hooks/use-license-summary";
+import { isLicenseFeatureEnabled } from "@/lib/license/feature-access";
+import {
+  REFUND_GUARANTEE_NOTE,
+  REFUND_GUARANTEE_TITLE,
+} from "@/lib/refund-policy";
 
 export const CartSummary = () => {
+  const { summary, isLoading } = useLicenseSummary();
   const {
     cartItems,
     autoDiscount,
@@ -116,13 +123,15 @@ export const CartSummary = () => {
         </div>
       </div>
 
-      <div className="mt-5 rounded-2xl border border-border bg-muted/50 p-4">
-        <CouponApplyBox
-          appliedCoupon={manualCoupon}
-          onApply={applyManualCoupon}
-          onRemove={removeCoupon}
-        />
-      </div>
+      {!isLoading && isLicenseFeatureEnabled(summary, "coupons") ? (
+        <div className="mt-5 rounded-2xl border border-border bg-muted/50 p-4">
+          <CouponApplyBox
+            appliedCoupon={manualCoupon}
+            onApply={applyManualCoupon}
+            onRemove={removeCoupon}
+          />
+        </div>
+      ) : null}
 
       <Link href="/checkout" className="mt-5 block">
         <Button
@@ -139,12 +148,11 @@ export const CartSummary = () => {
         </div>
 
         <p className="text-sm font-semibold text-card-foreground">
-          Refunds Reviewed By Team
+          {REFUND_GUARANTEE_TITLE}
         </p>
 
         <p className="mt-1 text-xs leading-5 text-muted-foreground">
-          Eligible refund requests are enabled by support and reviewed as per
-          policy.
+          {REFUND_GUARANTEE_NOTE}
         </p>
       </div>
     </aside>

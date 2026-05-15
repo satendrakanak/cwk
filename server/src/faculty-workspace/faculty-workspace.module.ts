@@ -5,6 +5,7 @@ import { EmailTemplatesModule } from 'src/email-templates/email-templates.module
 import { Enrollment } from 'src/enrollments/enrollment.entity';
 import { ExamAttempt } from 'src/exams/exam-attempt.entity';
 import { Exam } from 'src/exams/exam.entity';
+import { LicensesModule } from 'src/licenses/licenses.module';
 import { SettingsModule } from 'src/settings/settings.module';
 import { NotificationsModule } from 'src/notifications/notifications.module';
 import { Upload } from 'src/uploads/upload.entity';
@@ -28,6 +29,7 @@ import { FacultyWorkspaceService } from './providers/faculty-workspace.service';
     NotificationsModule,
     UploadsModule,
     EmailTemplatesModule,
+    LicensesModule,
     TypeOrmModule.forFeature([
       Course,
       Enrollment,

@@ -9,6 +9,7 @@ import {
   Database,
   KeyRound,
   Loader,
+  Loader2,
   Play,
   ShieldCheck,
   Sparkles,
@@ -52,9 +53,13 @@ const initialForm: CompleteInstallationPayload = {
   },
   siteName: "CodeWithKasa",
   siteTagline: "Practical courses, live classes, and certificates in one platform.",
-  supportEmail: "support@codewithkasa.com",
-  supportPhone: "",
+  supportEmail: "support@getkasa.in",
+  supportPhone: "+91-987-XXX-XXXX",
+  activationMode: "kasa",
   licenseKey: "",
+  envatoPurchaseCode: "",
+  envatoBuyerName: "",
+  envatoBuyerEmail: "",
   adminFirstName: "",
   adminLastName: "",
   adminEmail: "",
@@ -85,6 +90,41 @@ function databaseHostsMatch(
 
   const localHosts = new Set(["localhost", "127.0.0.1", "::1"]);
   return localHosts.has(formHost) && runtimeHost === "host.docker.internal";
+}
+
+function buildInstallationPayload(
+  form: CompleteInstallationPayload,
+): CompleteInstallationPayload {
+  const basePayload: CompleteInstallationPayload = {
+    ...form,
+    siteName: form.siteName.trim(),
+    siteTagline: form.siteTagline?.trim(),
+    supportEmail: form.supportEmail?.trim(),
+    supportPhone: form.supportPhone?.trim(),
+    adminFirstName: form.adminFirstName.trim(),
+    adminLastName: form.adminLastName.trim(),
+    adminEmail: form.adminEmail.trim(),
+  };
+
+  if (form.activationMode === "envato") {
+    return {
+      ...basePayload,
+      activationMode: "envato",
+      licenseKey: undefined,
+      envatoPurchaseCode: form.envatoPurchaseCode?.trim(),
+      envatoBuyerName: form.envatoBuyerName?.trim(),
+      envatoBuyerEmail: form.envatoBuyerEmail?.trim(),
+    };
+  }
+
+  return {
+    ...basePayload,
+    activationMode: "kasa",
+    licenseKey: form.licenseKey?.trim(),
+    envatoPurchaseCode: undefined,
+    envatoBuyerName: undefined,
+    envatoBuyerEmail: undefined,
+  };
 }
 
 export function InstallationWizard() {
@@ -189,9 +229,19 @@ export function InstallationWizard() {
   const validateLicense = async () => {
     setValidating(true);
     try {
-      const result = await installerClientService.validateLicense(
-        form.licenseKey,
-      );
+      const envatoBuyerName = (form.envatoBuyerName || "").trim();
+      const result =
+        form.activationMode === "envato"
+          ? await installerClientService.validateLicense({
+              activationMode: "envato",
+              envatoPurchaseCode: (form.envatoPurchaseCode || "").trim(),
+              envatoBuyerName,
+              envatoBuyerEmail: (form.envatoBuyerEmail || "").trim(),
+            })
+          : await installerClientService.validateLicense({
+              activationMode: "kasa",
+              licenseKey: (form.licenseKey || "").trim(),
+            });
       setLicenseFingerprint(result.fingerprint);
       setLicenseSummary({
         plan: result.plan,
@@ -204,7 +254,7 @@ export function InstallationWizard() {
     } catch (error) {
       setLicenseFingerprint(null);
       setLicenseSummary(null);
-      toast.error(error instanceof Error ? error.message : "Invalid license key");
+      toast.error(error instanceof Error ? error.message : "Activation failed");
     } finally {
       setValidating(false);
     }
@@ -213,7 +263,9 @@ export function InstallationWizard() {
   const completeInstallation = async () => {
     setSubmitting(true);
     try {
-      const result = await installerClientService.start(form);
+      const result = await installerClientService.start(
+        buildInstallationPayload(form),
+      );
       setInstallationJobId(result.jobId);
       setInstallationProgress({
         id: result.jobId,
@@ -376,7 +428,7 @@ export function InstallationWizard() {
                 {installationProgress.status === "completed" ? (
                   <CheckCircle2 className="size-8" />
                 ) : (
-                  <Loader className="size-8 animate-spin" />
+                  <Loader2 className="size-8 animate-spin" />
                 )}
               </div>
               <h1 className="mt-6 text-3xl font-semibold">
@@ -484,14 +536,14 @@ export function InstallationWizard() {
         <aside className="rounded-[2rem] border bg-card p-6 shadow-sm">
           <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-primary">
             <ShieldCheck className="size-4" />
-            Secure installer
+            Secure setup
           </div>
           <h1 className="mt-5 text-4xl font-semibold tracking-tight">
             Set up your academy workspace.
           </h1>
           <p className="mt-4 text-muted-foreground">
-            Connect the running database, activate the license, create the first
-            admin, and optionally import marketplace-ready demo data.
+            Connect the database, verify your purchase, create the first admin,
+            and optionally import starter content.
           </p>
 
           <div className="mt-8 space-y-3">
@@ -873,21 +925,90 @@ export function InstallationWizard() {
             <section>
               <SectionTitle
                 icon={KeyRound}
-                title="Activate license"
-                description="Activation is checked before admin setup and demo import. This keeps installation gated without interrupting the first screen."
+                title="Verify your purchase"
+                description="Choose the purchase method you used, then verify access to continue setup."
               />
               <div className="mt-6 grid gap-4">
-                <Field label="License key">
-                  <Input
-                    value={form.licenseKey}
-                    onChange={(event) => {
-                      updateForm("licenseKey", event.target.value);
-                      setLicenseFingerprint(null);
-                      setLicenseSummary(null);
-                    }}
-                    placeholder="Enter the license key from CodeWithKasa License Portal"
-                  />
-                </Field>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {(["kasa", "envato"] as const).map((mode) => (
+                    <button
+                      key={mode}
+                      type="button"
+                      onClick={() => {
+                        updateForm("activationMode", mode);
+                        setLicenseFingerprint(null);
+                        setLicenseSummary(null);
+                      }}
+                      className={`rounded-2xl border p-4 text-left transition ${
+                        form.activationMode === mode
+                          ? "border-primary bg-primary/10"
+                          : "hover:bg-muted"
+                      }`}
+                    >
+                      <span className="block text-sm font-semibold">
+                        {mode === "kasa" ? "License key" : "Envato purchase code"}
+                      </span>
+                      <span className="mt-1 block text-xs text-muted-foreground">
+                        {mode === "kasa"
+                          ? "Use the license key provided with your purchase."
+                          : "Use the purchase code from the Envato downloads page."}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+
+                {form.activationMode === "envato" ? (
+                  <div className="grid gap-4">
+                    <Field label="Envato purchase code">
+                      <Input
+                        value={form.envatoPurchaseCode}
+                        onChange={(event) => {
+                          updateForm("envatoPurchaseCode", event.target.value);
+                          setLicenseFingerprint(null);
+                          setLicenseSummary(null);
+                        }}
+                        placeholder="Enter your Envato purchase code"
+                      />
+                    </Field>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <Field label="Buyer email">
+                        <Input
+                          type="email"
+                          value={form.envatoBuyerEmail}
+                          onChange={(event) => {
+                            updateForm("envatoBuyerEmail", event.target.value);
+                            setLicenseFingerprint(null);
+                            setLicenseSummary(null);
+                          }}
+                          placeholder="buyer@email.com"
+                        />
+                      </Field>
+                      <Field label="Buyer name">
+                        <Input
+                          value={form.envatoBuyerName}
+                          onChange={(event) => {
+                            updateForm("envatoBuyerName", event.target.value);
+                            setLicenseFingerprint(null);
+                            setLicenseSummary(null);
+                          }}
+                          placeholder="Name used for support records"
+                        />
+                      </Field>
+                    </div>
+                  </div>
+                ) : (
+                  <Field label="License key">
+                    <Input
+                      value={form.licenseKey}
+                      onChange={(event) => {
+                        updateForm("licenseKey", event.target.value);
+                        setLicenseFingerprint(null);
+                        setLicenseSummary(null);
+                      }}
+                      placeholder="Enter your license key"
+                    />
+                  </Field>
+                )}
                 {licenseFingerprint ? (
                   <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm text-emerald-600">
                     <div className="flex items-center gap-3">
@@ -922,14 +1043,21 @@ export function InstallationWizard() {
                 </Button>
                 <Button
                   onClick={validateLicense}
-                  disabled={validating || form.licenseKey.trim().length < 8}
+                  disabled={
+                    validating ||
+                    (form.activationMode === "envato"
+                      ? (form.envatoPurchaseCode || "").trim().length < 8 ||
+                        (form.envatoBuyerName || "").trim().length < 2 ||
+                        !(form.envatoBuyerEmail || "").includes("@")
+                      : (form.licenseKey || "").trim().length < 8)
+                  }
                 >
                   {validating ? (
                     <Loader className="size-4 animate-spin" />
                   ) : (
                     <ShieldCheck className="size-4" />
                   )}
-                  Validate license
+                  Verify purchase
                 </Button>
               </div>
             </section>
@@ -1011,7 +1139,7 @@ export function InstallationWizard() {
                   }
                 >
                   {submitting ? (
-                    <Loader className="size-4 animate-spin" />
+                    <Loader2 className="size-4 animate-spin" />
                   ) : (
                     <Play className="size-4" />
                   )}
@@ -1035,7 +1163,7 @@ function InstallShell({ children }: { children: React.ReactNode }) {
             CodeWithKasa Installer
           </p>
           <p className="mt-1 text-sm text-muted-foreground">
-            Product setup and activation
+            Product setup
           </p>
         </div>
         <div className="rounded-full border bg-card px-4 py-2 text-sm font-medium">

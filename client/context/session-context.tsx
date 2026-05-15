@@ -11,6 +11,7 @@ import { CartItem } from "@/types/cart";
 type SessionContextType = {
   user: User | null;
   isLoading: boolean;
+  setUser: (user: User | null) => void;
 };
 
 const SessionContext = createContext<SessionContextType | undefined>(undefined);
@@ -188,7 +189,7 @@ export const SessionProvider = ({
   }, [cartItems, hasHydratedCart, replaceCartItems, user]);
 
   return (
-    <SessionContext.Provider value={{ user, isLoading }}>
+    <SessionContext.Provider value={{ user, isLoading, setUser }}>
       {children}
     </SessionContext.Provider>
   );

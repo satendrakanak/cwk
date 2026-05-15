@@ -15,17 +15,20 @@ import { formatModuleName, parsePermissionName } from "@/lib/access-control";
 import { Permission, Role } from "@/types/user";
 import { PermissionDialog } from "./permission-dialog";
 import { getActionLabel, getPermissionUsage } from "./access-control-utils";
+import { DEMO_CONFIGURATION_LOCK_MESSAGE } from "@/lib/demo-access";
 
 export function PermissionsPanel({
   roles,
   permissions,
   onPermissionsChange,
   onRolesChange,
+  isDemoUser = false,
 }: {
   roles: Role[];
   permissions: Permission[];
   onPermissionsChange: (permissions: Permission[]) => void;
   onRolesChange: (roles: Role[]) => void;
+  isDemoUser?: boolean;
 }) {
   const router = useRouter();
   const [editorOpen, setEditorOpen] = useState(false);
@@ -59,8 +62,22 @@ export function PermissionsPanel({
     onPermissionsChange([...permissions, savedPermission]);
   };
 
+  const blockDemoConfigurationChange = () => {
+    if (!isDemoUser) {
+      return false;
+    }
+
+    toast.error(DEMO_CONFIGURATION_LOCK_MESSAGE);
+    return true;
+  };
+
   const handleDelete = async () => {
     if (!deletePermission) {
+      return;
+    }
+
+    if (blockDemoConfigurationChange()) {
+      setDeletePermission(null);
       return;
     }
 
@@ -102,6 +119,7 @@ export function PermissionsPanel({
           </div>
           <Button
             onClick={() => {
+              if (blockDemoConfigurationChange()) return;
               setActivePermission(null);
               setEditorOpen(true);
             }}
@@ -140,6 +158,7 @@ export function PermissionsPanel({
                       size="sm"
                       className="dark:border-white/10 dark:bg-white/6 dark:text-slate-100 dark:hover:bg-white/10"
                       onClick={() => {
+                        if (blockDemoConfigurationChange()) return;
                         setActivePermission(permission);
                         setEditorOpen(true);
                       }}
@@ -151,7 +170,10 @@ export function PermissionsPanel({
                       variant="destructive"
                       size="sm"
                       className="dark:bg-rose-500/12 dark:text-rose-200 dark:hover:bg-rose-500/20"
-                      onClick={() => setDeletePermission(permission)}
+                      onClick={() => {
+                        if (blockDemoConfigurationChange()) return;
+                        setDeletePermission(permission);
+                      }}
                     >
                       <Trash2 className="size-3.5" />
                       Delete

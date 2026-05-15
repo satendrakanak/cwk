@@ -22,6 +22,7 @@ import { userProgressClientService } from "@/services/user-progress/user-progres
 import { Course } from "@/types/course";
 import type { FacultyClassSession } from "@/types/faculty-workspace";
 import type { Assignment } from "@/types/assignment";
+import type { LicenseSummary } from "@/types/license";
 import { Lecture } from "@/types/lecture";
 import {
   hasLiveClasses,
@@ -39,12 +40,14 @@ interface LearnClientProps {
   course: Course;
   liveSessions?: FacultyClassSession[];
   assignments?: Assignment[];
+  licenseSummary?: LicenseSummary | null;
 }
 
 export const LearnClient = ({
   course,
   liveSessions = [],
   assignments = [],
+  licenseSummary,
 }: LearnClientProps) => {
   const [courseData, setCourseData] = useState(course);
   const [currentLecture, setCurrentLecture] = useState<Lecture | null>(null);
@@ -187,7 +190,11 @@ export const LearnClient = ({
                 </button>
               </div>
 
-              <CourseTabs course={courseData} assignments={assignments} />
+              <CourseTabs
+                course={courseData}
+                assignments={assignments}
+                licenseSummary={licenseSummary}
+              />
               {showLiveSessions ? (
                 <section className="mx-auto max-w-6xl px-4 pb-8 md:px-6">
                   <div className="rounded-2xl border bg-card p-5 shadow-sm">

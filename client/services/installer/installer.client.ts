@@ -36,7 +36,11 @@ export type CompleteInstallationPayload = {
   siteTagline?: string;
   supportEmail?: string;
   supportPhone?: string;
-  licenseKey: string;
+  activationMode?: "kasa" | "envato";
+  licenseKey?: string;
+  envatoPurchaseCode?: string;
+  envatoBuyerName?: string;
+  envatoBuyerEmail?: string;
   adminFirstName: string;
   adminLastName: string;
   adminEmail: string;
@@ -68,7 +72,16 @@ export const installerClientService = {
     return response.data;
   },
 
-  validateLicense: async (licenseKey: string) => {
+  validateLicense: async (
+    payload:
+      | { activationMode?: "kasa"; licenseKey: string }
+      | {
+          activationMode: "envato";
+          envatoPurchaseCode: string;
+          envatoBuyerName?: string;
+          envatoBuyerEmail: string;
+        },
+  ) => {
     const response = await apiClient.post<
       ApiResponse<{
         valid: boolean;
@@ -77,8 +90,9 @@ export const installerClientService = {
         expiresAt: string | null;
         activeActivations: number;
         maxActivations: number;
+        source?: "kasa" | "envato";
       }>
-    >("/api/installer/validate-license", { licenseKey });
+    >("/api/installer/validate-license", payload);
     return response.data;
   },
 

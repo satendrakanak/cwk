@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EnrollmentsModule } from 'src/enrollments/enrollments.module';
+import { LicensesModule } from 'src/licenses/licenses.module';
 import { Order } from 'src/orders/order.entity';
 import { PaymentsModule } from 'src/payments/payments.module';
 import { User } from 'src/users/user.entity';
@@ -14,6 +15,7 @@ import { RefundsService } from './providers/refunds.service';
     TypeOrmModule.forFeature([RefundRequest, RefundLog, Order, User]),
     PaymentsModule,
     EnrollmentsModule,
+    LicensesModule,
   ],
   controllers: [RefundsController],
   providers: [RefundsService],

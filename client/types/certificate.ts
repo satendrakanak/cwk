@@ -1,5 +1,6 @@
 import { Course } from "./course";
 import { FileType } from "./file";
+import type { CertificateRule } from "./license";
 import { User } from "./user";
 
 export type Certificate = {
@@ -28,6 +29,7 @@ export type AdminCertificateRow = {
   completedLectures: number;
   examRequired: boolean;
   examPassed: boolean;
+  certificateRule: CertificateRule;
   courseCompleted: boolean;
   status: AdminCertificateStatus;
   actionHint: string;

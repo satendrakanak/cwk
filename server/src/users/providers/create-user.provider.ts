@@ -1,9 +1,11 @@
 import {
   ConflictException,
   forwardRef,
+  HttpException,
   Inject,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user.entity';
@@ -20,6 +22,7 @@ import { CreateUserOptions } from '../interfaces/create-user-options.interface';
 import { GenerateVerificationTokenProvider } from 'src/auth/providers/generate-verification-token.provider';
 import { TokenType } from 'src/auth/enums/token-type.enum';
 import { ensureStudentRole } from '../utils/ensure-student-role';
+import { LicensesService } from 'src/licenses/providers/licenses.service';
 
 @Injectable()
 export class CreateUserProvider {
@@ -58,6 +61,7 @@ export class CreateUserProvider {
 
     private readonly generateUsernameProvider: GenerateUsernameProvider,
     private readonly generateVerificationTokenProvider: GenerateVerificationTokenProvider,
+    private readonly licensesService: LicensesService,
   ) {}
 
   public async create(
@@ -93,12 +97,37 @@ export class CreateUserProvider {
         ? await this.rolesPermissionsService.findByIds(createUserDto.roleIds)
         : [];
       const roles = ensureStudentRole(requestedRoles, studentRole);
+      const isCreatingFaculty = roles.some((role) => role.name === 'faculty');
 
-      console.log('Current User', currentUser);
+      await this.licensesService.assertCanCreateUser();
+
+      if (isCreatingFaculty) {
+        await this.licensesService.assertCanCreateFaculty();
+      }
 
       const isAdmin =
         currentUser?.roles?.includes('admin') ||
-        currentUser?.roles?.some((r: any) => r.name === 'admin'); // अगर objects हैं
+        currentUser?.roles?.includes('super_admin') ||
+        currentUser?.roles?.some(
+          (r: any) => r.name === 'admin' || r.name === 'super_admin',
+        ); // अगर objects हैं
+      const isDemoCreator = currentUser?.roles?.includes('demo_admin');
+      const demoCreator = isDemoCreator
+        ? await this.userRepository.findOne({
+            where: { id: currentUser!.sub },
+            select: ['id', 'isDemo', 'demoExpiresAt'],
+          })
+        : null;
+
+      if (
+        isDemoCreator &&
+        (!demoCreator?.isDemo ||
+          !demoCreator.demoExpiresAt ||
+          demoCreator.demoExpiresAt.getTime() <= Date.now())
+      ) {
+        throw new UnauthorizedException('Demo access expired');
+      }
+
       const hashedPassword = await this.hashingProvider.hashPassword(
         createUserDto.password,
       );
@@ -123,6 +152,8 @@ export class CreateUserProvider {
           roles,
           password: hashedPassword,
           emailVerified: isAdmin ? new Date() : undefined,
+          isDemo: Boolean(demoCreator?.isDemo),
+          demoExpiresAt: demoCreator?.demoExpiresAt ?? undefined,
         });
 
         try {
@@ -165,7 +196,7 @@ export class CreateUserProvider {
       //await this.mailService.sendWelcomeEmail(user);
       return newUser;
     } catch (error: unknown) {
-      if (error instanceof ConflictException) {
+      if (error instanceof HttpException) {
         throw error;
       }
       console.error('🔥 REAL ERROR:', error);

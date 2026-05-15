@@ -18,7 +18,7 @@ export class InstallerController {
 
   @Post('validate-license')
   validateLicense(@Body() payload: ValidateLicenseDto) {
-    return this.installerService.validateLicense(payload.licenseKey);
+    return this.installerService.validateLicense(payload);
   }
 
   @Post('database/test')

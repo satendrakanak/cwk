@@ -15,15 +15,18 @@ import { isSystemRole } from "@/lib/access-control";
 import { Permission, Role } from "@/types/user";
 import { RoleDialog } from "./role-dialog";
 import { summarizeRoleModules } from "./access-control-utils";
+import { DEMO_CONFIGURATION_LOCK_MESSAGE } from "@/lib/demo-access";
 
 export function RolesPanel({
   roles,
   permissions,
   onRolesChange,
+  isDemoUser = false,
 }: {
   roles: Role[];
   permissions: Permission[];
   onRolesChange: (roles: Role[]) => void;
+  isDemoUser?: boolean;
 }) {
   const router = useRouter();
   const [editorOpen, setEditorOpen] = useState(false);
@@ -47,8 +50,22 @@ export function RolesPanel({
     onRolesChange([...roles, savedRole]);
   };
 
+  const blockDemoConfigurationChange = () => {
+    if (!isDemoUser) {
+      return false;
+    }
+
+    toast.error(DEMO_CONFIGURATION_LOCK_MESSAGE);
+    return true;
+  };
+
   const handleDelete = async () => {
     if (!deleteRole) {
+      return;
+    }
+
+    if (blockDemoConfigurationChange()) {
+      setDeleteRole(null);
       return;
     }
 
@@ -80,6 +97,7 @@ export function RolesPanel({
           </div>
           <Button
             onClick={() => {
+              if (blockDemoConfigurationChange()) return;
               setActiveRole(null);
               setEditorOpen(true);
             }}
@@ -120,6 +138,7 @@ export function RolesPanel({
                       size="sm"
                       className="dark:border-white/10 dark:bg-white/6 dark:text-slate-100 dark:hover:bg-white/10"
                       onClick={() => {
+                        if (blockDemoConfigurationChange()) return;
                         setActiveRole(role);
                         setEditorOpen(true);
                       }}
@@ -132,7 +151,10 @@ export function RolesPanel({
                           variant="destructive"
                           size="sm"
                           className="dark:bg-rose-500/12 dark:text-rose-200 dark:hover:bg-rose-500/20"
-                          onClick={() => setDeleteRole(role)}
+                          onClick={() => {
+                            if (blockDemoConfigurationChange()) return;
+                            setDeleteRole(role);
+                          }}
                         >
                         <Trash2 className="size-3.5" />
                         Delete

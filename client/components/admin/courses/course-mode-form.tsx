@@ -19,6 +19,8 @@ import { getErrorMessage } from "@/lib/error-handler";
 import { cn } from "@/lib/utils";
 import { courseClientService } from "@/services/courses/course.client";
 import type { Course } from "@/types/course";
+import { useOptionalAdminLicense } from "@/components/admin/layout/admin-license-provider";
+import { isCourseModeAllowed } from "@/lib/license/feature-access";
 
 const courseModeSchema = z.object({
   mode: z.enum(["self_learning", "faculty_led", "hybrid"]),
@@ -54,6 +56,7 @@ type CourseModeFormValues = z.output<typeof courseModeSchema>;
 
 export function CourseModeForm({ course }: CourseModeFormProps) {
   const router = useRouter();
+  const licenseContext = useOptionalAdminLicense();
   const currentMode = COURSE_DELIVERY_MODES.some(
     (option) => option.value === course.mode,
   )
@@ -138,17 +141,25 @@ export function CourseModeForm({ course }: CourseModeFormProps) {
               {COURSE_DELIVERY_MODES.map((option) => {
                 const Icon = modeIcons[option.value];
                 const active = field.value === option.value;
+                const locked =
+                  !licenseContext?.isLoading &&
+                  !isCourseModeAllowed(licenseContext?.summary, option.value);
 
                 return (
                   <button
                     key={option.value}
                     type="button"
-                    onClick={() => field.onChange(option.value)}
+                    disabled={locked}
+                    onClick={() => {
+                      if (!locked) field.onChange(option.value);
+                    }}
                     className={cn(
                       "flex w-full items-start gap-3 rounded-xl border p-3 text-left transition-colors",
                       active
                         ? "border-primary bg-primary/10 text-foreground"
                         : "border-border bg-muted/30 hover:border-primary/40 hover:bg-primary/5",
+                      locked &&
+                        "cursor-not-allowed border-dashed opacity-55 hover:border-border hover:bg-muted/30",
                     )}
                   >
                     <span
@@ -166,7 +177,9 @@ export function CourseModeForm({ course }: CourseModeFormProps) {
                         {option.shortLabel}
                       </span>
                       <span className="mt-1 block text-xs leading-5 text-muted-foreground">
-                        {option.description}
+                        {locked
+                          ? "Locked by the active license course type policy."
+                          : option.description}
                       </span>
                     </span>
                   </button>
@@ -286,7 +299,11 @@ export function CourseModeForm({ course }: CourseModeFormProps) {
         <SubmitButton
           type="submit"
           loading={isSubmitting}
-          disabled={!form.formState.isDirty}
+          disabled={
+            !form.formState.isDirty ||
+            (!licenseContext?.isLoading &&
+              !isCourseModeAllowed(licenseContext?.summary, selectedMode))
+          }
           className="w-full"
           loadingText="Updating..."
         >

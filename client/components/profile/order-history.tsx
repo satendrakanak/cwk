@@ -24,6 +24,10 @@ import { CourseProgressBar } from "@/components/courses/course-progress-bar";
 import { RefundRequestDialog } from "./refunds/refund-request-dialog";
 import { RefundTimeline } from "@/components/refunds/refund-timeline";
 import { formatDate } from "@/utils/formate-date";
+import {
+  MAX_REFUND_PROGRESS,
+  REFUND_WINDOW_DAYS,
+} from "@/lib/refund-policy";
 
 interface OrderHistoryProps {
   orders: Order[];
@@ -32,9 +36,6 @@ interface OrderHistoryProps {
   showViewAll?: boolean;
   canRequestRefund?: boolean;
 }
-
-const REFUND_WINDOW_DAYS = 7;
-const MAX_REFUND_PROGRESS = 20;
 
 export function OrderHistory({
   orders,

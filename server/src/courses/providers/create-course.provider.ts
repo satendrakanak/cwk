@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpException,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import { Category } from 'src/categories/category.entity';
 import { TagsService } from 'src/tags/providers/tags.service';
 import { Tag } from 'src/tags/tag.entity';
 import { EngagementService } from 'src/engagement/providers/engagement.service';
+import { LicensesService } from 'src/licenses/providers/licenses.service';
 
 @Injectable()
 export class CreateCourseProvider {
@@ -44,6 +46,7 @@ export class CreateCourseProvider {
     private readonly tagsService: TagsService,
 
     private readonly engagementService: EngagementService,
+    private readonly licensesService: LicensesService,
   ) {}
 
   public async create(
@@ -51,6 +54,8 @@ export class CreateCourseProvider {
     user: ActiveUserData,
   ): Promise<Course> {
     try {
+      await this.licensesService.assertCanCreateCourse(createCouseDto.mode);
+
       const baseSlug = generateSlug(
         createCouseDto.slug ?? createCouseDto.title,
       );
@@ -93,6 +98,10 @@ export class CreateCourseProvider {
 
       return savedCourse;
     } catch (error: unknown) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
       if (typeof error === 'object' && error && 'code' in error) {
         if ((error as { code?: string }).code === '23505') {
           throw new BadRequestException('Slug already exists');

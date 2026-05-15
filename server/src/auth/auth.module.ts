@@ -27,12 +27,14 @@ import { SettingsModule } from 'src/settings/settings.module';
 import { RolesPermissionsModule } from 'src/roles-permissions/roles-permissions.module';
 import { SocialAuthService } from './providers/social-auth.service';
 import { UserProfile } from 'src/profiles/user-profile.entity';
+import { LicensesModule } from 'src/licenses/licenses.module';
 
 @Module({
   imports: [
     forwardRef(() => UsersModule),
     SettingsModule,
     RolesPermissionsModule,
+    LicensesModule,
     ConfigModule.forFeature(jwtConfig),
     JwtModule.registerAsync(jwtConfig.asProvider()),
     TypeOrmModule.forFeature([VerificationToken, User, AuthAccount, UserProfile]),
@@ -63,6 +65,7 @@ import { UserProfile } from 'src/profiles/user-profile.entity';
     AuthService,
     HashingProvider,
     GenerateVerificationTokenProvider,
+    GenerateTokensProvider,
   ],
 })
 export class AuthModule {}
