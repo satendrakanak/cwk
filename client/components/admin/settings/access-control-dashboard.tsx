@@ -9,12 +9,16 @@ import { SettingsShell } from "./settings-shell";
 import { AccessControlOverview } from "./access-control-overview";
 import { RolesPanel } from "./roles-panel";
 import { PermissionsPanel } from "./permissions-panel";
+import { useSession } from "@/context/session-context";
+import { isDemoUser as getIsDemoUser } from "@/lib/demo-access";
 
 export function AccessControlDashboard({
   data,
 }: {
   data: AccessControlDashboardData;
 }) {
+  const { user } = useSession();
+  const isDemoUser = getIsDemoUser(user);
   const [roles, setRoles] = useState<Role[]>(data.roles);
   const [permissions, setPermissions] = useState<Permission[]>(data.permissions);
 
@@ -43,6 +47,7 @@ export function AccessControlDashboard({
             roles={roles}
             permissions={permissions}
             onRolesChange={setRoles}
+            isDemoUser={isDemoUser}
           />
         </TabsContent>
 
@@ -52,6 +57,7 @@ export function AccessControlDashboard({
             permissions={permissions}
             onPermissionsChange={setPermissions}
             onRolesChange={setRoles}
+            isDemoUser={isDemoUser}
           />
         </TabsContent>
       </Tabs>

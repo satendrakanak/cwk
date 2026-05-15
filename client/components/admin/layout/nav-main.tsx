@@ -10,6 +10,7 @@ import {
   getLicenseInvalidReason,
   isLicenseRecoveryPath,
 } from "@/lib/license/module-access";
+import { isDemoUser as getIsDemoUser } from "@/lib/demo-access";
 import { useAdminLicense } from "./admin-license-provider";
 
 import {
@@ -39,7 +40,7 @@ export function NavMain({
   const { summary, isLoading } = useAdminLicense();
   const licenseInvalid = !isLoading && Boolean(getLicenseInvalidReason(summary));
   const isSuperAdmin = hasRole(user, "super_admin") || hasRole(user, "admin");
-  const isDemoUser = Boolean(user?.isDemo) || hasRole(user, "demo_admin");
+  const isDemoUser = getIsDemoUser(user);
 
   const isLocked = (item: SidebarNavItem) => {
     if (isDemoUser) {

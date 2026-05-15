@@ -37,6 +37,11 @@ import {
 import { cn } from "@/lib/utils";
 import { MediaModal } from "@/components/media/media-modal";
 import { FileType } from "@/types/file";
+import { useSession } from "@/context/session-context";
+import {
+  DEMO_CONFIGURATION_LOCK_MESSAGE,
+  isDemoUser as getIsDemoUser,
+} from "@/lib/demo-access";
 
 const providers: { label: string; value: PaymentProvider }[] = [
   { label: "Razorpay", value: "RAZORPAY" },
@@ -185,6 +190,8 @@ export function SiteSettingsDashboard({
   socialProviders: SocialAuthProvider[];
 }) {
   const router = useRouter();
+  const { user } = useSession();
+  const isDemoUser = getIsDemoUser(user);
   const [items, setItems] = useState(gateways);
   const [siteForm, setSiteForm] = useState<SiteSettings>({
     ...defaultSiteSettings,
@@ -230,6 +237,15 @@ export function SiteSettingsDashboard({
 
   const activeSocialProviders = socialForm.filter((item) => item.isEnabled);
   const activeGateway = items.find((gateway) => gateway.isActive);
+
+  const blockDemoConfigurationChange = () => {
+    if (!isDemoUser) {
+      return false;
+    }
+
+    toast.error(DEMO_CONFIGURATION_LOCK_MESSAGE);
+    return true;
+  };
 
   const updateSiteField = <K extends keyof SiteSettings>(
     key: K,
@@ -299,6 +315,8 @@ export function SiteSettingsDashboard({
 
   const saveSiteSettings = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (blockDemoConfigurationChange()) return;
+
     startTransition(async () => {
       try {
         const response =
@@ -314,6 +332,8 @@ export function SiteSettingsDashboard({
 
   const saveEmailSettings = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (blockDemoConfigurationChange()) return;
+
     startTransition(async () => {
       try {
         const emailPayload = { ...emailForm };
@@ -343,6 +363,8 @@ export function SiteSettingsDashboard({
 
   const saveSocialAuthSettings = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (blockDemoConfigurationChange()) return;
+
     startTransition(async () => {
       try {
         const response = await settingsClientService.upsertSocialAuthSettings(
@@ -366,6 +388,8 @@ export function SiteSettingsDashboard({
 
   const saveAwsStorageSettings = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (blockDemoConfigurationChange()) return;
+
     startTransition(async () => {
       try {
         const awsPayload = { ...awsForm };
@@ -397,6 +421,8 @@ export function SiteSettingsDashboard({
 
   const saveBbbSettings = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (blockDemoConfigurationChange()) return;
+
     startTransition(async () => {
       try {
         const bbbPayload = { ...bbbForm };
@@ -424,6 +450,8 @@ export function SiteSettingsDashboard({
 
   const savePushNotificationSettings = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (blockDemoConfigurationChange()) return;
+
     startTransition(async () => {
       try {
         const pushPayload = { ...pushForm };
@@ -449,6 +477,8 @@ export function SiteSettingsDashboard({
   };
 
   const generatePushNotificationKeys = () => {
+    if (blockDemoConfigurationChange()) return;
+
     startTransition(async () => {
       try {
         const response =
@@ -467,6 +497,8 @@ export function SiteSettingsDashboard({
 
   const saveGateway = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (blockDemoConfigurationChange()) return;
+
     startTransition(async () => {
       try {
         const response = await settingsClientService.upsertGateway(gatewayForm);

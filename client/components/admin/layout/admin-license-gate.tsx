@@ -9,13 +9,13 @@ import {
 } from "@/lib/license/module-access";
 import { useAdminLicense } from "./admin-license-provider";
 import { useSession } from "@/context/session-context";
-import { hasRole } from "@/lib/access-control";
+import { isDemoUser as getIsDemoUser } from "@/lib/demo-access";
 
 export function AdminLicenseGate({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { summary, isLoading, error } = useAdminLicense();
   const { user } = useSession();
-  const isDemoUser = Boolean(user?.isDemo) || hasRole(user, "demo_admin");
+  const isDemoUser = getIsDemoUser(user);
 
   if (isDemoUser || isLicenseRecoveryPath(pathname)) {
     return <>{children}</>;

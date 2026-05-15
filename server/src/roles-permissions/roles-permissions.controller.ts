@@ -17,6 +17,9 @@ import { UpdateRoleDto } from './dtos/update-role.dto';
 import { CreatePermissionDto } from './dtos/create-permission.dto';
 import { UpdatePermissionDto } from './dtos/update-permission.dto';
 
+const DEMO_CONFIGURATION_LOCK_MESSAGE =
+  'Demo users cannot change these settings. Purchase KASA to unlock configuration changes.';
+
 @Controller('roles-permissions')
 export class RolesPermissionsController {
   constructor(
@@ -33,13 +36,13 @@ export class RolesPermissionsController {
 
   @Get('dashboard')
   async getDashboard(@ActiveUser() user: ActiveUserData) {
-    this.assertAdmin(user);
+    this.assertAccessControlViewer(user);
     return await this.rolesPermissionsService.getDashboard();
   }
 
   @Get('permissions')
   async findAllPermissions(@ActiveUser() user: ActiveUserData) {
-    this.assertAdmin(user);
+    this.assertAccessControlViewer(user);
     return await this.rolesPermissionsService.findAllPermissions();
   }
 
@@ -48,6 +51,7 @@ export class RolesPermissionsController {
     @Body() createRoleDto: CreateRoleDto,
     @ActiveUser() user: ActiveUserData,
   ) {
+    this.assertNotDemoUser(user);
     this.assertAdmin(user);
     return await this.rolesPermissionsService.createRole(createRoleDto);
   }
@@ -58,6 +62,7 @@ export class RolesPermissionsController {
     @Body() updateRoleDto: UpdateRoleDto,
     @ActiveUser() user: ActiveUserData,
   ) {
+    this.assertNotDemoUser(user);
     this.assertAdmin(user);
     return await this.rolesPermissionsService.updateRole(id, updateRoleDto);
   }
@@ -67,6 +72,7 @@ export class RolesPermissionsController {
     @Param('id', ParseIntPipe) id: number,
     @ActiveUser() user: ActiveUserData,
   ) {
+    this.assertNotDemoUser(user);
     this.assertAdmin(user);
     return await this.rolesPermissionsService.deleteRole(id);
   }
@@ -76,6 +82,7 @@ export class RolesPermissionsController {
     @Body() createPermissionDto: CreatePermissionDto,
     @ActiveUser() user: ActiveUserData,
   ) {
+    this.assertNotDemoUser(user);
     this.assertAdmin(user);
     return await this.rolesPermissionsService.createPermission(
       createPermissionDto,
@@ -88,6 +95,7 @@ export class RolesPermissionsController {
     @Body() updatePermissionDto: UpdatePermissionDto,
     @ActiveUser() user: ActiveUserData,
   ) {
+    this.assertNotDemoUser(user);
     this.assertAdmin(user);
     return await this.rolesPermissionsService.updatePermission(
       id,
@@ -100,8 +108,23 @@ export class RolesPermissionsController {
     @Param('id', ParseIntPipe) id: number,
     @ActiveUser() user: ActiveUserData,
   ) {
+    this.assertNotDemoUser(user);
     this.assertAdmin(user);
     return await this.rolesPermissionsService.deletePermission(id);
+  }
+
+  private assertAccessControlViewer(user: ActiveUserData) {
+    if (user?.roles?.includes('demo_admin')) {
+      return;
+    }
+
+    this.assertAdmin(user);
+  }
+
+  private assertNotDemoUser(user: ActiveUserData) {
+    if (user?.roles?.includes('demo_admin')) {
+      throw new ForbiddenException(DEMO_CONFIGURATION_LOCK_MESSAGE);
+    }
   }
 
   private assertAdmin(user: ActiveUserData) {

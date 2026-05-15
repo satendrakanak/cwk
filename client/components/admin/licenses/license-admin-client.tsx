@@ -9,6 +9,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
+import { useSession } from "@/context/session-context";
+import {
+  DEMO_CONFIGURATION_LOCK_MESSAGE,
+  isDemoUser as getIsDemoUser,
+} from "@/lib/demo-access";
 import { licenseClientService } from "@/services/licenses/license.client";
 import {
   LicenseLimitKey,
@@ -35,6 +40,8 @@ export function LicenseAdminClient({
 }: {
   initialSummary: LicenseSummary;
 }) {
+  const { user } = useSession();
+  const isDemoUser = getIsDemoUser(user);
   const [summary, setSummary] = useState(initialSummary);
   const [key, setKey] = useState("");
   const [purchaserEmail, setPurchaserEmail] = useState("");
@@ -65,6 +72,11 @@ export function LicenseAdminClient({
   );
 
   const activate = () => {
+    if (isDemoUser) {
+      toast.error(DEMO_CONFIGURATION_LOCK_MESSAGE);
+      return;
+    }
+
     startTransition(async () => {
       try {
         const response = await licenseClientService.activate({

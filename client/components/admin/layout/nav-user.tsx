@@ -45,6 +45,7 @@ import {
   hasAnyPermission,
   hasRole,
 } from "@/lib/access-control";
+import { isDemoUser as getIsDemoUser } from "@/lib/demo-access";
 import { getErrorMessage } from "@/lib/error-handler";
 import { getLicenseInvalidReason } from "@/lib/license/module-access";
 import { getUserAvatarUrl, getUserDisplayName } from "@/lib/user-avatar";
@@ -74,7 +75,7 @@ export function NavUser({ variant = "sidebar" }: NavUserProps) {
   const displayName = getUserDisplayName(user);
   const avatarUrl = getUserAvatarUrl(user);
   const initials = `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase();
-  const isDemoUser = Boolean(user.isDemo) || hasRole(user, "demo_admin");
+  const isDemoUser = getIsDemoUser(user);
   const isPrivilegedAdmin = hasRole(user, "super_admin") || hasRole(user, "admin");
   const menuItems: MenuItem[] = [
     ...(canAccessAdmin(user)
