@@ -7,6 +7,7 @@ import { Course } from 'src/courses/course.entity';
 import { UserProfile } from 'src/profiles/user-profile.entity';
 import { Permission } from 'src/roles-permissions/permission.entity';
 import { Role } from 'src/roles-permissions/role.entity';
+import { AppSetting } from 'src/settings/app-setting.entity';
 import { Tag } from 'src/tags/tag.entity';
 import { User } from 'src/users/user.entity';
 import { DemoToursController } from './demo-tours.controller';
@@ -23,6 +24,7 @@ import { DemoToursService } from './providers/demo-tours.service';
       Course,
       Category,
       Tag,
+      AppSetting,
     ]),
     AuthModule,
   ],
