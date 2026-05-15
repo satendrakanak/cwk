@@ -7,10 +7,12 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GenerateTokensProvider } from 'src/auth/providers/generate-tokens.provider';
 import { HashingProvider } from 'src/auth/providers/hashing.provider';
+import { Category } from 'src/categories/category.entity';
 import { Course } from 'src/courses/course.entity';
 import { UserProfile } from 'src/profiles/user-profile.entity';
 import { Permission } from 'src/roles-permissions/permission.entity';
 import { Role } from 'src/roles-permissions/role.entity';
+import { Tag } from 'src/tags/tag.entity';
 import { User } from 'src/users/user.entity';
 import { LessThan, Repository } from 'typeorm';
 import { StartDemoTourDto } from '../dtos/start-demo-tour.dto';
@@ -58,6 +60,12 @@ export class DemoToursService {
     @InjectRepository(Course)
     private readonly courseRepository: Repository<Course>,
 
+    @InjectRepository(Category)
+    private readonly categoryRepository: Repository<Category>,
+
+    @InjectRepository(Tag)
+    private readonly tagRepository: Repository<Tag>,
+
     private readonly hashingProvider: HashingProvider,
     private readonly generateTokensProvider: GenerateTokensProvider,
   ) {}
@@ -69,9 +77,13 @@ export class DemoToursService {
     });
 
     if (existingUser) {
-      throw new ConflictException(
-        'A user already exists with this email. Please sign in or use another email for demo.',
-      );
+      if (existingUser.isDemo) {
+        await this.cleanupDemoUsers([existingUser]);
+      } else {
+        throw new ConflictException(
+          'A user already exists with this email. Please sign in or use another email for demo.',
+        );
+      }
     }
 
     const role = await this.ensureDemoRole();
@@ -142,15 +154,45 @@ export class DemoToursService {
       },
     });
 
-    if (!expiredUsers.length) return;
+    if (!expiredUsers.length) return { cleanedUsers: 0 };
 
-    const expiredUserIds = expiredUsers.map((user) => user.id);
+    await this.cleanupDemoUsers(expiredUsers);
+
+    return { cleanedUsers: expiredUsers.length };
+  }
+
+  private async cleanupDemoUsers(users: User[]) {
+    const expiredUserIds = users.map((user) => user.id);
+
+    if (!expiredUserIds.length) return;
 
     await this.courseRepository
       .createQueryBuilder()
       .softDelete()
       .where('createdById IN (:...expiredUserIds)', { expiredUserIds })
       .execute();
+
+    await this.categoryRepository
+      .createQueryBuilder()
+      .softDelete()
+      .where('createdById IN (:...expiredUserIds)', { expiredUserIds })
+      .execute();
+
+    await this.tagRepository
+      .createQueryBuilder()
+      .softDelete()
+      .where('createdById IN (:...expiredUserIds)', { expiredUserIds })
+      .execute();
+
+    for (const user of users) {
+      const suffix = `${user.id}-${Date.now()}`;
+
+      await this.userRepository.update(user.id, {
+        email: `expired-demo-${suffix}@codewithkasa.demo`,
+        username: `expired-demo-${suffix}`,
+        phoneNumber: null,
+      });
+    }
 
     await this.userRepository.softDelete(expiredUserIds);
   }

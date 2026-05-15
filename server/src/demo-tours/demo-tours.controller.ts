@@ -32,4 +32,17 @@ export class DemoToursController {
       },
     };
   }
+
+  @Auth(AuthType.None)
+  @HttpCode(HttpStatus.OK)
+  @Post('cleanup-expired')
+  async cleanupExpired() {
+    const result = await this.demoToursService.expireDemoData();
+
+    return {
+      success: true,
+      message: 'Expired demo workspaces cleaned',
+      data: result,
+    };
+  }
 }

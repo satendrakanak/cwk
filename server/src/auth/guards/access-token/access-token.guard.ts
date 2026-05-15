@@ -10,6 +10,8 @@ import { JwtService } from '@nestjs/jwt';
 import jwtConfig from 'src/auth/config/jwt.config';
 import { REQUEST_USER_KEY } from 'src/auth/constants/auth.constants';
 import { Request } from 'express';
+import { DataSource } from 'typeorm';
+import { User } from 'src/users/user.entity';
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
@@ -26,6 +28,8 @@ export class AccessTokenGuard implements CanActivate {
 
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
+
+    private readonly dataSource: DataSource,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     //Extract the request from the execution context
@@ -44,6 +48,7 @@ export class AccessTokenGuard implements CanActivate {
         token,
         this.jwtConfiguration,
       );
+      await this.assertDemoSessionIsActive(payload.sub);
       request[REQUEST_USER_KEY] = payload;
     } catch {
       throw new UnauthorizedException();
@@ -57,5 +62,24 @@ export class AccessTokenGuard implements CanActivate {
     }
     const [_, token] = request.headers.authorization?.split(' ') ?? [];
     return token;
+  }
+
+  private async assertDemoSessionIsActive(userId: number) {
+    const user = await this.dataSource.getRepository(User).findOne({
+      where: { id: userId },
+      select: ['id', 'isDemo', 'demoExpiresAt'],
+    });
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    if (
+      user.isDemo &&
+      user.demoExpiresAt &&
+      user.demoExpiresAt.getTime() <= Date.now()
+    ) {
+      throw new UnauthorizedException('Demo access expired');
+    }
   }
 }

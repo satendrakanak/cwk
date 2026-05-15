@@ -19,6 +19,13 @@ const canManageLicense = (user: User) => {
   return roles.includes('super_admin') || roles.includes('admin');
 };
 
+const isExpiredDemoUser = (user: User) =>
+  Boolean(
+    user.isDemo &&
+      user.demoExpiresAt &&
+      user.demoExpiresAt.getTime() <= Date.now(),
+  );
+
 @Injectable()
 export class RefreshTokensProvider {
   constructor(
@@ -59,6 +66,10 @@ export class RefreshTokensProvider {
       });
 
       const user = await this.usersService.findOneById(sub);
+
+      if (isExpiredDemoUser(user)) {
+        throw new UnauthorizedException('Demo access expired');
+      }
 
       try {
         await this.licensesService.assertActiveLicense();

@@ -1,8 +1,8 @@
 "use client";
 
 import { FormEvent, useEffect, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
-import { ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { AlertTriangle, ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,6 +21,7 @@ const progressSteps = [
 
 export function DemoTourForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const [progress, setProgress] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
@@ -62,6 +63,7 @@ export function DemoTourForm() {
 
         window.setTimeout(() => {
           router.push(response.data.defaultRedirect);
+          router.refresh();
         }, 900);
       } catch (error) {
         setIsPreparing(false);
@@ -87,6 +89,15 @@ export function DemoTourForm() {
             We will create a limited demo admin for you, prepare the workspace,
             and keep the tour open for 1 hour.
           </p>
+          {searchParams.get("expired") ? (
+            <div className="mt-6 inline-flex max-w-xl items-start gap-3 rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-left text-sm text-amber-700 dark:text-amber-300">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+              <span>
+                Your previous demo session has expired and its temporary data is
+                being cleaned. You can start a fresh tour from here.
+              </span>
+            </div>
+          ) : null}
         </div>
       </section>
 

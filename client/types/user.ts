@@ -55,6 +55,8 @@ export type User = {
   coverImage: FileType | null;
   avatarUrl: string | null;
   canRequestRefund: boolean;
+  isDemo?: boolean;
+  demoExpiresAt?: string | null;
 
   roles?: Role[];
 

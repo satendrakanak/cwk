@@ -5,6 +5,7 @@ import {
   Inject,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user.entity';
@@ -110,6 +111,23 @@ export class CreateUserProvider {
         currentUser?.roles?.some(
           (r: any) => r.name === 'admin' || r.name === 'super_admin',
         ); // अगर objects हैं
+      const isDemoCreator = currentUser?.roles?.includes('demo_admin');
+      const demoCreator = isDemoCreator
+        ? await this.userRepository.findOne({
+            where: { id: currentUser!.sub },
+            select: ['id', 'isDemo', 'demoExpiresAt'],
+          })
+        : null;
+
+      if (
+        isDemoCreator &&
+        (!demoCreator?.isDemo ||
+          !demoCreator.demoExpiresAt ||
+          demoCreator.demoExpiresAt.getTime() <= Date.now())
+      ) {
+        throw new UnauthorizedException('Demo access expired');
+      }
+
       const hashedPassword = await this.hashingProvider.hashPassword(
         createUserDto.password,
       );
@@ -134,6 +152,8 @@ export class CreateUserProvider {
           roles,
           password: hashedPassword,
           emailVerified: isAdmin ? new Date() : undefined,
+          isDemo: Boolean(demoCreator?.isDemo),
+          demoExpiresAt: demoCreator?.demoExpiresAt ?? undefined,
         });
 
         try {

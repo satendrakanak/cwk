@@ -28,4 +28,8 @@ export const demoTourClientService = {
       "/api/demo-tours/start",
       data,
     ),
+  cleanupExpired: () =>
+    apiClient.post<ApiResponse<{ cleanedUsers: number }>>(
+      "/api/demo-tours/cleanup-expired",
+    ),
 };

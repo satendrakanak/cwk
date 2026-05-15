@@ -48,6 +48,13 @@ const canManageLicense = (user: User) => {
   return roles.includes('super_admin') || roles.includes('admin');
 };
 
+const isExpiredDemoUser = (user: User) =>
+  Boolean(
+    user.isDemo &&
+      user.demoExpiresAt &&
+      user.demoExpiresAt.getTime() <= Date.now(),
+  );
+
 const toSignInUserSummary = (user: User): SignInUserSummary => ({
   id: user.id,
   email: user.email,
@@ -96,6 +103,10 @@ export class SignInProvider {
       throw new UnauthorizedException(
         'This account was created with social login. Use the social sign-in option or set a password first.',
       );
+    }
+
+    if (isExpiredDemoUser(user)) {
+      throw new UnauthorizedException('Demo access expired');
     }
     //Compare password to the hash
 
