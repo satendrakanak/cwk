@@ -16,7 +16,7 @@ import { Permission } from 'src/roles-permissions/permission.entity';
 import { Role } from 'src/roles-permissions/role.entity';
 import { Tag } from 'src/tags/tag.entity';
 import { User } from 'src/users/user.entity';
-import { LessThan, Repository } from 'typeorm';
+import { FindOptionsWhere, LessThan, Repository } from 'typeorm';
 import { StartDemoTourDto } from '../dtos/start-demo-tour.dto';
 
 const DEMO_DURATION_MINUTES = 60;
@@ -76,19 +76,18 @@ export class DemoToursService {
   async start(dto: StartDemoTourDto) {
     this.assertDemoToursEnabled();
 
-    const existingUser = await this.userRepository.findOne({
-      where: { email: dto.email },
-      withDeleted: true,
-    });
+    const existingUsers = await this.findExistingDemoIdentities(dto);
 
-    if (existingUser) {
-      if (existingUser.isDemo) {
-        await this.cleanupDemoUsers([existingUser]);
-      } else {
+    if (existingUsers.length) {
+      const realUser = existingUsers.find((user) => !user.isDemo);
+
+      if (realUser) {
         throw new ConflictException(
-          'A user already exists with this email. Please sign in or use another email for demo.',
+          'A user already exists with these details. Please sign in or use another email or phone for demo.',
         );
       }
+
+      await this.cleanupDemoUsers(existingUsers);
     }
 
     const role = await this.ensureDemoRole();
@@ -204,6 +203,21 @@ export class DemoToursService {
     }
 
     await this.userRepository.softDelete(expiredUserIds);
+  }
+
+  private async findExistingDemoIdentities(dto: StartDemoTourDto) {
+    const where: FindOptionsWhere<User>[] = [{ email: dto.email }];
+
+    if (dto.phoneNumber) {
+      where.push({ phoneNumber: dto.phoneNumber });
+    }
+
+    const users = await this.userRepository.find({
+      where,
+      withDeleted: true,
+    });
+
+    return Array.from(new Map(users.map((user) => [user.id, user])).values());
   }
 
   private async ensureDemoRole() {
