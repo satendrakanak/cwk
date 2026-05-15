@@ -8,6 +8,10 @@ import { CouponApplyBox } from "../coupon/coupon-apply-box";
 import { SummaryRow } from "./summary-row";
 import { useLicenseSummary } from "@/hooks/use-license-summary";
 import { isLicenseFeatureEnabled } from "@/lib/license/feature-access";
+import {
+  REFUND_GUARANTEE_NOTE,
+  REFUND_GUARANTEE_TITLE,
+} from "@/lib/refund-policy";
 
 export const CartSummary = () => {
   const { summary, isLoading } = useLicenseSummary();
@@ -144,12 +148,11 @@ export const CartSummary = () => {
         </div>
 
         <p className="text-sm font-semibold text-card-foreground">
-          Refunds Reviewed By Team
+          {REFUND_GUARANTEE_TITLE}
         </p>
 
         <p className="mt-1 text-xs leading-5 text-muted-foreground">
-          Eligible refund requests are enabled by support and reviewed as per
-          policy.
+          {REFUND_GUARANTEE_NOTE}
         </p>
       </div>
     </aside>

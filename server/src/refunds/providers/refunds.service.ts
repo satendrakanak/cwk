@@ -24,6 +24,8 @@ import { RefundRequestStatus } from '../enums/refund-request-status.enum';
 import { RefundLog } from '../refund-log.entity';
 import { RefundRequest } from '../refund-request.entity';
 
+const REFUND_WINDOW_DAYS = 15;
+
 @Injectable()
 export class RefundsService {
   constructor(
@@ -182,6 +184,17 @@ export class RefundsService {
     if (!requester.canRequestRefund) {
       throw new BadRequestException(
         'Refund request access is not enabled for this account',
+      );
+    }
+
+    const refundEligibleUntil = new Date(order.createdAt);
+    refundEligibleUntil.setDate(
+      refundEligibleUntil.getDate() + REFUND_WINDOW_DAYS,
+    );
+
+    if (new Date() > refundEligibleUntil) {
+      throw new BadRequestException(
+        `Refund requests are allowed within ${REFUND_WINDOW_DAYS} days of purchase`,
       );
     }
 
