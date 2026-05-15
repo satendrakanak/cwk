@@ -39,8 +39,13 @@ export function NavMain({
   const { summary, isLoading } = useAdminLicense();
   const licenseInvalid = !isLoading && Boolean(getLicenseInvalidReason(summary));
   const isSuperAdmin = hasRole(user, "super_admin") || hasRole(user, "admin");
+  const isDemoUser = Boolean(user?.isDemo) || hasRole(user, "demo_admin");
 
   const isLocked = (item: SidebarNavItem) => {
+    if (isDemoUser) {
+      return false;
+    }
+
     if (isLoading || isLicenseRecoveryPath(item.url)) {
       return false;
     }

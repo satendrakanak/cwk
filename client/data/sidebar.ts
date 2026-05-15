@@ -141,7 +141,7 @@ export const sidebarData: {
       title: "Media",
       url: "/admin/media",
       icon: Images,
-      requiredPermissions: ["view_settings", "create_course", "update_course"],
+      requiredPermissions: ["view_course", "create_course", "update_course"],
     },
 
     {

@@ -39,7 +39,12 @@ import {
 } from "@/components/ui/sidebar";
 import { useSession } from "@/context/session-context";
 import { apiClient } from "@/lib/api/client";
-import { canAccessAdmin, canAccessFaculty } from "@/lib/access-control";
+import {
+  canAccessAdmin,
+  canAccessFaculty,
+  hasAnyPermission,
+  hasRole,
+} from "@/lib/access-control";
 import { getErrorMessage } from "@/lib/error-handler";
 import { getLicenseInvalidReason } from "@/lib/license/module-access";
 import { getUserAvatarUrl, getUserDisplayName } from "@/lib/user-avatar";
@@ -69,23 +74,36 @@ export function NavUser({ variant = "sidebar" }: NavUserProps) {
   const displayName = getUserDisplayName(user);
   const avatarUrl = getUserAvatarUrl(user);
   const initials = `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase();
+  const isDemoUser = Boolean(user.isDemo) || hasRole(user, "demo_admin");
+  const isPrivilegedAdmin = hasRole(user, "super_admin") || hasRole(user, "admin");
   const menuItems: MenuItem[] = [
     ...(canAccessAdmin(user)
       ? [
           { href: "/admin", label: "Admin dashboard", icon: LayoutDashboard },
-          { href: "/admin/users", label: "Manage users", icon: UserRound },
-          {
-            href: "/admin/settings/access-control",
-            label: "Roles & permissions",
-            icon: ShieldCheck,
-            licenseFeature: "advancedSettings" as const,
-          },
-          {
-            href: "/admin/settings/site",
-            label: "Site settings",
-            icon: Settings,
-            licenseFeature: "branding" as const,
-          },
+          ...(isPrivilegedAdmin || hasAnyPermission(user, ["view_user"])
+            ? [{ href: "/admin/users", label: "Manage users", icon: UserRound }]
+            : []),
+          ...(isPrivilegedAdmin ||
+          hasAnyPermission(user, ["view_permission", "view_role"])
+            ? [
+                {
+                  href: "/admin/settings/access-control",
+                  label: "Roles & permissions",
+                  icon: ShieldCheck,
+                  licenseFeature: "advancedSettings" as const,
+                },
+              ]
+            : []),
+          ...(isPrivilegedAdmin || hasAnyPermission(user, ["view_settings"])
+            ? [
+                {
+                  href: "/admin/settings/site",
+                  label: "Site settings",
+                  icon: Settings,
+                  licenseFeature: "branding" as const,
+                },
+              ]
+            : []),
         ]
       : []),
     ...(canAccessFaculty(user)
@@ -114,6 +132,10 @@ export function NavUser({ variant = "sidebar" }: NavUserProps) {
   ];
 
   const isItemLocked = (item: MenuItem) => {
+    if (isDemoUser) {
+      return false;
+    }
+
     if (!licenseContext || licenseContext.isLoading || item.href === "/") {
       return false;
     }

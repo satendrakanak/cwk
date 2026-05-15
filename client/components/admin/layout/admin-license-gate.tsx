@@ -8,12 +8,16 @@ import {
   isLicenseRecoveryPath,
 } from "@/lib/license/module-access";
 import { useAdminLicense } from "./admin-license-provider";
+import { useSession } from "@/context/session-context";
+import { hasRole } from "@/lib/access-control";
 
 export function AdminLicenseGate({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { summary, isLoading, error } = useAdminLicense();
+  const { user } = useSession();
+  const isDemoUser = Boolean(user?.isDemo) || hasRole(user, "demo_admin");
 
-  if (isLicenseRecoveryPath(pathname)) {
+  if (isDemoUser || isLicenseRecoveryPath(pathname)) {
     return <>{children}</>;
   }
 
