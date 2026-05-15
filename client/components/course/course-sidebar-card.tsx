@@ -14,6 +14,8 @@ import { getCourseMeta } from "@/helpers/course-meta";
 import { Button } from "../ui/button";
 import { useCartStore } from "@/store/cart-store";
 import { couponClientService } from "@/services/coupons/coupon.client";
+import { useLicenseSummary } from "@/hooks/use-license-summary";
+import { isLicenseFeatureEnabled } from "@/lib/license/feature-access";
 import CoursePrice from "./course-price";
 import {
   getCourseDeliveryLabel,
@@ -27,6 +29,8 @@ interface CourseSidebarCardProps {
 
 export const CourseSidebarCard = ({ course }: CourseSidebarCardProps) => {
   const applyAutoCoupon = useCartStore((state) => state.applyAutoCoupon);
+  const { summary, isLoading } = useLicenseSummary();
+  const couponsEnabled = !isLoading && isLicenseFeatureEnabled(summary, "coupons");
 
   const [couponData, setCouponData] = useState<{
     code: string;
@@ -58,11 +62,26 @@ export const CourseSidebarCard = ({ course }: CourseSidebarCardProps) => {
   }, [course]);
 
   useEffect(() => {
-    applyAutoCoupon();
-  }, [applyAutoCoupon, course.id]);
+    if (couponsEnabled) {
+      void applyAutoCoupon();
+    }
+  }, [applyAutoCoupon, course.id, couponsEnabled]);
 
   useEffect(() => {
     let isMounted = true;
+
+    if (isLoading) {
+      return () => {
+        isMounted = false;
+      };
+    }
+
+    if (!couponsEnabled) {
+      setCouponData(null);
+      return () => {
+        isMounted = false;
+      };
+    }
 
     const run = async () => {
       try {
@@ -86,7 +105,7 @@ export const CourseSidebarCard = ({ course }: CourseSidebarCardProps) => {
     return () => {
       isMounted = false;
     };
-  }, [course.id, course.priceInr]);
+  }, [course.id, course.priceInr, isLoading, couponsEnabled]);
 
   const discount = couponData?.discount || 0;
   const finalAmount = couponData?.finalAmount || Number(course.priceInr);

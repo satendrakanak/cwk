@@ -25,7 +25,12 @@ export const CouponBulkClient = ({ courses }: Props) => {
   const { summary, isLoading } = useLicenseSummary();
 
   useEffect(() => {
-    if (!courses.length || isLoading || !isLicenseFeatureEnabled(summary, "coupons")) {
+    if (!courses.length || isLoading) {
+      return;
+    }
+
+    if (!isLicenseFeatureEnabled(summary, "coupons")) {
+      setCouponMap({});
       return;
     }
 
@@ -39,8 +44,8 @@ export const CouponBulkClient = ({ courses }: Props) => {
         });
 
         setCouponMap(res.data.data || {});
-      } catch (e) {
-        console.error("❌ BULK FAILED", e);
+      } catch {
+        setCouponMap({});
       }
     };
 

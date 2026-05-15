@@ -7,6 +7,8 @@ import { Autoplay, EffectCards, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { couponClientService } from "@/services/coupons/coupon.client";
+import { useLicenseSummary } from "@/hooks/use-license-summary";
+import { isLicenseFeatureEnabled } from "@/lib/license/feature-access";
 import { CouponMap } from "@/types/coupon";
 import { Course } from "@/types/course";
 import CourseHeroCard from "./course-hero-card";
@@ -18,9 +20,15 @@ interface HeroProps {
 export default function Hero({ courses }: HeroProps) {
   const visibleCourses = useMemo(() => courses.slice(0, 3), [courses]);
   const [couponMap, setCouponMap] = useState<CouponMap>({});
+  const { summary, isLoading } = useLicenseSummary();
 
   useEffect(() => {
-    if (!visibleCourses?.length) return;
+    if (!visibleCourses?.length || isLoading) return;
+
+    if (!isLicenseFeatureEnabled(summary, "coupons")) {
+      setCouponMap({});
+      return;
+    }
 
     const fetchCoupons = async () => {
       try {
@@ -38,7 +46,7 @@ export default function Hero({ courses }: HeroProps) {
     };
 
     fetchCoupons();
-  }, [visibleCourses]);
+  }, [visibleCourses, isLoading, summary]);
 
   return (
     <section className="academy-hero relative overflow-hidden text-white">

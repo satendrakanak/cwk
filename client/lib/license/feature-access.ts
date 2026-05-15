@@ -8,7 +8,7 @@ export function isLicenseFeatureEnabled(
   summary: LicenseSummary | null | undefined,
   feature: LicenseFeatureKey,
 ) {
-  return summary?.plan?.features[feature] !== false;
+  return summary?.plan?.features[feature] === true;
 }
 
 export function getAllowedCourseModes(
