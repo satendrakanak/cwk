@@ -2,8 +2,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Chapter } from 'src/chapters/chapter.entity';
 import { Course } from 'src/courses/course.entity';
+import { CourseExamAttempt } from 'src/course-exams/course-exam-attempt.entity';
 import { EmailTemplatesModule } from 'src/email-templates/email-templates.module';
 import { Enrollment } from 'src/enrollments/enrollment.entity';
+import { ExamAttempt } from 'src/exams/exam-attempt.entity';
+import { Exam } from 'src/exams/exam.entity';
 import { Lecture } from 'src/lectures/lecture.entity';
 import { MailModule } from 'src/mail/mail.module';
 import { LicensesModule } from 'src/licenses/licenses.module';
@@ -28,6 +31,9 @@ import { CertificatesService } from './providers/certificates.service';
       Lecture,
       UserProgres,
       Upload,
+      CourseExamAttempt,
+      ExamAttempt,
+      Exam,
     ]),
     UploadsModule,
     MailModule,
