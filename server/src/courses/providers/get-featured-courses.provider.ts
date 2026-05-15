@@ -92,7 +92,10 @@ export class GetFeaturedCoursesProvider {
       take: limit,
     });
 
-    if (!courses.length && flag === 'showInMegaMenu') {
+    if (
+      !courses.length &&
+      (flag === 'showInMegaMenu' || flag === 'showInPopular')
+    ) {
       courses = await this.courseRepository.find({
         where: {
           isPublished: true,
