@@ -2,7 +2,9 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GenerateTokensProvider } from 'src/auth/providers/generate-tokens.provider';
@@ -66,11 +68,14 @@ export class DemoToursService {
     @InjectRepository(Tag)
     private readonly tagRepository: Repository<Tag>,
 
+    private readonly configService: ConfigService,
     private readonly hashingProvider: HashingProvider,
     private readonly generateTokensProvider: GenerateTokensProvider,
   ) {}
 
   async start(dto: StartDemoTourDto) {
+    this.assertDemoToursEnabled();
+
     const existingUser = await this.userRepository.findOne({
       where: { email: dto.email },
       withDeleted: true,
@@ -142,11 +147,15 @@ export class DemoToursService {
 
   @Cron(CronExpression.EVERY_DAY_AT_3AM)
   async cleanupExpiredDemos() {
+    if (!this.areDemoToursEnabled()) return;
+
     await this.expireDemoData();
   }
 
   @Cron(CronExpression.EVERY_10_MINUTES)
   async expireDemoData() {
+    if (!this.areDemoToursEnabled()) return { cleanedUsers: 0 };
+
     const expiredUsers = await this.userRepository.find({
       where: {
         isDemo: true,
@@ -258,5 +267,15 @@ export class DemoToursService {
     }
 
     return `demo-${Date.now()}`;
+  }
+
+  private areDemoToursEnabled() {
+    return this.configService.get<string>('KASA_DEMO_TOURS_ENABLED') === 'true';
+  }
+
+  private assertDemoToursEnabled() {
+    if (!this.areDemoToursEnabled()) {
+      throw new NotFoundException('Demo tours are not enabled');
+    }
   }
 }

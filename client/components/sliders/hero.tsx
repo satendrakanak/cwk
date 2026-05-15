@@ -21,6 +21,7 @@ export default function Hero({ courses }: HeroProps) {
   const visibleCourses = useMemo(() => courses.slice(0, 3), [courses]);
   const [couponMap, setCouponMap] = useState<CouponMap>({});
   const { summary, isLoading } = useLicenseSummary();
+  const demoEntryUrl = process.env.NEXT_PUBLIC_DEMO_ENTRY_URL || "/contact";
 
   useEffect(() => {
     if (!visibleCourses?.length || isLoading) return;
@@ -85,7 +86,7 @@ export default function Hero({ courses }: HeroProps) {
             </Link>
 
             <Link
-              href="/demo-tour"
+              href={demoEntryUrl}
               className="inline-flex h-12 w-full max-w-64 items-center justify-center rounded-full border border-white/25 bg-white/10 px-7 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_15px_45px_rgba(15,23,42,0.28)] backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white hover:text-slate-950 sm:w-auto lg:max-w-none"
             >
               Take a Tour

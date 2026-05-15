@@ -29,4 +29,5 @@ export default Joi.object({
   LICENSE_PORTAL_CHECK_INTERVAL_SECONDS: Joi.number().min(5).default(10),
   LICENSE_PORTAL_GRACE_DAYS: Joi.number().min(1).default(7),
   ALLOW_LOCAL_LICENSE_KEYS: Joi.string().valid('true', 'false').default('false'),
+  KASA_DEMO_TOURS_ENABLED: Joi.string().valid('true', 'false').default('false'),
 });

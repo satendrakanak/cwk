@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Clock3, TimerReset } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { toast } from "sonner";
 import { useSession } from "@/context/session-context";
 import { authService } from "@/services/auth.service";
@@ -21,10 +21,12 @@ function formatRemaining(milliseconds: number) {
 
 export function DemoSessionTimer() {
   const { user, setUser } = useSession();
-  const router = useRouter();
   const pathname = usePathname();
   const [now, setNow] = useState(() => Date.now());
   const handledExpiry = useRef(false);
+  const demoEntryUrl =
+    process.env.NEXT_PUBLIC_DEMO_ENTRY_URL ||
+    `/auth/sign-in?error=${encodeURIComponent("Demo access expired")}`;
 
   const expiresAt = useMemo(() => {
     if (!user?.isDemo || !user.demoExpiresAt) return null;
@@ -53,12 +55,11 @@ export function DemoSessionTimer() {
       await demoTourClientService.cleanupExpired().catch(() => null);
       await authService.logout().catch(() => null);
       setUser(null);
-      router.replace(`/demo-tour?expired=true`);
-      router.refresh();
+      window.location.href = demoEntryUrl;
     }, 1800);
 
     return () => window.clearTimeout(timeout);
-  }, [expiresAt, isExpired, router, setUser]);
+  }, [demoEntryUrl, expiresAt, isExpired, setUser]);
 
   if (!expiresAt || pathname?.startsWith("/auth")) {
     return null;
