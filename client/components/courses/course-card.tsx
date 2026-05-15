@@ -314,11 +314,11 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
             mode={course.mode}
           />
         ) : (
-          <div className="mt-auto flex flex-col items-stretch justify-between gap-3 sm:flex-row sm:items-center sm:gap-4">
-            <div className="flex flex-col text-center sm:text-left">
+          <div className="mt-auto flex items-center justify-between gap-4">
+            <div className="flex min-w-0 flex-col text-left">
               {discount > 0 ? (
                 <>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
                     <span className="text-base font-semibold text-primary">
                       ₹{new Intl.NumberFormat("en-IN").format(finalPrice)}
                     </span>
